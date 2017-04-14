@@ -109,15 +109,18 @@ public class UserBOImpl implements IUserBO {
     }
 
     @Override
-    public String doSaveBUser(String mobile, String updater, String systemCode,
-            String companyCode) {
+    public String doSaveBUser(String mobile, String userReferee,
+            String updater, String systemCode, String companyCode) {
         XN001350Req req = new XN001350Req();
         req.setLoginName(mobile);
         req.setMobile(mobile);
+        req.setUserReferee(userReferee);
         req.setUpdater(updater);
         req.setRemark("代注册商家");
         if (ESystemCode.ZHPAY.getCode().equals(systemCode)) {
             req.setIsRegHx(EBoolean.YES.getCode());
+            // 正汇推荐人是店铺推荐人 用户推荐人置为空
+            req.setUserReferee(null);
         }
         req.setSystemCode(systemCode);
         req.setCompanyCode(companyCode);

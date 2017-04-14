@@ -75,8 +75,8 @@ public class StoreAOImpl implements IStoreAO {
         String bUser = userBO.isUserExist(req.getMobile(), EUserKind.F2,
             req.getSystemCode());
         if (StringUtils.isBlank(bUser)) { // 注册B端用户
-            bUser = userBO.doSaveBUser(req.getMobile(), req.getUpdater(),
-                req.getSystemCode(), req.getCompanyCode());
+            bUser = userBO.doSaveBUser(req.getMobile(), req.getUserReferee(),
+                req.getUpdater(), req.getSystemCode(), req.getCompanyCode());
         } else {
             // 判断该用户是否有店铺了
             storeBO.checkStoreByUser(bUser, req.getMobile());

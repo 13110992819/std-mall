@@ -10,6 +10,9 @@ public class XN001350Req {
     // 类别(必填)
     private String kind;
 
+    // 推荐人(选填)
+    private String userReferee;
+
     // 更新人(必填)
     private String updater;
 
@@ -24,6 +27,14 @@ public class XN001350Req {
 
     // 公司编号(必填)
     private String companyCode;
+
+    public String getUserReferee() {
+        return userReferee;
+    }
+
+    public void setUserReferee(String userReferee) {
+        this.userReferee = userReferee;
+    }
 
     public String getIsRegHx() {
         return isRegHx;

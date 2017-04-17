@@ -426,6 +426,9 @@ public class StoreAOImpl implements IStoreAO {
         condition.setStoreCode(store.getCode());
         condition.setStatus(EStoreTicketStatus.ON.getCode());
         store.setStoreTickets(storeTicketBO.queryStoreTicketList(condition));
+        if (StringUtils.isNotBlank(fromUser)) {
+            store.setIsDZ(storeActionBO.isDz(fromUser, store.getCode()));
+        }
         return store;
 
     }

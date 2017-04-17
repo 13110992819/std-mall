@@ -14,6 +14,7 @@ import com.xnjr.mall.core.OrderNoGenerater;
 import com.xnjr.mall.dao.IStoreActionDAO;
 import com.xnjr.mall.domain.StoreAction;
 import com.xnjr.mall.enums.EGeneratePrefix;
+import com.xnjr.mall.enums.EStoreActionType;
 import com.xnjr.mall.exception.BizException;
 
 @Component
@@ -86,6 +87,19 @@ public class StoreActionBOImpl extends PaginableBOImpl<StoreAction> implements
         } else {
             return null;
         }
+    }
+
+    @Override
+    public boolean isDz(String fromUser, String code) {
+        boolean result = false;
+        StoreAction condition = new StoreAction();
+        condition.setActionUser(fromUser);
+        condition.setStoreCode(code);
+        condition.setType(EStoreActionType.DZ.getCode());
+        if (getTotalCount(condition) > 0) {
+            result = true;
+        }
+        return result;
     }
 
 }

@@ -10,6 +10,7 @@ package com.xnjr.mall.bo;
 
 import com.xnjr.mall.domain.Account;
 import com.xnjr.mall.dto.res.XN002500Res;
+import com.xnjr.mall.dto.res.XN002501Res;
 import com.xnjr.mall.dto.res.XN002510Res;
 import com.xnjr.mall.enums.EBizType;
 import com.xnjr.mall.enums.ECurrency;
@@ -59,6 +60,10 @@ public interface IAccountBO {
     public XN002500Res doWeiXinPayRemote(String fromUserId, String toUserId,
             Long amount, EBizType bizType, String fromBizNote,
             String toBizNote, String payGroup);
+
+    public XN002501Res doWeiXinH5PayRemote(String fromUserId,
+            String fromOpenId, String toUserId, Long amount, EBizType bizType,
+            String fromBizNote, String toBizNote, String payGroup);
 
     public XN002510Res doAlipayRemote(String fromUserId, String toUserId,
             Long amount, EBizType bizType, String fromBizNote,

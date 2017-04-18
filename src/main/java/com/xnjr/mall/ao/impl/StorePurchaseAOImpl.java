@@ -251,9 +251,9 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
             throw new BizException("xn0000", "积分不足");
         }
         // RMB调用微信渠道至商家
-        return accountBO.doWeiXinPayRemote(user.getUserId(), store.getOwner(),
-            amount - discountAmount, EBizType.CG_O2O_RMB, "O2O消费微信支付",
-            "O2O消费微信支付", payGroup);
+        return accountBO.doWeiXinH5PayRemote(user.getUserId(),
+            user.getOpenId(), store.getOwner(), amount - discountAmount,
+            EBizType.CG_O2O_RMB, "O2O消费微信支付", "O2O消费微信支付", payGroup);
         // 资金划转结束--------------
     }
 

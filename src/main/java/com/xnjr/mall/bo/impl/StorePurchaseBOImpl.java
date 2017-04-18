@@ -87,7 +87,8 @@ public class StorePurchaseBOImpl extends PaginableBOImpl<StorePurchase>
     }
 
     @Override
-    public String storePurchaseCGWX(User user, Store store, Long amount, Long jf) {
+    public String storePurchaseCGWX(User user, Store store, Long amount,
+            Long jfAmount) {
         String payGroup = OrderNoGenerater
             .generateM(EGeneratePrefix.STORE_PURCHASW.getCode());
         Date now = new Date();
@@ -99,11 +100,11 @@ public class StorePurchaseBOImpl extends PaginableBOImpl<StorePurchase>
         data.setPrice(amount);
 
         data.setCreateDatetime(now);
-        data.setStatus(EStorePurchaseStatus.PAYED.getCode());
+        data.setStatus(EStorePurchaseStatus.TO_PAY.getCode());
         data.setPayType(EO2OPayType.WEIXIN.getCode());
         data.setPayGroup(payGroup);
 
-        data.setPayAmount2(jf);
+        data.setPayAmount2(jfAmount);
         data.setPayDatetime(now);
         data.setRemark("微信支付O2O消费");
         data.setSystemCode(store.getSystemCode());

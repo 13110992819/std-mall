@@ -1,3 +1,4 @@
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('S','STORE_XFFX','0.2','',now(),'o2o消费返现比例','CD-CCG000007','CD-CCG000007');
 /*
 -- Query: SELECT `type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code` FROM tsys_dict where system_code = 'CD-CCG000007'
 LIMIT 0, 10000

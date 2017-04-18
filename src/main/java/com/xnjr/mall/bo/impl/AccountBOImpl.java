@@ -137,38 +137,6 @@ public class AccountBOImpl implements IAccountBO {
     }
 
     @Override
-    public void doCgbJfPay(String fromUserId, String toUserId, Long cgbPrice,
-            Long jfPrice, EBizType bizType) {
-        // 检验菜狗币和积分是否充足
-        checkCgbJf(fromUserId, cgbPrice, jfPrice);
-        // 扣除菜狗币
-        doTransferAmountRemote(fromUserId, toUserId, ECurrency.CG_CGB,
-            cgbPrice, bizType, bizType.getValue(), bizType.getValue());
-        // 扣除积分
-        doTransferAmountRemote(fromUserId, toUserId, ECurrency.CGJF, jfPrice,
-            bizType, bizType.getValue(), bizType.getValue());
-    }
-
-    @Override
-    public void checkCgbJf(String userId, Long cgbAmount, Long jfAmount) {
-        Account cgbAccount = getRemoteAccount(userId, ECurrency.CG_CGB);
-        if (cgbAmount > cgbAccount.getAmount()) {
-            throw new BizException("xn0000", "菜狗币不足");
-        }
-        Account xnbAccount = getRemoteAccount(userId, ECurrency.CGJF);
-        if (jfAmount > xnbAccount.getAmount()) {
-            throw new BizException("xn0000", "积分不足");
-        }
-    }
-
-    @Override
-    public void doCSWJfPay(String fromUserId, String toUserId, Long jfAmount,
-            EBizType bizType) {
-        doTransferAmountRemote(fromUserId, toUserId, ECurrency.JF, jfAmount,
-            bizType, bizType.getValue(), bizType.getValue());
-    }
-
-    @Override
     public void doZHYEPay(String fromUserId, String toUserId, Long frbAmount,
             Long gxzAmount, Long gwbAmount, Long qbbAmount, EBizType bizType) {
         if (frbAmount > 0) {
@@ -210,4 +178,52 @@ public class AccountBOImpl implements IAccountBO {
         }
     }
 
+    // ************************************菜狗************************************
+    @Override
+    public void doCgbJfPay(String fromUserId, String toUserId, Long cgbPrice,
+            Long jfPrice, EBizType bizType) {
+        // 检验菜狗币和积分是否充足
+        checkCgbJf(fromUserId, cgbPrice, jfPrice);
+        // 扣除菜狗币
+        doTransferAmountRemote(fromUserId, toUserId, ECurrency.CG_CGB,
+            cgbPrice, bizType, bizType.getValue(), bizType.getValue());
+        // 扣除积分
+        doTransferAmountRemote(fromUserId, toUserId, ECurrency.CGJF, jfPrice,
+            bizType, bizType.getValue(), bizType.getValue());
+    }
+
+    @Override
+    public void checkCgbJf(String userId, Long cgbAmount, Long jfAmount) {
+        Account cgbAccount = getRemoteAccount(userId, ECurrency.CG_CGB);
+        if (cgbAmount > cgbAccount.getAmount()) {
+            throw new BizException("xn0000", "菜狗币不足");
+        }
+        Account xnbAccount = getRemoteAccount(userId, ECurrency.CGJF);
+        if (jfAmount > xnbAccount.getAmount()) {
+            throw new BizException("xn0000", "积分不足");
+        }
+    }
+
+    @Override
+    public void checkRmbJf(String userId, Long rmbAmount, Long jfAmount) {
+        Account rmbAccount = getRemoteAccount(userId, ECurrency.CNY);
+        if (rmbAmount > rmbAccount.getAmount()) {
+            throw new BizException("xn0000", "人民币不足");
+        }
+        Account cgjfAccount = getRemoteAccount(userId, ECurrency.CGJF);
+        if (jfAmount > cgjfAccount.getAmount()) {
+            throw new BizException("xn0000", "积分不足");
+        }
+    }
+
+    // ************************************菜狗************************************
+
+    // ************************************城市网************************************
+    @Override
+    public void doCSWJfPay(String fromUserId, String toUserId, Long jfAmount,
+            EBizType bizType) {
+        doTransferAmountRemote(fromUserId, toUserId, ECurrency.JF, jfAmount,
+            bizType, bizType.getValue(), bizType.getValue());
+    }
+    // ************************************城市网************************************
 }

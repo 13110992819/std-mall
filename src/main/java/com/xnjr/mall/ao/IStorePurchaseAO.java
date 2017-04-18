@@ -21,6 +21,8 @@ public interface IStorePurchaseAO {
 
     public void paySuccess(String payGroup, String payCode, Long payAmount);
 
+    public void paySuccessCG(String payGroup, String payCode, Long payAmount);
+
     public Paginable<StorePurchase> queryStorePurchasePage(int start,
             int limit, StorePurchase condition);
 

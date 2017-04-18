@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.xnjr.mall.bo.IUserBO;
+import com.xnjr.mall.core.StringValidater;
 import com.xnjr.mall.domain.User;
 import com.xnjr.mall.dto.req.XN001102Req;
 import com.xnjr.mall.dto.req.XN001301Req;
@@ -55,6 +56,7 @@ public class UserBOImpl implements IUserBO {
             user.setMobile(res.getMobile());
             user.setIdentityFlag(res.getIdentityFlag());
             user.setUserReferee(res.getUserReferee());
+            user.setDivRate(StringValidater.toDouble(res.getDivRate()));
         }
         return user;
     }

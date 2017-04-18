@@ -22,7 +22,7 @@ public class XN808243 extends AProcessor {
     private XN808243Req req = null;
 
     @Override
-    public Object doBusiness() throws BizException {
+    public synchronized Object doBusiness() throws BizException {
         return storePurchaseAO.storePurchaseRMBJF(req.getUserId(),
             req.getStoreCode(), StringValidater.toLong(req.getAmount()),
             req.getPayType());

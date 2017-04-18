@@ -73,6 +73,7 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
     private IAccountBO accountBO;
 
     @Override
+    @Transactional
     public String storePurchaseCGB(String userId, String storeCode,
             Long cgbTotalAmount, String payType) {
         User user = userBO.getRemoteUser(userId);
@@ -85,27 +86,51 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
         if (cgbAccount.getAmount() < cgbTotalAmount) {
             throw new BizException("xn0000", "菜狗币账户余额不足");
         }
+        // 菜狗币消费：
+        // 1、落地消费记录，支付消费者菜狗币
+        // 2、返现规则：
+        // 1)消费者返现人民币=cgbTotalAmount * xffxRate(全局)；
+        // 2)商家返现人民币=cgbTotalAmount * store.rate3(商家特有)
+        // 3)商家对应加盟商分成返现人民币=cgbTotalAmount * user.getDivRate(加盟商分成比例)
         // 计算返点人民币
-        Long fdAmount = Double.valueOf(cgbTotalAmount * store.getRate3())
-            .longValue();
+        Long fdAmount = AmountUtil.mul(cgbTotalAmount, store.getRate3());
         // 落地本地系统消费记录
         String code = storePurchaseBO.storePurchaseCGcgb(user, store,
             cgbTotalAmount, fdAmount);
         // 资金划转开始--------------
-        // 菜狗币从消费者回收至平台，
+        // 菜狗币从消费者回收至平台
         String systemUser = ESysUser.SYS_USER_CAIGO.getCode();
         accountBO.doTransferAmountRemote(user.getUserId(), systemUser,
             ECurrency.CG_CGB, cgbTotalAmount, EBizType.CG_O2O_CGB,
             "O2O消费使用菜狗币", "O2O消费回收菜狗币");
-        // 商家从平台处拿到返点（人民币）
+
+        // 消费者从平台拿到返点
+        SYSConfig config = sysConfigBO.getSYSConfig(SysConstants.STORE_XFFX,
+            store.getCompanyCode(), store.getSystemCode());
+        Long xffxAmount = AmountUtil.mul(cgbTotalAmount,
+            Double.valueOf(config.getCvalue()));
+        accountBO.doTransferAmountRemote(systemUser, user.getUserId(),
+            ECurrency.CNY, xffxAmount, EBizType.CG_O2O_CGBFD,
+            "O2O消费支付消费者返现人民币", "O2O消费收到返现人民币");
+
+        // 商家从平台处拿到返点
         accountBO.doTransferAmountRemote(systemUser, store.getOwner(),
             ECurrency.CNY, fdAmount, EBizType.CG_O2O_CGBFD, "O2O消费支付返点人民币",
             "O2O消费收到返点人民币");
+
+        // 加盟商从平台拿到返点
+        User storeUser = userBO.getRemoteUser(store.getOwner());
+        User jmsUser = userBO.getRemoteUser(storeUser.getUserReferee());
+        Long jmsFdAmount = AmountUtil.mul(cgbTotalAmount, jmsUser.getDivRate());
+        accountBO.doTransferAmountRemote(systemUser, jmsUser.getUserId(),
+            ECurrency.CNY, jmsFdAmount, EBizType.CG_O2O_CGBFD,
+            "O2O消费支付加盟商返点人民币", "O2O消费收到返点人民币");
         // 资金划转结束--------------
         return code;
     }
 
     @Override
+    @Transactional
     public Object storePurchaseRMBJF(String userId, String storeCode,
             Long rmbTotalAmount, String payType) {
         User user = userBO.getRemoteUser(userId);
@@ -196,6 +221,9 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
         // 资金划转开始--------------
         // 积分从消费者回收至平台，
         String systemUser = ESysUser.SYS_USER_CAIGO.getCode();
+
+        // 验证余额是否足够
+        accountBO.checkRmbJf(user.getUserId(), payRMB, payJF);
         accountBO.doTransferAmountRemote(user.getUserId(), systemUser,
             ECurrency.CGJF, payJF, EBizType.CG_O2O_CGJF, "O2O消费积分回收",
             "O2O消费积分回收");
@@ -209,19 +237,19 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
 
     private Object storePurchaseCGWX(User user, Store store, Long amount) {
         // 计算折扣，即积分扣钱金额
-        Long discountAmount = Double.valueOf(amount * store.getRate2())
-            .longValue();
-
+        Long discountAmount = AmountUtil.mul(amount, store.getRate2());
         Double cgjf2cnyRate = accountBO.getExchangeRateRemote(ECurrency.CGJF);
-        Long jf = Double.valueOf(discountAmount * cgjf2cnyRate).longValue();
+        Long jfAmount = AmountUtil.mul(discountAmount, cgjf2cnyRate);
         // 落地本地系统消费记录
         String payGroup = storePurchaseBO.storePurchaseCGWX(user, store,
-            amount, jf);
+            amount, jfAmount);
         // 资金划转开始--------------
-        // 积分从消费者回收至平台，
-        String systemUser = ESysUser.SYS_USER_CAIGO.getCode();
-        accountBO.doTransferAmountRemote(user.getUserId(), systemUser,
-            ECurrency.JF, jf, EBizType.CG_O2O_CGJF, "O2O消费使用积分", "O2O消费回收积分");
+        // 验证积分是否足够
+        Account xnbAccount = accountBO.getRemoteAccount(user.getUserId(),
+            ECurrency.CGJF);
+        if (jfAmount > xnbAccount.getAmount()) {
+            throw new BizException("xn0000", "积分不足");
+        }
         // RMB调用微信渠道至商家
         return accountBO.doWeiXinPayRemote(user.getUserId(), store.getOwner(),
             amount - discountAmount, EBizType.CG_O2O_RMB, "O2O消费微信支付",
@@ -407,6 +435,25 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
                         userFrAmount, store, user);
                 }
             }
+        } else {
+            logger.info("订单号：" + storePurchase.getCode() + "已支付，重复回调");
+        }
+    }
+
+    @Override
+    @Transactional
+    public void paySuccessCG(String payGroup, String payCode, Long payAmount) {
+        StorePurchase storePurchase = storePurchaseBO
+            .getStorePurchaseByPayGroup(payGroup);
+        if (EStorePurchaseStatus.TO_PAY.getCode().equals(
+            storePurchase.getStatus())) {
+            // 更新支付记录
+            storePurchaseBO.paySuccess(storePurchase, payCode, payAmount);
+            // 支付成功后，将积分从消费者回收至平台
+            String systemUser = ESysUser.SYS_USER_CAIGO.getCode();
+            accountBO.doTransferAmountRemote(storePurchase.getUserId(),
+                systemUser, ECurrency.CGJF, storePurchase.getPayAmount2(),
+                EBizType.CG_O2O_CGJF, "O2O消费使用积分", "O2O消费回收积分");
         } else {
             logger.info("订单号：" + storePurchase.getCode() + "已支付，重复回调");
         }

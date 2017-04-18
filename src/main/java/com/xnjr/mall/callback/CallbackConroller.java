@@ -48,17 +48,17 @@ public class CallbackConroller {
             // ------------------------------
             try {
                 if (EBizType.AJ_GW.getCode().equals(bizType)) {
-                    System.out.println("**** 进入商品购物，微信APP支付服务器回调 start****");
+                    System.out.println("**** 进入商品购物，微信支付服务器回调 start****");
                     orderAO.paySuccess(payGroup, payCode, amount);
-                    System.out.println("**** 进入商品购物，微信APP支付服务器回调 end****");
+                    System.out.println("**** 进入商品购物，微信支付服务器回调 end****");
                 } else if (EBizType.ZH_O2O.getCode().equals(bizType)) {
-                    System.out.println("**** 进入优店买单，微信APP支付服务器回调 start****");
+                    System.out.println("**** 进入优店买单，微信支付服务器回调 start****");
                     storePurchaseAO.paySuccess(payGroup, payCode, amount);
-                    System.out.println("**** 进入优店买单，微信APP支付服务器回调 end****");
-                } else if (EBizType.CSW_PAY.getCode().equals(bizType)) {
-                    System.out.println("**** 进入商品购物，微信APP支付服务器回调 start****");
-                    // orderAO.paySuccess(payGroup, payCode, amount);
-                    System.out.println("**** 进入商品购物，微信APP支付服务器回调 end****");
+                    System.out.println("**** 进入优店买单，微信支付服务器回调 end****");
+                } else if (EBizType.CG_O2O_RMB.getCode().equals(bizType)) {
+                    System.out.println("**** 进入菜狗优店买单，微信支付服务器回调 start****");
+                    storePurchaseAO.paySuccessCG(payGroup, payCode, amount);
+                    System.out.println("**** 进入菜狗优店买单，微信支付服务器回调 end****");
                 }
             } catch (Exception e) {
                 logger.info("支付回调异常");

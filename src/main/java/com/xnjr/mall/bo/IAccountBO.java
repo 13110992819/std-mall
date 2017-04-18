@@ -64,14 +64,6 @@ public interface IAccountBO {
             Long amount, EBizType bizType, String fromBizNote,
             String toBizNote, String payGroup);
 
-    public void doCgbJfPay(String fromUserId, String toUserId, Long cgbPrice,
-            Long jfPrice, EBizType bizType);
-
-    public void checkCgbJf(String userId, Long cgbAmount, Long jfAmount);
-
-    public void doCSWJfPay(String fromUserId, String toUserId, Long jfAmount,
-            EBizType bizType);
-
     public void doZHYEPay(String fromUserId, String systemUserId,
             Long frbAmount, Long gxzAmount, Long gwbAmount, Long qbbAmount,
             EBizType ajGw);
@@ -81,4 +73,18 @@ public interface IAccountBO {
 
     public void checkZHGwbQbb(String userId, Long gwbAmount, Long qbbAmount);
 
+    // ************************************菜狗************************************
+    public void doCgbJfPay(String fromUserId, String toUserId, Long cgbPrice,
+            Long jfPrice, EBizType bizType);
+
+    public void checkCgbJf(String userId, Long cgbAmount, Long jfAmount);
+
+    public void checkRmbJf(String userId, Long rmbAmount, Long jfAmount);
+
+    // ************************************菜狗************************************
+
+    // ************************************城市网************************************
+    public void doCSWJfPay(String fromUserId, String toUserId, Long jfAmount,
+            EBizType bizType);
+    // ************************************城市网************************************
 }

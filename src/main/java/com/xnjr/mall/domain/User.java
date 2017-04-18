@@ -45,6 +45,9 @@ public class User extends ABaseDO {
     // 推荐人
     private String userReferee;
 
+    // 分成比例
+    private Double divRate;
+
     // 省
     private String province;
 
@@ -53,6 +56,14 @@ public class User extends ABaseDO {
 
     // 区(县)
     private String area;
+
+    public Double getDivRate() {
+        return divRate;
+    }
+
+    public void setDivRate(Double divRate) {
+        this.divRate = divRate;
+    }
 
     public String getUserReferee() {
         return userReferee;

@@ -46,6 +46,9 @@ public class XN001400Res {
     // 是否绑定银行卡
     private String bankcardFlag;
 
+    // 分成比例
+    private String divRate;
+
     // 公司编号
     private String companyCode;
 
@@ -211,6 +214,14 @@ public class XN001400Res {
 
     public void setTotalFansNum(String totalFansNum) {
         this.totalFansNum = totalFansNum;
+    }
+
+    public String getDivRate() {
+        return divRate;
+    }
+
+    public void setDivRate(String divRate) {
+        this.divRate = divRate;
     }
 
     public String getSystemCode() {

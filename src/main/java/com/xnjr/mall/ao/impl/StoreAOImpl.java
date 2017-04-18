@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.xnjr.mall.ao.IStoreAO;
 import com.xnjr.mall.bo.IAccountBO;
 import com.xnjr.mall.bo.ISmsOutBO;
+import com.xnjr.mall.bo.IStoreActionBO;
 import com.xnjr.mall.bo.IStoreBO;
 import com.xnjr.mall.bo.IStorePurchaseBO;
 import com.xnjr.mall.bo.IStoreTicketBO;
@@ -60,6 +61,9 @@ public class StoreAOImpl implements IStoreAO {
 
     @Autowired
     private IStorePurchaseBO storePurchaseBO;
+
+    @Autowired
+    private IStoreActionBO storeActionBO;
 
     @Override
     @Transactional
@@ -358,6 +362,10 @@ public class StoreAOImpl implements IStoreAO {
                 List<StoreTicket> storeTickets = storeTicketBO
                     .queryStoreTicketList(stCondition);
                 store.setStoreTickets(storeTickets);
+                if (StringUtils.isNotBlank(condition.getFromUser())) {
+                    store.setIsDZ(storeActionBO.isDz(condition.getFromUser(),
+                        store.getCode()));
+                }
             }
         }
         return paginable;
@@ -418,6 +426,9 @@ public class StoreAOImpl implements IStoreAO {
         condition.setStoreCode(store.getCode());
         condition.setStatus(EStoreTicketStatus.ON.getCode());
         store.setStoreTickets(storeTicketBO.queryStoreTicketList(condition));
+        if (StringUtils.isNotBlank(fromUser)) {
+            store.setIsDZ(storeActionBO.isDz(fromUser, store.getCode()));
+        }
         return store;
 
     }

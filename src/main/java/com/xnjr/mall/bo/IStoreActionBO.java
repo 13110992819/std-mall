@@ -19,4 +19,6 @@ public interface IStoreActionBO extends IPaginableBO<StoreAction> {
     public StoreAction getStoreAction(String storeCode, String userId,
             String type);
 
+    public boolean isDz(String fromUser, String code);
+
 }

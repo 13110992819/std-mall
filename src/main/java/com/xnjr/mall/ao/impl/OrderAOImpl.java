@@ -333,7 +333,7 @@ public class OrderAOImpl implements IOrderAO {
         Order order = orderBO.getOrder(code);
         if (!EOrderStatus.PAY_YES.getCode().equals(order.getStatus())
                 && !EOrderStatus.SEND.getCode().equals(order.getStatus())) {
-            throw new BizException("xn0000", "该订单支付成功或已发货状态，无法操作");
+            throw new BizException("xn0000", "该订单不是支付成功或已发货状态，无法操作");
         }
         String status = null;
         if (EOrderStatus.PAY_YES.getCode().equals(order.getStatus())) {

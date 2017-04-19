@@ -68,7 +68,6 @@ public class StoreAOImpl implements IStoreAO {
     @Override
     @Transactional
     public String addStoreOss(XN808200Req req) {
-
         // 验证推荐人是否是平台的已注册用户,将userReferee手机号转化为用户编号
         String systemCode = req.getSystemCode();
         String userReferee = req.getUserReferee();
@@ -112,6 +111,7 @@ public class StoreAOImpl implements IStoreAO {
         store.setUserReferee(userRefereeUserId);
         store.setRate1(StringValidater.toDouble(req.getRate1()));
         store.setRate2(StringValidater.toDouble(req.getRate2()));
+        store.setRate3(StringValidater.toDouble(req.getRate3()));
 
         store.setStatus(EStoreStatus.PASS.getCode());
         store.setUpdater(req.getUpdater());
@@ -162,6 +162,7 @@ public class StoreAOImpl implements IStoreAO {
         dbStore.setUserReferee(userRefereeUserId);
         dbStore.setRate1(StringValidater.toDouble(req.getRate1()));
         dbStore.setRate2(StringValidater.toDouble(req.getRate2()));
+        dbStore.setRate3(StringValidater.toDouble(req.getRate3()));
 
         dbStore.setStatus(EStoreStatus.PASS.getCode());
         dbStore.setUpdater(req.getUpdater());
@@ -208,6 +209,7 @@ public class StoreAOImpl implements IStoreAO {
         data.setUserReferee(userId);
         data.setRate1(StringValidater.toDouble(req.getRate1()));
         data.setRate2(StringValidater.toDouble(req.getRate2()));
+        data.setRate3(StringValidater.toDouble(req.getRate3()));
 
         data.setStatus(EStoreStatus.TOCHECK.getCode());
         data.setUpdater(req.getOwner());
@@ -255,6 +257,7 @@ public class StoreAOImpl implements IStoreAO {
 
         data.setRate1(StringValidater.toDouble(req.getRate1()));
         data.setRate2(StringValidater.toDouble(req.getRate2()));
+        data.setRate3(StringValidater.toDouble(req.getRate3()));
 
         data.setStatus(EStoreStatus.TOCHECK.getCode());
         data.setUpdater(req.getUpdater());

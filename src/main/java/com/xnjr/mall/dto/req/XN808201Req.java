@@ -26,6 +26,9 @@ public class XN808201Req {
     // 不使用折扣券分成比例（必填）
     private String rate2;
 
+    // 返点比例（选填）(菜狗)
+    private String rate3;
+
     // 广告语（必填）
     private String slogan;
 
@@ -261,4 +264,11 @@ public class XN808201Req {
         this.companyCode = companyCode;
     }
 
+    public String getRate3() {
+        return rate3;
+    }
+
+    public void setRate3(String rate3) {
+        this.rate3 = rate3;
+    }
 }

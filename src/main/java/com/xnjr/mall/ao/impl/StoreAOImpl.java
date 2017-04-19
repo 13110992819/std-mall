@@ -433,7 +433,6 @@ public class StoreAOImpl implements IStoreAO {
             store.setIsDZ(storeActionBO.isDz(fromUser, store.getCode()));
         }
         return store;
-
     }
 
     @Override

@@ -141,7 +141,7 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
         if (EPayType.CG_YE.getCode().equals(payType)) {
             return storePurchaseCGYE(user, store, rmbTotalAmount);
         }
-        if (EPayType.WEIXIN.getCode().equals(payType)) {
+        if (EPayType.WEIXIN_H5.getCode().equals(payType)) {
             return storePurchaseCGWX(user, store, rmbTotalAmount);
         } else {
             throw new BizException("xn0000", "支付方式不存在");
@@ -299,7 +299,7 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
             return storePurchaseZHYE(user, store, amount, ticketCode);
         } else if (EO2OPayType.ALIPAY.getCode().equals(payType)) {
             return storePurchaseZHZFB(user, store, amount, ticketCode);
-        } else if (EO2OPayType.WEIXIN.getCode().equals(payType)) {
+        } else if (EO2OPayType.WEIXIN_APP.getCode().equals(payType)) {
             return storePurchaseZHWX(user, store, amount, ticketCode);
         } else {
             throw new BizException("xn0000", payType + "支付方式暂不支持");

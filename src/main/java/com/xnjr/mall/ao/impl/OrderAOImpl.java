@@ -379,8 +379,9 @@ public class OrderAOImpl implements IOrderAO {
         }
         if (jfAmount > 0) {
             accountBO.doTransferAmountRemote(order.getToUser(),
-                order.getApplyUser(), ECurrency.JF, jfAmount, EBizType.AJ_GWTK,
-                EBizType.AJ_GWTK.getValue(), EBizType.AJ_GWTK.getValue());
+                order.getApplyUser(), ECurrency.CGJF, jfAmount,
+                EBizType.AJ_GWTK, EBizType.AJ_GWTK.getValue(),
+                EBizType.AJ_GWTK.getValue());
         }
     }
 

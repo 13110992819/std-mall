@@ -101,7 +101,7 @@ public class StorePurchaseBOImpl extends PaginableBOImpl<StorePurchase>
 
         data.setCreateDatetime(now);
         data.setStatus(EStorePurchaseStatus.TO_PAY.getCode());
-        data.setPayType(EO2OPayType.WEIXIN.getCode());
+        data.setPayType(EO2OPayType.WEIXIN_APP.getCode());
         data.setPayGroup(payGroup);
 
         data.setPayAmount2(jfAmount);
@@ -131,7 +131,7 @@ public class StorePurchaseBOImpl extends PaginableBOImpl<StorePurchase>
 
         data.setCreateDatetime(now);
         data.setStatus(EStorePurchaseStatus.TO_PAY.getCode());
-        data.setPayType(EO2OPayType.WEIXIN.getCode());
+        data.setPayType(EO2OPayType.WEIXIN_APP.getCode());
 
         data.setPayGroup(payGroup);
 
@@ -236,7 +236,10 @@ public class StorePurchaseBOImpl extends PaginableBOImpl<StorePurchase>
         condition.setStatus(EStorePurchaseStatus.PAYED.getCode());
         List<StorePurchase> list = storePurchaseDAO.selectList(condition);
         for (StorePurchase storePurchase : list) {
-            if (EPayType.WEIXIN.getCode().equals(storePurchase.getPayType())
+            if (EPayType.WEIXIN_APP.getCode()
+                .equals(storePurchase.getPayType())
+                    || EPayType.WEIXIN_H5.getCode().equals(
+                        storePurchase.getPayType())
                     || EPayType.ALIPAY.getCode().equals(
                         storePurchase.getPayType())) {
                 if (null != storePurchase.getPayAmount1()) {

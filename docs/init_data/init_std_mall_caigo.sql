@@ -1,3 +1,20 @@
+/*
+-- Query: SELECT * FROM std_mall_200.tmall_category where system_code = 'CD-CCG000007'
+LIMIT 0, 400
+
+-- Date: 2017-04-19 19:18
+*/
+INSERT INTO `tmall_category` (`code`,`type`,`parent_code`,`name`,`pic`,`order_no`,`status`,`company_code`,`system_code`) VALUES ('CG1','2','0','餐饮','http://121.40.48.48:8901/default/1.png',3,'1','CD-CCG000007','CD-CCG000007');
+INSERT INTO `tmall_category` (`code`,`type`,`parent_code`,`name`,`pic`,`order_no`,`status`,`company_code`,`system_code`) VALUES ('CG10','2','0','旅游','http://121.40.48.48:8901/default/10.png',1,'1','CD-CCG000007','CD-CCG000007');
+INSERT INTO `tmall_category` (`code`,`type`,`parent_code`,`name`,`pic`,`order_no`,`status`,`company_code`,`system_code`) VALUES ('CG2','2','0','生活服务','http://121.40.48.48:8901/2016121218/20161234706230130351603.jpg',6,'1','CD-CCG000007','CD-CCG000007');
+INSERT INTO `tmall_category` (`code`,`type`,`parent_code`,`name`,`pic`,`order_no`,`status`,`company_code`,`system_code`) VALUES ('CG3','2','0','电影','http://121.40.48.48:8901/default/3.png',9,'1','CD-CCG000007','CD-CCG000007');
+INSERT INTO `tmall_category` (`code`,`type`,`parent_code`,`name`,`pic`,`order_no`,`status`,`company_code`,`system_code`) VALUES ('CG4','2','0','酒店','http://121.40.48.48:8901/default/4.png',1,'1','CD-CCG000007','CD-CCG000007');
+INSERT INTO `tmall_category` (`code`,`type`,`parent_code`,`name`,`pic`,`order_no`,`status`,`company_code`,`system_code`) VALUES ('CG5','2','0','休闲娱乐','http://121.40.48.48:8901/default/5.png',7,'1','CD-CCG000007','CD-CCG000007');
+INSERT INTO `tmall_category` (`code`,`type`,`parent_code`,`name`,`pic`,`order_no`,`status`,`company_code`,`system_code`) VALUES ('CG6','2','0','汽车','http://121.40.48.48:8901/default/6.png',0,'1','CD-CCG000007','CD-CCG000007');
+INSERT INTO `tmall_category` (`code`,`type`,`parent_code`,`name`,`pic`,`order_no`,`status`,`company_code`,`system_code`) VALUES ('CG8','2','0','甜点水果','http://121.40.48.48:8901/2016121218/20161234706285088930745.jpg',3,'1','CD-CCG000007','CD-CCG000007');
+INSERT INTO `tmall_category` (`code`,`type`,`parent_code`,`name`,`pic`,`order_no`,`status`,`company_code`,`system_code`) VALUES ('CG9','2','0','建材家居','http://121.40.48.48:8901/2016121218/20161234706220240693727.jpg',2,'1','CD-CCG000007','CD-CCG000007');
+INSERT INTO `tmall_category` (`code`,`type`,`parent_code`,`name`,`pic`,`order_no`,`status`,`company_code`,`system_code`) VALUES ('CGDH2016121213455649238','2','0','教育培训','http://121.40.48.48:8901/2016121218/20161234706105597114849.jpg',9,'1','CD-CCG000007','CD-CCG000007');
+
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('S','STORE_XFFX','0.2','',now(),'o2o消费返现比例','CD-CCG000007','CD-CCG000007');
 /*
 -- Query: SELECT `type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code` FROM tsys_dict where system_code = 'CD-CCG000007'

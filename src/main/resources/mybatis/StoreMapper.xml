@@ -338,6 +338,7 @@
 		,user_referee
 		,rate1
 		,rate2
+		,rate3
 		
 		,status
 		,updater
@@ -379,7 +380,8 @@
 		,#{userReferee}
 		,#{rate1}
 		,#{rate2}
-	
+		
+	    ,#{rate3}
 		,#{status}
 		,#{updater}
 		,#{updateDatetime}

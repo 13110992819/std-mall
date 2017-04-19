@@ -60,7 +60,7 @@ public class StorePurchaseBOImpl extends PaginableBOImpl<StorePurchase>
     }
 
     @Override
-    public String storePurchaseCGrmbjf(User user, Store store, Long amount,
+    public String storePurchaseCGRMBJF(User user, Store store, Long amount,
             Long payRMB, Long payJF) {
         String code = OrderNoGenerater.generateM(EGeneratePrefix.STORE_PURCHASW
             .getCode());

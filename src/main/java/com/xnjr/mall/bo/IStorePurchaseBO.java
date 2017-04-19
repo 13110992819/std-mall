@@ -12,7 +12,7 @@ public interface IStorePurchaseBO extends IPaginableBO<StorePurchase> {
     public String storePurchaseCGcgb(User user, Store store, Long amount,
             Long fdAmount);
 
-    public String storePurchaseCGrmbjf(User user, Store store, Long amount,
+    public String storePurchaseCGRMBJF(User user, Store store, Long amount,
             Long payRMB, Long payJF);
 
     public String storePurchaseCGWX(User user, Store store, Long amount,

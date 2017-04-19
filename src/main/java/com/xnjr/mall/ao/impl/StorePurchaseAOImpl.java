@@ -31,7 +31,6 @@ import com.xnjr.mall.domain.StoreTicket;
 import com.xnjr.mall.domain.User;
 import com.xnjr.mall.domain.UserTicket;
 import com.xnjr.mall.dto.res.BooleanRes;
-import com.xnjr.mall.dto.res.XN808248Res;
 import com.xnjr.mall.enums.EBizType;
 import com.xnjr.mall.enums.ECurrency;
 import com.xnjr.mall.enums.EO2OPayType;
@@ -216,7 +215,7 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
             throw new BizException("xn0000", "人民币账户余额不足");
         }
         // 落地本地系统消费记录
-        String code = storePurchaseBO.storePurchaseCGrmbjf(user, store,
+        String code = storePurchaseBO.storePurchaseCGRMBJF(user, store,
             rmbTotalAmount, payRMB, payJF);
         // 资金划转开始--------------
         // 积分从消费者回收至平台，
@@ -483,36 +482,19 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
      * @see com.xnjr.mall.ao.IStorePurchaseAO#getLasterStorePurchase(java.lang.String)
      */
     @Override
-    public XN808248Res getLasterStorePurchase(String storeCode) {
-        XN808248Res result = null;
+    public StorePurchase getLasterStorePurchase(String storeCode) {
+        StorePurchase result = null;
         StorePurchase condition = new StorePurchase();
         condition.setStoreCode(storeCode);
         condition.setStatus(EStorePurchaseStatus.PAYED.getCode());
         condition.setOrder("code", "desc");
         Paginable<StorePurchase> page = storePurchaseBO.getPaginable(1, 1,
             condition);
-
         List<StorePurchase> list = page.getList();
-        if (page != null && CollectionUtils.isNotEmpty(list)) {
-            StorePurchase data = list.get(0);
-            if (EPayType.INTEGRAL.getCode().equals(data.getPayType())) {
-                result = new XN808248Res();
-                result.setAmount(data.getPayAmount2());
-                result.setCurrency(ECurrency.CG_CGB.getCode());
-                User user = userBO.getRemoteUser(data.getUserId());
-
-                result.setCode(data.getCode());
-                result.setPrice(data.getPrice());
-                result.setMobile(user.getMobile());
-                result.setNickName(user.getNickname());
-                result.setCreateDatetime(data.getCreateDatetime());
-
-                result.setStoreCode(data.getStoreCode());
-                result.setCompanyCode(data.getCompanyCode());
-                result.setSystemCode(data.getSystemCode());
-            } else {
-                result = null;
-            }
+        if (CollectionUtils.isNotEmpty(list)) {
+            result = list.get(0);
+            User user = userBO.getRemoteUser(result.getUserId());
+            result.setUser(user);
         }
         return result;
     }

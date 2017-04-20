@@ -5,6 +5,7 @@ import com.xnjr.mall.api.AProcessor;
 import com.xnjr.mall.common.JsonUtil;
 import com.xnjr.mall.core.StringValidater;
 import com.xnjr.mall.dto.req.XN808650Req;
+import com.xnjr.mall.dto.res.PKCodeRes;
 import com.xnjr.mall.exception.BizException;
 import com.xnjr.mall.exception.ParaException;
 import com.xnjr.mall.spring.SpringContextHolder;
@@ -22,7 +23,8 @@ public class XN808650 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        return vorderAO.commitOrder(req);
+        String code = vorderAO.commitOrder(req);
+        return new PKCodeRes(code);
     }
 
     @Override

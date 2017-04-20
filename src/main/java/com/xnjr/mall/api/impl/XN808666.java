@@ -2,6 +2,8 @@ package com.xnjr.mall.api.impl;
 
 import com.xnjr.mall.ao.IVorderAO;
 import com.xnjr.mall.api.AProcessor;
+import com.xnjr.mall.common.JsonUtil;
+import com.xnjr.mall.core.StringValidater;
 import com.xnjr.mall.dto.req.XN808666Req;
 import com.xnjr.mall.exception.BizException;
 import com.xnjr.mall.exception.ParaException;
@@ -20,13 +22,13 @@ public class XN808666 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        // TODO Auto-generated method stub
-        return null;
+        return vorderAO.getVorder(req.getCode());
     }
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        // TODO Auto-generated method stub
+        req = JsonUtil.json2Bean(inputparams, XN808666Req.class);
+        StringValidater.validateBlank(req.getCode());
 
     }
 

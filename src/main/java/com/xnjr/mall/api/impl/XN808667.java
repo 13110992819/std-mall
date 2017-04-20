@@ -2,6 +2,9 @@ package com.xnjr.mall.api.impl;
 
 import com.xnjr.mall.ao.IVorderAO;
 import com.xnjr.mall.api.AProcessor;
+import com.xnjr.mall.common.JsonUtil;
+import com.xnjr.mall.core.StringValidater;
+import com.xnjr.mall.domain.Vorder;
 import com.xnjr.mall.dto.req.XN808667Req;
 import com.xnjr.mall.exception.BizException;
 import com.xnjr.mall.exception.ParaException;
@@ -20,13 +23,29 @@ public class XN808667 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        // TODO Auto-generated method stub
-        return null;
+        Vorder condition = new Vorder();
+        condition.setType(req.getType());
+        condition.setReCardno(req.getReCardno());
+        condition.setReName(req.getReName());
+        condition.setReMobile(req.getReMobile());
+        condition.setApplyUser(req.getApplyUser());
+
+        condition.setStatus(req.getStatus());
+        condition.setPayType(req.getPayType());
+        condition.setPayGroup(req.getPayGroup());
+        condition.setPayCode(req.getPayCode());
+        condition.setHandleUser(req.getHandleUser());
+
+        condition.setCompanyCode(req.getCompanyCode());
+        condition.setSystemCode(req.getSystemCode());
+        return vorderAO.queryVorderList(condition);
     }
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        // TODO Auto-generated method stub
+        req = JsonUtil.json2Bean(inputparams, XN808667Req.class);
+        StringValidater
+            .validateBlank(req.getSystemCode(), req.getCompanyCode());
 
     }
 

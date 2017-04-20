@@ -1,7 +1,12 @@
 package com.xnjr.mall.api.impl;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.xnjr.mall.ao.IVorderAO;
 import com.xnjr.mall.api.AProcessor;
+import com.xnjr.mall.common.JsonUtil;
+import com.xnjr.mall.core.StringValidater;
+import com.xnjr.mall.domain.Vorder;
 import com.xnjr.mall.dto.req.XN808668Req;
 import com.xnjr.mall.exception.BizException;
 import com.xnjr.mall.exception.ParaException;
@@ -20,13 +25,28 @@ public class XN808668 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        // TODO Auto-generated method stub
-        return null;
+        Vorder condition = new Vorder();
+        condition.setType(req.getType());
+        condition.setApplyUser(req.getApplyUser());
+        condition.setStatus(req.getStatus());
+        condition.setCompanyCode(req.getCompanyCode());
+        condition.setSystemCode(req.getSystemCode());
+        String orderColumn = req.getOrderColumn();
+        if (StringUtils.isBlank(orderColumn)) {
+            orderColumn = IVorderAO.DEFAULT_ORDER_COLUMN;
+        }
+        condition.setOrder(orderColumn, req.getOrderDir());
+        int start = StringValidater.toInteger(req.getStart());
+        int limit = StringValidater.toInteger(req.getLimit());
+        return vorderAO.queryVorderPage(start, limit, condition);
     }
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        // TODO Auto-generated method stub
+        req = JsonUtil.json2Bean(inputparams, XN808668Req.class);
+        StringValidater.validateBlank(req.getStart(), req.getLimit());
+        StringValidater.validateBlank(req.getSystemCode(),
+            req.getCompanyCode(), req.getApplyUser());
 
     }
 

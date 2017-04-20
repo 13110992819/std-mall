@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xnjr.mall.dao.IVproductDAO">
+	<resultMap id="vproduct_DB_Result" type="vproduct">
+		<result column="code" property="code" />
+		<result column="name" property="name" />
+		<result column="slogan" property="slogan" />
+		<result column="adv_pic" property="advPic" />
+		<result column="pic" property="pic" />
+		<result column="price" property="price" />
+		<result column="rate" property="rate" />
+		<result column="location" property="location" />
+		<result column="order_no" property="orderNo" />
+		<result column="status" property="status" />
+		<result column="updater" property="updater" />
+		<result column="update_datetime" property="updateDatetime" />
+		<result column="remark" property="remark" />
+		<result column="company_code" property="companyCode" />
+		<result column="system_code" property="systemCode" />
+	</resultMap>
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="code != null and code != '' ">
+				AND t.code = #{code}
+			</if>
+			<if test="name != null and name != '' ">
+				AND t.name = #{name}
+			</if>
+			<if test="location != null and location != '' ">
+				AND t.location = #{location}
+			</if>
+			<if test="status != null and status != '' ">
+				AND t.status = #{status}
+			</if>
+			<if test="updater != null and updater != '' ">
+				AND t.updater = #{updater}
+			</if>
+			<if test="companyCode != null and companyCode != '' ">
+				AND t.company_code = #{companyCode}
+			</if>
+			<if test="systemCode != null and systemCode != '' ">
+				AND t.system_code = #{systemCode}
+			</if>
+		</trim>
+	</sql>
+	<select id="select_vproduct" parameterType="vproduct" resultMap="vproduct_DB_Result">
+		SELECT
+		t.code
+		,t.name
+		,t.slogan
+		,t.adv_pic
+		,t.pic
+		,t.description
+		,t.price
+		,t.rate
+		,t.location
+		,t.order_no
+		,t.status
+		,t.updater
+		,t.update_datetime
+		,t.remark
+		,t.company_code
+		,t.system_code 
+		FROM
+		tmall_vproduct t 
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+
+	<select id="select_vproduct_count" parameterType="vproduct"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM tmall_vproduct t
+		<include refid="where_condition" />
+	</select>
+
+	<insert id="insert_vproduct" parameterType="vproduct">
+		INSERT INTO
+		tmall_vproduct(
+		code
+		,name
+		,slogan
+		,adv_pic
+		,pic
+		
+		,description
+		,price
+		,status
+		
+		,updater
+		,update_datetime
+		,remark
+		,company_code
+		,system_code 
+		)
+		VALUES(
+		#{code}
+		,#{name}
+		,#{slogan}
+		,#{advPic}
+		,#{pic}
+		
+		,#{description}
+		,#{price}
+		,#{status}
+		
+		,#{updater}
+		,#{updateDatetime}
+		,#{remark}
+		,#{companyCode}
+		,#{systemCode} 
+		)
+	</insert>
+	
+	<update id="update_vproduct" parameterType="vproduct">
+		UPDATE tmall_vproduct
+		SET
+		name=#{name}
+		,slogan=#{slogan}
+		,adv_pic=#{advPic}
+		,pic=#{pic}
+		
+		,description=#{description}
+		,price=#{price}
+		,status=#{status}
+		
+		,updater=#{updater}
+		,update_datetime=#{updateDatetime}
+		,remark=#{remark}
+		,company_code=#{companyCode}
+		,system_code =#{systemCode}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_putOn" parameterType="vproduct">
+		UPDATE tmall_vproduct
+		SET
+		location=#{location}
+		,order_no=#{orderNo}
+		,rate=#{rate}
+		,updater=#{updater}
+		,update_datetime=#{updateDatetime}
+		,status = #{status}
+		,remark=#{remark}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_putOff" parameterType="vproduct">
+		UPDATE tmall_vproduct
+		SET
+		updater=#{updater}
+		,update_datetime=#{updateDatetime}
+		,status = #{status}
+		,remark=#{remark}
+		WHERE code = #{code}
+	</update>
+	
+	<delete id="delete_vproduct" parameterType="vproduct">
+		DELETE FROM
+		tmall_vproduct
+		WHERE
+		code = #{code}
+	</delete>
+	
+</mapper>

@@ -224,8 +224,8 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
         // 验证余额是否足够
         accountBO.checkRmbJf(user.getUserId(), payRMB, payJF);
         accountBO.doTransferAmountRemote(user.getUserId(), systemUser,
-            ECurrency.CGJF, payJF, EBizType.CG_O2O_CGJF, "O2O消费积分回收",
-            "O2O消费积分回收");
+            ECurrency.CGJF, payJF, EBizType.CG_O2O_CGJF, "O2O消费积分支付",
+            "O2O消费积分支付");
         // 人民币给商家（人民币）
         accountBO.doTransferAmountRemote(user.getUserId(), store.getOwner(),
             ECurrency.CNY, payRMB, EBizType.CG_O2O_RMB, "O2O消费人民币支付",

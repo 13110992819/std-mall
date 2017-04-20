@@ -7,6 +7,7 @@ CREATE TABLE `tmall_vproduct` (
   `pic` text DEFAULT NULL COMMENT 'pic',
   `description` text COMMENT '图文描述',
   `price` varchar(255) DEFAULT NULL COMMENT '价格档（逗号隔开）',
+  `rate` decimal(18,8) DEFAULT NULL COMMENT '1个产品价格币种，兑换rate个支付币种',
   `location` varchar(32) DEFAULT NULL COMMENT '位置(0 普通)',
   `order_no` int(11) DEFAULT NULL COMMENT '相对位置编号',
   `status` varchar(4) DEFAULT NULL COMMENT '产品状态',

@@ -19,9 +19,6 @@ public class XN808650Req {
     // 下单人（必填）
     private String applyUser;
 
-    // 支付方式（必填）
-    private String payType;
-
     public String getVproductCode() {
         return vproductCode;
     }
@@ -68,14 +65,6 @@ public class XN808650Req {
 
     public void setApplyUser(String applyUser) {
         this.applyUser = applyUser;
-    }
-
-    public String getPayType() {
-        return payType;
-    }
-
-    public void setPayType(String payType) {
-        this.payType = payType;
     }
 
 }

@@ -14,7 +14,7 @@ public class Vorder extends ABaseDO {
     // 编号
     private String code;
 
-    // 类型
+    // 类型1=中石化充值；2=中石油充值；3=手机充值
     private String type;
 
     // 收件人卡号
@@ -32,17 +32,17 @@ public class Vorder extends ABaseDO {
     // 申请时间
     private Date applyDatetime;
 
-    // 订单金额
+    // 充值金额
     private Long amount;
+
+    // 实际需支付金额
+    private Long payAmount;
 
     // 状态
     private String status;
 
     // 支付方式
     private String payType;
-
-    // 实际支付金额
-    private Long payAmount;
 
     // 支付组号
     private String payGroup;
@@ -64,6 +64,8 @@ public class Vorder extends ABaseDO {
 
     // 所属系统编号
     private String systemCode;
+
+    // *************dp properties **************
 
     public String getCode() {
         return code;
@@ -208,7 +210,5 @@ public class Vorder extends ABaseDO {
     public void setSystemCode(String systemCode) {
         this.systemCode = systemCode;
     }
-
-    // *************dp properties **************
 
 }

@@ -14,7 +14,7 @@ public enum EBizType {
 
     , CG_HB2CGB("211", "嗨币兑换菜狗币"), CG_O2O_CGB("90", "菜狗O2O菜狗币支付"), CG_O2O_CGBFD(
             "91", "菜狗O2O菜狗币返点人民币"), CG_O2O_RMB("92", "菜狗O2O人民币支付"), CG_O2O_CGJF(
-            "93", "菜狗O2O积分支付")
+            "93", "菜狗O2O积分支付"), CG_XNCZ("94", "菜狗虚拟币充值")
 
     , ZH_O2O("-ZH1", "正汇O2O支付"), ZH_STOCK("-ZH2", "正汇分红权分红")
 

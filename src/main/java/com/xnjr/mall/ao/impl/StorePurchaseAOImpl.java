@@ -199,21 +199,15 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
         Long dxRMB = AmountUtil.mul(rmbTotalAmount, store.getRate2());// 可被抵消的人民币部分
         Double rate = accountBO.getExchangeRateRemote(ECurrency.CGJF);
         Long dxJF = AmountUtil.mul(dxRMB, rate);// 可抵消的积分
-        Account jfAccount = accountBO.getRemoteAccount(user.getUserId(),
-            ECurrency.CGJF);// 积分账户
-        if (jfAccount.getAmount() < dxJF) {// 积分余额不足时,自己积分全部用掉，不够部分用人民币抵消
-            payJF = jfAccount.getAmount();
-            Long addRMB = Double.valueOf((dxJF - payJF) / rate).longValue();
-            payRMB = rmbTotalAmount - dxRMB + addRMB;
-        } else {
-            payJF = dxJF;
-            payRMB = rmbTotalAmount - dxRMB;
-        }
-        Account cnyAccount = accountBO.getRemoteAccount(user.getUserId(),
-            ECurrency.CNY);
-        if (cnyAccount.getAmount() < payRMB) {
-            throw new BizException("xn0000", "人民币账户余额不足");
-        }
+        // Account jfAccount = accountBO.getRemoteAccount(user.getUserId(),
+        // ECurrency.CGJF);// 积分账户
+        // if (jfAccount.getAmount() < dxJF) {// 积分余额不足时,自己积分全部用掉，不够部分用人民币抵消
+        // payJF = jfAccount.getAmount();
+        // Long addRMB = AmountUtil.mul((dxJF - payJF), 1 / rate);
+        // payRMB = rmbTotalAmount - dxRMB + addRMB;
+        // } else
+        payRMB = rmbTotalAmount - dxRMB;
+        payJF = dxJF;
         // 落地本地系统消费记录
         String code = storePurchaseBO.storePurchaseCGRMBJF(user, store,
             rmbTotalAmount, payRMB, payJF);
@@ -224,8 +218,8 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
         // 验证余额是否足够
         accountBO.checkRmbJf(user.getUserId(), payRMB, payJF);
         accountBO.doTransferAmountRemote(user.getUserId(), systemUser,
-            ECurrency.CGJF, payJF, EBizType.CG_O2O_CGJF, "O2O消费积分回收",
-            "O2O消费积分回收");
+            ECurrency.CGJF, payJF, EBizType.CG_O2O_CGJF, "O2O消费积分支付",
+            "O2O消费积分支付");
         // 人民币给商家（人民币）
         accountBO.doTransferAmountRemote(user.getUserId(), store.getOwner(),
             ECurrency.CNY, payRMB, EBizType.CG_O2O_RMB, "O2O消费人民币支付",
@@ -249,10 +243,13 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
         if (jfAmount > xnbAccount.getAmount()) {
             throw new BizException("xn0000", "积分不足");
         }
+        // 验证积分是否足够
+        accountBO.checkRmbJf(user.getUserId(), 0L, jfAmount);
         // RMB调用微信渠道至商家
         return accountBO.doWeiXinH5PayRemote(user.getUserId(),
-            user.getOpenId(), store.getOwner(), amount - discountAmount,
-            EBizType.CG_O2O_RMB, "O2O消费微信支付", "O2O消费微信支付", payGroup);
+            user.getOpenId(), store.getOwner(),
+            AmountUtil.rmbJinFen(amount - discountAmount), EBizType.CG_O2O_RMB,
+            "O2O消费微信支付", "O2O消费微信支付", payGroup);
         // 资金划转结束--------------
     }
 

@@ -194,45 +194,40 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
     }
 
     private Object storePurchaseCGYE(User user, Store store, Long rmbTotalAmount) {
-        Long payRMB = null;// 需要支付的RMB金额
-        Long payJF = null;// 需要支付的积分金额
-        Long dxRMB = AmountUtil.mul(rmbTotalAmount, store.getRate2());// 可被抵消的人民币部分
-        Double rate = accountBO.getExchangeRateRemote(ECurrency.CGJF);
-        Long dxJF = AmountUtil.mul(dxRMB, rate);// 可抵消的积分
-        // Account jfAccount = accountBO.getRemoteAccount(user.getUserId(),
-        // ECurrency.CGJF);// 积分账户
-        // if (jfAccount.getAmount() < dxJF) {// 积分余额不足时,自己积分全部用掉，不够部分用人民币抵消
-        // payJF = jfAccount.getAmount();
-        // Long addRMB = AmountUtil.mul((dxJF - payJF), 1 / rate);
-        // payRMB = rmbTotalAmount - dxRMB + addRMB;
-        // } else
-        payRMB = rmbTotalAmount - dxRMB;
-        payJF = dxJF;
+        Long payRmbAmount = AmountUtil.mulRmbJinFen(rmbTotalAmount,
+            1 - store.getRate2());// 需要支付的RMB金额
+        Long discountAmount = rmbTotalAmount - payRmbAmount;// 可被抵消的人民币部分
+        // 进分
+        Double cgjf2cnyRate = accountBO.getExchangeRateRemote(ECurrency.CGJF);// 可抵消的积分
+        Long payJfAmount = AmountUtil.mulXnbJin1(discountAmount, cgjf2cnyRate);// 需要支付的积分金额
+
         // 落地本地系统消费记录
         String code = storePurchaseBO.storePurchaseCGRMBJF(user, store,
-            rmbTotalAmount, payRMB, payJF);
+            rmbTotalAmount, payRmbAmount, payJfAmount);
         // 资金划转开始--------------
         // 积分从消费者回收至平台，
-        String systemUser = ESysUser.SYS_USER_CAIGO.getCode();
-
         // 验证余额是否足够
-        accountBO.checkRmbJf(user.getUserId(), payRMB, payJF);
-        accountBO.doTransferAmountRemote(user.getUserId(), systemUser,
-            ECurrency.CGJF, payJF, EBizType.CG_O2O_CGJF, "O2O消费积分支付",
-            "O2O消费积分支付");
+        accountBO.checkRmbJf(user.getUserId(), payRmbAmount, payJfAmount);
         // 人民币给商家（人民币）
         accountBO.doTransferAmountRemote(user.getUserId(), store.getOwner(),
-            ECurrency.CNY, payRMB, EBizType.CG_O2O_RMB, "O2O消费人民币支付",
+            ECurrency.CNY, payRmbAmount, EBizType.CG_O2O_RMB, "O2O消费人民币支付",
             "O2O消费人民币支付");
+        String systemUser = ESysUser.SYS_USER_CAIGO.getCode();
+        accountBO.doTransferAmountRemote(user.getUserId(), systemUser,
+            ECurrency.CGJF, payJfAmount, EBizType.CG_O2O_CGJF, "O2O消费积分支付",
+            "O2O消费积分支付");
         // 资金划转结束--------------
         return code;
     }
 
     private Object storePurchaseCGWX(User user, Store store, Long amount) {
         // 计算折扣，即积分扣钱金额
-        Long discountAmount = AmountUtil.mul(amount, store.getRate2());
+        Long payRmbAmount = AmountUtil.mulRmbJinFen(amount,
+            1 - store.getRate2());
+        Long discountAmount = amount - payRmbAmount;
+        // 进分
         Double cgjf2cnyRate = accountBO.getExchangeRateRemote(ECurrency.CGJF);
-        Long jfAmount = AmountUtil.mul(discountAmount, cgjf2cnyRate);
+        Long jfAmount = AmountUtil.mulXnbJin1(discountAmount, cgjf2cnyRate);
         // 落地本地系统消费记录
         String payGroup = storePurchaseBO.storePurchaseCGWX(user, store,
             amount, jfAmount);
@@ -247,9 +242,8 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
         accountBO.checkRmbJf(user.getUserId(), 0L, jfAmount);
         // RMB调用微信渠道至商家
         return accountBO.doWeiXinH5PayRemote(user.getUserId(),
-            user.getOpenId(), store.getOwner(),
-            AmountUtil.rmbJinFen(amount - discountAmount), EBizType.CG_O2O_RMB,
-            "O2O消费微信支付", "O2O消费微信支付", payGroup);
+            user.getOpenId(), store.getOwner(), payRmbAmount,
+            EBizType.CG_O2O_RMB, "O2O消费微信支付", "O2O消费微信支付", payGroup);
         // 资金划转结束--------------
     }
 

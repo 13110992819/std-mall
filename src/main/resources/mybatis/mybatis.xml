@@ -22,7 +22,8 @@
 	    
 	    <typeAlias alias="sysDict" type="com.xnjr.mall.domain.SYSDict" />
 	    <typeAlias alias="sysConfig" type="com.xnjr.mall.domain.SYSConfig" />
-	    
+	    <typeAlias alias="vproduct" type="com.xnjr.mall.domain.Vproduct" />
+	    <typeAlias alias="vorder" type="com.xnjr.mall.domain.Vorder" />
 	</typeAliases>	
 </configuration>
 

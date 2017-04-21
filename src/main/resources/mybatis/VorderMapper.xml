@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xnjr.mall.dao.IVorderDAO">
+	<resultMap id="vorder_DB_Result" type="vorder">
+		<result column="code" property="code" />
+		<result column="type" property="type" />
+		<result column="re_cardno" property="reCardno" />
+		<result column="re_name" property="reName" />
+		<result column="re_mobile" property="reMobile" />
+		
+		<result column="apply_user" property="applyUser" />
+		<result column="apply_datetime" property="applyDatetime" />
+		<result column="amount" property="amount" />
+		<result column="pay_amount" property="payAmount" />
+		<result column="status" property="status" />
+		
+		<result column="pay_type" property="payType" />
+		<result column="pay_group" property="payGroup" />
+		<result column="pay_code" property="payCode" />
+		<result column="pay_datetime" property="payDatetime" />
+		<result column="handle_user" property="handleUser" />
+		
+		<result column="handle_datetime" property="handleDatetime" />
+		<result column="company_code" property="companyCode" />
+		<result column="system_code" property="systemCode" />
+	</resultMap>
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="code != null and code != '' ">
+				AND t.code = #{code}
+			</if>
+			<if test="type != null and type != '' ">
+				AND t.type = #{type}
+			</if>
+			<if test="reCardno != null and reCardno != '' ">
+				AND t.re_cardno = #{reCardno}
+			</if>
+			<if test="reName != null and reName != '' ">
+				AND t.re_name = #{reName}
+			</if>
+			<if test="reMobile != null and reMobile != '' ">
+				AND t.re_mobile = #{reMobile}
+			</if>
+			<if test="applyUser != null and applyUser != '' ">
+				AND t.apply_user = #{applyUser}
+			</if>
+			<if test="status != null and status != '' ">
+				AND t.status = #{status}
+			</if>
+			<if test="payType != null and payType != '' ">
+				AND t.pay_type = #{payType}
+			</if>
+			<if test="payGroup != null and payGroup != '' ">
+				AND t.pay_group = #{payGroup}
+			</if>
+			<if test="payCode != null and payCode != '' ">
+				AND t.pay_code = #{payCode}
+			</if>
+			<if test="HandleUser != null and handleUser != '' ">
+				AND t.handle_user = #{handleUser}
+			</if>
+			<if test="companyCode != null and companyCode != '' ">
+				AND t.company_code = #{companyCode}
+			</if>
+			<if test="systemCode != null and systemCode != '' ">
+				AND t.system_code = #{systemCode}
+			</if>
+		</trim>
+	</sql>
+	<select id="select_vorder" parameterType="vorder" resultMap="vorder_DB_Result">
+		SELECT
+		t.code
+		,t.type
+		,t.re_cardno
+		,t.re_name
+		,t.re_mobile
+		
+		,t.apply_user
+		,t.apply_datetime
+		,t.amount
+		,t.pay_amount
+		,t.status
+		
+		,t.pay_type
+		,t.pay_group
+		,t.pay_code
+		,t.pay_datetime
+		,t.handle_user
+		
+		,t.handle_datetime
+		,t.company_code
+		,t.system_code
+		FROM
+		tmall_vorder t 
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+
+	<select id="select_vorder_count" parameterType="vorder"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM tmall_vorder t
+		<include refid="where_condition" />
+	</select>
+
+	<insert id="insert_vorder" parameterType="vorder">
+		INSERT INTO
+		tmall_vorder(
+		code
+		,type
+		,re_cardno
+		,re_name
+		,re_mobile
+		
+		,apply_user
+		,apply_datetime
+		,amount
+		,pay_amount
+		,status
+		
+		,company_code
+		,system_code
+		)
+		VALUES(
+		#{code} 
+		,#{type}
+		,#{reCardno}
+		,#{reName}
+		,#{reMobile}
+		
+		,#{applyUser}
+		,#{applyDatetime}
+		,#{amount}
+		,#{payAmount}
+		,#{status}
+		
+		,#{companyCode}
+		,#{systemCode}
+		)
+	</insert>
+	
+	<update id="update_payOrderByCGB" parameterType="vorder">
+		UPDATE tmall_vorder
+		SET
+		status=#{status}
+		,pay_type=#{payType}
+		,pay_group=#{payGroup}
+		,pay_code=#{payCode}
+		,pay_datetime=#{payDatetime}
+		WHERE code = #{code}
+	</update>
+	
+	
+	<update id="update_cancelOrder" parameterType="vorder">
+		UPDATE tmall_vorder
+		SET
+		status=#{status}
+		,handle_user=#{handleUser}
+		,handle_datetime=#{handleDatetime}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_deliverOrder" parameterType="vorder">
+		UPDATE tmall_vorder
+		SET
+		status=#{status}
+		,handle_user=#{handleUser}
+		,handle_datetime=#{handleDatetime}
+		WHERE code = #{code}
+	</update>
+	
+	
+</mapper>

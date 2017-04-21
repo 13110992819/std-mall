@@ -103,7 +103,7 @@ public class StorePurchaseBOImpl extends PaginableBOImpl<StorePurchase>
         data.setPayType(EO2OPayType.WEIXIN_H5.getCode());
         data.setPayGroup(payGroup);
 
-        data.setPayAmount2(jfAmount);
+        data.setPayAmount3(jfAmount);
         data.setPayDatetime(now);
         data.setRemark("微信支付O2O消费");
         data.setSystemCode(store.getSystemCode());

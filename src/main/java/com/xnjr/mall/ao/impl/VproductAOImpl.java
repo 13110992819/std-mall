@@ -36,11 +36,12 @@ public class VproductAOImpl implements IVproductAO {
         String code = OrderNoGenerater.generateM(EGeneratePrefix.PRODUCT
             .getCode());
         data.setCode(code);
+        data.setType(req.getType());
         data.setName(req.getName());
         data.setSlogan(req.getSlogan());
         data.setAdvPic(req.getAdvPic());
-        data.setPic(req.getPic());
 
+        data.setPic(req.getPic());
         data.setDescription(req.getDescription());
         data.setPrice(req.getPrice());
         data.setStatus(EVproductStatus.TO_PUBLISH.getCode());
@@ -76,11 +77,12 @@ public class VproductAOImpl implements IVproductAO {
         if (EVproductStatus.PUBLISH_YES.getCode().equals(dbProduct.getStatus())) {
             throw new BizException("xn000000", "该产品处于已上架状态，无法修改");
         }
+        dbProduct.setType(req.getType());
         dbProduct.setName(req.getName());
         dbProduct.setSlogan(req.getSlogan());
         dbProduct.setAdvPic(req.getAdvPic());
-        dbProduct.setPic(req.getPic());
 
+        dbProduct.setPic(req.getPic());
         dbProduct.setDescription(req.getDescription());
         dbProduct.setPrice(req.getPrice());
 
@@ -88,7 +90,6 @@ public class VproductAOImpl implements IVproductAO {
         dbProduct.setUpdateDatetime(new Date());
         dbProduct.setRemark(req.getRemark());
         vproductBO.refreshVproduct(dbProduct);
-
     }
 
     @Override

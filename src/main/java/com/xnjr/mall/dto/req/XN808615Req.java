@@ -6,6 +6,9 @@ public class XN808615Req extends APageReq {
      */
     private static final long serialVersionUID = 7273492391226688734L;
 
+    // 类型(选填)
+    private String type;
+
     // 产品名称(选填)
     private String name;
 
@@ -23,6 +26,14 @@ public class XN808615Req extends APageReq {
 
     // 所属系统编号(必填)
     private String systemCode;
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 
     public String getName() {
         return name;

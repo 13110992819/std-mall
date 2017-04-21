@@ -25,6 +25,7 @@ public class XN808617 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         Vproduct condition = new Vproduct();
+        condition.setType(req.getType());
         condition.setName(req.getName());
         condition.setLocation(req.getLocation());
         condition.setStatus(req.getStatus());

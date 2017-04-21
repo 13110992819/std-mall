@@ -1,6 +1,9 @@
 package com.xnjr.mall.dto.req;
 
 public class XN808617Req {
+    // 类型(选填)
+    private String type;
+
     // 产品名称(选填)
     private String name;
 
@@ -18,6 +21,14 @@ public class XN808617Req {
 
     // 所属系统编号(必填)
     private String systemCode;
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 
     public String getName() {
         return name;

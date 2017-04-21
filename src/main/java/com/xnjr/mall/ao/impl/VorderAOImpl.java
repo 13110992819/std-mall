@@ -57,7 +57,7 @@ public class VorderAOImpl implements IVorderAO {
         String code = OrderNoGenerater.generateM(EGeneratePrefix.PRODUCT
             .getCode());
         data.setCode(code);
-        data.setType(product.getName());
+        data.setType(product.getType());
         data.setReCardno(req.getReCardno());
         data.setReName(req.getReName());
         data.setReMobile(req.getReMobile());
@@ -87,13 +87,12 @@ public class VorderAOImpl implements IVorderAO {
             // 菜狗币支付
             accountBO.doTransferAmountRemote(order.getApplyUser(),
                 ESysUser.SYS_USER_CAIGO.getCode(), ECurrency.CG_CGB, payAmount,
-                EBizType.CG_XNCZ, EBizType.CG_XNCZ.getValue(),
-                EBizType.CG_XNCZ.getValue());
-            vorderBO.payOrder(order);
+                EBizType.CG_XNCZ_P, EBizType.CG_XNCZ_P.getValue(),
+                EBizType.CG_XNCZ_P.getValue());
+            vorderBO.payOrderByCGB(order);
         } else {
             throw new BizException("xn000000", "系统编号不能识别");
         }
-
         return new BooleanRes(true);
     }
 
@@ -102,7 +101,6 @@ public class VorderAOImpl implements IVorderAO {
         for (String code : codeList) {
             cancelOrderSingle(code, updater, remark);
         }
-
     }
 
     private void cancelOrderSingle(String code, String updater, String remark) {
@@ -113,7 +111,11 @@ public class VorderAOImpl implements IVorderAO {
             smsOutBO.sentContent(applyUser, applyUser,
                 "尊敬的用户，您的订单[" + order.getCode() + "]已取消");
         } else if (EVorderStatus.Payed.getCode().equals(order.getStatus())) {
-            // 退款
+            // 菜狗币退款
+            accountBO.doTransferAmountRemote(ESysUser.SYS_USER_CAIGO.getCode(),
+                order.getApplyUser(), ECurrency.CG_CGB, order.getPayAmount(),
+                EBizType.CG_XNCZ_M, EBizType.CG_XNCZ_M.getValue(),
+                EBizType.CG_XNCZ_M.getValue());
             // 发短信
             smsOutBO.sentContent(applyUser, applyUser,
                 "尊敬的用户，您的订单[" + order.getCode() + "]已取消,退款原因:[" + remark

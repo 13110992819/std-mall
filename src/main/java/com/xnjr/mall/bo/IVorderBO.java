@@ -9,7 +9,7 @@ public interface IVorderBO extends IPaginableBO<Vorder> {
 
     void saveOrder(Vorder data);
 
-    void payOrder(Vorder order);
+    void payOrderByCGB(Vorder order);
 
     void cancelOrder(Vorder order, String updater, String remark);
 

@@ -1,6 +1,8 @@
 package com.xnjr.mall.dto.req;
 
 public class XN808600Req {
+    // 类型1=中石化充值；2=中石油充值；3=手机充值（必填）
+    private String type;
 
     // 产品名称(必填)
     private String name;
@@ -31,6 +33,14 @@ public class XN808600Req {
 
     // 所属系统编号(必填)
     private String systemCode;
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 
     public String getName() {
         return name;

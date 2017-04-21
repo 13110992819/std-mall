@@ -14,6 +14,9 @@ public class Vproduct extends ABaseDO {
     // 产品编号
     private String code;
 
+    // 类型1=中石化充值；2=中石油充值；3=手机充值
+    private String type;
+
     // 产品名称
     private String name;
 
@@ -185,6 +188,14 @@ public class Vproduct extends ABaseDO {
 
     public void setRate(Double rate) {
         this.rate = rate;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
 }

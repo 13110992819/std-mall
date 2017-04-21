@@ -4,18 +4,23 @@
 <mapper namespace="com.xnjr.mall.dao.IVproductDAO">
 	<resultMap id="vproduct_DB_Result" type="vproduct">
 		<result column="code" property="code" />
+		<result column="type" property="type" />
 		<result column="name" property="name" />
 		<result column="slogan" property="slogan" />
 		<result column="adv_pic" property="advPic" />
+		
 		<result column="pic" property="pic" />
+		<result column="description" property="description" />
 		<result column="price" property="price" />
 		<result column="rate" property="rate" />
 		<result column="location" property="location" />
+		
 		<result column="order_no" property="orderNo" />
 		<result column="status" property="status" />
 		<result column="updater" property="updater" />
 		<result column="update_datetime" property="updateDatetime" />
 		<result column="remark" property="remark" />
+		
 		<result column="company_code" property="companyCode" />
 		<result column="system_code" property="systemCode" />
 	</resultMap>
@@ -23,6 +28,9 @@
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="code != null and code != '' ">
 				AND t.code = #{code}
+			</if>
+			<if test="type != null and type != '' ">
+				AND t.type = #{type}
 			</if>
 			<if test="name != null and name != '' ">
 				AND t.name = #{name}
@@ -47,19 +55,23 @@
 	<select id="select_vproduct" parameterType="vproduct" resultMap="vproduct_DB_Result">
 		SELECT
 		t.code
+		,t.type
 		,t.name
 		,t.slogan
 		,t.adv_pic
+		
 		,t.pic
 		,t.description
 		,t.price
 		,t.rate
 		,t.location
+		
 		,t.order_no
 		,t.status
 		,t.updater
 		,t.update_datetime
 		,t.remark
+		
 		,t.company_code
 		,t.system_code 
 		FROM
@@ -82,11 +94,12 @@
 		INSERT INTO
 		tmall_vproduct(
 		code
+		,type
 		,name
 		,slogan
 		,adv_pic
-		,pic
 		
+		,pic
 		,description
 		,price
 		,status
@@ -99,11 +112,12 @@
 		)
 		VALUES(
 		#{code}
+		,#{type}
 		,#{name}
 		,#{slogan}
 		,#{advPic}
-		,#{pic}
 		
+		,#{pic}
 		,#{description}
 		,#{price}
 		,#{status}
@@ -119,20 +133,18 @@
 	<update id="update_vproduct" parameterType="vproduct">
 		UPDATE tmall_vproduct
 		SET
-		name=#{name}
+		type=#{type}
+		,name=#{name}
 		,slogan=#{slogan}
 		,adv_pic=#{advPic}
-		,pic=#{pic}
 		
+		,pic=#{pic}
 		,description=#{description}
 		,price=#{price}
-		,status=#{status}
-		
+
 		,updater=#{updater}
 		,update_datetime=#{updateDatetime}
 		,remark=#{remark}
-		,company_code=#{companyCode}
-		,system_code =#{systemCode}
 		WHERE code = #{code}
 	</update>
 	
@@ -142,6 +154,7 @@
 		location=#{location}
 		,order_no=#{orderNo}
 		,rate=#{rate}
+		
 		,updater=#{updater}
 		,update_datetime=#{updateDatetime}
 		,status = #{status}

@@ -8,15 +8,19 @@
 		<result column="re_cardno" property="reCardno" />
 		<result column="re_name" property="reName" />
 		<result column="re_mobile" property="reMobile" />
+		
 		<result column="apply_user" property="applyUser" />
 		<result column="apply_datetime" property="applyDatetime" />
 		<result column="amount" property="amount" />
-		<result column="status" property="status" />
 		<result column="pay_amount" property="payAmount" />
+		<result column="status" property="status" />
+		
+		<result column="pay_type" property="payType" />
 		<result column="pay_group" property="payGroup" />
 		<result column="pay_code" property="payCode" />
 		<result column="pay_datetime" property="payDatetime" />
 		<result column="handle_user" property="handleUser" />
+		
 		<result column="handle_datetime" property="handleDatetime" />
 		<result column="company_code" property="companyCode" />
 		<result column="system_code" property="systemCode" />
@@ -71,15 +75,19 @@
 		,t.re_cardno
 		,t.re_name
 		,t.re_mobile
+		
 		,t.apply_user
 		,t.apply_datetime
 		,t.amount
-		,t.status
 		,t.pay_amount
+		,t.status
+		
+		,t.pay_type
 		,t.pay_group
 		,t.pay_code
 		,t.pay_datetime
 		,t.handle_user
+		
 		,t.handle_datetime
 		,t.company_code
 		,t.system_code
@@ -107,16 +115,13 @@
 		,re_cardno
 		,re_name
 		,re_mobile
+		
 		,apply_user
 		,apply_datetime
 		,amount
-		,status
 		,pay_amount
-		,pay_group
-		,pay_code
-		,pay_datetime
-		,handle_user
-		,handle_datetime
+		,status
+		
 		,company_code
 		,system_code
 		)
@@ -126,48 +131,47 @@
 		,#{reCardno}
 		,#{reName}
 		,#{reMobile}
+		
 		,#{applyUser}
 		,#{applyDatetime}
 		,#{amount}
-		,#{status}
 		,#{payAmount}
-		,#{payGroup}
-		,#{payCode}
-		,#{payDatetime}
-		,#{handleUser}
-		,#{handleDatetime}
+		,#{status}
+		
 		,#{companyCode}
 		,#{systemCode}
 		)
 	</insert>
 	
-	<update id="update_vorder" parameterType="vorder">
+	<update id="update_payOrderByCGB" parameterType="vorder">
 		UPDATE tmall_vorder
 		SET
-		type=#{type}
-		,re_cardno=#{reCardno}
-		,re_name=#{reName}
-		,re_mobile=#{reMobile}
-		,apply_user=#{applyUser}
-		,apply_datetime=#{applyDatetime}
-		,amount=#{amount}
-		,status=#{status}
-		,pay_amount=#{payAmount}
+		status=#{status}
+		,pay_type=#{payType}
 		,pay_group=#{payGroup}
 		,pay_code=#{payCode}
 		,pay_datetime=#{payDatetime}
-		,handle_user=#{handleUser}
-		,handle_datetime=#{handleDatetime}
-		,company_code=#{companyCode}
-		,system_code=#{systemCode}
 		WHERE code = #{code}
 	</update>
 	
-	<delete id="delete_vorder" parameterType="vorder">
-		DELETE FROM
-		tmall_vorder
-		WHERE
-		code = #{code}
-	</delete>
+	
+	<update id="update_cancelOrder" parameterType="vorder">
+		UPDATE tmall_vorder
+		SET
+		status=#{status}
+		,handle_user=#{handleUser}
+		,handle_datetime=#{handleDatetime}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_deliverOrder" parameterType="vorder">
+		UPDATE tmall_vorder
+		SET
+		status=#{status}
+		,handle_user=#{handleUser}
+		,handle_datetime=#{handleDatetime}
+		WHERE code = #{code}
+	</update>
+	
 	
 </mapper>

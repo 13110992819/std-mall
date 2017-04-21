@@ -6,5 +6,9 @@ import com.xnjr.mall.domain.Vorder;
 public interface IVorderDAO extends IBaseDAO<Vorder> {
     String NAMESPACE = IVorderDAO.class.getName().concat(".");
 
-    public int update(Vorder vorder);
+    public int payOrderByCGB(Vorder order);
+
+    public int cancelOrder(Vorder order);
+
+    public int deliverOrder(Vorder order);
 }

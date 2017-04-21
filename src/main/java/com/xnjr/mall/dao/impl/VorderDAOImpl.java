@@ -24,7 +24,7 @@ public class VorderDAOImpl extends AMybatisTemplate implements IVorderDAO {
 
     @Override
     public int delete(Vorder data) {
-        return super.delete(NAMESPACE.concat("delete_vorder"), data);
+        return 0;
     }
 
     @Override
@@ -52,8 +52,18 @@ public class VorderDAOImpl extends AMybatisTemplate implements IVorderDAO {
     }
 
     @Override
-    public int update(Vorder data) {
-        return super.update(NAMESPACE.concat("update_vorder"), data);
+    public int payOrderByCGB(Vorder order) {
+        return super.update(NAMESPACE.concat("update_payOrderByCGB"), order);
+    }
+
+    @Override
+    public int cancelOrder(Vorder order) {
+        return super.update(NAMESPACE.concat("update_cancelOrder"), order);
+    }
+
+    @Override
+    public int deliverOrder(Vorder order) {
+        return super.update(NAMESPACE.concat("update_deliverOrder"), order);
     }
 
 }

@@ -4,6 +4,9 @@ public class XN808602Req {
     // 产品编号(必填)
     private String code;
 
+    // 类型(必填)
+    private String type;
+
     // 产品名称(必填)
     private String name;
 
@@ -27,6 +30,14 @@ public class XN808602Req {
 
     // 备注(选填)
     private String remark;
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 
     public String getCode() {
         return code;

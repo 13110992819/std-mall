@@ -145,7 +145,6 @@ public class StockBOImpl extends PaginableBOImpl<Stock> implements IStockBO {
 
     private Long getDayRemindCount(String userId) {
         Long remindCount = null;// 还可以生成“生效中”分红权的个数
-        // Long dayMaxCount = 3L;// 当天最大分红权个数，配置参数
         SYSConfig congfig = sysConfigBO.getSYSConfig(
             SysConstants.MAX_DAY_STOCK, ESystemCode.ZHPAY.getCode());
         Long dayMaxCount = Long.valueOf(congfig.getCvalue());

@@ -59,6 +59,9 @@ public class Vorder extends ABaseDO {
     // 处理时间
     private Date handleDatetime;
 
+    // 备注
+    private String remark;
+
     // 所属公司编号
     private String companyCode;
 
@@ -193,6 +196,14 @@ public class Vorder extends ABaseDO {
 
     public void setHandleDatetime(Date handleDatetime) {
         this.handleDatetime = handleDatetime;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
     public String getCompanyCode() {

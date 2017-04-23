@@ -1,7 +1,7 @@
 package com.xnjr.mall.enums;
 
 public enum EVorderStatus {
-    Topay("1", "待支付"), Payed("2", "已支付"), Delivered("3", "已兑换"), Canceled("4",
+    TOPAY("0", "待支付"), PAYED("1", "已支付"), DELIVER("2", "已兑换"), CANCEL("3",
             "已取消");
 
     EVorderStatus(String code, String value) {

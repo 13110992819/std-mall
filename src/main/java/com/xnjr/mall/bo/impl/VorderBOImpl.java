@@ -29,7 +29,7 @@ public class VorderBOImpl extends PaginableBOImpl<Vorder> implements IVorderBO {
 
     @Override
     public void payOrderByCGB(Vorder order) {
-        order.setStatus(EVorderStatus.Payed.getCode());
+        order.setStatus(EVorderStatus.PAYED.getCode());
         order.setPayType(EPayType.INTEGRAL.getCode());
         order.setPayGroup(OrderNoGenerater.generateM(EGeneratePrefix.PRODUCT
             .getCode()));
@@ -40,17 +40,19 @@ public class VorderBOImpl extends PaginableBOImpl<Vorder> implements IVorderBO {
 
     @Override
     public void cancelOrder(Vorder order, String updater, String remark) {
-        order.setStatus(EVorderStatus.Canceled.getCode());
+        order.setStatus(EVorderStatus.CANCEL.getCode());
         order.setHandleUser(updater);
         order.setHandleDatetime(new Date());
+        order.setRemark(remark);
         vorderDAO.cancelOrder(order);
     }
 
     @Override
     public void deliverOrder(Vorder order, String updater, String remark) {
-        order.setStatus(EVorderStatus.Delivered.getCode());
+        order.setStatus(EVorderStatus.DELIVER.getCode());
         order.setHandleUser(updater);
         order.setHandleDatetime(new Date());
+        order.setRemark(remark);
         vorderDAO.deliverOrder(order);
     }
 

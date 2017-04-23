@@ -24,6 +24,7 @@ import com.xnjr.mall.dto.res.BooleanRes;
 import com.xnjr.mall.enums.EBizType;
 import com.xnjr.mall.enums.ECurrency;
 import com.xnjr.mall.enums.EGeneratePrefix;
+import com.xnjr.mall.enums.EPayType;
 import com.xnjr.mall.enums.ESysUser;
 import com.xnjr.mall.enums.ESystemCode;
 import com.xnjr.mall.enums.EVorderStatus;
@@ -66,7 +67,7 @@ public class VorderAOImpl implements IVorderAO {
         data.setApplyDatetime(now);
         data.setAmount(amount);
         data.setPayAmount(payAmount);
-        data.setStatus(EVorderStatus.Topay.getCode());
+        data.setStatus(EVorderStatus.TOPAY.getCode());
 
         data.setSystemCode(product.getSystemCode());
         data.setCompanyCode(product.getCompanyCode());
@@ -79,19 +80,24 @@ public class VorderAOImpl implements IVorderAO {
         // 暂时只实现单笔订单支付
         String code = codeList.get(0);
         Vorder order = vorderBO.getVorder(code);
-        if (!EVorderStatus.Topay.getCode().equals(order.getStatus())) {
+        if (!EVorderStatus.TOPAY.getCode().equals(order.getStatus())) {
             throw new BizException("xn000000", "订单不处于待支付状态");
         }
         Long payAmount = order.getPayAmount();
-        if (ESystemCode.Caigo.getCode().equals(order.getSystemCode())) {
-            // 菜狗币支付
-            accountBO.doTransferAmountRemote(order.getApplyUser(),
-                ESysUser.SYS_USER_CAIGO.getCode(), ECurrency.CG_CGB, payAmount,
-                EBizType.CG_XNCZ_P, EBizType.CG_XNCZ_P.getValue(),
-                EBizType.CG_XNCZ_P.getValue());
-            vorderBO.payOrderByCGB(order);
+        if (EPayType.INTEGRAL.getCode().equals(payType)) {
+            if (ESystemCode.Caigo.getCode().equals(order.getSystemCode())) {
+                // 菜狗币支付
+                accountBO.doTransferAmountRemote(order.getApplyUser(),
+                    ESysUser.SYS_USER_CAIGO.getCode(), ECurrency.CG_CGB,
+                    payAmount, EBizType.CG_XNCZ_P,
+                    EBizType.CG_XNCZ_P.getValue(),
+                    EBizType.CG_XNCZ_P.getValue());
+                vorderBO.payOrderByCGB(order);
+            } else {
+                throw new BizException("xn000000", "系统编号不能识别");
+            }
         } else {
-            throw new BizException("xn000000", "系统编号不能识别");
+            throw new BizException("xn000000", "支付方式不支持");
         }
         return new BooleanRes(true);
     }
@@ -106,11 +112,11 @@ public class VorderAOImpl implements IVorderAO {
     private void cancelOrderSingle(String code, String updater, String remark) {
         Vorder order = vorderBO.getVorder(code);
         String applyUser = order.getApplyUser();
-        if (EVorderStatus.Topay.getCode().equals(order.getStatus())) {
+        if (EVorderStatus.TOPAY.getCode().equals(order.getStatus())) {
             // 发短信
             smsOutBO.sentContent(applyUser, applyUser,
                 "尊敬的用户，您的订单[" + order.getCode() + "]已取消");
-        } else if (EVorderStatus.Payed.getCode().equals(order.getStatus())) {
+        } else if (EVorderStatus.PAYED.getCode().equals(order.getStatus())) {
             // 菜狗币退款
             accountBO.doTransferAmountRemote(ESysUser.SYS_USER_CAIGO.getCode(),
                 order.getApplyUser(), ECurrency.CG_CGB, order.getPayAmount(),
@@ -136,7 +142,7 @@ public class VorderAOImpl implements IVorderAO {
 
     private void deliverOrderSingle(String code, String updater, String remark) {
         Vorder order = vorderBO.getVorder(code);
-        if (EVorderStatus.Payed.getCode().equals(order.getStatus())) {
+        if (EVorderStatus.PAYED.getCode().equals(order.getStatus())) {
             vorderBO.deliverOrder(order, updater, remark);
         } else {
             throw new BizException("xn0000", "该订单不是已支付状态，无法发货");

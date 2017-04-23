@@ -63,9 +63,9 @@ public class VproductAOImpl implements IVproductAO {
                 product.getStatus())
                     || EVproductStatus.PUBLISH_NO.getCode().equals(
                         product.getStatus())) {
-                vproductBO.removeVproduct(code);
-            } else {
                 throw new BizException("xn000000", "产品已上架过，不能删除");
+            } else {
+                vproductBO.removeVproduct(code);
             }
         }
 
@@ -122,7 +122,6 @@ public class VproductAOImpl implements IVproductAO {
         } else {
             throw new BizException("xn000000", "该产品状态不是上架状态，无法下架");
         }
-
     }
 
     @Override

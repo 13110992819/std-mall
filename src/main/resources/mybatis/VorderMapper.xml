@@ -22,6 +22,7 @@
 		<result column="handle_user" property="handleUser" />
 		
 		<result column="handle_datetime" property="handleDatetime" />
+		<result column="remark" property="remark" />
 		<result column="company_code" property="companyCode" />
 		<result column="system_code" property="systemCode" />
 	</resultMap>
@@ -57,7 +58,7 @@
 			<if test="payCode != null and payCode != '' ">
 				AND t.pay_code = #{payCode}
 			</if>
-			<if test="HandleUser != null and handleUser != '' ">
+			<if test="handleUser != null and handleUser != '' ">
 				AND t.handle_user = #{handleUser}
 			</if>
 			<if test="companyCode != null and companyCode != '' ">
@@ -89,6 +90,7 @@
 		,t.handle_user
 		
 		,t.handle_datetime
+		,t.remark
 		,t.company_code
 		,t.system_code
 		FROM
@@ -161,6 +163,7 @@
 		status=#{status}
 		,handle_user=#{handleUser}
 		,handle_datetime=#{handleDatetime}
+		,remark=#{remark}
 		WHERE code = #{code}
 	</update>
 	
@@ -170,8 +173,8 @@
 		status=#{status}
 		,handle_user=#{handleUser}
 		,handle_datetime=#{handleDatetime}
+		,remark=#{remark}
 		WHERE code = #{code}
 	</update>
-	
 	
 </mapper>

@@ -1,7 +1,7 @@
 package com.xnjr.mall.enums;
 
 public enum EVproductStatus {
-    TO_PUBLISH("1", "待上架"), PUBLISH_YES("2", "已上架"), PUBLISH_NO("3", "已下架");
+    TO_PUBLISH("0", "待上架"), PUBLISH_YES("1", "已上架"), PUBLISH_NO("2", "已下架");
 
     EVproductStatus(String code, String value) {
         this.code = code;

@@ -44,6 +44,7 @@ CREATE TABLE `tmall_vorder` (
   `handle_user` varchar(32) DEFAULT NULL COMMENT '处理人编号',
   
   `handle_datetime` datetime DEFAULT NULL COMMENT '处理时间',
+  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
   `company_code` varchar(32) DEFAULT NULL COMMENT '公司编号',
   `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
   PRIMARY KEY (`code`) COMMENT '虚拟产品订单'

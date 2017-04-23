@@ -83,6 +83,29 @@ INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_d
 INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('1','store_pay_type','31','菜狗020菜狗币支付','admin',now(),'','CD-CCG000007','CD-CCG000007');
 INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('1','store_pay_type','32','菜狗020人民币积分支付','admin',now(),'','CD-CCG000007','CD-CCG000007');
 
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('0',NULL,'vproduct_type','虚拟产品类型','admin',now(),'','CD-CCG000007','CD-CCG000007');
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('1','vproduct_type','1','中石化充值','admin',now(),'','CD-CCG000007','CD-CCG000007');
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('1','vproduct_type','2','中石油充值','admin',now(),'','CD-CCG000007','CD-CCG000007');
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('1','vproduct_type','3','手机充值','admin',now(),'','CD-CCG000007','CD-CCG000007');
+
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('0',NULL,'vproduct_status','虚拟产品状态','admin',now(),'','CD-CCG000007','CD-CCG000007');
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('1','vproduct_status','0','待上架','admin',now(),'','CD-CCG000007','CD-CCG000007');
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('1','vproduct_status','1','已上架','admin',now(),'','CD-CCG000007','CD-CCG000007');
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('1','vproduct_status','2','已下架','admin',now(),'','CD-CCG000007','CD-CCG000007');
+
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('0',NULL,'vorder_status','虚拟订单状态','admin',now(),'','CD-CCG000007','CD-CCG000007');
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('1','vorder_status','0','待支付','admin',now(),'','CD-CCG000007','CD-CCG000007');
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('1','vorder_status','1','已支付','admin',now(),'','CD-CCG000007','CD-CCG000007');
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('1','vorder_status','2','已兑换','admin',now(),'','CD-CCG000007','CD-CCG000007');
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('1','vorder_status','3','已取消','admin',now(),'','CD-CCG000007','CD-CCG000007');
+
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('0',NULL,'vproduct_price','商品价格','admin',now(),'','CD-CCG000007','CD-CCG000007');
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('1','vproduct_price','100','100','admin',now(),'','CD-CCG000007','CD-CCG000007');
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('1','vproduct_price','200','200','admin',now(),'','CD-CCG000007','CD-CCG000007');
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('1','vproduct_price','500','500','admin',now(),'','CD-CCG000007','CD-CCG000007');
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('1','vproduct_price','1000','1000','admin',now(),'','CD-CCG000007','CD-CCG000007');
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('1','vproduct_price','2000','2000','admin',now(),'','CD-CCG000007','CD-CCG000007');
+
 /*
 -- Query: SELECT * FROM std_mall_200.tduijie_caigopool
 LIMIT 0, 10000
@@ -90,4 +113,14 @@ LIMIT 0, 10000
 -- Date: 2017-04-05 23:37
 */
 INSERT INTO `tduijie_caigopool` (`code`,`name`,`type`,`rate`,`amount`,`used_amount`,`add_user`,`add_datetime`,`remark`,`company_code`,`system_code`) VALUES ('P201704011700000001','嗨币对接池','1',2.10000000,1000000,0,'admin',now(),'','CD-CCG000007','CD-CCG000007');
+
+/*
+-- Query: SELECT * FROM std_mall_200.tmall_vproduct
+LIMIT 0, 400
+
+-- Date: 2017-04-23 14:06
+*/
+INSERT INTO `tmall_vproduct` (`code`,`type`,`name`,`slogan`,`adv_pic`,`pic`,`description`,`price`,`rate`,`location`,`order_no`,`status`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('VCP201700000000000001','1','中石化充值','安全 快捷 方便','adv_zshyk_2x.png','zshyk_2x.png','安全 快捷 方便','100',1,'0',1,'1','admin',now(),'','CD-CCG000007','CD-CCG000007');
+INSERT INTO `tmall_vproduct` (`code`,`type`,`name`,`slogan`,`adv_pic`,`pic`,`description`,`price`,`rate`,`location`,`order_no`,`status`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('VCP201700000000000002','2','中石油充值','安全 快捷 方便','adv_zsyyk_2x.png','zsyyk_2x.png','安全 快捷 方便','100',1,'0',1,'1','admin',now(),'','CD-CCG000007','CD-CCG000007');
+INSERT INTO `tmall_vproduct` (`code`,`type`,`name`,`slogan`,`adv_pic`,`pic`,`description`,`price`,`rate`,`location`,`order_no`,`status`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('VCP201700000000000003','3','手机充值','安全 快捷 方便','adv_mobile_2x.png','mobile_2x.png','安全 快捷 方便','100',1,'0',1,'1','admin',now(),'','CD-CCG000007','CD-CCG000007');
 

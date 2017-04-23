@@ -70,11 +70,12 @@
 		<property name="paginableDAO" ref="caigopoolBackDAOImpl"/>
 	</bean>
 	
-	
-	
-	
-	
-	
+	<bean id="vproductBO" class="com.xnjr.mall.bo.impl.VproductBOImpl">
+		<property name="paginableDAO" ref="vproductDAOImpl"/>
+	</bean>	
+	<bean id="vorderBO" class="com.xnjr.mall.bo.impl.VorderBOImpl">
+		<property name="paginableDAO" ref="vorderDAOImpl"/>
+	</bean>	
 	
 	<bean id="sysDictBO" class="com.xnjr.mall.bo.impl.SYSDictBOImpl">
 		<property name="paginableDAO" ref="sysDictDAOImpl"/>

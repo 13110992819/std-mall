@@ -47,7 +47,6 @@ public class XN808668 extends AProcessor {
         StringValidater.validateBlank(req.getStart(), req.getLimit());
         StringValidater.validateBlank(req.getSystemCode(),
             req.getCompanyCode(), req.getApplyUser());
-
     }
 
 }

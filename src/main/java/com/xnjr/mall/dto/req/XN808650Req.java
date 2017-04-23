@@ -10,7 +10,7 @@ public class XN808650Req {
     // 收件人姓名（必填）
     private String reName;
 
-    // 收件人电话（必填）
+    // 收件人电话（选填）
     private String reMobile;
 
     // 订单金额（必填）

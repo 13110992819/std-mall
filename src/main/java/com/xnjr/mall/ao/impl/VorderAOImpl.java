@@ -55,7 +55,7 @@ public class VorderAOImpl implements IVorderAO {
         Long payAmount = AmountUtil.mul(amount, product.getRate());
 
         Vorder data = new Vorder();
-        String code = OrderNoGenerater.generateM(EGeneratePrefix.PRODUCT
+        String code = OrderNoGenerater.generateM(EGeneratePrefix.ORDER
             .getCode());
         data.setCode(code);
         data.setType(product.getType());

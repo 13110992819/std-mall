@@ -243,7 +243,7 @@ public class OrderBOImpl extends PaginableBOImpl<Order> implements IOrderBO {
     private Order getOrderBasicInfo(String toUser, CommitOrderPOJO pojo) {
         // 生成订单基本信息
         Order order = new Order();
-        String code = OrderNoGenerater.generateME(EGeneratePrefix.ORDER
+        String code = OrderNoGenerater.generateM(EGeneratePrefix.ORDER
             .getCode());
         order.setCode(code);
         order.setType(EOrderType.SH_SALE.getCode());

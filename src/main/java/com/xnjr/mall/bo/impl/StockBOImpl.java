@@ -99,19 +99,13 @@ public class StockBOImpl extends PaginableBOImpl<Stock> implements IStockBO {
 
     @Override
     public void generateBStock(Long amount, String storeOwner) {
-        Long remindCount = getDayRemindCount(storeOwner);
         Long mod = amount % 500000;
         Long zheng = (amount - mod) / 500000;// 整数部分
         Long yu = amount - zheng * 500000;// 余数部分
 
         if (zheng > 0) {// 针对整数,生成整数个分红权
             for (int i = 0; i < zheng; i++) {
-                if (remindCount > 0) {
-                    generateBFullStock(EStockStatus.ING_effect, storeOwner);
-                    remindCount = remindCount - 1;
-                } else {
-                    generateBFullStock(EStockStatus.WILL_effect, storeOwner);
-                }
+                generateBFullStock(storeOwner);
             }
         }
 
@@ -122,20 +116,12 @@ public class StockBOImpl extends PaginableBOImpl<Stock> implements IStockBO {
             } else {
                 Long twoYu = dbStock.getCostAmount() + yu;
                 if (twoYu > 500000) {// 且肯定小于1000
-                    if (remindCount > 0) {
-                        generateBFullStock(EStockStatus.ING_effect, storeOwner);
-                    } else {
-                        generateBFullStock(EStockStatus.WILL_effect, storeOwner);
-                    }
+                    generateBFullStock(storeOwner);
                     refreshCostAmount(dbStock, twoYu - 500000);
                 } else if (twoYu < 500000) {// 且肯定大于0
                     refreshCostAmount(dbStock, twoYu);
                 } else {// 等于500'
-                    if (remindCount > 0) {
-                        refreshTOeffectStatus(dbStock, EStockStatus.ING_effect);
-                    } else {
-                        refreshTOeffectStatus(dbStock, EStockStatus.WILL_effect);
-                    }
+                    refreshTOeffectStatus(dbStock, EStockStatus.ING_effect);
                 }
             }
 
@@ -159,7 +145,6 @@ public class StockBOImpl extends PaginableBOImpl<Stock> implements IStockBO {
 
     private Long getDayRemindCount(String userId) {
         Long remindCount = null;// 还可以生成“生效中”分红权的个数
-        // Long dayMaxCount = 3L;// 当天最大分红权个数，配置参数
         SYSConfig congfig = sysConfigBO.getSYSConfig(
             SysConstants.MAX_DAY_STOCK, ESystemCode.ZHPAY.getCode());
         Long dayMaxCount = Long.valueOf(congfig.getCvalue());
@@ -229,7 +214,7 @@ public class StockBOImpl extends PaginableBOImpl<Stock> implements IStockBO {
 
     }
 
-    private void generateBFullStock(EStockStatus status, String storeOwner) {
+    private void generateBFullStock(String storeOwner) {
         Date now = new Date();
         String code = OrderNoGenerater.generateM(EGeneratePrefix.STOCK
             .getCode());
@@ -249,7 +234,7 @@ public class StockBOImpl extends PaginableBOImpl<Stock> implements IStockBO {
         data.setTodayAmount(0L);
         data.setNextBackDate(DateUtil.getTomorrowStart(now));
         data.setCreateDatetime(now);
-        data.setStatus(status.getCode());
+        data.setStatus(EStockStatus.ING_effect.getCode());// 商家每日生效分红权没有上限
         data.setSystemCode(ESystemCode.ZHPAY.getCode());
         data.setCompanyCode(ESystemCode.ZHPAY.getCode());
         stockDAO.insert(data);

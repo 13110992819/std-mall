@@ -255,7 +255,7 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
         // 资金划转开始--------------
         // RMB调用微信渠道至商家
         return accountBO.doWeiXinPayRemote(user.getUserId(), store.getOwner(),
-            amount, EBizType.CG_O2O_RMB, "O2O消费微信支付", "O2O消费微信支付", payGroup);
+            amount, EBizType.ZH_O2O, "O2O消费微信支付", "O2O消费微信支付", payGroup);
         // 资金划转结束--------------
     }
 
@@ -396,7 +396,7 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
 
     @Override
     @Transactional
-    public void paySuccess(String payGroup, String payCode, Long payAmount) {
+    public void paySuccessZH(String payGroup, String payCode, Long payAmount) {
         StorePurchase storePurchase = storePurchaseBO
             .getStorePurchaseByPayGroup(payGroup);
         if (EStorePurchaseStatus.TO_PAY.getCode().equals(
@@ -426,7 +426,7 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
                 }
             }
         } else {
-            logger.info("订单号：" + storePurchase.getCode() + "已支付，重复回调");
+            logger.error("订单号：" + storePurchase.getCode() + "已支付，重复回调");
         }
     }
 

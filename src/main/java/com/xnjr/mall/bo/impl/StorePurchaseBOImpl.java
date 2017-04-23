@@ -17,7 +17,6 @@ import com.xnjr.mall.domain.User;
 import com.xnjr.mall.enums.ECurrency;
 import com.xnjr.mall.enums.EGeneratePrefix;
 import com.xnjr.mall.enums.EO2OPayType;
-import com.xnjr.mall.enums.EPayType;
 import com.xnjr.mall.enums.EStorePurchaseStatus;
 import com.xnjr.mall.exception.BizException;
 
@@ -101,10 +100,10 @@ public class StorePurchaseBOImpl extends PaginableBOImpl<StorePurchase>
 
         data.setCreateDatetime(now);
         data.setStatus(EStorePurchaseStatus.TO_PAY.getCode());
-        data.setPayType(EO2OPayType.WEIXIN_APP.getCode());
+        data.setPayType(EO2OPayType.WEIXIN_H5.getCode());
         data.setPayGroup(payGroup);
 
-        data.setPayAmount2(jfAmount);
+        data.setPayAmount3(jfAmount);
         data.setPayDatetime(now);
         data.setRemark("微信支付O2O消费");
         data.setSystemCode(store.getSystemCode());
@@ -236,17 +235,19 @@ public class StorePurchaseBOImpl extends PaginableBOImpl<StorePurchase>
         condition.setStatus(EStorePurchaseStatus.PAYED.getCode());
         List<StorePurchase> list = storePurchaseDAO.selectList(condition);
         for (StorePurchase storePurchase : list) {
-            if (EPayType.WEIXIN_APP.getCode()
-                .equals(storePurchase.getPayType())
-                    || EPayType.WEIXIN_H5.getCode().equals(
+            if (EO2OPayType.WEIXIN_APP.getCode().equals(
+                storePurchase.getPayType())
+                    || EO2OPayType.WEIXIN_H5.getCode().equals(
                         storePurchase.getPayType())
-                    || EPayType.ALIPAY.getCode().equals(
+                    || EO2OPayType.ALIPAY.getCode().equals(
+                        storePurchase.getPayType())
+                    || EO2OPayType.CG_02O_RMBJF.getCode().equals(
                         storePurchase.getPayType())) {
                 if (null != storePurchase.getPayAmount1()) {
                     result += storePurchase.getPayAmount1();
                 }
-            }
-            if (EPayType.INTEGRAL.getCode().equals(storePurchase.getPayType())) { // 加上返现金额
+            } else if (EO2OPayType.CG_O2O_CGB.getCode().equals(
+                storePurchase.getPayType())) { // 加上返现金额
                 if (ECurrency.CNY.getCode().equals(
                     storePurchase.getBackCurrency())) {
                     result += storePurchase.getBackAmount();

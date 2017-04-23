@@ -3,6 +3,7 @@ package com.xnjr.mall.ao.impl;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,12 +12,14 @@ import org.springframework.stereotype.Service;
 import com.xnjr.mall.ao.IVorderAO;
 import com.xnjr.mall.bo.IAccountBO;
 import com.xnjr.mall.bo.ISmsOutBO;
+import com.xnjr.mall.bo.IUserBO;
 import com.xnjr.mall.bo.IVorderBO;
 import com.xnjr.mall.bo.IVproductBO;
 import com.xnjr.mall.bo.base.Paginable;
 import com.xnjr.mall.common.AmountUtil;
 import com.xnjr.mall.core.OrderNoGenerater;
 import com.xnjr.mall.core.StringValidater;
+import com.xnjr.mall.domain.User;
 import com.xnjr.mall.domain.Vorder;
 import com.xnjr.mall.domain.Vproduct;
 import com.xnjr.mall.dto.req.XN808650Req;
@@ -46,6 +49,9 @@ public class VorderAOImpl implements IVorderAO {
 
     @Autowired
     private ISmsOutBO smsOutBO;
+
+    @Autowired
+    private IUserBO userBO;
 
     @Override
     public String commitOrder(XN808650Req req) {
@@ -153,16 +159,32 @@ public class VorderAOImpl implements IVorderAO {
     @Override
     public Paginable<Vorder> queryVorderPage(int start, int limit,
             Vorder condition) {
-        return vorderBO.getPaginable(start, limit, condition);
+        Paginable<Vorder> page = vorderBO.getPaginable(start, limit, condition);
+        if (null != page && CollectionUtils.isNotEmpty(page.getList())) {
+            for (Vorder vorder : page.getList()) {
+                User applyUserDetail = userBO.getRemoteUser(vorder
+                    .getApplyUser());
+                vorder.setApplyUserDetail(applyUserDetail);
+            }
+        }
+        return page;
     }
 
     @Override
     public Vorder getVorder(String code) {
-        return vorderBO.getVorder(code);
+        Vorder vorder = vorderBO.getVorder(code);
+        User applyUserDetail = userBO.getRemoteUser(vorder.getApplyUser());
+        vorder.setApplyUserDetail(applyUserDetail);
+        return vorder;
     }
 
     @Override
     public List<Vorder> queryVorderList(Vorder condition) {
-        return vorderBO.queryVorderList(condition);
+        List<Vorder> list = vorderBO.queryVorderList(condition);
+        for (Vorder vorder : list) {
+            User applyUserDetail = userBO.getRemoteUser(vorder.getApplyUser());
+            vorder.setApplyUserDetail(applyUserDetail);
+        }
+        return list;
     }
 }

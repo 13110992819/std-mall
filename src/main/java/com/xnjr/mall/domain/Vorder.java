@@ -70,6 +70,17 @@ public class Vorder extends ABaseDO {
 
     // *************dp properties **************
 
+    // 申请人详情
+    private User applyUserDetail;
+
+    public User getApplyUserDetail() {
+        return applyUserDetail;
+    }
+
+    public void setApplyUserDetail(User applyUserDetail) {
+        this.applyUserDetail = applyUserDetail;
+    }
+
     public String getCode() {
         return code;
     }

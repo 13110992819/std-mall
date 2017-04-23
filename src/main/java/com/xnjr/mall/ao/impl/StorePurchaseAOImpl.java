@@ -128,6 +128,9 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
         return code;
     }
 
+    /**
+     * 支付金额：等比例支付人民币和积分，例如100人民币，使用积分比例25%，人民币需支付75元，积分支付25
+     */
     @Override
     @Transactional
     public Object storePurchaseRMBJF(String userId, String storeCode,
@@ -196,10 +199,7 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
     private Object storePurchaseCGYE(User user, Store store, Long rmbTotalAmount) {
         Long payRmbAmount = AmountUtil.mulRmbJinFen(rmbTotalAmount,
             1 - store.getRate2());// 需要支付的RMB金额
-        Long discountAmount = rmbTotalAmount - payRmbAmount;// 可被抵消的人民币部分
-        // 进分
-        Double cgjf2cnyRate = accountBO.getExchangeRateRemote(ECurrency.CGJF);// 可抵消的积分
-        Long payJfAmount = AmountUtil.mulXnbJin1(discountAmount, cgjf2cnyRate);// 需要支付的积分金额
+        Long payJfAmount = rmbTotalAmount - payRmbAmount;// 需要支付的积分金额
 
         // 落地本地系统消费记录
         String code = storePurchaseBO.storePurchaseCGRMBJF(user, store,
@@ -220,26 +220,22 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
         return code;
     }
 
-    private Object storePurchaseCGWX(User user, Store store, Long amount) {
-        // 计算折扣，即积分扣钱金额
-        Long payRmbAmount = AmountUtil.mulRmbJinFen(amount,
-            1 - store.getRate2());
-        Long discountAmount = amount - payRmbAmount;
-        // 进分
-        Double cgjf2cnyRate = accountBO.getExchangeRateRemote(ECurrency.CGJF);
-        Long jfAmount = AmountUtil.mulXnbJin1(discountAmount, cgjf2cnyRate);
-        // 落地本地系统消费记录
+    private Object storePurchaseCGWX(User user, Store store, Long rmbTotalAmount) {
+        Long payRmbAmount = AmountUtil.mulRmbJinFen(rmbTotalAmount,
+            1 - store.getRate2());// 需要支付的RMB金额
+        Long payJfAmount = rmbTotalAmount - payRmbAmount;// 需要支付的积分金额
+
         String payGroup = storePurchaseBO.storePurchaseCGWX(user, store,
-            amount, jfAmount);
+            payRmbAmount, payJfAmount);
         // 资金划转开始--------------
         // 验证积分是否足够
-        Account xnbAccount = accountBO.getRemoteAccount(user.getUserId(),
+        Account jfAccount = accountBO.getRemoteAccount(user.getUserId(),
             ECurrency.CGJF);
-        if (jfAmount > xnbAccount.getAmount()) {
+        if (payJfAmount > jfAccount.getAmount()) {
             throw new BizException("xn0000", "积分不足");
         }
         // 验证积分是否足够
-        accountBO.checkRmbJf(user.getUserId(), 0L, jfAmount);
+        accountBO.checkRmbJf(user.getUserId(), 0L, payJfAmount);
         // RMB调用微信渠道至商家
         return accountBO.doWeiXinH5PayRemote(user.getUserId(),
             user.getOpenId(), store.getOwner(), payRmbAmount,

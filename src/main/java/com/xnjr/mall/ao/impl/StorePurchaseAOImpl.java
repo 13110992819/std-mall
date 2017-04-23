@@ -255,7 +255,7 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
         // 资金划转开始--------------
         // RMB调用微信渠道至商家
         return accountBO.doWeiXinPayRemote(user.getUserId(), store.getOwner(),
-            amount, EBizType.CG_O2O_RMB, "O2O消费微信支付", "O2O消费微信支付", payGroup);
+            amount, EBizType.ZH_O2O, "O2O消费微信支付", "O2O消费微信支付", payGroup);
         // 资金划转结束--------------
     }
 

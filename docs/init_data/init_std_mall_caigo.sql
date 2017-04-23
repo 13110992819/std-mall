@@ -100,11 +100,11 @@ INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_d
 INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('1','vorder_status','3','已取消','admin',now(),'','CD-CCG000007','CD-CCG000007');
 
 INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('0',NULL,'vproduct_price','商品价格','admin',now(),'','CD-CCG000007','CD-CCG000007');
-INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('1','vproduct_price','100','100','admin',now(),'','CD-CCG000007','CD-CCG000007');
-INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('1','vproduct_price','200','200','admin',now(),'','CD-CCG000007','CD-CCG000007');
-INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('1','vproduct_price','500','500','admin',now(),'','CD-CCG000007','CD-CCG000007');
-INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('1','vproduct_price','1000','1000','admin',now(),'','CD-CCG000007','CD-CCG000007');
 INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('1','vproduct_price','2000','2000','admin',now(),'','CD-CCG000007','CD-CCG000007');
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('1','vproduct_price','1000','1000','admin',now(),'','CD-CCG000007','CD-CCG000007');
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('1','vproduct_price','500','500','admin',now(),'','CD-CCG000007','CD-CCG000007');
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('1','vproduct_price','200','200','admin',now(),'','CD-CCG000007','CD-CCG000007');
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('1','vproduct_price','100','100','admin',now(),'','CD-CCG000007','CD-CCG000007');
 
 /*
 -- Query: SELECT * FROM std_mall_200.tduijie_caigopool

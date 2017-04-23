@@ -36,8 +36,7 @@ public class XN808653 extends AProcessor {
         if (CollectionUtils.isEmpty(req.getCodeList())) {
             throw new BizException("xn000000", "订单编号列表不能为空");
         }
-        StringValidater.validateBlank(req.getUpdater(), req.getRemark());
-
+        StringValidater.validateBlank(req.getUpdater());
     }
 
 }

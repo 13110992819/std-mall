@@ -1,8 +1,8 @@
 package com.xnjr.mall.dto.req;
 
 public class XN808667Req {
-    // 类型(选填)
-    private String type;
+    // 产品编号(选填)
+    private String productCode;
 
     // 收件人卡号(选填)
     private String reCardno;
@@ -37,12 +37,12 @@ public class XN808667Req {
     // 所属系统编号(必填)
     private String systemCode;
 
-    public String getType() {
-        return type;
+    public String getProductCode() {
+        return productCode;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setProductCode(String productCode) {
+        this.productCode = productCode;
     }
 
     public String getReCardno() {

@@ -26,7 +26,7 @@ public class XN808668 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         Vorder condition = new Vorder();
-        condition.setType(req.getType());
+        condition.setProductCode(req.getProductCode());
         condition.setApplyUser(req.getApplyUser());
         condition.setStatus(req.getStatus());
         condition.setCompanyCode(req.getCompanyCode());

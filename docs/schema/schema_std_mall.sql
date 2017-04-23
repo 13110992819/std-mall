@@ -26,7 +26,7 @@ CREATE TABLE `tmall_vproduct` (
 DROP TABLE IF EXISTS `tmall_vorder`;
 CREATE TABLE `tmall_vorder` (
   `code` varchar(32) NOT NULL COMMENT '编号',
-  `type` varchar(4) DEFAULT NULL COMMENT '类型',
+  `product_code` varchar(32) DEFAULT NULL COMMENT '产品编号',
   `re_cardno` varchar(255) DEFAULT NULL COMMENT '收件人卡号',
   `re_name` varchar(255) DEFAULT NULL COMMENT '收件人姓名',
   `re_mobile` varchar(32) DEFAULT NULL COMMENT '收件人电话',

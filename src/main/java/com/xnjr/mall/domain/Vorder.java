@@ -14,8 +14,8 @@ public class Vorder extends ABaseDO {
     // 编号
     private String code;
 
-    // 类型1=中石化充值；2=中石油充值；3=手机充值
-    private String type;
+    // 产品编号
+    private String productCode;
 
     // 收件人卡号
     private String reCardno;
@@ -73,6 +73,17 @@ public class Vorder extends ABaseDO {
     // 申请人详情
     private User applyUserDetail;
 
+    // 产品
+    private Vproduct product;
+
+    public Vproduct getProduct() {
+        return product;
+    }
+
+    public void setProduct(Vproduct product) {
+        this.product = product;
+    }
+
     public User getApplyUserDetail() {
         return applyUserDetail;
     }
@@ -89,12 +100,12 @@ public class Vorder extends ABaseDO {
         this.code = code;
     }
 
-    public String getType() {
-        return type;
+    public String getProductCode() {
+        return productCode;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setProductCode(String productCode) {
+        this.productCode = productCode;
     }
 
     public String getReCardno() {

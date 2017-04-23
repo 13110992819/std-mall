@@ -7,8 +7,8 @@ public class XN808668Req extends APageReq {
      */
     private static final long serialVersionUID = -7669432267838084902L;
 
-    // 类型(选填)
-    private String type;
+    // 产品编号(选填)
+    private String productCode;
 
     // 下单人(必填)
     private String applyUser;
@@ -22,12 +22,12 @@ public class XN808668Req extends APageReq {
     // 所属系统编号(必填)
     private String systemCode;
 
-    public String getType() {
-        return type;
+    public String getProductCode() {
+        return productCode;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setProductCode(String productCode) {
+        this.productCode = productCode;
     }
 
     public String getApplyUser() {

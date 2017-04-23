@@ -8,7 +8,7 @@ public class XN808665Req extends APageReq {
     private static final long serialVersionUID = -1335754015824945645L;
 
     // 类型(选填)
-    private String type;
+    private String productCode;
 
     // 收件人卡号(选填)
     private String reCardno;
@@ -43,12 +43,12 @@ public class XN808665Req extends APageReq {
     // 所属系统编号(必填)
     private String systemCode;
 
-    public String getType() {
-        return type;
+    public String getProductCode() {
+        return productCode;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setProductCode(String productCode) {
+        this.productCode = productCode;
     }
 
     public String getReCardno() {

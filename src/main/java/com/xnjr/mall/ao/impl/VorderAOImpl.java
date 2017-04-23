@@ -64,7 +64,7 @@ public class VorderAOImpl implements IVorderAO {
         String code = OrderNoGenerater.generateM(EGeneratePrefix.ORDER
             .getCode());
         data.setCode(code);
-        data.setType(product.getType());
+        data.setProductCode(product.getCode());
         data.setReCardno(req.getReCardno());
         data.setReName(req.getReName());
         data.setReMobile(req.getReMobile());
@@ -165,6 +165,9 @@ public class VorderAOImpl implements IVorderAO {
                 User applyUserDetail = userBO.getRemoteUser(vorder
                     .getApplyUser());
                 vorder.setApplyUserDetail(applyUserDetail);
+                // 虚拟产品
+                vorder.setProduct(vproductBO.getVproduct(vorder
+                    .getProductCode()));
             }
         }
         return page;
@@ -175,6 +178,8 @@ public class VorderAOImpl implements IVorderAO {
         Vorder vorder = vorderBO.getVorder(code);
         User applyUserDetail = userBO.getRemoteUser(vorder.getApplyUser());
         vorder.setApplyUserDetail(applyUserDetail);
+        // 虚拟产品
+        vorder.setProduct(vproductBO.getVproduct(vorder.getProductCode()));
         return vorder;
     }
 
@@ -184,6 +189,8 @@ public class VorderAOImpl implements IVorderAO {
         for (Vorder vorder : list) {
             User applyUserDetail = userBO.getRemoteUser(vorder.getApplyUser());
             vorder.setApplyUserDetail(applyUserDetail);
+            // 虚拟产品
+            vorder.setProduct(vproductBO.getVproduct(vorder.getProductCode()));
         }
         return list;
     }

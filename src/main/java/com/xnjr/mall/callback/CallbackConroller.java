@@ -48,20 +48,27 @@ public class CallbackConroller {
             // ------------------------------
             try {
                 if (EBizType.AJ_GW.getCode().equals(bizType)) {
-                    System.out.println("**** 进入商品购物，微信支付服务器回调 start****");
+                    logger.info("**** 购物支付回调 payGroup <" + payGroup
+                            + "> payCode <" + payCode + ">start****");
                     orderAO.paySuccess(payGroup, payCode, amount);
-                    System.out.println("**** 进入商品购物，微信支付服务器回调 end****");
+                    logger.info("**** 购物支付回调 payGroup <" + payGroup
+                            + "> payCode <" + payCode + ">end****");
                 } else if (EBizType.ZH_O2O.getCode().equals(bizType)) {
-                    System.out.println("**** 进入优店买单，微信支付服务器回调 start****");
-                    storePurchaseAO.paySuccess(payGroup, payCode, amount);
-                    System.out.println("**** 进入优店买单，微信支付服务器回调 end****");
+                    logger.info("**** 正汇O2O支付回调 payGroup <" + payGroup
+                            + "> payCode <" + payCode + ">start****");
+                    storePurchaseAO.paySuccessZH(payGroup, payCode, amount);
+                    logger.info("**** 正汇O2O支付回调 payGroup <" + payGroup
+                            + "> payCode <" + payCode + ">end****");
                 } else if (EBizType.CG_O2O_RMB.getCode().equals(bizType)) {
-                    System.out.println("**** 进入菜狗优店买单，微信支付服务器回调 start****");
+                    logger.info("**** 菜狗O2O支付回调 payGroup <" + payGroup
+                            + "> payCode <" + payCode + ">start****");
                     storePurchaseAO.paySuccessCG(payGroup, payCode, amount);
-                    System.out.println("**** 进入菜狗优店买单，微信支付服务器回调 end****");
+                    logger.info("**** 菜狗O2O支付回调 payGroup <" + payGroup
+                            + "> payCode <" + payCode + ">end****");
                 }
             } catch (Exception e) {
-                logger.info("支付回调异常");
+                logger.error("支付回调异常payGroup <" + payGroup + "> payCode <"
+                        + payCode + ">异常如下：" + e.getMessage());
             }
             // ------------------------------
             // 处理业务完毕

@@ -396,7 +396,7 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
 
     @Override
     @Transactional
-    public void paySuccess(String payGroup, String payCode, Long payAmount) {
+    public void paySuccessZH(String payGroup, String payCode, Long payAmount) {
         StorePurchase storePurchase = storePurchaseBO
             .getStorePurchaseByPayGroup(payGroup);
         if (EStorePurchaseStatus.TO_PAY.getCode().equals(
@@ -426,7 +426,7 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
                 }
             }
         } else {
-            logger.info("订单号：" + storePurchase.getCode() + "已支付，重复回调");
+            logger.error("订单号：" + storePurchase.getCode() + "已支付，重复回调");
         }
     }
 

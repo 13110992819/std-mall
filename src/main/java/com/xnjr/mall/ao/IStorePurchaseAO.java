@@ -18,7 +18,7 @@ public interface IStorePurchaseAO {
     public Object storePurchaseGD(String userId, String storeCode, Long amount,
             String payType);
 
-    public void paySuccess(String payGroup, String payCode, Long payAmount);
+    public void paySuccessZH(String payGroup, String payCode, Long payAmount);
 
     public void paySuccessCG(String payGroup, String payCode, Long payAmount);
 

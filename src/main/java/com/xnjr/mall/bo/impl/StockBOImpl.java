@@ -334,6 +334,7 @@ public class StockBOImpl extends PaginableBOImpl<Stock> implements IStockBO {
         if (CollectionUtils.isNotEmpty(list)) {
             result = list.get(0);
             result.setStatus(EStockStatus.ING_effect.getCode());
+            result.setNextBackDate(DateUtil.getTomorrowStart(new Date()));
             stockDAO.awakenStock(result);
         }
 

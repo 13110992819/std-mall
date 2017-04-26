@@ -176,6 +176,7 @@
 		UPDATE tfund_stock
 		SET
 		status = #{status}
+		,next_back_date = #{nextBackDate}
 		WHERE code = #{code}
 	</update>
 </mapper>

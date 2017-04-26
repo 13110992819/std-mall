@@ -366,12 +366,11 @@ public class OrderAOImpl implements IOrderAO {
         String userId = order.getApplyUser();
         // 发送短信
         if (!ESystemCode.CSW.getCode().equals(order.getSystemCode())) {
-            smsOutBO.sentContent(userId, userId,
-                "尊敬的用户，您的订单[" + order.getCode() + "]已取消,退款原因:[" + remark
-                        + "],请及时查看退款。");
+            smsOutBO.sentContent(userId, "尊敬的用户，您的订单[" + order.getCode()
+                    + "]已取消,退款原因:[" + remark + "],请及时查看退款。");
         } else {
-            smsOutBO.sentContent(userId, userId,
-                "尊敬的用户，您的订单[" + order.getCode() + "]已取消,原因:[" + remark + "]。");
+            smsOutBO.sentContent(userId, "尊敬的用户，您的订单[" + order.getCode()
+                    + "]已取消,原因:[" + remark + "]。");
         }
     }
 
@@ -527,7 +526,7 @@ public class OrderAOImpl implements IOrderAO {
                         + order.getProductOrderList().get(0).getProduct()
                             .getName() + "]已发货，请注意查收。";
             }
-            smsOutBO.sentContent(userId, userId, notice);
+            smsOutBO.sentContent(userId, notice);
         }
     }
 
@@ -590,7 +589,7 @@ public class OrderAOImpl implements IOrderAO {
         distributeBO.distribute25Amount(frbAmount, order.getPayAmount1(),
             store, user);
         // 短信通知商户
-        smsOutBO.sentContent(order.getCompanyCode(), order.getCompanyCode(),
+        smsOutBO.sentContent(order.getCompanyCode(),
             "尊敬的商户，订单号[" + order.getCode() + "]的用户已确认收货,本次收入分润："
                     + CalculationUtil.divi(frbAmount) + ",请注意查收!");
     }
@@ -617,11 +616,8 @@ public class OrderAOImpl implements IOrderAO {
             // 更新支付金额
             orderBO.refreshPaySuccess(order, cnyAmount, 0L, gwbAmount,
                 qbbAmount, null);
-            smsOutBO.sentContent(
-                order.getApplyUser(),
-                order.getApplyUser(),
-                "您的订单" + order.getCode() + "已支付成功，支付金额为"
-                        + CalculationUtil.divi(payAmount) + "元");
+            smsOutBO.sentContent(order.getApplyUser(), "您的订单" + order.getCode()
+                    + "已支付成功，支付金额为" + CalculationUtil.divi(payAmount) + "元");
         } else {
             logger.info("订单号：" + order.getCode() + "已支付，重复回调");
         }

@@ -18,10 +18,10 @@ public class SmsOutBOImpl implements ISmsOutBO {
     static Logger logger = Logger.getLogger(SmsOutBOImpl.class);
 
     @Override
-    public void sentContent(String tokenId, String ownerId, String content) {
+    public void sentContent(String ownerId, String content) {
         try {
             XN805905Req req = new XN805905Req();
-            req.setTokenId(tokenId);
+            req.setTokenId(ownerId);
             req.setOwnerId(ownerId);
             req.setContent(content);
             BizConnecter.getBizData("805905", JsonUtils.object2Json(req),

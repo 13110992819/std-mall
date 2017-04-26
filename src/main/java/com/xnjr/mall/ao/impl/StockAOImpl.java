@@ -69,9 +69,8 @@ public class StockAOImpl implements IStockAO {
     }
 
     @Override
-    public void doDailyStock() {
+    public synchronized void doDailyStock() {
         logger.info("***************开始扫描分红权***************");
-        // Date now = new Date();
         Stock condition = new Stock();
         condition.setStatus(EStockStatus.ING_effect.getCode());
         condition.setNextBackDateStart(DateUtil.getTodayStart());// 确定是今天的才开始
@@ -131,7 +130,6 @@ public class StockAOImpl implements IStockAO {
                         ECurrency.ZH_GXZ, half, EBizType.ZH_STOCK, "正汇分红权分红",
                         "正汇分红权分红");
                 }
-
             }
         }
         logger.info("***************结束扫描分红权***************");

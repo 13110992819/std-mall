@@ -50,6 +50,7 @@ import com.xnjr.mall.enums.EBizType;
 import com.xnjr.mall.enums.ECurrency;
 import com.xnjr.mall.enums.EOrderStatus;
 import com.xnjr.mall.enums.EPayType;
+import com.xnjr.mall.enums.EProductStatus;
 import com.xnjr.mall.enums.ESysUser;
 import com.xnjr.mall.enums.ESystemCode;
 import com.xnjr.mall.exception.BizException;
@@ -155,6 +156,8 @@ public class OrderAOImpl implements IOrderAO {
         if (!EOrderStatus.TO_PAY.getCode().equals(order.getStatus())) {
             throw new BizException("xn000000", "订单不处于待支付状态");
         }
+        // 验证产品是否有未上架的
+        doCheckProductOnline(order);
         if (ESystemCode.Caigo.getCode().equals(order.getSystemCode())) {
             return toPayOrderCG(order, payType);
         } else if (ESystemCode.ZHPAY.getCode().equals(order.getSystemCode())) {
@@ -191,6 +194,26 @@ public class OrderAOImpl implements IOrderAO {
             throw new BizException("xn0000", "支付类型不支持");
         }
         return new BooleanRes(true);
+    }
+
+    /** 
+     * @param order 
+     * @create: 2017年5月2日 下午5:19:38 xieyj
+     * @history: 
+     */
+    private void doCheckProductOnline(Order order) {
+        List<ProductOrder> prodList = productOrderBO
+            .queryProductOrderList(order.getCode());
+        if (CollectionUtils.isNotEmpty(prodList)) {
+            for (ProductOrder productOrder : prodList) {
+                Product product = productBO.getProduct(productOrder
+                    .getProductCode());
+                if (!EProductStatus.APPROVE_YES.getCode().equals(
+                    product.getStatus())) {
+                    throw new BizException("xn0000", "订单中有未上架产品，不能支付");
+                }
+            }
+        }
     }
 
     @Transactional

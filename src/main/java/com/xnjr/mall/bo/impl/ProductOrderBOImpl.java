@@ -81,4 +81,14 @@ public class ProductOrderBOImpl extends PaginableBOImpl<ProductOrder> implements
         return data;
     }
 
+    /** 
+     * @see com.xnjr.mall.bo.IProductOrderBO#queryProductOrderList(java.lang.String)
+     */
+    @Override
+    public List<ProductOrder> queryProductOrderList(String orderCode) {
+        ProductOrder condition = new ProductOrder();
+        condition.setOrderCode(orderCode);
+        return productOrderDAO.selectList(condition);
+    }
+
 }

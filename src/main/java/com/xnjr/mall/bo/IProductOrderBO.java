@@ -43,4 +43,13 @@ public interface IProductOrderBO extends IPaginableBO<ProductOrder> {
      * @history:
      */
     public ProductOrder getProductOrder(String code);
+
+    /**
+     * 查询订单下所有产品是否下架
+     * @param orderCode
+     * @return 
+     * @create: 2017年5月2日 下午5:14:28 xieyj
+     * @history:
+     */
+    public List<ProductOrder> queryProductOrderList(String orderCode);
 }

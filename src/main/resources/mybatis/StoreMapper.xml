@@ -605,6 +605,9 @@
 		UPDATE to2o_store
 		SET
 		level = #{level}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
 		WHERE code = #{code}
 	</update>
 	

@@ -179,4 +179,12 @@
 		,next_back_date = #{nextBackDate}
 		WHERE code = #{code}
 	</update>
+	
+	<delete id="delete_deleteStock" parameterType="stock">
+		DELETE FROM
+		tfund_stock
+		WHERE
+		user_id = #{userId}
+		,status = #{status}
+	</delete>
 </mapper>

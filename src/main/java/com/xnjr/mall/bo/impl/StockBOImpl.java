@@ -37,45 +37,53 @@ public class StockBOImpl extends PaginableBOImpl<Stock> implements IStockBO {
     public void generateCStock(Long frAmount, String buyUser) {
         Long peopleRemindCount = getPeopleRemindCount(buyUser);
         if (peopleRemindCount > 0) {
-            Long remindCount = getDayRemindCount(buyUser);
+            Long dayRemindCount = getDayRemindCount(buyUser);
             Long mod = frAmount % 500000;
             Long zheng = (frAmount - mod) / 500000;// 整数部分
             Long yu = frAmount - zheng * 500000;// 余数部分
 
-            if (zheng > 0) {// 针对整数,生成整数个分红权
-                for (int i = 0; i < zheng; i++) {
-                    if (remindCount > 0) {
+            Long remindCount = peopleRemindCount > zheng ? zheng
+                    : peopleRemindCount;// 可以生成的分红权个数等于两者的较小值
+            if (remindCount > 0) {// 针对整数,生成整数个分红权
+                for (int i = 0; i < remindCount; i++) {
+                    if (dayRemindCount > 0) {
                         generateCFullStock(EStockStatus.ING_effect, buyUser);
-                        remindCount = remindCount - 1;
+                        dayRemindCount = dayRemindCount - 1;
+                        peopleRemindCount = peopleRemindCount - 1;
                     } else {
                         generateCFullStock(EStockStatus.WILL_effect, buyUser);
                     }
                 }
             }
-
-            if (yu > 0) {// 针对余数,跟“等待生效”的分红权有关
-                Stock dbStock = this.getMyNextStock(buyUser);
-                if (dbStock == null) {
-                    generateCPartStock(yu, buyUser);
-                } else {
-                    Long twoYu = dbStock.getCostAmount() + yu;
-                    if (twoYu > 500000) {// 且肯定小于1000
-                        if (remindCount > 0) {
-                            generateCFullStock(EStockStatus.ING_effect, buyUser);
-                        } else {
-                            generateCFullStock(EStockStatus.WILL_effect,
-                                buyUser);
-                        }
-                        refreshCostAmount(dbStock, twoYu - 500000);
-                    } else if (twoYu < 500000) {// 且肯定大于0
-                        refreshCostAmount(dbStock, twoYu);
-                    } else {// 等于500'
-                        if (remindCount > 0) {
-                            refreshTOeffectStatus(dbStock,
-                                EStockStatus.ING_effect);
-                        } else {
-                            refreshTOeffectStatus(dbStock,
-                                EStockStatus.WILL_effect);
+            if (peopleRemindCount <= 0) {
+                // 如果有待形成的分红权，则删除
+                stockDAO.deleteStock(buyUser, EStockStatus.TO_effect);
+            } else {
+                if (yu > 0) {// 针对余数,跟“等待生效”的分红权有关
+                    Stock dbStock = this.getMyNextStock(buyUser);
+                    if (dbStock == null) {
+                        generateCPartStock(yu, buyUser);
+                    } else {
+                        Long twoYu = dbStock.getCostAmount() + yu;
+                        if (twoYu > 500000) {// 且肯定小于1000
+                            if (dayRemindCount > 0) {
+                                generateCFullStock(EStockStatus.ING_effect,
+                                    buyUser);
+                            } else {
+                                generateCFullStock(EStockStatus.WILL_effect,
+                                    buyUser);
+                            }
+                            refreshCostAmount(dbStock, twoYu - 500000);
+                        } else if (twoYu < 500000) {// 且肯定大于0
+                            refreshCostAmount(dbStock, twoYu);
+                        } else {// 等于500'
+                            if (dayRemindCount > 0) {
+                                refreshTOeffectStatus(dbStock,
+                                    EStockStatus.ING_effect);
+                            } else {
+                                refreshTOeffectStatus(dbStock,
+                                    EStockStatus.WILL_effect);
+                            }
                         }
                     }
                 }

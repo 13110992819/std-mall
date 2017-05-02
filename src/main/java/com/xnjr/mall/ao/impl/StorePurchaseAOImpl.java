@@ -438,7 +438,7 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
             // 支付成功后，将积分从消费者回收至平台
             String systemUser = ESysUser.SYS_USER_CAIGO.getCode();
             accountBO.doTransferAmountRemote(storePurchase.getUserId(),
-                systemUser, ECurrency.CGJF, storePurchase.getPayAmount2(),
+                systemUser, ECurrency.CGJF, storePurchase.getPayAmount3(),
                 EBizType.CG_O2O_CGJF, "O2O消费使用积分", "O2O消费回收积分");
         } else {
             logger.info("订单号：" + storePurchase.getCode() + "已支付，重复回调");

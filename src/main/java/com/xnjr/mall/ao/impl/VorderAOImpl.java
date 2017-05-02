@@ -17,6 +17,7 @@ import com.xnjr.mall.bo.IVorderBO;
 import com.xnjr.mall.bo.IVproductBO;
 import com.xnjr.mall.bo.base.Paginable;
 import com.xnjr.mall.common.AmountUtil;
+import com.xnjr.mall.core.CalculationUtil;
 import com.xnjr.mall.core.OrderNoGenerater;
 import com.xnjr.mall.core.StringValidater;
 import com.xnjr.mall.domain.User;
@@ -31,6 +32,7 @@ import com.xnjr.mall.enums.EPayType;
 import com.xnjr.mall.enums.ESysUser;
 import com.xnjr.mall.enums.ESystemCode;
 import com.xnjr.mall.enums.EVorderStatus;
+import com.xnjr.mall.enums.EVproductType;
 import com.xnjr.mall.exception.BizException;
 
 @Service
@@ -120,8 +122,8 @@ public class VorderAOImpl implements IVorderAO {
         String applyUser = order.getApplyUser();
         if (EVorderStatus.TOPAY.getCode().equals(order.getStatus())) {
             // 发短信
-            smsOutBO.sentContent(applyUser, applyUser,
-                "尊敬的用户，您的订单[" + order.getCode() + "]已取消");
+            smsOutBO.sentContent(applyUser, "尊敬的用户，您的订单[" + order.getCode()
+                    + "]已取消");
         } else if (EVorderStatus.PAYED.getCode().equals(order.getStatus())) {
             // 菜狗币退款
             accountBO.doTransferAmountRemote(ESysUser.SYS_USER_CAIGO.getCode(),
@@ -129,9 +131,8 @@ public class VorderAOImpl implements IVorderAO {
                 EBizType.CG_XNCZ_M, EBizType.CG_XNCZ_M.getValue(),
                 EBizType.CG_XNCZ_M.getValue());
             // 发短信
-            smsOutBO.sentContent(applyUser, applyUser,
-                "尊敬的用户，您的订单[" + order.getCode() + "]已取消,退款原因:[" + remark
-                        + "],请及时查看退款。");
+            smsOutBO.sentContent(applyUser, "尊敬的用户，您的订单[" + order.getCode()
+                    + "]已取消,退款原因:[" + remark + "],请及时查看退款。");
         } else {
             throw new BizException("xn0000", "该订单，无法操作");
         }
@@ -150,6 +151,15 @@ public class VorderAOImpl implements IVorderAO {
         Vorder order = vorderBO.getVorder(code);
         if (EVorderStatus.PAYED.getCode().equals(order.getStatus())) {
             vorderBO.deliverOrder(order, updater, remark);
+            // 发送短信
+            Vproduct product = vproductBO.getVproduct(order.getProductCode());
+            EVproductType eVproductType = EVproductType
+                .getEVproductType(product.getType());
+            String applyUser = order.getApplyUser();
+            smsOutBO.sentContent(applyUser,
+                "尊敬的用户，您的" + eVproductType + "订单《" + order.getCode()
+                        + "》已处理，充值金额" + CalculationUtil.divi(order.getAmount())
+                        + "元，请注意查收。");
         } else {
             throw new BizException("xn0000", "该订单不是已支付状态，无法发货");
         }

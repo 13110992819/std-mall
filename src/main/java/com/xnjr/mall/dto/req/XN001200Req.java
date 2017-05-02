@@ -1,6 +1,6 @@
 package com.xnjr.mall.dto.req;
 
-public class XN805905Req {
+public class XN001200Req {
     // tokenId(必填)
     private String tokenId;
 

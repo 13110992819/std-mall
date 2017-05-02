@@ -4,7 +4,7 @@ import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
 import com.xnjr.mall.bo.ISmsOutBO;
-import com.xnjr.mall.dto.req.XN805905Req;
+import com.xnjr.mall.dto.req.XN001200Req;
 import com.xnjr.mall.http.BizConnecter;
 import com.xnjr.mall.http.JsonUtils;
 
@@ -18,16 +18,16 @@ public class SmsOutBOImpl implements ISmsOutBO {
     static Logger logger = Logger.getLogger(SmsOutBOImpl.class);
 
     @Override
-    public void sentContent(String tokenId, String ownerId, String content) {
+    public void sentContent(String ownerId, String content) {
         try {
-            XN805905Req req = new XN805905Req();
-            req.setTokenId(tokenId);
+            XN001200Req req = new XN001200Req();
+            req.setTokenId(ownerId);
             req.setOwnerId(ownerId);
             req.setContent(content);
-            BizConnecter.getBizData("805905", JsonUtils.object2Json(req),
+            BizConnecter.getBizData("001200", JsonUtils.object2Json(req),
                 Object.class);
         } catch (Exception e) {
-            logger.error("调用短信发送服务异常");
+            logger.error("调用短信发送服务异常, 原因：" + e.getMessage());
         }
     }
 }

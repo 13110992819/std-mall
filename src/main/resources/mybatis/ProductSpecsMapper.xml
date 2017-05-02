@@ -19,6 +19,9 @@
 			<if test="productCode != null and productCode != '' ">
 				AND t.product_code = #{productCode}
 			</if>
+			<if test="dkey != null and dkey != '' ">
+				AND t.dkey = #{dkey}
+			</if>
 			<if test="companyCode != null and companyCode != '' ">
 				AND t.company_code = #{companyCode}
 			</if>

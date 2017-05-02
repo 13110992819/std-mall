@@ -27,6 +27,7 @@ public class XN808037 extends AProcessor {
     public Object doBusiness() throws BizException {
         ProductSpecs condition = new ProductSpecs();
         condition.setProductCode(req.getProductCode());
+        condition.setDkey(req.getDkey());
         return productSpecsAO.queryProductSpecsList(condition);
     }
 

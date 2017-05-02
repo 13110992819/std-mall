@@ -119,6 +119,15 @@ public class OrderAOImpl implements IOrderAO {
     public String commitCartOrderCG(XN808051Req req) {
         List<String> cartCodeList = req.getCartCodeList();
         List<Cart> cartList = cartBO.queryCartList(cartCodeList);
+        // 验证产品是否有记录
+        for (Cart cart : cartList) {
+            Product product = productBO.getProduct(cart.getProductCode());
+            if (!EProductStatus.PUBLISH_YES.getCode().equals(
+                product.getStatus())) {
+                throw new BizException("xn0000", "购物车中有未上架产品["
+                        + product.getName() + "]无法下单");
+            }
+        }
         String orderCode = orderBO.saveOrder(cartList, req.getPojo(),
             req.getToUser());
         // 删除购物车选中记录
@@ -208,7 +217,7 @@ public class OrderAOImpl implements IOrderAO {
             for (ProductOrder productOrder : prodList) {
                 Product product = productBO.getProduct(productOrder
                     .getProductCode());
-                if (!EProductStatus.APPROVE_YES.getCode().equals(
+                if (!EProductStatus.PUBLISH_YES.getCode().equals(
                     product.getStatus())) {
                     throw new BizException("xn0000", "订单中有未上架产品，不能支付");
                 }

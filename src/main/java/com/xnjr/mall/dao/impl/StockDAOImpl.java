@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import com.xnjr.mall.dao.IStockDAO;
 import com.xnjr.mall.dao.base.support.AMybatisTemplate;
 import com.xnjr.mall.domain.Stock;
+import com.xnjr.mall.enums.EStockStatus;
 
 @Repository("stockDAOImpl")
 public class StockDAOImpl extends AMybatisTemplate implements IStockDAO {
@@ -63,6 +64,15 @@ public class StockDAOImpl extends AMybatisTemplate implements IStockDAO {
     @Override
     public int awakenStock(Stock data) {
         return super.update(NAMESPACE.concat("update_awakenStock"), data);
+    }
+
+    @Override
+    public int deleteStock(String userId, EStockStatus toEffect) {
+        Stock data = new Stock();
+        data.setUserId(userId);
+        data.setStatus(toEffect.getCode());
+        return super.delete(NAMESPACE.concat("delete_deleteStock"), data);
+
     }
 
 }

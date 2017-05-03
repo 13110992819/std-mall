@@ -28,6 +28,9 @@ public class XN808245Req extends APageReq {
     // 状态（选填）
     private String status;
 
+    // 支付类型（选填）
+    private String payType;
+
     public String getStatus() {
         return status;
     }
@@ -50,5 +53,13 @@ public class XN808245Req extends APageReq {
 
     public void setStoreCode(String storeCode) {
         this.storeCode = storeCode;
+    }
+
+    public String getPayType() {
+        return payType;
+    }
+
+    public void setPayType(String payType) {
+        this.payType = payType;
     }
 }

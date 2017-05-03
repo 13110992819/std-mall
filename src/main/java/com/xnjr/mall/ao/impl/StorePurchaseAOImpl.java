@@ -226,7 +226,7 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
         Long payJfAmount = rmbTotalAmount - payRmbAmount;// 需要支付的积分金额
 
         String payGroup = storePurchaseBO.storePurchaseCGWX(user, store,
-            payRmbAmount, payJfAmount);
+            rmbTotalAmount, payJfAmount);
         // 资金划转开始--------------
         // 验证积分是否足够
         Account jfAccount = accountBO.getRemoteAccount(user.getUserId(),

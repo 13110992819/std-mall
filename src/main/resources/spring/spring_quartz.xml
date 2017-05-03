@@ -28,7 +28,7 @@
 	
 	<bean id="orderTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
        <property name="jobDetail" ref="doChangeOrderStatusDaily"/>  
-      <property name="cronExpression" value="0 0 22 * * ?"/><!-- 每天22点执行 -->
+       <property name="cronExpression" value="0 0 22 * * ?"/><!-- 每天22点执行 -->
 	</bean>
 	<bean id="doChangeOrderStatusDaily" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">   
 	        <property name="targetObject" ref="orderAOImpl"/>  
@@ -48,7 +48,7 @@
 	
 	<bean id="stockTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
        <property name="jobDetail" ref="stockJobDetail"/>  
-        <property name="cronExpression" value="0 0/2 * * * ?"/><!-- 每隔两分钟 -->
+       <property name="cronExpression" value="0 0/30 * * * ?"/><!-- 每隔30分钟  -->
 	</bean>
 	<bean id="stockJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">   
 	        <property name="targetObject" ref="stockAOImpl"/>  

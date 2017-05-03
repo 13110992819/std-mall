@@ -71,6 +71,7 @@ public class StockAOImpl implements IStockAO {
     @Override
     public synchronized void doDailyStock() {
         logger.info("***************开始扫描分红权***************");
+
         Stock condition = new Stock();
         condition.setStatus(EStockStatus.ING_effect.getCode());
         condition.setNextBackDateStart(DateUtil.getTodayStart());// 确定是今天的才开始

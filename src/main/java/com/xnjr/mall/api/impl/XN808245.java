@@ -41,6 +41,7 @@ public class XN808245 extends AProcessor {
         condition.setUserId(req.getUserId());
         condition.setStoreCode(req.getStoreCode());
         condition.setStatus(req.getStatus());
+        condition.setPayType(req.getPayType());
         String orderColumn = req.getOrderColumn();
         if (StringUtils.isBlank(orderColumn)) {
             orderColumn = IStorePurchaseAO.DEFAULT_ORDER_COLUMN;

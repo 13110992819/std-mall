@@ -32,6 +32,7 @@ import com.xnjr.mall.enums.EPayType;
 import com.xnjr.mall.enums.ESysUser;
 import com.xnjr.mall.enums.ESystemCode;
 import com.xnjr.mall.enums.EVorderStatus;
+import com.xnjr.mall.enums.EVproductStatus;
 import com.xnjr.mall.enums.EVproductType;
 import com.xnjr.mall.exception.BizException;
 
@@ -58,6 +59,9 @@ public class VorderAOImpl implements IVorderAO {
     @Override
     public String commitOrder(XN808650Req req) {
         Vproduct product = vproductBO.getVproduct(req.getVproductCode());
+        if (!EVproductStatus.PUBLISH_YES.getCode().equals(product.getStatus())) {
+            throw new BizException("xn000000", "产品未上架，无法下单");
+        }
         Date now = new Date();
         Long amount = StringValidater.toLong(req.getAmount());
         Long payAmount = AmountUtil.mul(amount, product.getRate());
@@ -88,6 +92,10 @@ public class VorderAOImpl implements IVorderAO {
         // 暂时只实现单笔订单支付
         String code = codeList.get(0);
         Vorder order = vorderBO.getVorder(code);
+        Vproduct product = vproductBO.getVproduct(order.getProductCode());
+        if (!EVproductStatus.PUBLISH_YES.getCode().equals(product.getStatus())) {
+            throw new BizException("xn000000", "产品未上架，无法支付");
+        }
         if (!EVorderStatus.TOPAY.getCode().equals(order.getStatus())) {
             throw new BizException("xn000000", "订单不处于待支付状态");
         }

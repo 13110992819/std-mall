@@ -86,8 +86,8 @@ public class StorePurchaseBOImpl extends PaginableBOImpl<StorePurchase>
     }
 
     @Override
-    public String storePurchaseCGWX(User user, Store store, Long amount,
-            Long jfAmount) {
+    public String storePurchaseCGWX(User user, Store store,
+            Long rmbTotalAmount, Long jfAmount) {
         String payGroup = OrderNoGenerater
             .generateM(EGeneratePrefix.STORE_PURCHASW.getCode());
         Date now = new Date();
@@ -96,7 +96,7 @@ public class StorePurchaseBOImpl extends PaginableBOImpl<StorePurchase>
             .getCode()));
         data.setUserId(user.getUserId());
         data.setStoreCode(store.getCode());
-        data.setPrice(amount);
+        data.setPrice(rmbTotalAmount);
 
         data.setCreateDatetime(now);
         data.setStatus(EStorePurchaseStatus.TO_PAY.getCode());

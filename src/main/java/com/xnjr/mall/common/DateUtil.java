@@ -244,8 +244,6 @@ public class DateUtil {
     }
 
     public static void main(String[] args) {
-        // int a = DateUtil.daysBetweenDate(new Date(),
-        // DateUtil.getTomorrowStart(new Date()));
-        // System.out.println(a);
+
     }
 }

@@ -37,10 +37,10 @@ public class XN808217 extends AProcessor {
         condition.setCityForQuery(req.getCity());
         condition.setAreaForQuery(req.getArea());
         condition.setLatitude(req.getLatitude());
+
         condition.setLongitude(req.getLongitude());
-
         condition.setUiLocation(req.getUiLocation());
-
+        condition.setIsDefault(req.getIsDefault());
         condition.setSystemCode(req.getSystemCode());
         condition.setCompanyCode(req.getCompanyCode());
 
@@ -60,5 +60,4 @@ public class XN808217 extends AProcessor {
         StringValidater.validateBlank(req.getStart(), req.getLimit(),
             req.getCompanyCode(), req.getSystemCode());
     }
-
 }

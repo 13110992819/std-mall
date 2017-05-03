@@ -37,13 +37,21 @@ public class XN808217Req extends APageReq {
     private String uiLocation;
 
     // 是否默认（选填）
-    // private String isDefault;
+    private String isDefault;
 
     // 所属公司编号（必填）
     private String companyCode;
 
     // 所属系统编号（必填）
     private String systemCode;
+
+    public String getIsDefault() {
+        return isDefault;
+    }
+
+    public void setIsDefault(String isDefault) {
+        this.isDefault = isDefault;
+    }
 
     public String getUserId() {
         return userId;

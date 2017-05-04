@@ -22,7 +22,7 @@ public class SmsOutBOImpl implements ISmsOutBO {
         try {
             XN001200Req req = new XN001200Req();
             req.setTokenId(ownerId);
-            req.setOwnerId(ownerId);
+            req.setUserId(ownerId);
             req.setContent(content);
             BizConnecter.getBizData("001200", JsonUtils.object2Json(req),
                 Object.class);

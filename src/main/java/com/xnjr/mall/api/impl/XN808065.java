@@ -42,10 +42,10 @@ public class XN808065 extends AProcessor {
         condition.setLogisticsCompany(req.getLogisticsCompany());
         condition.setCompanyCode(req.getCompanyCode());
         condition.setSystemCode(req.getSystemCode());
-        condition.setApplyDatetimeStart(DateUtil.strToDate(req.getDateStart(),
-            DateUtil.DATA_TIME_PATTERN_1));
-        condition.setApplyDatetimeEnd(DateUtil.strToDate(req.getDateEnd(),
-            DateUtil.DATA_TIME_PATTERN_1));
+        condition.setApplyDatetimeStart(DateUtil.getFrontDate(
+            req.getDateStart(), false));
+        condition.setApplyDatetimeEnd(DateUtil.getFrontDate(req.getDateEnd(),
+            true));
         condition.setStatusList(req.getStatusList());
         String orderColumn = req.getOrderColumn();
         if (StringUtils.isBlank(orderColumn)) {

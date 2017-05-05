@@ -74,7 +74,7 @@ public class Store extends ABaseDO {
     // 店铺推荐人
     private String userReferee;
 
-    // 费率1 使用折扣券分成比例
+    // 费率1 使用折扣券分成比例,菜狗纯人民币消费，返现菜狗币比例
     private Double rate1;
 
     // 费率2 不使用折扣券分成比例

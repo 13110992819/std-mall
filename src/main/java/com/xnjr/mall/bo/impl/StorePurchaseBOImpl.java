@@ -86,8 +86,34 @@ public class StorePurchaseBOImpl extends PaginableBOImpl<StorePurchase>
     }
 
     @Override
-    public String storePurchaseCGWX(User user, Store store,
-            Long rmbTotalAmount, Long jfAmount) {
+    public String storePurchaseCGRMB(User user, Store store, Long amount,
+            Long payRMB) {
+        String code = OrderNoGenerater.generateM(EGeneratePrefix.STORE_PURCHASW
+            .getCode());
+        Date now = new Date();
+        StorePurchase data = new StorePurchase();
+        data.setCode(code);
+        data.setUserId(user.getUserId());
+        data.setStoreCode(store.getCode());
+        data.setPrice(amount);
+
+        data.setCreateDatetime(now);
+        data.setStatus(EStorePurchaseStatus.PAYED.getCode());
+        data.setPayType(EO2OPayType.CG_02O_RMB.getCode());
+
+        data.setPayAmount1(payRMB);
+        data.setPayAmount3(0L);
+
+        data.setPayDatetime(now);
+        data.setRemark("人民币支付O2O消费");
+        data.setSystemCode(store.getSystemCode());
+        data.setCompanyCode(store.getCompanyCode());
+        storePurchaseDAO.insert(data);
+        return code;
+    }
+
+    @Override
+    public String storePurchaseCGWX(User user, Store store, Long rmbTotalAmount) {
         String payGroup = OrderNoGenerater
             .generateM(EGeneratePrefix.STORE_PURCHASW.getCode());
         Date now = new Date();
@@ -103,9 +129,36 @@ public class StorePurchaseBOImpl extends PaginableBOImpl<StorePurchase>
         data.setPayType(EO2OPayType.WEIXIN_H5.getCode());
         data.setPayGroup(payGroup);
 
+        data.setPayAmount3(0L);
+        data.setPayDatetime(now);
+        data.setRemark("O2O消费人民币微信H5支付");
+        data.setSystemCode(store.getSystemCode());
+        data.setCompanyCode(store.getCompanyCode());
+        storePurchaseDAO.insert(data);
+        return payGroup;
+    }
+
+    @Override
+    public String storePurchaseCGWX(User user, Store store,
+            Long rmbTotalAmount, Long jfAmount) {
+        String payGroup = OrderNoGenerater
+            .generateM(EGeneratePrefix.STORE_PURCHASW.getCode());
+        Date now = new Date();
+        StorePurchase data = new StorePurchase();
+        data.setCode(OrderNoGenerater.generateM(EGeneratePrefix.STORE_PURCHASW
+            .getCode()));
+        data.setUserId(user.getUserId());
+        data.setStoreCode(store.getCode());
+        data.setPrice(rmbTotalAmount);
+
+        data.setCreateDatetime(now);
+        data.setStatus(EStorePurchaseStatus.TO_PAY.getCode());
+        data.setPayType(EO2OPayType.CG_RMBJF_WEIXIN_H5.getCode());
+        data.setPayGroup(payGroup);
+
         data.setPayAmount3(jfAmount);
         data.setPayDatetime(now);
-        data.setRemark("微信支付O2O消费");
+        data.setRemark("O2O消费人民币积分微信H5支付");
         data.setSystemCode(store.getSystemCode());
         data.setCompanyCode(store.getCompanyCode());
         storePurchaseDAO.insert(data);

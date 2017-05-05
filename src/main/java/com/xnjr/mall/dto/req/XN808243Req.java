@@ -13,6 +13,17 @@ public class XN808243Req {
     // 支付类型（必填）:余额支付/微信支付
     private String payType;
 
+    // 是否只有人民币支付(必填)
+    private String isOnlyRmb;
+
+    public String getIsOnlyRmb() {
+        return isOnlyRmb;
+    }
+
+    public void setIsOnlyRmb(String isOnlyRmb) {
+        this.isOnlyRmb = isOnlyRmb;
+    }
+
     public String getUserId() {
         return userId;
     }

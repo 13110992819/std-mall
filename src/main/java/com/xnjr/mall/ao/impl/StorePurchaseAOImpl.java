@@ -221,8 +221,11 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
     private Object storePurchaseCGRMBYE(User user, Store store,
             Long rmbTotalAmount) {
         // 落地本地系统消费记录
+        Long payStoreRmbAmount = AmountUtil.mul(rmbTotalAmount,
+            1 - store.getRate1());
+        Long fxCgbAmount = rmbTotalAmount - payStoreRmbAmount;
         String code = storePurchaseBO.storePurchaseCGRMB(user, store,
-            rmbTotalAmount, rmbTotalAmount);
+            rmbTotalAmount, rmbTotalAmount, fxCgbAmount);
         // 资金划转开始--------------
         String systemUser = ESysUser.SYS_USER_CAIGO.getCode();
         // 1、用户人民币给平台人民币
@@ -230,13 +233,10 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
             ECurrency.CNY, rmbTotalAmount, EBizType.CG_O2O_RMB, "O2O消费人民币支付",
             "O2O消费人民币支付");
         // 2、平台给商家一定比例人民币
-        Long payStoreRmbAmount = AmountUtil.mul(rmbTotalAmount,
-            1 - store.getRate1());
         accountBO.doTransferAmountRemote(systemUser, store.getOwner(),
             ECurrency.CNY, payStoreRmbAmount, EBizType.CG_O2O_RMB,
             "O2O消费人民币支付", "O2O消费人民币支付");
         // 3、平台返现等比例菜狗币(回收人民币)
-        Long fxCgbAmount = rmbTotalAmount - payStoreRmbAmount;
         accountBO.doTransferAmountRemote(systemUser, user.getUserId(),
             ECurrency.CG_CGB, fxCgbAmount, EBizType.CG_O2O_RMBFD,
             "O2O消费人民币支付返点", "O2O消费人民币支付返点");
@@ -271,8 +271,12 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
 
     private Object storePurchaseCGRMBWX(User user, Store store,
             Long rmbTotalAmount) {
-        String payGroup = storePurchaseBO.storePurchaseCGWX(user, store,
-            rmbTotalAmount);
+        // 落地本地系统消费记录
+        Long payStoreRmbAmount = AmountUtil.mul(rmbTotalAmount,
+            1 - store.getRate1());
+        Long fxCgbAmount = rmbTotalAmount - payStoreRmbAmount;
+        String payGroup = storePurchaseBO.storePurchaseCGRMBWX(user, store,
+            rmbTotalAmount, fxCgbAmount);
         // 资金划转开始--------------
         String systemUser = ESysUser.SYS_USER_CAIGO.getCode();
         // RMB调用微信渠道至平台
@@ -288,7 +292,7 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
             1 - store.getRate2());// 需要支付的RMB金额
         Long payJfAmount = rmbTotalAmount - payRmbAmount;// 需要支付的积分金额
 
-        String payGroup = storePurchaseBO.storePurchaseCGWX(user, store,
+        String payGroup = storePurchaseBO.storePurchaseCGRMBJFWX(user, store,
             rmbTotalAmount, payJfAmount);
         // 资金划转开始--------------
         // 验证积分是否足够

@@ -5,6 +5,7 @@ import com.xnjr.mall.api.AProcessor;
 import com.xnjr.mall.common.JsonUtil;
 import com.xnjr.mall.core.StringValidater;
 import com.xnjr.mall.dto.req.XN808050Req;
+import com.xnjr.mall.enums.ESystemCode;
 import com.xnjr.mall.exception.BizException;
 import com.xnjr.mall.exception.ParaException;
 import com.xnjr.mall.spring.SpringContextHolder;
@@ -38,10 +39,14 @@ public class XN808050 extends AProcessor {
         if (null == req.getPojo()) {
             throw new BizException("xn702000", "订单基本信息不能为空");
         }
+        // 自提方式无需收货地址// toUser 划分订单归属
+        if (!ESystemCode.Caigo.getCode().equals(req.getPojo().getSystemCode())) {
+            StringValidater.validateBlank(req.getPojo().getReceiver(), req
+                .getPojo().getReMobile(), req.getPojo().getReAddress());
+        }
         StringValidater.validateBlank(req.getProductCode(), req.getQuantity(),
-            req.getPojo().getReceiver(), req.getPojo().getReMobile(), req
-                .getPojo().getReAddress(), req.getPojo().getApplyUser(), req
-                .getPojo().getCompanyCode(), req.getPojo().getSystemCode());
+            req.getPojo().getApplyUser(), req.getPojo().getCompanyCode(), req
+                .getPojo().getSystemCode());
         StringValidater.validateNumber(req.getQuantity());
     }
 }

@@ -31,6 +31,12 @@ public class XN808245Req extends APageReq {
     // 支付类型（选填）
     private String payType;
 
+    // 公司编号
+    private String companyCode;
+
+    // 系统编号
+    private String systemCode;
+
     public String getStatus() {
         return status;
     }
@@ -61,5 +67,21 @@ public class XN808245Req extends APageReq {
 
     public void setPayType(String payType) {
         this.payType = payType;
+    }
+
+    public String getCompanyCode() {
+        return companyCode;
+    }
+
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
+    }
+
+    public String getSystemCode() {
+        return systemCode;
+    }
+
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
     }
 }

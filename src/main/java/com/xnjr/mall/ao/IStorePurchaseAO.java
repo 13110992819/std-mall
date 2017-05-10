@@ -12,6 +12,9 @@ public interface IStorePurchaseAO {
     public Object storePurchaseCGB(String userId, String storeCode,
             Long cgbTotalAmount, String payType);
 
+    public Object storePurchaseRMB(String userId, String storeCode,
+            Long rmbTotalAmount, String payType);
+
     public Object storePurchaseRMBJF(String userId, String storeCode,
             Long rmbTotalAmount, String payType);
 

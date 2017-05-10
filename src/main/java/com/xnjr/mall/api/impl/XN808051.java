@@ -55,9 +55,12 @@ public class XN808051 extends AProcessor {
         if (null == req.getPojo()) {
             throw new BizException("xn702000", "订单基本信息不能为空");
         }
-        StringValidater.validateBlank(req.getPojo().getReceiver(), req
-            .getPojo().getReMobile(), req.getPojo().getReAddress(), req
-            .getPojo().getApplyUser(), req.getPojo().getCompanyCode(), req
-            .getPojo().getSystemCode());
+        // 自提方式无需收货地址// toUser 划分订单归属
+        if (!ESystemCode.Caigo.getCode().equals(req.getPojo().getSystemCode())) {
+            StringValidater.validateBlank(req.getPojo().getReceiver(), req
+                .getPojo().getReMobile(), req.getPojo().getReAddress());
+        }
+        StringValidater.validateBlank(req.getPojo().getApplyUser(), req
+            .getPojo().getCompanyCode(), req.getPojo().getSystemCode());
     }
 }

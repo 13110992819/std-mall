@@ -10,6 +10,9 @@ delete from tmall_product_specs where system_code = 'CD-CCG000007';
 delete from tmall_order where system_code = 'CD-CCG000007';
 delete from tmall_product_order where system_code = 'CD-CCG000007';
 
+delete from tmall_vorder where system_code = 'CD-CCG000007';
+delete from tmall_vproduct where system_code = 'CD-CCG000007';
+
 delete from to2o_purchase where system_code = 'CD-CCG000007';
 delete from to2o_store_back where system_code = 'CD-CCG000007';
 delete from to2o_store where system_code = 'CD-CCG000007';

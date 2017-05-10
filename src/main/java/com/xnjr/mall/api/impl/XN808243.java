@@ -5,6 +5,7 @@ import com.xnjr.mall.api.AProcessor;
 import com.xnjr.mall.common.JsonUtil;
 import com.xnjr.mall.core.StringValidater;
 import com.xnjr.mall.dto.req.XN808243Req;
+import com.xnjr.mall.enums.EBoolean;
 import com.xnjr.mall.exception.BizException;
 import com.xnjr.mall.exception.ParaException;
 import com.xnjr.mall.spring.SpringContextHolder;
@@ -23,16 +24,24 @@ public class XN808243 extends AProcessor {
 
     @Override
     public synchronized Object doBusiness() throws BizException {
-        return storePurchaseAO.storePurchaseRMBJF(req.getUserId(),
-            req.getStoreCode(), StringValidater.toLong(req.getAmount()),
-            req.getPayType());
+        Object result = null;
+        if (EBoolean.YES.getCode().equals(req.getIsOnlyRmb())) {
+            result = storePurchaseAO.storePurchaseRMB(req.getUserId(),
+                req.getStoreCode(), StringValidater.toLong(req.getAmount()),
+                req.getPayType());
+        } else {
+            result = storePurchaseAO.storePurchaseRMBJF(req.getUserId(),
+                req.getStoreCode(), StringValidater.toLong(req.getAmount()),
+                req.getPayType());
+        }
+        return result;
     }
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN808243Req.class);
         StringValidater.validateBlank(req.getUserId(), req.getStoreCode(),
-            req.getAmount(), req.getAmount());
+            req.getAmount(), req.getIsOnlyRmb());
 
     }
 

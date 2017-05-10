@@ -402,10 +402,10 @@ public class OrderAOImpl implements IOrderAO {
         // 发送短信
         if (!ESystemCode.CSW.getCode().equals(order.getSystemCode())) {
             smsOutBO.sentContent(userId, "尊敬的用户，您的订单[" + order.getCode()
-                    + "]已取消,退款原因:[" + remark + "],请及时查看退款。");
+                    + "]已取消,请及时查看退款。");
         } else {
             smsOutBO.sentContent(userId, "尊敬的用户，您的订单[" + order.getCode()
-                    + "]已取消,原因:[" + remark + "]。");
+                    + "]已取消。");
         }
     }
 

@@ -165,7 +165,7 @@ public class VorderAOImpl implements IVorderAO {
                 .getEVproductType(product.getType());
             String applyUser = order.getApplyUser();
             smsOutBO.sentContent(applyUser,
-                "尊敬的用户，您的" + eVproductType + "订单《" + order.getCode()
+                "尊敬的用户，您的" + eVproductType.getValue() + "订单《" + order.getCode()
                         + "》已处理，充值金额" + CalculationUtil.divi(order.getAmount())
                         + "元，请注意查收。");
         } else {

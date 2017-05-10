@@ -5,7 +5,7 @@ public class XN001200Req {
     private String tokenId;
 
     // 拥有者(必填)
-    private String ownerId;
+    private String userId;
 
     // 发送短信内容(必填)
     private String content;
@@ -18,12 +18,12 @@ public class XN001200Req {
         this.tokenId = tokenId;
     }
 
-    public String getOwnerId() {
-        return ownerId;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setOwnerId(String ownerId) {
-        this.ownerId = ownerId;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getContent() {

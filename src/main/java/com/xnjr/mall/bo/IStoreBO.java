@@ -57,10 +57,9 @@ public interface IStoreBO {
     /**
      * 一个人只能有一家店铺
      * @param bUser
-     * @param mobile 
      * @create: 2017年3月27日 下午3:15:36 xieyj
      * @history:
      */
-    public void checkStoreByUser(String bUser, String mobile);
+    public void checkStoreByUser(String bUser);
 
 }

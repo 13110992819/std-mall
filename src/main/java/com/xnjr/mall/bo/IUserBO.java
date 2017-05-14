@@ -10,6 +10,8 @@ import com.xnjr.mall.enums.EUserKind;
  */
 public interface IUserBO {
 
+    public void checkTradePwd(String userId, String tradePwd);
+
     public User getRemoteUser(String userId);
 
     /**

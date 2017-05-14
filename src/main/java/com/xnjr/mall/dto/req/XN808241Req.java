@@ -29,6 +29,17 @@ public class XN808241Req {
     // 折扣券购买记录编号（选填）
     private String ticketCode;
 
+    // 交易密码（必填）
+    private String tradePwd;
+
+    public String getTradePwd() {
+        return tradePwd;
+    }
+
+    public void setTradePwd(String tradePwd) {
+        this.tradePwd = tradePwd;
+    }
+
     public String getPayType() {
         return payType;
     }

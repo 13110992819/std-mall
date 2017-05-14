@@ -16,6 +16,17 @@ public class XN808052Req {
     // 支付渠道（必填）
     private String payType;
 
+    // 交易密码（选填/适系统而定）
+    private String tradePwd;
+
+    public String getTradePwd() {
+        return tradePwd;
+    }
+
+    public void setTradePwd(String tradePwd) {
+        this.tradePwd = tradePwd;
+    }
+
     public String getPayType() {
         return payType;
     }

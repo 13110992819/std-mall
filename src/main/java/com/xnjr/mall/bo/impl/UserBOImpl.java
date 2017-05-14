@@ -11,6 +11,7 @@ import com.google.gson.reflect.TypeToken;
 import com.xnjr.mall.bo.IUserBO;
 import com.xnjr.mall.core.StringValidater;
 import com.xnjr.mall.domain.User;
+import com.xnjr.mall.dto.req.XN001100Req;
 import com.xnjr.mall.dto.req.XN001102Req;
 import com.xnjr.mall.dto.req.XN001301Req;
 import com.xnjr.mall.dto.req.XN001350Req;
@@ -35,6 +36,19 @@ import com.xnjr.mall.http.JsonUtils;
  */
 @Component
 public class UserBOImpl implements IUserBO {
+
+    @Override
+    public void checkTradePwd(String userId, String tradePwd) {
+        if (StringUtils.isBlank(tradePwd)) {
+            throw new BizException("XN000000", "请输入交易密码");
+        }
+        XN001100Req req = new XN001100Req();
+        req.setTokenId(userId);
+        req.setUserId(userId);
+        req.setTradePwd(tradePwd);
+        BizConnecter.getBizData("001100", JsonUtils.object2Json(req),
+            Object.class);
+    }
 
     @Override
     public User getRemoteUser(String userId) {

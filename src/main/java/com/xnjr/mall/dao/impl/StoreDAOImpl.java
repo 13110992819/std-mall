@@ -108,17 +108,6 @@ public class StoreDAOImpl extends AMybatisTemplate implements IStoreDAO {
     }
 
     @Override
-    public Long selectOssTotalCount(Store condition) {
-        return super.selectTotalCount("select_oss_store_count", condition);
-    }
-
-    @Override
-    public List<Store> selectOssList(Store condition, int start, int count) {
-        return super.selectList("select_oss_store", start, count, condition,
-            Store.class);
-    }
-
-    @Override
     public Long selectTotalCount(Store condition) {
         return super.selectTotalCount("select_store_count", condition);
     }

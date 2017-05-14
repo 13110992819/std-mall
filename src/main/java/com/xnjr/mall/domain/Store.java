@@ -98,6 +98,9 @@ public class Store extends ABaseDO {
     // 备注
     private String remark;
 
+    // 升级为理财型商家时间
+    private Date fundDatetime;
+
     // 店铺主人
     private String owner;
 
@@ -551,4 +554,11 @@ public class Store extends ABaseDO {
         this.refereeMobile = refereeMobile;
     }
 
+    public Date getFundDatetime() {
+        return fundDatetime;
+    }
+
+    public void setFundDatetime(Date fundDatetime) {
+        this.fundDatetime = fundDatetime;
+    }
 }

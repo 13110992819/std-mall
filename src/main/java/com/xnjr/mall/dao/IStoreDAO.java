@@ -41,10 +41,5 @@ public interface IStoreDAO extends IBaseDAO<Store> {
 
     public Long selectFrontTotalCount(Store condition);
 
-    public Long selectOssTotalCount(Store condition);
-
     public List<Store> selectFrontList(Store condition, int start, int count);
-
-    public List<Store> selectOssList(Store condition, int start, int count);
-
 }

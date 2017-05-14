@@ -70,7 +70,7 @@ public class StoreAOImpl implements IStoreAO {
     public String addStoreOss(XN808200Req req) {
         // 验证推荐手机号和店铺主人手机号(正汇等传入推荐人是手机号)
         if (req.getMobile().equals(req.getUserReferee())) {
-            throw new BizException("xn000000", "推荐人手机号不能和申请人手机号一样，请重新输入");
+            throw new BizException("xn000000", "推荐人手机号不能和申请人手机号一样");
         }
         // 验证推荐人是否是平台的已注册用户,将userReferee手机号转化为用户编号
         String systemCode = req.getSystemCode();
@@ -142,9 +142,9 @@ public class StoreAOImpl implements IStoreAO {
         User owner = userBO.getRemoteUser(dbStore.getOwner());
         // 验证推荐手机号和店铺主人手机号(正汇等传入推荐人是手机号)
         if (owner.getMobile().equals(req.getUserReferee())) {
-            throw new BizException("xn000000", "推荐人手机号不能和申请人手机号一样，请重新输入");
+            throw new BizException("xn000000", "推荐人手机号不能和申请人手机号一样");
         }
-        
+
         // 验证推荐人是否是平台的已注册用户,将userReferee手机号转化为用户编号
         String userRefereeUserId = storeBO.isUserRefereeExist(
             req.getUserReferee(), dbStore.getSystemCode());
@@ -190,9 +190,9 @@ public class StoreAOImpl implements IStoreAO {
         // 验证当前用户是否已拥有店铺
         User owner = userBO.getRemoteUser(req.getOwner());
         storeBO.checkStoreByUser(owner.getUserId());
-     // 验证推荐手机号和店铺主人手机号(正汇等传入推荐人是手机号)
+        // 验证推荐手机号和店铺主人手机号(正汇等传入推荐人是手机号)
         if (owner.getMobile().equals(req.getUserReferee())) {
-            throw new BizException("xn000000", "推荐人手机号不能和申请人手机号一样，请重新输入");
+            throw new BizException("xn000000", "推荐人手机号不能和申请人手机号一样");
         }
 
         // 验证推荐人是否是平台的已注册用户,将userReferee手机号转化为用户编号
@@ -361,13 +361,12 @@ public class StoreAOImpl implements IStoreAO {
         }
         if (EStoreLevel.NOMAL.getCode().equals(dbStore.getLevel())) {
             dbStore.setLevel(EStoreLevel.FINANCIAL.getCode());
+            dbStore.setFundDatetime(new Date());
             dbStore.setRemark("商家自行升级成公益型店铺");
+            storeBO.upLevel(dbStore);
         } else {
             throw new BizException("xn000000", "店铺不能进行升级操作");
         }
-        dbStore.setUpdater(dbStore.getOwner());
-        dbStore.setUpdateDatetime(new Date());
-        storeBO.upLevel(dbStore);
     }
 
     @Override

@@ -37,6 +37,7 @@
 		<result column="updater" property="updater" />
 		<result column="update_datetime" property="updateDatetime" />
 		<result column="remark" property="remark" />
+		<result column="fund_datetime" property="fundDatetime" />
 		<result column="owner" property="owner" />
 		
 		<result column="contract_no" property="contractNo" />
@@ -158,6 +159,7 @@
 		,t.updater
 		,t.update_datetime
 		,t.remark
+		,t.fund_datetime
 		,t.owner
 		
 		,t.contract_no
@@ -224,6 +226,7 @@
 		,t.updater
 		,t.update_datetime
 		,t.remark
+		,t.fund_datetime
 		,t.owner
 		
 		,t.contract_no
@@ -244,67 +247,6 @@
 	</select>
 	
 	<select id="select_store_count" parameterType="store"
-		resultType="java.lang.Long">
-		SELECT count(1) FROM to2o_store t
-		<include refid="where_condition" />
-	</select>
-	
-	<select id="select_oss_store" parameterType="store" resultMap="store_DB_Result">
-		SELECT
-		t.code
-		,t.name
-		,t.level
-		,t.type
-		,t.slogan
-		
-		,t.adv_pic	
-		,t.pic
-		,t.description
-		,t.province
-		,t.city
-		
-		,t.area
-		,t.address
-		,t.longitude
-		,t.latitude
-		,t.book_mobile
-		
-		,t.sms_mobile
-		,t.pdf
-		,t.ui_location
-		,t.ui_order
-		,t.legal_person_name
-		
-		,t.user_referee
-		,t.rate1
-		,t.rate2
-		,t.rate3
-		,t.is_default
-		
-		,t.status
-		,t.updater
-		,t.update_datetime
-		,t.remark
-		,t.owner
-		
-		,t.contract_no
-		,t.total_rmb_num
-		,t.total_jf_num
-		,t.total_dz_num
-		,t.total_sc_num
-		,t.company_code
-		,t.system_code
-		FROM
-		to2o_store t
-		<include refid="where_condition" />
-		<trim prefix="ORDER BY ">
-			<if test="order != null and order != '' ">
-				${order}
-			</if>
-		</trim>
-	</select>
-	
-	<select id="select_oss_store_count" parameterType="store"
 		resultType="java.lang.Long">
 		SELECT count(1) FROM to2o_store t
 		<include refid="where_condition" />
@@ -605,8 +547,7 @@
 		UPDATE to2o_store
 		SET
 		level = #{level}
-		,updater = #{updater}
-		,update_datetime = #{updateDatetime}
+		,fund_datetime = #{fundDatetime}
 		,remark = #{remark}
 		WHERE code = #{code}
 	</update>

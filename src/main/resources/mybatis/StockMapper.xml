@@ -185,6 +185,7 @@
 		tfund_stock
 		WHERE
 		user_id = #{userId}
-		,status = #{status}
+		AND
+		status = #{status}
 	</delete>
 </mapper>

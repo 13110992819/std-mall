@@ -1,5 +1,6 @@
 package com.xnjr.mall.bo.impl;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -57,7 +58,11 @@ public class DistributeBOImpl implements IDistributeBO {
                 "正汇O2O平台赠送钱包币");
         }
         // 21、买单用户的推荐人B可得到分润X1
-        User bUser = userBO.getRemoteUser(user.getUserReferee());
+        User bUser = null;
+        if (StringUtils.isNotBlank(user.getUserReferee())) {
+            bUser = userBO.getRemoteUser(user.getUserReferee());
+        }
+
         Long X1 = Double.valueOf(storeFrAmount * 0.015).longValue();
         if (X1 > 0) {
             if (bUser != null) {
@@ -72,7 +77,11 @@ public class DistributeBOImpl implements IDistributeBO {
 
         }
         // 22、B的推荐人A可得到分润X2
-        User aUser = userBO.getRemoteUser(bUser.getUserReferee());
+        User aUser = null;
+        if (null != bUser && StringUtils.isNotBlank(bUser.getUserReferee())) {
+            aUser = userBO.getRemoteUser(bUser.getUserReferee());
+        }
+
         Long X2 = Double.valueOf(storeFrAmount * 0.015).longValue();
         if (X2 > 0) {
             if (aUser != null) {
@@ -134,7 +143,10 @@ public class DistributeBOImpl implements IDistributeBO {
         String buyUserId = user.getUserId();
         String storeUserId = store.getOwner();
         // 21、买单用户的推荐人B可得到分润X1
-        User bUser = userBO.getRemoteUser(user.getUserReferee());
+        User bUser = null;
+        if (StringUtils.isNotBlank(user.getUserReferee())) {
+            bUser = userBO.getRemoteUser(user.getUserReferee());
+        }
         Long X1 = AmountUtil.mul(storeFrAmount, 0.008);
         if (X1 > 0) {
             if (bUser != null) {
@@ -148,7 +160,11 @@ public class DistributeBOImpl implements IDistributeBO {
             }
         }
         // 22、B的推荐人A可得到分润X2
-        User aUser = userBO.getRemoteUser(bUser.getUserReferee());
+        User aUser = null;
+        if (null != bUser && StringUtils.isNotBlank(bUser.getUserReferee())) {
+            aUser = userBO.getRemoteUser(bUser.getUserReferee());
+        }
+
         Long X2 = AmountUtil.mul(storeFrAmount, 0.008);
         if (X2 > 0) {
             if (aUser != null) {

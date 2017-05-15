@@ -44,14 +44,18 @@ public class StockBOImpl extends PaginableBOImpl<Stock> implements IStockBO {
 
             Long remindCount = peopleRemindCount > zheng ? zheng
                     : peopleRemindCount;// 可以生成的分红权个数等于两者的较小值
+            int indexStock = 0;
             if (remindCount > 0) {// 针对整数,生成整数个分红权
                 for (int i = 0; i < remindCount; i++) {
+                    indexStock = i + 1;
                     if (dayRemindCount > 0) {
-                        generateCFullStock(EStockStatus.ING_effect, buyUser);
+                        generateCFullStock(EStockStatus.ING_effect, buyUser,
+                            indexStock);
                         dayRemindCount = dayRemindCount - 1;
                         peopleRemindCount = peopleRemindCount - 1;
                     } else {
-                        generateCFullStock(EStockStatus.WILL_effect, buyUser);
+                        generateCFullStock(EStockStatus.WILL_effect, buyUser,
+                            indexStock);
                     }
                 }
             }
@@ -68,10 +72,10 @@ public class StockBOImpl extends PaginableBOImpl<Stock> implements IStockBO {
                         if (twoYu > 500000) {// 且肯定小于1000
                             if (dayRemindCount > 0) {
                                 generateCFullStock(EStockStatus.ING_effect,
-                                    buyUser);
+                                    buyUser, indexStock + 1);
                             } else {
                                 generateCFullStock(EStockStatus.WILL_effect,
-                                    buyUser);
+                                    buyUser, indexStock + 1);
                             }
                             refreshCostAmount(dbStock, twoYu - 500000);
                         } else if (twoYu < 500000) {// 且肯定大于0
@@ -111,9 +115,11 @@ public class StockBOImpl extends PaginableBOImpl<Stock> implements IStockBO {
         Long zheng = (amount - mod) / 500000;// 整数部分
         Long yu = amount - zheng * 500000;// 余数部分
 
+        int indexStock = 0;
         if (zheng > 0) {// 针对整数,生成整数个分红权
             for (int i = 0; i < zheng; i++) {
-                generateBFullStock(storeOwner);
+                indexStock = i + 1;
+                generateBFullStock(storeOwner, indexStock);
             }
         }
 
@@ -124,7 +130,7 @@ public class StockBOImpl extends PaginableBOImpl<Stock> implements IStockBO {
             } else {
                 Long twoYu = dbStock.getCostAmount() + yu;
                 if (twoYu > 500000) {// 且肯定小于1000
-                    generateBFullStock(storeOwner);
+                    generateBFullStock(storeOwner, indexStock + 1);
                     refreshCostAmount(dbStock, twoYu - 500000);
                 } else if (twoYu < 500000) {// 且肯定大于0
                     refreshCostAmount(dbStock, twoYu);
@@ -222,10 +228,10 @@ public class StockBOImpl extends PaginableBOImpl<Stock> implements IStockBO {
 
     }
 
-    private void generateBFullStock(String storeOwner) {
+    private void generateBFullStock(String storeOwner, int index) {
         Date now = new Date();
         String code = OrderNoGenerater.generateM(EGeneratePrefix.STOCK
-            .getCode());
+            .getCode()) + '-' + index;
         Stock data = new Stock();
         data.setCode(code);
         data.setUserId(storeOwner);
@@ -249,10 +255,11 @@ public class StockBOImpl extends PaginableBOImpl<Stock> implements IStockBO {
 
     }
 
-    private void generateCFullStock(EStockStatus status, String userId) {
+    private void generateCFullStock(EStockStatus status, String userId,
+            int index) {
         Date now = new Date();
         String code = OrderNoGenerater.generateM(EGeneratePrefix.STOCK
-            .getCode());
+            .getCode()) + '-' + index;
         Stock data = new Stock();
         data.setCode(code);
         data.setUserId(userId);
@@ -347,5 +354,4 @@ public class StockBOImpl extends PaginableBOImpl<Stock> implements IStockBO {
         }
 
     }
-
 }

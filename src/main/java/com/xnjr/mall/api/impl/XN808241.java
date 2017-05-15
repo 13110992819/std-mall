@@ -36,7 +36,7 @@ public class XN808241 extends AProcessor {
     public Object doBusiness() throws BizException {
         return storePurchaseAO.storePurchaseZH(req.getUserId(),
             req.getStoreCode(), StringValidater.toLong(req.getAmount()),
-            req.getPayType(), req.getTicketCode());
+            req.getPayType(), req.getTicketCode(), req.getTradePwd());
     }
 
     /** 
@@ -46,6 +46,6 @@ public class XN808241 extends AProcessor {
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN808241Req.class);
         StringValidater.validateBlank(req.getUserId(), req.getStoreCode(),
-            req.getAmount(), req.getAmount());
+            req.getAmount(), req.getPayType());
     }
 }

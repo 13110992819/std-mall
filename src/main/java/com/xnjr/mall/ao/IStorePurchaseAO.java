@@ -7,7 +7,7 @@ public interface IStorePurchaseAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
 
     public Object storePurchaseZH(String userId, String storeCode, Long amount,
-            String payType, String ticketCode);
+            String payType, String ticketCode, String tradePwd);
 
     public Object storePurchaseCGB(String userId, String storeCode,
             Long cgbTotalAmount, String payType);

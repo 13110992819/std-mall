@@ -124,12 +124,12 @@ public class StoreBOImpl extends PaginableBOImpl<Store> implements IStoreBO {
     }
 
     @Override
-    public void checkStoreByUser(String bUser, String mobile) {
+    public void checkStoreByUser(String bUser) {
         Store condition = new Store();
         condition.setOwner(bUser);
         List<Store> list = this.queryStoreList(condition);
         if (CollectionUtils.isNotEmpty(list) && list.size() > 0) {
-            throw new BizException("xn000000", "用户" + mobile + "已有店铺,无需再次申请");
+            throw new BizException("xn000000", "已有店铺,无需再次申请");
         }
     }
 
@@ -210,10 +210,10 @@ public class StoreBOImpl extends PaginableBOImpl<Store> implements IStoreBO {
     @Override
     public Paginable<Store> queryOssPage(int start, int pageSize,
             Store condition) {
-        long totalCount = storeDAO.selectOssTotalCount(condition);
+        long totalCount = storeDAO.selectTotalCount(condition);
         Paginable<Store> page = new Page<Store>(start, pageSize, totalCount);
-        List<Store> dataList = storeDAO.selectOssList(condition,
-            page.getStart(), page.getPageSize());
+        List<Store> dataList = storeDAO.selectList(condition, page.getStart(),
+            page.getPageSize());
         page.setList(dataList);
         return page;
     }

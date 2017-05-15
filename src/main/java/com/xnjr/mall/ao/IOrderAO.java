@@ -22,7 +22,8 @@ public interface IOrderAO {
 
     public String commitCartOrderCG(XN808051Req req);
 
-    public Object toPayOrder(List<String> codeList, String payType);
+    public Object toPayOrder(List<String> codeList, String payType,
+            String tradePwd);
 
     public void userCancel(String code, String userId, String remark);
 

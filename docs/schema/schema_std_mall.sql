@@ -304,6 +304,7 @@ CREATE TABLE `to2o_store` (
   `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
   `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
+  `fund_datetime` datetime DEFAULT NULL COMMENT '升级为理财型商家时间',
   `owner` varchar(32) DEFAULT NULL COMMENT '店铺主人',
   `contract_no` varchar(255) DEFAULT NULL COMMENT '合同编号',
   `total_rmb_num` bigint(20) DEFAULT '0' COMMENT '累计人民币数量',

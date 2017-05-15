@@ -161,7 +161,8 @@ public class OrderAOImpl implements IOrderAO {
 
     @Override
     @Transactional
-    public Object toPayOrder(List<String> codeList, String payType) {
+    public Object toPayOrder(List<String> codeList, String payType,
+            String tradePwd) {
         // 暂时只实现单笔订单支付
         String code = codeList.get(0);
         Order order = orderBO.getOrder(code);
@@ -173,7 +174,7 @@ public class OrderAOImpl implements IOrderAO {
         if (ESystemCode.Caigo.getCode().equals(order.getSystemCode())) {
             return toPayOrderCG(order, payType);
         } else if (ESystemCode.ZHPAY.getCode().equals(order.getSystemCode())) {
-            return toPayOrderZH(order, payType);
+            return toPayOrderZH(order, payType, tradePwd);
         } else if (ESystemCode.CSW.getCode().equals(order.getSystemCode())) {
             return toPayOrderCSW(order, payType);
         } else if (ESystemCode.PIPE.getCode().equals(order.getSystemCode())) {
@@ -183,8 +184,7 @@ public class OrderAOImpl implements IOrderAO {
         }
     }
 
-    @Transactional
-    public Object toPayOrderCG(Order order, String payType) {
+    private Object toPayOrderCG(Order order, String payType) {
         Long cgbAmount = order.getAmount2(); // 菜狗币
         Long jfAmount = order.getAmount3(); // 积分
         String systemCode = order.getSystemCode();
@@ -228,8 +228,8 @@ public class OrderAOImpl implements IOrderAO {
         }
     }
 
-    @Transactional
-    public Object toPayOrderZH(Order order, String payType) {
+    private Object toPayOrderZH(Order order, String payType, String tradePwd) {
+        // 验证交易密码
         Long cnyAmount = order.getAmount1() + order.getYunfei();// 人民币+运费
         Long gwbAmount = order.getAmount2();// 购物币
         Long qbbAmount = order.getAmount3();// 钱包币
@@ -237,6 +237,9 @@ public class OrderAOImpl implements IOrderAO {
         String fromUserId = order.getApplyUser();
         // 余额支付
         if (EPayType.ZH_YE.getCode().equals(payType)) {
+            // 验证交易密码
+            userBO.checkTradePwd(order.getApplyUser(), tradePwd);
+
             // 计算需要支付得分润和贡献值，以及余额校验
             order = calculateToPayFrbAndGxz(order);
             Long frbAmount = order.getPayAmount1();
@@ -244,6 +247,7 @@ public class OrderAOImpl implements IOrderAO {
             // 更新订单支付金额
             orderBO.refreshPaySuccess(order, frbAmount, gxzAmount, gwbAmount,
                 qbbAmount, null);
+
             // 付钱给平台
             String systemUserId = userBO.getSystemUser(systemCode);
             accountBO.doZHYEPay(fromUserId, systemUserId, frbAmount, gxzAmount,
@@ -306,8 +310,7 @@ public class OrderAOImpl implements IOrderAO {
         return order;
     }
 
-    @Transactional
-    public Object toPayOrderCSW(Order order, String payType) {
+    private Object toPayOrderCSW(Order order, String payType) {
         // amount1 代表人民币账户 amount2，amount3代表积分金额
         Long jfAmount = order.getAmount2(); // 积分
         String systemCode = order.getSystemCode();
@@ -326,8 +329,7 @@ public class OrderAOImpl implements IOrderAO {
         return new BooleanRes(true);
     }
 
-    @Transactional
-    public Object toPayOrderGD(Order order, String payType) {
+    private Object toPayOrderGD(Order order, String payType) {
         Long jfAmount = order.getAmount3(); // 积分
         String systemCode = order.getSystemCode();
         String fromUserId = order.getApplyUser();

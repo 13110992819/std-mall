@@ -68,12 +68,15 @@ public class StoreAOImpl implements IStoreAO {
     @Override
     @Transactional
     public String addStoreOss(XN808200Req req) {
+        // 验证推荐手机号和店铺主人手机号(正汇等传入推荐人是手机号)
+        if (req.getMobile().equals(req.getUserReferee())) {
+            throw new BizException("xn000000", "推荐人手机号不能和申请人手机号一样");
+        }
         // 验证推荐人是否是平台的已注册用户,将userReferee手机号转化为用户编号
         String systemCode = req.getSystemCode();
         String userReferee = req.getUserReferee();
         String userRefereeUserId = storeBO.isUserRefereeExist(userReferee,
             systemCode);
-
         // 验证B端用户
         String bUser = userBO.isUserExist(req.getMobile(), EUserKind.F2,
             req.getSystemCode());
@@ -82,8 +85,10 @@ public class StoreAOImpl implements IStoreAO {
                 req.getUpdater(), req.getSystemCode(), req.getCompanyCode());
         } else {
             // 判断该用户是否有店铺了
-            storeBO.checkStoreByUser(bUser, req.getMobile());
+            storeBO.checkStoreByUser(bUser);
         }
+
+        // 更新字段
         String code = OrderNoGenerater.generateM("SJ");
         Store store = new Store();
         store.setCode(code);
@@ -134,6 +139,12 @@ public class StoreAOImpl implements IStoreAO {
     @Override
     public void editStoreOss(XN808208Req req) {
         Store dbStore = storeBO.getStore(req.getStoreCode());
+        User owner = userBO.getRemoteUser(dbStore.getOwner());
+        // 验证推荐手机号和店铺主人手机号(正汇等传入推荐人是手机号)
+        if (owner.getMobile().equals(req.getUserReferee())) {
+            throw new BizException("xn000000", "推荐人手机号不能和申请人手机号一样");
+        }
+
         // 验证推荐人是否是平台的已注册用户,将userReferee手机号转化为用户编号
         String userRefereeUserId = storeBO.isUserRefereeExist(
             req.getUserReferee(), dbStore.getSystemCode());
@@ -176,6 +187,13 @@ public class StoreAOImpl implements IStoreAO {
     @Override
     @Transactional
     public String addStoreFront(XN808201Req req) {
+        // 验证当前用户是否已拥有店铺
+        User owner = userBO.getRemoteUser(req.getOwner());
+        storeBO.checkStoreByUser(owner.getUserId());
+        // 验证推荐手机号和店铺主人手机号(正汇等传入推荐人是手机号)
+        if (owner.getMobile().equals(req.getUserReferee())) {
+            throw new BizException("xn000000", "推荐人手机号不能和申请人手机号一样");
+        }
 
         // 验证推荐人是否是平台的已注册用户,将userReferee手机号转化为用户编号
         String systemCode = req.getSystemCode();
@@ -232,6 +250,7 @@ public class StoreAOImpl implements IStoreAO {
     public void editStoreFront(XN808203Req req) {
         // 验证店铺是否存在
         storeBO.getStore(req.getCode());
+
         // 更新字段
         Store data = new Store();
         data.setCode(req.getCode());
@@ -342,13 +361,12 @@ public class StoreAOImpl implements IStoreAO {
         }
         if (EStoreLevel.NOMAL.getCode().equals(dbStore.getLevel())) {
             dbStore.setLevel(EStoreLevel.FINANCIAL.getCode());
+            dbStore.setFundDatetime(new Date());
             dbStore.setRemark("商家自行升级成公益型店铺");
+            storeBO.upLevel(dbStore);
         } else {
             throw new BizException("xn000000", "店铺不能进行升级操作");
         }
-        dbStore.setUpdater(dbStore.getOwner());
-        dbStore.setUpdateDatetime(new Date());
-        storeBO.upLevel(dbStore);
     }
 
     @Override

@@ -335,7 +335,7 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
     @Override
     @Transactional
     public Object storePurchaseZH(String userId, String storeCode, Long amount,
-            String payType, String ticketCode) {
+            String payType, String ticketCode, String tradePwd) {
         Store store = storeBO.getStore(storeCode);
         if (!EStoreStatus.ON_OPEN.getCode().equals(store.getStatus())) {
             throw new BizException("xn0000", "店铺不处于可消费状态");
@@ -347,7 +347,7 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
             amount = amount - ticketAmount;
         }
         if (EO2OPayType.ZH_YE.getCode().equals(payType)) {
-            return storePurchaseZHYE(user, store, amount, ticketCode);
+            return storePurchaseZHYE(user, store, amount, ticketCode, tradePwd);
         } else if (EO2OPayType.ALIPAY.getCode().equals(payType)) {
             return storePurchaseZHZFB(user, store, amount, ticketCode);
         } else if (EO2OPayType.WEIXIN_APP.getCode().equals(payType)) {
@@ -388,7 +388,10 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
     }
 
     private String storePurchaseZHYE(User user, Store store, Long amount,
-            String ticketCode) {
+            String ticketCode, String tradePwd) {
+        // 验证交易密码
+        userBO.checkTradePwd(user.getUserId(), tradePwd);
+
         Long frResultAmount = 0L;// 需要支付的分润金额
         Long gxjlResultAmount = 0L;// 需要支付的贡献值金额计算
 

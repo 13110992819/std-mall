@@ -107,7 +107,7 @@ public class VorderAOImpl implements IVorderAO {
                     ESysUser.SYS_USER_CAIGO.getCode(), ECurrency.CG_CGB,
                     payAmount, EBizType.CG_XNCZ_P,
                     EBizType.CG_XNCZ_P.getValue(),
-                    EBizType.CG_XNCZ_P.getValue());
+                    EBizType.CG_XNCZ_P.getValue(), order.getCode());
                 vorderBO.payOrderByCGB(order);
             } else {
                 throw new BizException("xn000000", "系统编号不能识别");
@@ -137,7 +137,7 @@ public class VorderAOImpl implements IVorderAO {
             accountBO.doTransferAmountRemote(ESysUser.SYS_USER_CAIGO.getCode(),
                 order.getApplyUser(), ECurrency.CG_CGB, order.getPayAmount(),
                 EBizType.CG_XNCZ_M, EBizType.CG_XNCZ_M.getValue(),
-                EBizType.CG_XNCZ_M.getValue());
+                EBizType.CG_XNCZ_M.getValue(), order.getCode());
             // 发短信
             smsOutBO.sentContent(applyUser, "尊敬的用户，您的订单[" + order.getCode()
                     + "]已取消,退款原因:[" + remark + "],请及时查看退款。");

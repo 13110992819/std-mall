@@ -196,11 +196,11 @@ public class OrderAOImpl implements IOrderAO {
             // 扣除金额
             if (StringUtils.isNotBlank(order.getToUser())) {// 付给加盟店
                 accountBO.doCgbJfPay(fromUserId, order.getToUser(), cgbAmount,
-                    jfAmount, EBizType.AJ_GW);
+                    jfAmount, EBizType.AJ_GW, order.getCode());
             } else {// 付钱给平台
                 String systemUserId = userBO.getSystemUser(systemCode);
                 accountBO.doCgbJfPay(fromUserId, systemUserId, cgbAmount,
-                    jfAmount, EBizType.AJ_GW);
+                    jfAmount, EBizType.AJ_GW, order.getCode());
             }
         } else {
             throw new BizException("xn0000", "支付类型不支持");
@@ -251,7 +251,7 @@ public class OrderAOImpl implements IOrderAO {
             // 付钱给平台
             String systemUserId = userBO.getSystemUser(systemCode);
             accountBO.doZHYEPay(fromUserId, systemUserId, frbAmount, gxzAmount,
-                gwbAmount, qbbAmount, EBizType.AJ_GW);
+                gwbAmount, qbbAmount, EBizType.AJ_GW, order.getCode());
             return new BooleanRes(true);
         } else if (EPayType.ALIPAY.getCode().equals(payType)) {
             // 检查购物币和钱包币是否充足
@@ -260,7 +260,8 @@ public class OrderAOImpl implements IOrderAO {
             String payGroup = orderBO.addPayGroup(order.getCode());
             return accountBO.doAlipayRemote(fromUserId,
                 ESysUser.SYS_USER_ZHPAY.getCode(), cnyAmount, EBizType.AJ_GW,
-                EBizType.AJ_GW.getValue(), EBizType.AJ_GW.getValue(), payGroup);
+                EBizType.AJ_GW.getValue(), EBizType.AJ_GW.getValue(), payGroup,
+                order.getCode());
         } else if (EPayType.WEIXIN_APP.getCode().equals(payType)) {
             // 检查购物币和钱包币是否充足
             accountBO.checkZHGwbQbb(fromUserId, gwbAmount, qbbAmount);
@@ -268,7 +269,8 @@ public class OrderAOImpl implements IOrderAO {
             String payGroup = orderBO.addPayGroup(order.getCode());
             return accountBO.doWeiXinPayRemote(fromUserId,
                 ESysUser.SYS_USER_ZHPAY.getCode(), cnyAmount, EBizType.AJ_GW,
-                EBizType.AJ_GW.getValue(), EBizType.AJ_GW.getValue(), payGroup);
+                EBizType.AJ_GW.getValue(), EBizType.AJ_GW.getValue(), payGroup,
+                order.getCode());
         } else {
             throw new BizException("xn0000", "支付类型不支持");
         }
@@ -322,7 +324,7 @@ public class OrderAOImpl implements IOrderAO {
             // 扣除金额
             String systemUserId = userBO.getSystemUser(systemCode);
             accountBO.doCSWJfPay(fromUserId, systemUserId, jfAmount,
-                EBizType.CSW_PAY);
+                EBizType.CSW_PAY, order.getCode());
         } else {
             throw new BizException("xn0000", "支付类型不支持");
         }
@@ -340,7 +342,7 @@ public class OrderAOImpl implements IOrderAO {
             // 扣除金额
             String systemUserId = userBO.getSystemUser(systemCode);
             accountBO.doCSWJfPay(fromUserId, systemUserId, jfAmount,
-                EBizType.GD_MALL);
+                EBizType.GD_MALL, order.getCode());
         } else {
             throw new BizException("xn0000", "支付类型不支持");
         }
@@ -418,13 +420,13 @@ public class OrderAOImpl implements IOrderAO {
             accountBO.doTransferAmountRemote(order.getToUser(),
                 order.getApplyUser(), ECurrency.CG_CGB, cgbAmount,
                 EBizType.AJ_GWTK, EBizType.AJ_GWTK.getValue(),
-                EBizType.AJ_GWTK.getValue());
+                EBizType.AJ_GWTK.getValue(), order.getCode());
         }
         if (jfAmount > 0) {
             accountBO.doTransferAmountRemote(order.getToUser(),
                 order.getApplyUser(), ECurrency.CGJF, jfAmount,
                 EBizType.AJ_GWTK, EBizType.AJ_GWTK.getValue(),
-                EBizType.AJ_GWTK.getValue());
+                EBizType.AJ_GWTK.getValue(), order.getCode());
         }
     }
 
@@ -437,25 +439,25 @@ public class OrderAOImpl implements IOrderAO {
             accountBO.doTransferAmountRemote(ESysUser.SYS_USER_ZHPAY.getCode(),
                 order.getApplyUser(), ECurrency.ZH_FRB, frbAmount,
                 EBizType.AJ_GWTK, EBizType.AJ_GWTK.getValue(),
-                EBizType.AJ_GWTK.getValue());
+                EBizType.AJ_GWTK.getValue(), order.getCode());
         }
         if (gxzAmount > 0) {
             accountBO.doTransferAmountRemote(ESysUser.SYS_USER_ZHPAY.getCode(),
                 order.getApplyUser(), ECurrency.ZH_GXZ, gxzAmount,
                 EBizType.AJ_GWTK, EBizType.AJ_GWTK.getValue(),
-                EBizType.AJ_GWTK.getValue());
+                EBizType.AJ_GWTK.getValue(), order.getCode());
         }
         if (gwbAmount > 0) {
             accountBO.doTransferAmountRemote(ESysUser.SYS_USER_ZHPAY.getCode(),
                 order.getApplyUser(), ECurrency.ZH_GWB, gwbAmount,
                 EBizType.AJ_GWTK, EBizType.AJ_GWTK.getValue(),
-                EBizType.AJ_GWTK.getValue());
+                EBizType.AJ_GWTK.getValue(), order.getCode());
         }
         if (qbbAmount > 0) {
             accountBO.doTransferAmountRemote(ESysUser.SYS_USER_ZHPAY.getCode(),
                 order.getApplyUser(), ECurrency.ZH_QBB, qbbAmount,
                 EBizType.AJ_GWTK, EBizType.AJ_GWTK.getValue(),
-                EBizType.AJ_GWTK.getValue());
+                EBizType.AJ_GWTK.getValue(), order.getCode());
         }
     }
 
@@ -619,12 +621,12 @@ public class OrderAOImpl implements IOrderAO {
         accountBO.doTransferAmountRemote(ESysUser.SYS_USER_ZHPAY.getCode(),
             order.getCompanyCode(), ECurrency.ZH_FRB, frbAmount,
             EBizType.AJ_QRSH, EBizType.AJ_QRSH.getValue(),
-            EBizType.AJ_QRSH.getValue());
+            EBizType.AJ_QRSH.getValue(), order.getCode());
         // 分销
         Store store = storeBO.getStoreByUser(order.getCompanyCode());
         User user = userBO.getRemoteUser(order.getApplyUser());
         distributeBO.distribute25Amount(frbAmount, order.getPayAmount1(),
-            store, user);
+            store, user, order.getCode());
         // 短信通知商户
         smsOutBO.sentContent(order.getCompanyCode(),
             "尊敬的商户，订单号[" + order.getCode() + "]的用户已确认收货,本次收入分润："
@@ -649,7 +651,7 @@ public class OrderAOImpl implements IOrderAO {
             // 扣除购物币和钱包币
             accountBO.doZHYEPay(order.getApplyUser(),
                 ESysUser.SYS_USER_ZHPAY.getCode(), 0L, 0L, gwbAmount,
-                qbbAmount, EBizType.AJ_GW);
+                qbbAmount, EBizType.AJ_GW, order.getCode());
             // 更新支付金额
             orderBO.refreshPaySuccess(order, cnyAmount, 0L, gwbAmount,
                 qbbAmount, null);

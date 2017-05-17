@@ -32,7 +32,8 @@ public class DistributeBOImpl implements IDistributeBO {
     private IAccountBO accountBO;
 
     @Override
-    public void distribute1Amount(Long storeFrAmount, Store store, User user) {
+    public void distribute1Amount(Long storeFrAmount, Store store, User user,
+            String storePurchase) {
         String systemUser = ESysUser.SYS_USER_ZHPAY.getCode();
         String storeUserId = store.getOwner();
         // 分给公司钱
@@ -40,13 +41,14 @@ public class DistributeBOImpl implements IDistributeBO {
         if (X1 > 0) {
             accountBO.doTransferAmountRemote(storeUserId, systemUser,
                 ECurrency.ZH_FRB, X1, EBizType.ZH_O2O, "正汇O2O抵扣券消费佣金",
-                "正汇O2O抵扣券消费佣金");
+                "正汇O2O抵扣券消费佣金", storePurchase);
         }
 
     }
 
     @Override
-    public void distribute10Amount(Long storeFrAmount, Store store, User user) {
+    public void distribute10Amount(Long storeFrAmount, Store store, User user,
+            String storePurchase) {
         String systemUser = ESysUser.SYS_USER_ZHPAY.getCode();
         String buyUserId = user.getUserId();
         String storeUserId = store.getOwner();
@@ -55,7 +57,7 @@ public class DistributeBOImpl implements IDistributeBO {
         if (c > 0) {
             accountBO.doTransferAmountRemote(systemUser, buyUserId,
                 ECurrency.ZH_QBB, c, EBizType.ZH_O2O, "正汇O2O平台赠送钱包币",
-                "正汇O2O平台赠送钱包币");
+                "正汇O2O平台赠送钱包币", storePurchase);
         }
         // 21、买单用户的推荐人B可得到分润X1
         User bUser = null;
@@ -68,11 +70,11 @@ public class DistributeBOImpl implements IDistributeBO {
             if (bUser != null) {
                 accountBO.doTransferAmountRemote(storeUserId,
                     bUser.getUserId(), ECurrency.ZH_FRB, X1, EBizType.ZH_O2O,
-                    "正汇O2O一级推荐人分成", "正汇O2O一级推荐人分成");
+                    "正汇O2O一级推荐人分成", "正汇O2O一级推荐人分成", storePurchase);
             } else {// 没有人就给平台
                 accountBO.doTransferAmountRemote(storeUserId, systemUser,
                     ECurrency.ZH_FRB, X1, EBizType.ZH_O2O, "正汇O2O一级推荐人分成",
-                    "正汇O2O一级推荐人分成");
+                    "正汇O2O一级推荐人分成", storePurchase);
             }
 
         }
@@ -87,11 +89,11 @@ public class DistributeBOImpl implements IDistributeBO {
             if (aUser != null) {
                 accountBO.doTransferAmountRemote(storeUserId,
                     aUser.getUserId(), ECurrency.ZH_FRB, X2, EBizType.ZH_O2O,
-                    "正汇O2O二级推荐人分成", "正汇O2O二级推荐人分成");
+                    "正汇O2O二级推荐人分成", "正汇O2O二级推荐人分成", storePurchase);
             } else {
                 accountBO.doTransferAmountRemote(storeUserId, systemUser,
                     ECurrency.ZH_FRB, X2, EBizType.ZH_O2O, "正汇O2O二级推荐人分成",
-                    "正汇O2O二级推荐人分成");
+                    "正汇O2O二级推荐人分成", storePurchase);
             }
 
         }
@@ -102,11 +104,11 @@ public class DistributeBOImpl implements IDistributeBO {
             if (storeReferee != null) {
                 accountBO.doTransferAmountRemote(storeUserId,
                     storeReferee.getUserId(), ECurrency.ZH_FRB, X3,
-                    EBizType.ZH_O2O, "正汇O2O业务员分成", "正汇O2O业务员分成");
+                    EBizType.ZH_O2O, "正汇O2O业务员分成", "正汇O2O业务员分成", storePurchase);
             } else {
                 accountBO.doTransferAmountRemote(storeUserId, systemUser,
                     ECurrency.ZH_FRB, X3, EBizType.ZH_O2O, "正汇O2O业务员分成",
-                    "正汇O2O业务员分成");
+                    "正汇O2O业务员分成", storePurchase);
             }
 
         }
@@ -118,27 +120,27 @@ public class DistributeBOImpl implements IDistributeBO {
             if (areaUser != null) {
                 accountBO.doTransferAmountRemote(storeUserId,
                     areaUser.getUserId(), ECurrency.ZH_FRB, X4,
-                    EBizType.ZH_O2O, "正汇O2O县合伙人分成", "正汇O2O县合伙人分成");
+                    EBizType.ZH_O2O, "正汇O2O县合伙人分成", "正汇O2O县合伙人分成",
+                    storePurchase);
             } else {
                 accountBO.doTransferAmountRemote(storeUserId, systemUser,
                     ECurrency.ZH_FRB, X4, EBizType.ZH_O2O, "正汇O2O县合伙人分成",
-                    "正汇O2O县合伙人分成");
+                    "正汇O2O县合伙人分成", storePurchase);
             }
         }
         // 25、公司X5—— 消费额里面扣除
         Long X5 = Double.valueOf(storeFrAmount * 0.045).longValue();
         if (X5 > 0) {
-            accountBO
-                .doTransferAmountRemote(storeUserId, systemUser,
-                    ECurrency.ZH_FRB, X5, EBizType.ZH_O2O, "正汇O2O公司分成",
-                    "正汇O2O公司分成");
+            accountBO.doTransferAmountRemote(storeUserId, systemUser,
+                ECurrency.ZH_FRB, X5, EBizType.ZH_O2O, "正汇O2O公司分成",
+                "正汇O2O公司分成", storePurchase);
         }
 
     }
 
     @Override
     public void distribute25Amount(Long storeFrAmount, Long userFrAmount,
-            Store store, User user) {
+            Store store, User user, String storePurchase) {
         String systemUser = ESysUser.SYS_USER_ZHPAY.getCode();
         String buyUserId = user.getUserId();
         String storeUserId = store.getOwner();
@@ -152,11 +154,11 @@ public class DistributeBOImpl implements IDistributeBO {
             if (bUser != null) {
                 accountBO.doTransferAmountRemote(storeUserId,
                     bUser.getUserId(), ECurrency.ZH_FRB, X1, EBizType.ZH_O2O,
-                    "正汇O2O一级推荐人分成", "正汇O2O一级推荐人分成");
+                    "正汇O2O一级推荐人分成", "正汇O2O一级推荐人分成", storePurchase);
             } else {
                 accountBO.doTransferAmountRemote(storeUserId, systemUser,
                     ECurrency.ZH_FRB, X1, EBizType.ZH_O2O, "正汇O2O一级推荐人分成",
-                    "正汇O2O一级推荐人分成");
+                    "正汇O2O一级推荐人分成", storePurchase);
             }
         }
         // 22、B的推荐人A可得到分润X2
@@ -170,11 +172,11 @@ public class DistributeBOImpl implements IDistributeBO {
             if (aUser != null) {
                 accountBO.doTransferAmountRemote(storeUserId,
                     aUser.getUserId(), ECurrency.ZH_FRB, X2, EBizType.ZH_O2O,
-                    "正汇O2O二级推荐人分成", "正汇O2O二级推荐人分成");
+                    "正汇O2O二级推荐人分成", "正汇O2O二级推荐人分成", storePurchase);
             } else {
                 accountBO.doTransferAmountRemote(storeUserId, systemUser,
                     ECurrency.ZH_FRB, X2, EBizType.ZH_O2O, "正汇O2O二级推荐人分成",
-                    "正汇O2O二级推荐人分成");
+                    "正汇O2O二级推荐人分成", storePurchase);
             }
         }
         // 23、店铺推荐人可得到分润X3 —— 消费额里面扣除
@@ -184,11 +186,11 @@ public class DistributeBOImpl implements IDistributeBO {
             if (storeReferee != null) {
                 accountBO.doTransferAmountRemote(storeUserId,
                     storeReferee.getUserId(), ECurrency.ZH_FRB, X3,
-                    EBizType.ZH_O2O, "正汇O2O业务员分成", "正汇O2O业务员分成");
+                    EBizType.ZH_O2O, "正汇O2O业务员分成", "正汇O2O业务员分成", storePurchase);
             } else {
                 accountBO.doTransferAmountRemote(storeUserId, systemUser,
                     ECurrency.ZH_FRB, X3, EBizType.ZH_O2O, "正汇O2O业务员分成",
-                    "正汇O2O业务员分成");
+                    "正汇O2O业务员分成", storePurchase);
             }
 
         }
@@ -200,40 +202,38 @@ public class DistributeBOImpl implements IDistributeBO {
             if (areaUser != null) {
                 accountBO.doTransferAmountRemote(storeUserId,
                     areaUser.getUserId(), ECurrency.ZH_FRB, X4,
-                    EBizType.ZH_O2O, "正汇O2O县合伙人分成", "正汇O2O县合伙人分成");
+                    EBizType.ZH_O2O, "正汇O2O县合伙人分成", "正汇O2O县合伙人分成",
+                    storePurchase);
             } else {
                 accountBO.doTransferAmountRemote(storeUserId, systemUser,
                     ECurrency.ZH_FRB, X4, EBizType.ZH_O2O, "正汇O2O县合伙人分成",
-                    "正汇O2O县合伙人分成");
+                    "正汇O2O县合伙人分成", storePurchase);
             }
 
         }
         // 25、公司X5—— 消费额里面扣除
         Long X5 = AmountUtil.mul(storeFrAmount, 0.01);
         if (X5 > 0) {
-            accountBO
-                .doTransferAmountRemote(storeUserId, systemUser,
-                    ECurrency.ZH_FRB, X5, EBizType.ZH_O2O, "正汇O2O公司分成",
-                    "正汇O2O公司分成");
+            accountBO.doTransferAmountRemote(storeUserId, systemUser,
+                ECurrency.ZH_FRB, X5, EBizType.ZH_O2O, "正汇O2O公司分成",
+                "正汇O2O公司分成", storePurchase);
         }
         // 31、进基金池Y1
         Long Y1 = AmountUtil.mul(storeFrAmount, 0.02);
         String poolUser = EZhPool.ZHPAY_JJ.getCode();
         if (Y1 > 0) {
-            accountBO
-                .doTransferAmountRemote(storeUserId, poolUser,
-                    ECurrency.ZH_FRB, Y1, EBizType.ZH_O2O, "正汇O2O入基金池",
-                    "正汇O2O入基金池");
+            accountBO.doTransferAmountRemote(storeUserId, poolUser,
+                ECurrency.ZH_FRB, Y1, EBizType.ZH_O2O, "正汇O2O入基金池",
+                "正汇O2O入基金池", storePurchase);
         }
 
         // 32、进商家池Y2
         Long Y2 = AmountUtil.mul(storeFrAmount, 0.04);
         poolUser = EZhPool.ZHPAY_STORE.getCode();
         if (Y2 > 0) {
-            accountBO
-                .doTransferAmountRemote(storeUserId, poolUser,
-                    ECurrency.ZH_FRB, Y2, EBizType.ZH_O2O, "正汇O2O入商家池",
-                    "正汇O2O入商家池");
+            accountBO.doTransferAmountRemote(storeUserId, poolUser,
+                ECurrency.ZH_FRB, Y2, EBizType.ZH_O2O, "正汇O2O入商家池",
+                "正汇O2O入商家池", storePurchase);
         }
 
         // 31、进消费者池Y3
@@ -242,14 +242,14 @@ public class DistributeBOImpl implements IDistributeBO {
         if (Y3 > 0) {
             accountBO.doTransferAmountRemote(storeUserId, poolUser,
                 ECurrency.ZH_FRB, Y3, EBizType.ZH_O2O, "正汇O2O入消费者池",
-                "正汇O2O入消费者池");
+                "正汇O2O入消费者池", storePurchase);
         }
         // 32、贡献值支付部分
         Long Y4 = AmountUtil.mul((storeFrAmount - userFrAmount), 0.14);
         if (Y4 > 0) {
             accountBO.doTransferAmountRemote(storeUserId, systemUser,
                 ECurrency.ZH_FRB, Y4, EBizType.ZH_O2O, "正汇O2O贡献值部分分成",
-                "正汇O2O贡献值部分分成");
+                "正汇O2O贡献值部分分成", storePurchase);
         }
 
         // 形成B端分红权处理

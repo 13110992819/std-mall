@@ -40,13 +40,14 @@ public interface IAccountBO {
      * @param amount
      * @param bizType
      * @param fromBizNote
-     * @param toBizNote 
-     * @create: 2017年3月26日 下午8:42:38 xieyj
+     * @param toBizNote
+     * @param refNo 
+     * @create: 2017年5月17日 上午10:46:30 xieyj
      * @history:
      */
     public void doTransferAmountRemote(String fromUserId, String toUserId,
             ECurrency currency, Long amount, EBizType bizType,
-            String fromBizNote, String toBizNote);
+            String fromBizNote, String toBizNote, String refNo);
 
     /**
      * 获取虚拟币的价值：1人民币等于多少虚拟币
@@ -59,19 +60,19 @@ public interface IAccountBO {
 
     public XN002500Res doWeiXinPayRemote(String fromUserId, String toUserId,
             Long amount, EBizType bizType, String fromBizNote,
-            String toBizNote, String payGroup);
+            String toBizNote, String payGroup, String refNo);
 
     public XN002501Res doWeiXinH5PayRemote(String fromUserId,
             String fromOpenId, String toUserId, Long amount, EBizType bizType,
-            String fromBizNote, String toBizNote, String payGroup);
+            String fromBizNote, String toBizNote, String payGroup, String refNo);
 
     public XN002510Res doAlipayRemote(String fromUserId, String toUserId,
             Long amount, EBizType bizType, String fromBizNote,
-            String toBizNote, String payGroup);
+            String toBizNote, String payGroup, String refNo);
 
     public void doZHYEPay(String fromUserId, String systemUserId,
             Long frbAmount, Long gxzAmount, Long gwbAmount, Long qbbAmount,
-            EBizType ajGw);
+            EBizType ajGw, String refNo);
 
     public void checkZHYE(String userId, Long frbAmount, Long gxzAmount,
             Long cnyAmount, Long gwbAmount, Long qbbAmount);
@@ -80,7 +81,7 @@ public interface IAccountBO {
 
     // ************************************菜狗************************************
     public void doCgbJfPay(String fromUserId, String toUserId, Long cgbPrice,
-            Long jfPrice, EBizType bizType);
+            Long jfPrice, EBizType bizType, String refNo);
 
     public void checkCgbJf(String userId, Long cgbAmount, Long jfAmount);
 
@@ -90,6 +91,6 @@ public interface IAccountBO {
 
     // ************************************城市网************************************
     public void doCSWJfPay(String fromUserId, String toUserId, Long jfAmount,
-            EBizType bizType);
+            EBizType bizType, String refNo);
     // ************************************城市网************************************
 }

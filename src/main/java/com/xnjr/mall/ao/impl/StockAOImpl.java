@@ -111,25 +111,28 @@ public class StockAOImpl implements IStockAO {
                 ele.setStatus(status);
                 stockBO.doDailyStock(ele);
                 // 落地返还记录
-                stockBackBO.saveStockBack(ele);
+                String backCode = String
+                    .valueOf(stockBackBO.saveStockBack(ele));
                 // 扣减池金额
                 if (EZhPool.ZHPAY_STORE.getCode().equals(ele.getFundCode())) {
                     accountBO.doTransferAmountRemote(ele.getFundCode(),
                         ele.getUserId(), ECurrency.ZH_FRB, todayAmount,
-                        EBizType.ZH_STOCK, "正汇分红权分红", "正汇分红权分红");
+                        EBizType.ZH_STOCK, "正汇分红权分红", "正汇分红权分红", backCode);
                 }
                 if (EZhPool.ZHPAY_CUSTOMER.getCode().equals(ele.getFundCode())) {
                     Long half = Double.valueOf(todayAmount / 2).longValue();
                     accountBO.doTransferAmountRemote(ele.getFundCode(),
                         ele.getUserId(), ECurrency.ZH_FRB, half,
-                        EBizType.ZH_STOCK, "正汇分红权分红", "正汇分红权分红");
-                    accountBO.doTransferAmountRemote(ele.getFundCode(),
-                        ESysUser.SYS_USER_ZHPAY.getCode(), ECurrency.ZH_FRB,
-                        half, EBizType.ZH_STOCK, "正汇分红权分红", "正汇分红权分红");
+                        EBizType.ZH_STOCK, "正汇分红权分红", "正汇分红权分红", backCode);
+                    accountBO
+                        .doTransferAmountRemote(ele.getFundCode(),
+                            ESysUser.SYS_USER_ZHPAY.getCode(),
+                            ECurrency.ZH_FRB, half, EBizType.ZH_STOCK,
+                            "正汇分红权分红", "正汇分红权分红", backCode);
                     accountBO.doTransferAmountRemote(
                         ESysUser.SYS_USER_ZHPAY.getCode(), ele.getUserId(),
                         ECurrency.ZH_GXZ, half, EBizType.ZH_STOCK, "正汇分红权分红",
-                        "正汇分红权分红");
+                        "正汇分红权分红", backCode);
                 }
             }
         }

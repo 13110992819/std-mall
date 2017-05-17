@@ -101,7 +101,7 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
         String systemUser = ESysUser.SYS_USER_CAIGO.getCode();
         accountBO.doTransferAmountRemote(user.getUserId(), systemUser,
             ECurrency.CG_CGB, cgbTotalAmount, EBizType.CG_O2O_CGB,
-            "O2O消费使用菜狗币", "O2O消费回收菜狗币");
+            "O2O消费使用菜狗币", "O2O消费回收菜狗币", code);
 
         // 消费者从平台拿到返点
         SYSConfig config = sysConfigBO.getSYSConfig(SysConstants.STORE_XFFX,
@@ -110,12 +110,12 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
             Double.valueOf(config.getCvalue()));
         accountBO.doTransferAmountRemote(systemUser, user.getUserId(),
             ECurrency.CNY, xffxAmount, EBizType.CG_O2O_CGBFD,
-            "O2O消费支付消费者返现人民币", "O2O消费收到返现人民币");
+            "O2O消费支付消费者返现人民币", "O2O消费收到返现人民币", code);
 
         // 商家从平台处拿到返点
         accountBO.doTransferAmountRemote(systemUser, store.getOwner(),
             ECurrency.CNY, fdAmount, EBizType.CG_O2O_CGBFD, "O2O消费支付返点人民币",
-            "O2O消费收到返点人民币");
+            "O2O消费收到返点人民币", code);
 
         // 加盟商从平台拿到返点
         User storeUser = userBO.getRemoteUser(store.getOwner());
@@ -123,7 +123,7 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
         Long jmsFdAmount = AmountUtil.mul(cgbTotalAmount, jmsUser.getDivRate());
         accountBO.doTransferAmountRemote(systemUser, jmsUser.getUserId(),
             ECurrency.CNY, jmsFdAmount, EBizType.CG_O2O_CGBFD,
-            "O2O消费支付加盟商返点人民币", "O2O消费收到返点人民币");
+            "O2O消费支付加盟商返点人民币", "O2O消费收到返点人民币", code);
         // 资金划转结束--------------
         return code;
     }
@@ -208,12 +208,14 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
             throw new BizException("xn0000", "积分账户余额不足");
         }
         // 落地本地系统消费记录
-        storePurchaseBO.storePurchaseGDYE(user, store, amount, payJF);
+        String code = storePurchaseBO.storePurchaseGDYE(user, store, amount,
+            payJF);
         // 资金划转开始--------------
         // 积分从消费者回收至平台，
         String systemUser = ESysUser.SYS_USER_PIPE.getCode();
         accountBO.doTransferAmountRemote(user.getUserId(), systemUser,
-            ECurrency.JF, payJF, EBizType.GD_O2O, "O2O消费积分回收", "O2O消费积分回收");
+            ECurrency.JF, payJF, EBizType.GD_O2O, "O2O消费积分回收", "O2O消费积分回收",
+            code);
         // 资金划转结束--------------
         return new BooleanRes(true);
     }
@@ -231,15 +233,15 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
         // 1、用户人民币给平台人民币
         accountBO.doTransferAmountRemote(user.getUserId(), systemUser,
             ECurrency.CNY, rmbTotalAmount, EBizType.CG_O2O_RMB, "O2O消费人民币支付",
-            "O2O消费人民币支付");
+            "O2O消费人民币支付", code);
         // 2、平台给商家一定比例人民币
         accountBO.doTransferAmountRemote(systemUser, store.getOwner(),
             ECurrency.CNY, payStoreRmbAmount, EBizType.CG_O2O_RMB,
-            "O2O消费人民币支付", "O2O消费人民币支付");
+            "O2O消费人民币支付", "O2O消费人民币支付", code);
         // 3、平台返现等比例菜狗币(回收人民币)
         accountBO.doTransferAmountRemote(systemUser, user.getUserId(),
             ECurrency.CG_CGB, fxCgbAmount, EBizType.CG_O2O_RMBFD,
-            "O2O消费人民币支付返点", "O2O消费人民币支付返点");
+            "O2O消费人民币支付返点", "O2O消费人民币支付返点", code);
         // 资金划转结束--------------
         return code;
     }
@@ -260,11 +262,11 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
         // 人民币给商家（人民币）
         accountBO.doTransferAmountRemote(user.getUserId(), store.getOwner(),
             ECurrency.CNY, payRmbAmount, EBizType.CG_O2O_RMB, "O2O消费人民币支付",
-            "O2O消费人民币支付");
+            "O2O消费人民币支付", code);
         String systemUser = ESysUser.SYS_USER_CAIGO.getCode();
         accountBO.doTransferAmountRemote(user.getUserId(), systemUser,
             ECurrency.CGJF, payJfAmount, EBizType.CG_O2O_CGJF, "O2O消费积分支付",
-            "O2O消费积分支付");
+            "O2O消费积分支付", code);
         // 资金划转结束--------------
         return code;
     }
@@ -282,7 +284,7 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
         // RMB调用微信渠道至平台
         return accountBO.doWeiXinH5PayRemote(user.getUserId(),
             user.getOpenId(), systemUser, rmbTotalAmount, EBizType.CG_O2O_RMB,
-            "O2O消费微信支付", "O2O消费微信支付", payGroup);
+            "O2O消费微信支付", "O2O消费微信支付", payGroup, store.getCode());
         // 资金划转结束--------------
     }
 
@@ -304,7 +306,8 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
         // RMB调用微信渠道至商家
         return accountBO.doWeiXinH5PayRemote(user.getUserId(),
             user.getOpenId(), store.getOwner(), payRmbAmount,
-            EBizType.CG_O2O_RMB, "O2O消费微信支付", "O2O消费微信支付", payGroup);
+            EBizType.CG_O2O_RMB, "O2O消费微信支付", "O2O消费微信支付", payGroup,
+            store.getCode());
         // 资金划转结束--------------
     }
 
@@ -316,7 +319,8 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
         // 资金划转开始--------------
         // RMB调用微信渠道至商家
         return accountBO.doWeiXinPayRemote(user.getUserId(), store.getOwner(),
-            amount, EBizType.ZH_O2O, "O2O消费微信支付", "O2O消费微信支付", payGroup);
+            amount, EBizType.ZH_O2O, "O2O消费微信支付", "O2O消费微信支付", payGroup,
+            store.getCode());
         // 资金划转结束--------------
     }
 
@@ -328,7 +332,8 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
         // 资金划转开始--------------
         // RMB调用支付宝渠道至商家
         return accountBO.doAlipayRemote(user.getUserId(), store.getOwner(),
-            amount, EBizType.ZH_O2O, "O2O消费支付宝支付", "O2O消费支付宝支付", payGroup);
+            amount, EBizType.ZH_O2O, "O2O消费支付宝支付", "O2O消费支付宝支付", payGroup,
+            store.getCode());
         // 资金划转结束--------------
     }
 
@@ -433,26 +438,26 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
         if (gxjlResultAmount > 0L) {// 贡献值是给平台的，贡献值等值的(1:1)分润有平台给商家
             accountBO.doTransferAmountRemote(buyUserId, systemUser,
                 ECurrency.ZH_GXZ, gxjlResultAmount, EBizType.ZH_O2O,
-                "正汇O2O贡献值消费", "正汇O2O消费者的贡献值回收");
+                "正汇O2O贡献值消费", "正汇O2O消费者的贡献值回收", code);
             accountBO.doTransferAmountRemote(systemUser, storeUserId,
                 ECurrency.ZH_FRB, gxjlResultAmount, EBizType.ZH_O2O,
-                "正汇O2O平台返现分润", "正汇O2O平台返现分润");
+                "正汇O2O平台返现分润", "正汇O2O平台返现分润", code);
         }
         if (frResultAmount > 0L) {
             accountBO.doTransferAmountRemote(buyUserId, storeUserId,
                 ECurrency.ZH_FRB, frResultAmount, EBizType.ZH_O2O,
-                "正汇O2O消费者的分润支付", "正汇O2O消费者的分润支付");
+                "正汇O2O消费者的分润支付", "正汇O2O消费者的分润支付", code);
         }
         // 用商家的钱开始分销
         if (StringUtils.isNotBlank(ticketCode)) {
-            distributeBO.distribute1Amount(amount, store, user);
+            distributeBO.distribute1Amount(amount, store, user, code);
         } else {
             if (EStoreLevel.NOMAL.getCode().equals(store.getLevel())) {
-                distributeBO.distribute10Amount(amount, store, user);
+                distributeBO.distribute10Amount(amount, store, user, code);
             }
             if (EStoreLevel.FINANCIAL.getCode().equals(store.getLevel())) {
                 distributeBO.distribute25Amount(amount, frResultAmount, store,
-                    user);
+                    user, code);
             }
         }
         return code;
@@ -479,14 +484,16 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
             Store store = storeBO.getStore(storePurchase.getStoreCode());
             User user = userBO.getRemoteUser(storePurchase.getUserId());
             if (StringUtils.isNotBlank(ticketCode)) {
-                distributeBO.distribute1Amount(storeFrAmount, store, user);
+                distributeBO.distribute1Amount(storeFrAmount, store, user,
+                    storePurchase.getCode());
             } else {
                 if (EStoreLevel.NOMAL.getCode().equals(store.getLevel())) {
-                    distributeBO.distribute10Amount(storeFrAmount, store, user);
+                    distributeBO.distribute10Amount(storeFrAmount, store, user,
+                        storePurchase.getCode());
                 }
                 if (EStoreLevel.FINANCIAL.getCode().equals(store.getLevel())) {
                     distributeBO.distribute25Amount(storeFrAmount,
-                        userFrAmount, store, user);
+                        userFrAmount, store, user, storePurchase.getCode());
                 }
             }
         } else {
@@ -509,7 +516,8 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
                 String systemUser = ESysUser.SYS_USER_CAIGO.getCode();
                 accountBO.doTransferAmountRemote(storePurchase.getUserId(),
                     systemUser, ECurrency.CGJF, storePurchase.getPayAmount3(),
-                    EBizType.CG_O2O_CGJF, "O2O消费使用积分", "O2O消费回收积分");
+                    EBizType.CG_O2O_CGJF, "O2O消费使用积分", "O2O消费回收积分",
+                    storePurchase.getCode());
             } else if (EO2OPayType.WEIXIN_H5.getCode().equals( // 全人民币支付
                 storePurchase.getPayType())) {
                 // 资金划转逻辑--------------
@@ -521,11 +529,12 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
                 String systemUser = ESysUser.SYS_USER_CAIGO.getCode();
                 accountBO.doTransferAmountRemote(systemUser, store.getOwner(),
                     ECurrency.CNY, payStoreRmbAmount, EBizType.CG_O2O_RMB,
-                    "O2O消费人民币支付", "O2O消费人民币支付");
+                    "O2O消费人民币支付", "O2O消费人民币支付", storePurchase.getCode());
                 Long fxCgbAmount = payAmount - payStoreRmbAmount;
                 accountBO.doTransferAmountRemote(systemUser,
                     storePurchase.getUserId(), ECurrency.CG_CGB, fxCgbAmount,
-                    EBizType.CG_O2O_RMBFD, "O2O消费人民币支付返点", "O2O消费人民币支付返点");
+                    EBizType.CG_O2O_RMBFD, "O2O消费人民币支付返点", "O2O消费人民币支付返点",
+                    storePurchase.getCode());
             }
         } else {
             logger.info("订单号：" + storePurchase.getCode() + "已支付，重复回调");

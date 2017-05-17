@@ -86,13 +86,13 @@ public class CaigopoolAOImpl implements ICaigopoolAO {
         // 并记录出金记录
         User user = userBO.getRemoteUser(userId);
         Long caigoAmount = AmountUtil.mul(highAmount, pool.getRate());
-        caigopoolBackBO.saveCaigopoolBack(pool, user, caigoAmount, mobile,
-            highAmount);
+        Long id = caigopoolBackBO.saveCaigopoolBack(pool, user, caigoAmount,
+            mobile, highAmount);
         // 划转菜狗币给用户
         accountBO.doTransferAmountRemote(ESysUser.SYS_USER_CAIGO.getCode(),
             userId, ECurrency.CG_CGB, caigoAmount, EBizType.CG_HB2CGB, "用户"
                     + mobile + EBizType.CG_HB2CGB.getValue(),
-            EBizType.CG_HB2CGB.getValue());
+            EBizType.CG_HB2CGB.getValue(), String.valueOf(id));
         return userId;
     }
 

@@ -64,7 +64,8 @@ public class UserTicketAOImpl implements IUserTicketAO {
         ECurrency currency = ECurrency.getResultMap().get(
             storeTicket.getCurrency());
         accountBO.doTransferAmountRemote(userId, systemUser, currency,
-            storeTicket.getPrice(), EBizType.AJ_GMZKQ, "折扣券购买", "折扣券购买");
+            storeTicket.getPrice(), EBizType.AJ_GMZKQ, "折扣券购买", "折扣券购买",
+            ticketCode);
         return ticketCode;
     }
 

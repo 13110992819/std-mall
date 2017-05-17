@@ -11,11 +11,13 @@ import com.xnjr.mall.domain.User;
  */
 public interface IDistributeBO {
 
-    void distribute1Amount(Long storeFrAmount, Store store, User user);
+    void distribute1Amount(Long storeFrAmount, Store store, User user,
+            String storePurchase);
 
-    void distribute10Amount(Long storeFrAmount, Store store, User user);
+    void distribute10Amount(Long storeFrAmount, Store store, User user,
+            String storePurchase);
 
     void distribute25Amount(Long storeFrAmount, Long userFrAmount, Store store,
-            User user);
+            User user, String storePurchase);
 
 }

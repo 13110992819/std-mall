@@ -1,5 +1,5 @@
 /**
- * @Title XN802184Req.java 
+ * @Title XN802180Req.java 
  * @Package com.std.account.dto.req 
  * @Description 
  * @author haiqingzheng  
@@ -9,12 +9,13 @@
 package com.xnjr.mall.dto.req;
 
 /** 
- * 支付宝APP支付请求接口，返回签名后的订单信息
+ * 微信公众号支付请求接口，返回预付单信息
  * @author: haiqingzheng 
  * @since: 2016年12月23日 上午9:25:46 
  * @history:
  */
-public class XN002510Req {
+public class XN002502Req {
+
     // 发起人(必填)
     private String applyUser;
 
@@ -102,5 +103,4 @@ public class XN002510Req {
     public void setBackUrl(String backUrl) {
         this.backUrl = backUrl;
     }
-
 }

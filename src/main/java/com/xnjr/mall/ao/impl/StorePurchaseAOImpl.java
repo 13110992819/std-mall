@@ -478,7 +478,7 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
             // 将商家人民币金额划转成分润币种
             Store store = storeBO.getStore(storePurchase.getStoreCode());
             accountBO.doTransferAmountRemote(store.getOwner(), ECurrency.CNY,
-                store.getOwner(), ECurrency.CG_CGB, payAmount,
+                store.getOwner(), ECurrency.ZH_FRB, payAmount,
                 EBizType.EXCHANGE_CURRENCY, "O2O消费人民币转分润币", "O2O消费人民币转分润币",
                 storePurchase.getCode());
 
@@ -568,6 +568,8 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
                     .getStoreTicket(userTicket.getTicketCode());
                 storePurchase.setStoreTicket(storeTicket);
             }
+            User user = userBO.getRemoteUser(storePurchase.getUserId());
+            storePurchase.setUser(user);
         }
         return page;
     }

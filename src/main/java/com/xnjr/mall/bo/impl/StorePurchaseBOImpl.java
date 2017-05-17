@@ -218,7 +218,7 @@ public class StorePurchaseBOImpl extends PaginableBOImpl<StorePurchase>
         data.setSystemCode(store.getSystemCode());
         data.setCompanyCode(store.getCompanyCode());
         storePurchaseDAO.insert(data);
-        return payGroup;
+        return code;
     }
 
     @Override
@@ -246,7 +246,7 @@ public class StorePurchaseBOImpl extends PaginableBOImpl<StorePurchase>
         data.setSystemCode(store.getSystemCode());
         data.setCompanyCode(store.getCompanyCode());
         storePurchaseDAO.insert(data);
-        return null;
+        return code;
     }
 
     @Override

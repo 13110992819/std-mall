@@ -22,6 +22,7 @@ import com.xnjr.mall.bo.IUserTicketBO;
 import com.xnjr.mall.bo.base.Paginable;
 import com.xnjr.mall.common.AmountUtil;
 import com.xnjr.mall.common.SysConstants;
+import com.xnjr.mall.core.OrderNoGenerater;
 import com.xnjr.mall.core.StringValidater;
 import com.xnjr.mall.domain.Account;
 import com.xnjr.mall.domain.SYSConfig;
@@ -33,6 +34,7 @@ import com.xnjr.mall.domain.UserTicket;
 import com.xnjr.mall.dto.res.BooleanRes;
 import com.xnjr.mall.enums.EBizType;
 import com.xnjr.mall.enums.ECurrency;
+import com.xnjr.mall.enums.EGeneratePrefix;
 import com.xnjr.mall.enums.EO2OPayType;
 import com.xnjr.mall.enums.EPayType;
 import com.xnjr.mall.enums.EStoreLevel;
@@ -277,14 +279,16 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
         Long payStoreRmbAmount = AmountUtil.mul(rmbTotalAmount,
             1 - store.getRate1());
         Long fxCgbAmount = rmbTotalAmount - payStoreRmbAmount;
-        String payGroup = storePurchaseBO.storePurchaseCGRMBWX(user, store,
-            rmbTotalAmount, fxCgbAmount);
+        String payGroup = OrderNoGenerater.generateM(EGeneratePrefix.PAY_GROUP
+            .getCode());
+        String code = storePurchaseBO.storePurchaseCGRMBWX(user, store,
+            rmbTotalAmount, fxCgbAmount, payGroup);
         // 资金划转开始--------------
         String systemUser = ESysUser.SYS_USER_CAIGO.getCode();
         // RMB调用微信渠道至平台
         return accountBO.doWeiXinH5PayRemote(user.getUserId(),
-            user.getOpenId(), systemUser, rmbTotalAmount, EBizType.CG_O2O_RMB,
-            "O2O消费微信支付", "O2O消费微信支付", payGroup, store.getCode());
+            user.getOpenId(), systemUser, payGroup, code, EBizType.CG_O2O_RMB,
+            "O2O消费微信支付", rmbTotalAmount);
         // 资金划转结束--------------
     }
 
@@ -293,9 +297,10 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
         Long payRmbAmount = AmountUtil.mulRmbJinFen(rmbTotalAmount,
             1 - store.getRate2());// 需要支付的RMB金额
         Long payJfAmount = rmbTotalAmount - payRmbAmount;// 需要支付的积分金额
-
-        String payGroup = storePurchaseBO.storePurchaseCGRMBJFWX(user, store,
-            rmbTotalAmount, payJfAmount);
+        String payGroup = OrderNoGenerater.generateM(EGeneratePrefix.PAY_GROUP
+            .getCode());
+        String code = storePurchaseBO.storePurchaseCGRMBJFWX(user, store,
+            rmbTotalAmount, payJfAmount, payGroup);
         // 资金划转开始--------------
         // 验证积分是否足够
         Account jfAccount = accountBO.getRemoteAccount(user.getUserId(),
@@ -305,35 +310,36 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
         }
         // RMB调用微信渠道至商家
         return accountBO.doWeiXinH5PayRemote(user.getUserId(),
-            user.getOpenId(), store.getOwner(), payRmbAmount,
-            EBizType.CG_O2O_RMB, "O2O消费微信支付", "O2O消费微信支付", payGroup,
-            store.getCode());
+            user.getOpenId(), store.getOwner(), payGroup, code,
+            EBizType.CG_O2O_RMB, "O2O消费微信支付", payRmbAmount);
         // 资金划转结束--------------
     }
 
     private Object storePurchaseZHWX(User user, Store store, Long amount,
             String ticketCode) {
         // 落地本地系统消费记录
-        String payGroup = storePurchaseBO.storePurchaseZHWX(user, store,
-            amount, ticketCode);
+        String payGroup = OrderNoGenerater.generateM(EGeneratePrefix.PAY_GROUP
+            .getCode());
+        String code = storePurchaseBO.storePurchaseZHWX(user, store, amount,
+            ticketCode, payGroup);
         // 资金划转开始--------------
         // RMB调用微信渠道至商家
         return accountBO.doWeiXinPayRemote(user.getUserId(), store.getOwner(),
-            amount, EBizType.ZH_O2O, "O2O消费微信支付", "O2O消费微信支付", payGroup,
-            store.getCode());
+            payGroup, code, EBizType.ZH_O2O, "O2O消费微信支付", amount);
         // 资金划转结束--------------
     }
 
     private Object storePurchaseZHZFB(User user, Store store, Long amount,
             String ticketCode) {
         // 落地本地系统消费记录
-        String payGroup = storePurchaseBO.storePurchaseZHZFB(user, store,
-            amount, ticketCode);
+        String payGroup = OrderNoGenerater.generateM(EGeneratePrefix.PAY_GROUP
+            .getCode());
+        String code = storePurchaseBO.storePurchaseZHZFB(user, store, amount,
+            ticketCode, payGroup);
         // 资金划转开始--------------
         // RMB调用支付宝渠道至商家
         return accountBO.doAlipayRemote(user.getUserId(), store.getOwner(),
-            amount, EBizType.ZH_O2O, "O2O消费支付宝支付", "O2O消费支付宝支付", payGroup,
-            store.getCode());
+            payGroup, code, EBizType.ZH_O2O, "O2O消费支付宝支付", amount);
         // 资金划转结束--------------
     }
 
@@ -360,7 +366,6 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
         } else {
             throw new BizException("xn0000", payType + "支付方式暂不支持");
         }
-
     }
 
     private Long getTicketAmount(String ticketCode, Long amount) {
@@ -470,6 +475,13 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
             .getStorePurchaseByPayGroup(payGroup);
         if (EStorePurchaseStatus.TO_PAY.getCode().equals(
             storePurchase.getStatus())) {
+            // 将商家人民币金额划转成分润币种
+            Store store = storeBO.getStore(storePurchase.getStoreCode());
+            accountBO.doTransferAmountRemote(store.getOwner(), ECurrency.CNY,
+                store.getOwner(), ECurrency.CG_CGB, payAmount,
+                EBizType.EXCHANGE_CURRENCY, "O2O消费人民币转分润币", "O2O消费人民币转分润币",
+                storePurchase.getCode());
+
             // 更新支付记录
             storePurchaseBO.paySuccess(storePurchase, payCode, payAmount);
             // 优惠券状态修改
@@ -481,7 +493,6 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
             // 用商家的钱开始分销
             Long storeFrAmount = storePurchase.getPrice();// 商家收到的分润
             Long userFrAmount = storeFrAmount;// 用户支付的分润
-            Store store = storeBO.getStore(storePurchase.getStoreCode());
             User user = userBO.getRemoteUser(storePurchase.getUserId());
             if (StringUtils.isNotBlank(ticketCode)) {
                 distributeBO.distribute1Amount(storeFrAmount, store, user,

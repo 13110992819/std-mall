@@ -116,9 +116,7 @@ public class StorePurchaseBOImpl extends PaginableBOImpl<StorePurchase>
 
     @Override
     public String storePurchaseCGRMBWX(User user, Store store,
-            Long rmbTotalAmount, Long fdAmount) {
-        String payGroup = OrderNoGenerater
-            .generateM(EGeneratePrefix.STORE_PURCHASW.getCode());
+            Long rmbTotalAmount, Long fdAmount, String payGroup) {
         Date now = new Date();
         StorePurchase data = new StorePurchase();
         data.setCode(OrderNoGenerater.generateM(EGeneratePrefix.STORE_PURCHASW
@@ -146,9 +144,7 @@ public class StorePurchaseBOImpl extends PaginableBOImpl<StorePurchase>
 
     @Override
     public String storePurchaseCGRMBJFWX(User user, Store store,
-            Long rmbTotalAmount, Long jfAmount) {
-        String payGroup = OrderNoGenerater
-            .generateM(EGeneratePrefix.STORE_PURCHASW.getCode());
+            Long rmbTotalAmount, Long jfAmount, String payGroup) {
         Date now = new Date();
         StorePurchase data = new StorePurchase();
         data.setCode(OrderNoGenerater.generateM(EGeneratePrefix.STORE_PURCHASW
@@ -173,9 +169,7 @@ public class StorePurchaseBOImpl extends PaginableBOImpl<StorePurchase>
 
     @Override
     public String storePurchaseZHWX(User user, Store store, Long amount,
-            String ticketCode) {
-        String payGroup = OrderNoGenerater
-            .generateM(EGeneratePrefix.STORE_PURCHASW.getCode());
+            String ticketCode, String payGroup) {
         String code = OrderNoGenerater.generateM(EGeneratePrefix.STORE_PURCHASW
             .getCode());
         Date now = new Date();
@@ -202,9 +196,7 @@ public class StorePurchaseBOImpl extends PaginableBOImpl<StorePurchase>
 
     @Override
     public String storePurchaseZHZFB(User user, Store store, Long amount,
-            String ticketCode) {
-        String payGroup = OrderNoGenerater
-            .generateM(EGeneratePrefix.STORE_PURCHASW.getCode());
+            String ticketCode, String payGroup) {
         String code = OrderNoGenerater.generateM(EGeneratePrefix.STORE_PURCHASW
             .getCode());
         Date now = new Date();
@@ -336,5 +328,4 @@ public class StorePurchaseBOImpl extends PaginableBOImpl<StorePurchase>
         storePurchase.setPayDatetime(new Date());
         storePurchaseDAO.updatePaySuccess(storePurchase);
     }
-
 }

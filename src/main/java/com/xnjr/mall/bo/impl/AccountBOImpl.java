@@ -71,22 +71,42 @@ public class AccountBOImpl implements IAccountBO {
         return account;
     }
 
-    /** 
-     * @see com.xnjr.mall.bo.IAccountBO#doTransferAmountRemote(java.lang.String, java.lang.String, java.lang.String, java.lang.Long, java.lang.String, java.lang.String)
-     */
     @Override
     public void doTransferAmountRemote(String fromUserId, String toUserId,
             ECurrency currency, Long amount, EBizType bizType,
-            String fromBizNote, String toBizNote) {
+            String fromBizNote, String toBizNote, String refNo) {
         if (amount != null && amount != 0) {
             XN002100Req req = new XN002100Req();
             req.setFromUserId(fromUserId);
+            req.setFromCurrency(currency.getCode());
             req.setToUserId(toUserId);
-            req.setCurrency(currency.getCode());
+            req.setToCurrency(currency.getCode());
             req.setTransAmount(String.valueOf(amount));
             req.setBizType(bizType.getCode());
             req.setFromBizNote(fromBizNote);
             req.setToBizNote(toBizNote);
+            req.setRefNo(refNo);
+            BizConnecter.getBizData("002100", JsonUtils.object2Json(req),
+                Object.class);
+        }
+    }
+
+    @Override
+    public void doTransferAmountRemote(String fromUserId,
+            ECurrency fromCurrency, String toUserId, ECurrency toCurrency,
+            Long amount, EBizType bizType, String fromBizNote,
+            String toBizNote, String refNo) {
+        if (amount != null && amount != 0) {
+            XN002100Req req = new XN002100Req();
+            req.setFromUserId(fromUserId);
+            req.setFromCurrency(fromCurrency.getCode());
+            req.setToUserId(toUserId);
+            req.setToCurrency(toCurrency.getCode());
+            req.setTransAmount(String.valueOf(amount));
+            req.setBizType(bizType.getCode());
+            req.setFromBizNote(fromBizNote);
+            req.setToBizNote(toBizNote);
+            req.setRefNo(refNo);
             BizConnecter.getBizData("002100", JsonUtils.object2Json(req),
                 Object.class);
         }
@@ -103,18 +123,18 @@ public class AccountBOImpl implements IAccountBO {
     }
 
     @Override
-    public XN002500Res doWeiXinPayRemote(String fromUserId, String toUserId,
-            Long amount, EBizType bizType, String fromBizNote,
-            String toBizNote, String payGroup) {
+    public XN002500Res doWeiXinPayRemote(String applyUser, String toUser,
+            String payGroup, String refNo, EBizType bizType, String bizNote,
+            Long amount) {
         // 获取微信APP支付信息
         XN002500Req req = new XN002500Req();
-        req.setFromUserId(fromUserId);
-        req.setToUserId(toUserId);
-        req.setBizType(bizType.getCode());
-        req.setFromBizNote(fromBizNote);
-        req.setToBizNote(toBizNote);
-        req.setTransAmount(String.valueOf(amount));
+        req.setApplyUser(applyUser);
+        req.setToUser(toUser);
         req.setPayGroup(payGroup);
+        req.setRefNo(refNo);
+        req.setBizType(bizType.getCode());
+        req.setBizNote(bizNote);
+        req.setAmount(String.valueOf(amount));
         req.setBackUrl(PropertiesUtil.Config.PAY_BACK_URL);
         XN002500Res res = BizConnecter.getBizData("002500",
             JsonUtil.Object2Json(req), XN002500Res.class);
@@ -122,36 +142,25 @@ public class AccountBOImpl implements IAccountBO {
     }
 
     /**
-     * 微信H5支付
-     * @param fromUserId 来方用户
-     * @param fromOpenId 来方openId
-     * @param toUserId 去方用户
-     * @param amount 发生金额
-     * @param bizType 业务类型
-     * @param fromBizNote 来方说明
-     * @param toBizNote 去方说明
-     * @param payGroup 支付组号
-     * @return 
-     * @create: 2017年3月31日 下午5:44:32 xieyj
-     * @history:
+     * @see com.xnjr.mall.bo.IAccountBO#doWeiXinH5PayRemote(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, com.xnjr.mall.enums.EBizType, java.lang.String, java.lang.Long, java.lang.String)
      */
     @Override
-    public XN002501Res doWeiXinH5PayRemote(String fromUserId,
-            String fromOpenId, String toUserId, Long amount, EBizType bizType,
-            String fromBizNote, String toBizNote, String payGroup) {
-        if (StringUtils.isBlank(fromOpenId)) {
+    public XN002501Res doWeiXinH5PayRemote(String applyUser, String openId,
+            String toUser, String payGroup, String refNo, EBizType bizType,
+            String bizNote, Long amount) {
+        if (StringUtils.isBlank(openId)) {
             throw new BizException("xn0000", "请先微信登录再支付");
         }
-        // 获取微信支付信息
+        // 获取微信APP支付信息
         XN002501Req req = new XN002501Req();
-        req.setFromUserId(fromUserId);
-        req.setFromOpenId(fromOpenId);
-        req.setToUserId(toUserId);
-        req.setTransAmount(String.valueOf(amount));
-        req.setBizType(bizType.getCode());
-        req.setFromBizNote(fromBizNote);
-        req.setToBizNote(toBizNote);
+        req.setApplyUser(applyUser);
+        req.setOpenId(openId);
+        req.setToUser(toUser);
         req.setPayGroup(payGroup);
+        req.setRefNo(refNo);
+        req.setBizType(bizType.getCode());
+        req.setBizNote(bizNote);
+        req.setAmount(String.valueOf(amount));
         req.setBackUrl(PropertiesUtil.Config.PAY_BACK_URL);
         XN002501Res res = BizConnecter.getBizData("002501",
             JsonUtil.Object2Json(req), XN002501Res.class);
@@ -159,18 +168,18 @@ public class AccountBOImpl implements IAccountBO {
     }
 
     @Override
-    public XN002510Res doAlipayRemote(String fromUserId, String toUserId,
-            Long amount, EBizType bizType, String fromBizNote,
-            String toBizNote, String payGroup) {
+    public XN002510Res doAlipayRemote(String applyUser, String toUser,
+            String payGroup, String refNo, EBizType bizType, String bizNote,
+            Long amount) {
         // 获取支付宝APP支付信息
         XN002510Req req = new XN002510Req();
-        req.setFromUserId(fromUserId);
-        req.setToUserId(toUserId);
-        req.setBizType(bizType.getCode());
-        req.setFromBizNote(fromBizNote);
-        req.setToBizNote(toBizNote);
-        req.setTransAmount(String.valueOf(amount));
+        req.setApplyUser(applyUser);
+        req.setToUser(toUser);
         req.setPayGroup(payGroup);
+        req.setRefNo(refNo);
+        req.setBizType(bizType.getCode());
+        req.setBizNote(bizNote);
+        req.setAmount(String.valueOf(amount));
         req.setBackUrl(PropertiesUtil.Config.PAY_BACK_URL);
         XN002510Res res = BizConnecter.getBizData("002510",
             JsonUtil.Object2Json(req), XN002510Res.class);
@@ -179,22 +188,27 @@ public class AccountBOImpl implements IAccountBO {
 
     @Override
     public void doZHYEPay(String fromUserId, String toUserId, Long frbAmount,
-            Long gxzAmount, Long gwbAmount, Long qbbAmount, EBizType bizType) {
+            Long gxzAmount, Long gwbAmount, Long qbbAmount, EBizType bizType,
+            String refNo) {
         if (frbAmount > 0) {
             doTransferAmountRemote(fromUserId, toUserId, ECurrency.ZH_FRB,
-                frbAmount, bizType, bizType.getValue(), bizType.getValue());
+                frbAmount, bizType, bizType.getValue(), bizType.getValue(),
+                refNo);
         }
         if (gxzAmount > 0) {
             doTransferAmountRemote(fromUserId, toUserId, ECurrency.ZH_GXZ,
-                gxzAmount, bizType, bizType.getValue(), bizType.getValue());
+                gxzAmount, bizType, bizType.getValue(), bizType.getValue(),
+                refNo);
         }
         if (gwbAmount > 0) {
             doTransferAmountRemote(fromUserId, toUserId, ECurrency.ZH_GWB,
-                gwbAmount, bizType, bizType.getValue(), bizType.getValue());
+                gwbAmount, bizType, bizType.getValue(), bizType.getValue(),
+                refNo);
         }
         if (qbbAmount > 0) {
             doTransferAmountRemote(fromUserId, toUserId, ECurrency.ZH_QBB,
-                qbbAmount, bizType, bizType.getValue(), bizType.getValue());
+                qbbAmount, bizType, bizType.getValue(), bizType.getValue(),
+                refNo);
         }
     }
 
@@ -222,15 +236,15 @@ public class AccountBOImpl implements IAccountBO {
     // ************************************菜狗************************************
     @Override
     public void doCgbJfPay(String fromUserId, String toUserId, Long cgbPrice,
-            Long jfPrice, EBizType bizType) {
+            Long jfPrice, EBizType bizType, String refNo) {
         // 检验菜狗币和积分是否充足
         checkCgbJf(fromUserId, cgbPrice, jfPrice);
         // 扣除菜狗币
         doTransferAmountRemote(fromUserId, toUserId, ECurrency.CG_CGB,
-            cgbPrice, bizType, bizType.getValue(), bizType.getValue());
+            cgbPrice, bizType, bizType.getValue(), bizType.getValue(), refNo);
         // 扣除积分
         doTransferAmountRemote(fromUserId, toUserId, ECurrency.CGJF, jfPrice,
-            bizType, bizType.getValue(), bizType.getValue());
+            bizType, bizType.getValue(), bizType.getValue(), refNo);
     }
 
     @Override
@@ -262,9 +276,9 @@ public class AccountBOImpl implements IAccountBO {
     // ************************************城市网************************************
     @Override
     public void doCSWJfPay(String fromUserId, String toUserId, Long jfAmount,
-            EBizType bizType) {
+            EBizType bizType, String refNo) {
         doTransferAmountRemote(fromUserId, toUserId, ECurrency.JF, jfAmount,
-            bizType, bizType.getValue(), bizType.getValue());
+            bizType, bizType.getValue(), bizType.getValue(), refNo);
     }
     // ************************************城市网************************************
 }

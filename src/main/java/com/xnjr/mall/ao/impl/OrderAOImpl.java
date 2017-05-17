@@ -259,18 +259,16 @@ public class OrderAOImpl implements IOrderAO {
             // 生成payGroup,并把这组订单（orderCodeList）归为一组进行支付。
             String payGroup = orderBO.addPayGroup(order.getCode());
             return accountBO.doAlipayRemote(fromUserId,
-                ESysUser.SYS_USER_ZHPAY.getCode(), cnyAmount, EBizType.AJ_GW,
-                EBizType.AJ_GW.getValue(), EBizType.AJ_GW.getValue(), payGroup,
-                order.getCode());
+                ESysUser.SYS_USER_ZHPAY.getCode(), payGroup, order.getCode(),
+                EBizType.AJ_GW, EBizType.AJ_GW.getValue(), cnyAmount);
         } else if (EPayType.WEIXIN_APP.getCode().equals(payType)) {
             // 检查购物币和钱包币是否充足
             accountBO.checkZHGwbQbb(fromUserId, gwbAmount, qbbAmount);
             // 生成payGroup,并把这组订单（orderCodeList）归为一组进行支付。
             String payGroup = orderBO.addPayGroup(order.getCode());
             return accountBO.doWeiXinPayRemote(fromUserId,
-                ESysUser.SYS_USER_ZHPAY.getCode(), cnyAmount, EBizType.AJ_GW,
-                EBizType.AJ_GW.getValue(), EBizType.AJ_GW.getValue(), payGroup,
-                order.getCode());
+                ESysUser.SYS_USER_ZHPAY.getCode(), payGroup, order.getCode(),
+                EBizType.AJ_GW, EBizType.AJ_GW.getValue(), cnyAmount);
         } else {
             throw new BizException("xn0000", "支付类型不支持");
         }

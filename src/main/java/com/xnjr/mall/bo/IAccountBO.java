@@ -49,6 +49,11 @@ public interface IAccountBO {
             ECurrency currency, Long amount, EBizType bizType,
             String fromBizNote, String toBizNote, String refNo);
 
+    public void doTransferAmountRemote(String fromUserId,
+            ECurrency fromCurrency, String toUserId, ECurrency toCurrency,
+            Long amount, EBizType bizType, String fromBizNote,
+            String toBizNote, String refNo);
+
     /**
      * 获取虚拟币的价值：1人民币等于多少虚拟币
      * @param currency
@@ -58,17 +63,17 @@ public interface IAccountBO {
      */
     public Double getExchangeRateRemote(ECurrency currency);
 
-    public XN002500Res doWeiXinPayRemote(String fromUserId, String toUserId,
-            Long amount, EBizType bizType, String fromBizNote,
-            String toBizNote, String payGroup, String refNo);
+    public XN002500Res doWeiXinPayRemote(String applyUser, String toUser,
+            String payGroup, String refNo, EBizType bizType, String bizNote,
+            Long amount);
 
-    public XN002501Res doWeiXinH5PayRemote(String fromUserId,
-            String fromOpenId, String toUserId, Long amount, EBizType bizType,
-            String fromBizNote, String toBizNote, String payGroup, String refNo);
+    public XN002501Res doWeiXinH5PayRemote(String applyUser, String openId,
+            String toUser, String payGroup, String refNo, EBizType bizType,
+            String bizNote, Long amount);
 
-    public XN002510Res doAlipayRemote(String fromUserId, String toUserId,
-            Long amount, EBizType bizType, String fromBizNote,
-            String toBizNote, String payGroup, String refNo);
+    public XN002510Res doAlipayRemote(String applyUser, String toUser,
+            String payGroup, String refNo, EBizType bizType, String bizNote,
+            Long amount);
 
     public void doZHYEPay(String fromUserId, String systemUserId,
             Long frbAmount, Long gxzAmount, Long gwbAmount, Long qbbAmount,

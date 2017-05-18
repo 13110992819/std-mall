@@ -12,6 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.xnjr.mall.ao.IStorePurchaseAO;
 import com.xnjr.mall.api.AProcessor;
+import com.xnjr.mall.common.DateUtil;
 import com.xnjr.mall.common.JsonUtil;
 import com.xnjr.mall.core.StringValidater;
 import com.xnjr.mall.domain.StorePurchase;
@@ -44,6 +45,10 @@ public class XN808245 extends AProcessor {
         condition.setPayType(req.getPayType());
         condition.setCompanyCode(req.getCompanyCode());
         condition.setSystemCode(req.getSystemCode());
+        condition.setCreateDatetimeStart(DateUtil.getFrontDate(
+            req.getDateStart(), false));
+        condition.setCreateDatetimeEnd(DateUtil.getFrontDate(req.getDateEnd(),
+            true));
         String orderColumn = req.getOrderColumn();
         if (StringUtils.isBlank(orderColumn)) {
             orderColumn = IStorePurchaseAO.DEFAULT_ORDER_COLUMN;

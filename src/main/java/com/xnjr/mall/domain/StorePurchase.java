@@ -78,6 +78,38 @@ public class StorePurchase extends ABaseDO {
 
     private User user;
 
+    private User storeUser;
+
+    // 创建起始时间
+    private Date createDatetimeStart;
+
+    // 创建终止时间
+    private Date createDatetimeEnd;
+
+    public User getStoreUser() {
+        return storeUser;
+    }
+
+    public void setStoreUser(User storeUser) {
+        this.storeUser = storeUser;
+    }
+
+    public Date getCreateDatetimeStart() {
+        return createDatetimeStart;
+    }
+
+    public void setCreateDatetimeStart(Date createDatetimeStart) {
+        this.createDatetimeStart = createDatetimeStart;
+    }
+
+    public Date getCreateDatetimeEnd() {
+        return createDatetimeEnd;
+    }
+
+    public void setCreateDatetimeEnd(Date createDatetimeEnd) {
+        this.createDatetimeEnd = createDatetimeEnd;
+    }
+
     public User getUser() {
         return user;
     }

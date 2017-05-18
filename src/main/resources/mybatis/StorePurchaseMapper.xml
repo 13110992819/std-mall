@@ -42,6 +42,12 @@
 			<if test="status != null and status != '' ">
 				AND t.status = #{status}
 			</if>
+			<if test="createDatetimeStart != null and createDatetimeStart != '' ">
+				<![CDATA[AND t.create_datetime >= #{createDatetimeStart}]]>
+			</if>
+			<if test="createDatetimeEnd != null and createDatetimeEnd != '' ">
+				<![CDATA[AND t.create_datetime <= #{createDatetimeEnd}]]>
+			</if>
 			<if test="payType != null and payType != '' ">
 				AND t.pay_type = #{payType}
 			</if>

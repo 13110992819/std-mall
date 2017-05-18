@@ -570,6 +570,8 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
             }
             User user = userBO.getRemoteUser(storePurchase.getUserId());
             storePurchase.setUser(user);
+            User storeUser = userBO.getRemoteUser(store.getOwner());
+            storePurchase.setStoreUser(storeUser);
         }
         return page;
     }

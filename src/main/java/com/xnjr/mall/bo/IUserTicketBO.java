@@ -11,7 +11,9 @@ public interface IUserTicketBO extends IPaginableBO<UserTicket> {
 
     public String saveUserTicket(User user, StoreTicket storeTicket);
 
-    public int refreshUserTicketStatus(String code, String status);
+    public int ticketUsed(String code);
+
+    public int ticketInvalid(String code);
 
     public List<UserTicket> queryUserTicketList(String storeTicketCode,
             String status);

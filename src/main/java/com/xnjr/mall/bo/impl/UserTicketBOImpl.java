@@ -82,12 +82,24 @@ public class UserTicketBOImpl extends PaginableBOImpl<UserTicket> implements
     }
 
     @Override
-    public int refreshUserTicketStatus(String code, String status) {
+    public int ticketUsed(String code) {
         int count = 0;
         if (StringUtils.isNotBlank(code)) {
             UserTicket data = new UserTicket();
             data.setCode(code);
-            data.setStatus(status);
+            data.setStatus(EUserTicketStatus.USED.getCode());
+            count = userTicketDAO.updateUserTicketStatus(data);
+        }
+        return count;
+    }
+
+    @Override
+    public int ticketInvalid(String code) {
+        int count = 0;
+        if (StringUtils.isNotBlank(code)) {
+            UserTicket data = new UserTicket();
+            data.setCode(code);
+            data.setStatus(EUserTicketStatus.INVAILD.getCode());
             count = userTicketDAO.updateUserTicketStatus(data);
         }
         return count;

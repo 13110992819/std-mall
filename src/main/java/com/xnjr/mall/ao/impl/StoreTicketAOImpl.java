@@ -192,8 +192,7 @@ public class StoreTicketAOImpl implements IStoreTicketAO {
             List<UserTicket> utList = userTicketBO.queryUserTicketList(
                 storeTicket.getCode(), EUserTicketStatus.UNUSED.getCode());
             for (UserTicket userTicket : utList) {
-                userTicketBO.refreshUserTicketStatus(userTicket.getCode(),
-                    EUserTicketStatus.INVAILD.getCode());
+                userTicketBO.ticketInvalid(userTicket.getCode());
             }
         }
         logger.info("***************结束扫描失效折扣券记录***************");

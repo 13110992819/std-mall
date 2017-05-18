@@ -322,6 +322,7 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
             .getCode());
         String code = storePurchaseBO.storePurchaseZHWX(user, store, amount,
             ticketCode, payGroup);
+
         // 资金划转开始--------------
         // RMB调用微信渠道至商家
         return accountBO.doWeiXinPayRemote(user.getUserId(), store.getOwner(),
@@ -336,6 +337,7 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
             .getCode());
         String code = storePurchaseBO.storePurchaseZHZFB(user, store, amount,
             ticketCode, payGroup);
+
         // 资金划转开始--------------
         // RMB调用支付宝渠道至商家
         return accountBO.doAlipayRemote(user.getUserId(), store.getOwner(),
@@ -390,9 +392,6 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
                     ticketAmount = storeTicket.getKey2();
                 }
             }
-            // 优惠券状态修改
-            userTicketBO.refreshUserTicketStatus(ticketCode,
-                EUserTicketStatus.USED.getCode());
         }
         return ticketAmount;
     }
@@ -402,9 +401,10 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
         // 验证交易密码
         userBO.checkTradePwd(user.getUserId(), tradePwd);
 
+        // 优惠券状态修改
+        userTicketBO.ticketUsed(ticketCode);
         Long frResultAmount = 0L;// 需要支付的分润金额
         Long gxjlResultAmount = 0L;// 需要支付的贡献值金额计算
-
         String buyUserId = user.getUserId();
         String storeUserId = store.getOwner();
         // 1、贡献奖励+分润<yhAmount 余额不足
@@ -482,14 +482,21 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
                 EBizType.EXCHANGE_CURRENCY, "O2O消费人民币转分润币", "O2O消费人民币转分润币",
                 storePurchase.getCode());
 
-            // 更新支付记录
-            storePurchaseBO.paySuccess(storePurchase, payCode, payAmount);
             // 优惠券状态修改
             String ticketCode = storePurchase.getTicketCode();
-            if (StringUtils.isNotBlank(ticketCode)) {
-                userTicketBO.refreshUserTicketStatus(ticketCode,
-                    EUserTicketStatus.USED.getCode());
+            UserTicket userTicket = userTicketBO.getUserTicket(ticketCode);
+            if (null != userTicket
+                    && !EUserTicketStatus.UNUSED.getCode().equals(
+                        userTicket.getStatus())) {
+                throw new BizException("xn000000", "该折扣券["
+                        + userTicket.getCode() + "]不是未使用状态，无法支付");
+            } else {
+                userTicketBO.ticketUsed(ticketCode);
             }
+
+            // 更新支付记录
+            storePurchaseBO.paySuccess(storePurchase, payCode, payAmount);
+
             // 用商家的钱开始分销
             Long storeFrAmount = storePurchase.getPrice();// 商家收到的分润
             Long userFrAmount = storeFrAmount;// 用户支付的分润

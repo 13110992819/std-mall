@@ -479,7 +479,7 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
             Store store = storeBO.getStore(storePurchase.getStoreCode());
             accountBO.doTransferAmountRemote(store.getOwner(), ECurrency.CNY,
                 store.getOwner(), ECurrency.ZH_FRB, payAmount,
-                EBizType.EXCHANGE_CURRENCY, "O2O消费人民币转分润币", "O2O消费人民币转分润币",
+                EBizType.EXCHANGE_CURRENCY, "O2O消费人民币转分润", "O2O消费加分润",
                 storePurchase.getCode());
 
             // 优惠券状态修改

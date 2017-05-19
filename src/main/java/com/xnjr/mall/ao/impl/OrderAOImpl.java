@@ -612,14 +612,16 @@ public class OrderAOImpl implements IOrderAO {
             productBO.updateBoughtCount(productOrder.getProductCode(),
                 productOrder.getQuantity());
         }
-        // 将分润给商家分润账户（购物币和钱包币由平台回收）
+
+        // 平台将人民币转分润给商家（购物币和钱包币由平台回收）
+        accountBO.doTransferAmountRemote(ESysUser.SYS_USER_ZHPAY.getCode(),
+            ECurrency.CNY, order.getCompanyCode(), ECurrency.ZH_FRB,
+            order.getAmount1(), EBizType.AJ_QRSH, "确认收货，平台人民币转给商家分润",
+            EBizType.AJ_QRSH.getValue(), order.getCode());
+
         Double frbRate = accountBO.getExchangeRateRemote(ECurrency.ZH_FRB);
         Long frbAmount = Double.valueOf(order.getAmount1() * frbRate)
             .longValue();
-        accountBO.doTransferAmountRemote(ESysUser.SYS_USER_ZHPAY.getCode(),
-            order.getCompanyCode(), ECurrency.ZH_FRB, frbAmount,
-            EBizType.AJ_QRSH, EBizType.AJ_QRSH.getValue(),
-            EBizType.AJ_QRSH.getValue(), order.getCode());
         // 分销
         Store store = storeBO.getStoreByUser(order.getCompanyCode());
         User user = userBO.getRemoteUser(order.getApplyUser());

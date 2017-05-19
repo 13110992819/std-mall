@@ -183,7 +183,7 @@ public class OrderBOImpl extends PaginableBOImpl<Order> implements IOrderBO {
         if (order != null && StringUtils.isNotBlank(order.getCode())) {
             order.setStatus(EOrderStatus.RECEIVE.getCode());
             order.setUpdater(updater);
-            order.setPayDatetime(new Date());
+            order.setUpdateDatetime(new Date());
             order.setRemark(remark);
             count = orderDAO.updateConfirm(order);
         }

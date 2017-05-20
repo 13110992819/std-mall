@@ -40,12 +40,9 @@ public class CallbackConroller {
         String bizType = request.getParameter("bizType");
         // 支付成功，商户处理后同步返回给微信参数
         if (!isSuccess) {
-            logger.info("支付失败");
+            logger.info("****业务类型<" + bizType + "> payGroup <" + payGroup
+                    + "> payCode <" + payCode + ">回调失败****");
         } else {
-            logger.info("===============付款成功==============");
-            // ------------------------------
-            // 处理业务开始
-            // ------------------------------
             try {
                 if (EBizType.AJ_GW.getCode().equals(bizType)) {
                     logger.info("**** 购物支付回调 payGroup <" + payGroup
@@ -70,9 +67,6 @@ public class CallbackConroller {
                 logger.error("支付回调异常payGroup <" + payGroup + "> payCode <"
                         + payCode + ">异常如下：" + e.getMessage());
             }
-            // ------------------------------
-            // 处理业务完毕
-            // ------------------------------
         }
     }
 }

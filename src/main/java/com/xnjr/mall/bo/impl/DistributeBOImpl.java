@@ -140,10 +140,15 @@ public class DistributeBOImpl implements IDistributeBO {
 
     @Override
     public void distribute25Amount(Long storeFrAmount, Long userFrAmount,
-            Store store, User user, String storePurchase) {
+            Store store, User user, String storePurchase) {// 先形成分红权，再进行分销规则处理，尽量确保事务回滚
         String systemUser = ESysUser.SYS_USER_ZHPAY.getCode();
         String buyUserId = user.getUserId();
         String storeUserId = store.getOwner();
+        // 形成B端分红权处理
+        stockBO.generateBStock(storeFrAmount, storeUserId);
+        // 形成C端分红权处理
+        stockBO.generateCStock(userFrAmount, buyUserId);
+
         // 21、买单用户的推荐人B可得到分润X1
         User bUser = null;
         if (StringUtils.isNotBlank(user.getUserReferee())) {
@@ -251,11 +256,5 @@ public class DistributeBOImpl implements IDistributeBO {
                 ECurrency.ZH_FRB, Y4, EBizType.ZH_O2O, "正汇O2O贡献值部分分成",
                 "正汇O2O贡献值部分分成", storePurchase);
         }
-
-        // 形成B端分红权处理
-        stockBO.generateBStock(storeFrAmount, storeUserId);
-        // 形成C端分红权处理
-        stockBO.generateCStock(userFrAmount, buyUserId);
-
     }
 }

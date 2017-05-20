@@ -475,12 +475,8 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
             .getStorePurchaseByPayGroup(payGroup);
         if (EStorePurchaseStatus.TO_PAY.getCode().equals(
             storePurchase.getStatus())) {
-            // 将商家人民币金额划转成分润币种
-            Store store = storeBO.getStore(storePurchase.getStoreCode());
-            accountBO.doTransferAmountRemote(store.getOwner(), ECurrency.CNY,
-                store.getOwner(), ECurrency.ZH_FRB, payAmount,
-                EBizType.EXCHANGE_CURRENCY, "O2O消费人民币转分润", "O2O消费加分润",
-                storePurchase.getCode());
+            // 更新支付记录
+            storePurchaseBO.paySuccess(storePurchase, payCode, payAmount);
 
             // 优惠券状态修改
             String ticketCode = storePurchase.getTicketCode();
@@ -494,9 +490,12 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
                 userTicketBO.ticketUsed(ticketCode);
             }
 
-            // 更新支付记录
-            storePurchaseBO.paySuccess(storePurchase, payCode, payAmount);
-
+            // 将商家人民币金额划转成分润币种
+            Store store = storeBO.getStore(storePurchase.getStoreCode());
+            accountBO.doTransferAmountRemote(store.getOwner(), ECurrency.CNY,
+                store.getOwner(), ECurrency.ZH_FRB, payAmount,
+                EBizType.EXCHANGE_CURRENCY, "O2O消费人民币转分润", "O2O消费加分润",
+                storePurchase.getCode());
             // 用商家的钱开始分销
             Long storeFrAmount = storePurchase.getPrice();// 商家收到的分润
             Long userFrAmount = storeFrAmount;// 用户支付的分润

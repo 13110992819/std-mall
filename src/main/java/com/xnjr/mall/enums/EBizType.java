@@ -26,7 +26,7 @@ public enum EBizType {
 
     , YC_O2O("YC_O2O", "姚橙O2O支付"), YC_MALL("YC_MALL", "姚橙商城购物支付"), YC_MALL_BACK(
             "YC_MALL_BACK", "姚橙商城购物退款"), YC_XNCZ_P("YC_XNCZ_P", "姚橙充值专区用款"), YC_XNCZ_M(
-            "-94", "菜狗充值专区退款");
+            "YC_XNCZ_M", "姚橙充值专区退款");
     public static Map<String, EBizType> getBizTypeMap() {
         Map<String, EBizType> map = new HashMap<String, EBizType>();
         for (EBizType bizType : EBizType.values()) {

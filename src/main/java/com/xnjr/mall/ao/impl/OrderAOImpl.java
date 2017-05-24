@@ -471,6 +471,8 @@ public class OrderAOImpl implements IOrderAO {
             doBackAmountZH(order);
         } else if (ESystemCode.CSW.getCode().equals(order.getSystemCode())) {
             // 订单作废，金额不退还
+        } else if (ESystemCode.YAOCHENG.getCode().equals(order.getSystemCode())) {
+            doBackAmountYC(order);
         } else {
             throw new BizException("xn000000", "系统编号不能识别");
         }
@@ -503,6 +505,23 @@ public class OrderAOImpl implements IOrderAO {
                 order.getApplyUser(), ECurrency.CGJF, jfAmount,
                 EBizType.AJ_GWTK, EBizType.AJ_GWTK.getValue(),
                 EBizType.AJ_GWTK.getValue(), order.getCode());
+        }
+    }
+
+    private void doBackAmountYC(Order order) {
+        Long rmbAmount = order.getPayAmount1(); // 人民币
+        Long cbAmount = order.getPayAmount2(); // 橙币
+        if (rmbAmount > 0) {
+            accountBO.doTransferAmountRemote(order.getToUser(),
+                order.getApplyUser(), ECurrency.CNY, rmbAmount,
+                EBizType.YC_MALL_BACK, EBizType.YC_MALL_BACK.getValue(),
+                EBizType.YC_MALL_BACK.getValue(), order.getCode());
+        }
+        if (cbAmount > 0) {
+            accountBO.doTransferAmountRemote(order.getToUser(),
+                order.getApplyUser(), ECurrency.YC_CB, cbAmount,
+                EBizType.YC_MALL_BACK, EBizType.YC_MALL_BACK.getValue(),
+                EBizType.YC_MALL_BACK.getValue(), order.getCode());
         }
     }
 

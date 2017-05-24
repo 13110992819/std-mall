@@ -109,6 +109,15 @@ public class VorderAOImpl implements IVorderAO {
                     EBizType.CG_XNCZ_P.getValue(),
                     EBizType.CG_XNCZ_P.getValue(), order.getCode());
                 vorderBO.payOrderByCGB(order);
+            } else if (ESystemCode.YAOCHENG.getCode().equals(
+                order.getSystemCode())) {
+                // 橙币支付
+                accountBO.doTransferAmountRemote(order.getApplyUser(),
+                    ESysUser.SYS_USER_YAOCHENG.getCode(), ECurrency.YC_CB,
+                    payAmount, EBizType.YC_XNCZ_P,
+                    EBizType.YC_XNCZ_P.getValue(),
+                    EBizType.YC_XNCZ_P.getValue(), order.getCode());
+                vorderBO.payOrderByCGB(order);
             } else {
                 throw new BizException("xn000000", "系统编号不能识别");
             }

@@ -24,7 +24,7 @@ public enum EBizType {
     , GD_MALL("GD_MALL", "积分商城消费"), GD_O2O("GD_O2O", "O2O店铺积分消费"), EXCHANGE_CURRENCY(
             "200", "币种兑换")
 
-    , YC_O2O("YC_O2O", "姚橙O2O支付");
+    , YC_O2O("YC_O2O", "姚橙O2O支付"), YC_MALL("YC_MALL", "姚橙商城支付");
     public static Map<String, EBizType> getBizTypeMap() {
         Map<String, EBizType> map = new HashMap<String, EBizType>();
         for (EBizType bizType : EBizType.values()) {

@@ -47,7 +47,7 @@ public class CallbackConroller {
                 if (EBizType.AJ_GW.getCode().equals(bizType)) {
                     logger.info("**** 购物支付回调 payGroup <" + payGroup
                             + "> payCode <" + payCode + ">start****");
-                    orderAO.paySuccess(payGroup, payCode, amount);
+                    orderAO.paySuccessZH(payGroup, payCode, amount);
                     logger.info("**** 购物支付回调 payGroup <" + payGroup
                             + "> payCode <" + payCode + ">end****");
                 } else if (EBizType.ZH_O2O.getCode().equals(bizType)) {
@@ -62,11 +62,19 @@ public class CallbackConroller {
                     storePurchaseAO.paySuccessCG(payGroup, payCode, amount);
                     logger.info("**** 菜狗O2O人民币支付回调 payGroup <" + payGroup
                             + "> payCode <" + payCode + ">end****");
+
                 } else if (EBizType.YC_O2O.getCode().equals(bizType)) {
                     logger.info("**** 姚橙O2O人民币支付回调 payGroup <" + payGroup
                             + "> payCode <" + payCode + ">start****");
                     storePurchaseAO.paySuccessYC(payGroup, payCode, amount);
                     logger.info("**** 姚橙O2O人民币支付回调 payGroup <" + payGroup
+                            + "> payCode <" + payCode + ">end****");
+
+                } else if (EBizType.YC_MALL.getCode().equals(bizType)) {
+                    logger.info("**** 姚橙商城人民币支付回调 payGroup <" + payGroup
+                            + "> payCode <" + payCode + ">start****");
+                    orderAO.paySuccessYC(payGroup, payCode, amount);
+                    logger.info("**** 姚橙商城人民币支付回调 payGroup <" + payGroup
                             + "> payCode <" + payCode + ">end****");
                 }
             } catch (Exception e) {

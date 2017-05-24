@@ -592,8 +592,7 @@ public class OrderAOImpl implements IOrderAO {
 
     }
 
-    @Transactional
-    public void doConfirm(Order order, String updater, String remark) {
+    private void doConfirm(Order order, String updater, String remark) {
         orderBO.confirm(order, updater, remark);
         // 更新产品的已购买人数
         List<ProductOrder> productOrders = order.getProductOrderList();
@@ -603,8 +602,7 @@ public class OrderAOImpl implements IOrderAO {
         }
     }
 
-    @Transactional
-    public void doConfirmZH(Order order, String updater, String remark) {
+    private void doConfirmZH(Order order, String updater, String remark) {
         orderBO.confirm(order, updater, remark);
         // 更新产品的已购买人数
         List<ProductOrder> productOrders = order.getProductOrderList();

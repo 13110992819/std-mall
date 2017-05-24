@@ -11,6 +11,8 @@ package com.xnjr.mall.enums;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.xnjr.mall.exception.BizException;
+
 /**
  * @author: xieyj 
  * @since: 2016年12月24日 下午1:51:38 
@@ -32,6 +34,15 @@ public enum ECurrency {
             map.put(currency.getCode(), currency);
         }
         return map;
+    }
+
+    public static ECurrency getCurrency(String code) {
+        Map<String, ECurrency> map = getResultMap();
+        ECurrency result = map.get(code);
+        if (result == null) {
+            throw new BizException("XN0000", code + "对应的currency不存在");
+        }
+        return result;
     }
 
     ECurrency(String code, String value) {

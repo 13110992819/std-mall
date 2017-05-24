@@ -33,7 +33,7 @@ public class StorePurchaseBOImpl extends PaginableBOImpl<StorePurchase>
     }
 
     @Override
-    public String storePurchaseCGcgb(User user, Store store, Long price,
+    public String storePurchaseCGcgb(User user, Store store, Long amount,
             Long fdAmount) {
         String code = OrderNoGenerater.generateM(EGeneratePrefix.STORE_PURCHASW
             .getCode());
@@ -42,14 +42,14 @@ public class StorePurchaseBOImpl extends PaginableBOImpl<StorePurchase>
         data.setCode(code);
         data.setUserId(user.getUserId());
         data.setStoreCode(store.getCode());
-        data.setPrice(price);
+        data.setPrice(amount);
         data.setBackAmount(fdAmount);
         data.setBackCurrency(ECurrency.CNY.getCode());
         data.setCreateDatetime(now);
         data.setStatus(EStorePurchaseStatus.PAYED.getCode());
         data.setPayType(EO2OPayType.CG_O2O_CGB.getCode());
 
-        data.setPayAmount2(price);
+        data.setPayAmount2(amount);
         data.setPayDatetime(now);
         data.setRemark("菜狗币支付O2O消费");
         data.setSystemCode(store.getSystemCode());
@@ -327,5 +327,88 @@ public class StorePurchaseBOImpl extends PaginableBOImpl<StorePurchase>
         storePurchase.setPayCode(payCode);
         storePurchase.setPayDatetime(new Date());
         storePurchaseDAO.updatePaySuccess(storePurchase);
+    }
+
+    @Override
+    public String storePurchaseYCCB(User user, Store store, Long amount,
+            Long fdAmount) {
+        String code = OrderNoGenerater.generateM(EGeneratePrefix.STORE_PURCHASW
+            .getCode());
+        Date now = new Date();
+        StorePurchase data = new StorePurchase();
+        data.setCode(code);
+        data.setUserId(user.getUserId());
+        data.setStoreCode(store.getCode());
+        data.setPrice(amount);
+        data.setBackAmount(fdAmount);
+        data.setBackCurrency(ECurrency.CNY.getCode());
+        data.setCreateDatetime(now);
+        data.setStatus(EStorePurchaseStatus.PAYED.getCode());
+        data.setPayType(EO2OPayType.YC_CB.getCode());
+
+        data.setPayAmount2(amount);
+        data.setPayDatetime(now);
+        data.setRemark("橙币支付O2O消费");
+        data.setSystemCode(store.getSystemCode());
+        data.setCompanyCode(store.getCompanyCode());
+        storePurchaseDAO.insert(data);
+        return code;
+    }
+
+    @Override
+    public String storePurchaseYCRMBYE(User user, Store store, Long amount,
+            Long fdAmount) {
+        String code = OrderNoGenerater.generateM(EGeneratePrefix.STORE_PURCHASW
+            .getCode());
+        Date now = new Date();
+        StorePurchase data = new StorePurchase();
+        data.setCode(code);
+        data.setUserId(user.getUserId());
+        data.setStoreCode(store.getCode());
+        data.setPrice(amount);
+
+        data.setCreateDatetime(now);
+        data.setStatus(EStorePurchaseStatus.PAYED.getCode());
+        data.setPayType(EO2OPayType.ZH_YE.getCode());
+
+        data.setPayAmount1(amount);
+        data.setPayAmount3(0L);
+        data.setBackAmount(fdAmount);
+        data.setBackCurrency(ECurrency.YC_CB.getCode());
+
+        data.setPayDatetime(now);
+        data.setRemark("人民币余额支付O2O消费");
+        data.setSystemCode(store.getSystemCode());
+        data.setCompanyCode(store.getCompanyCode());
+        storePurchaseDAO.insert(data);
+        return code;
+    }
+
+    @Override
+    public String storePurchaseYCRMBWXH5(User user, Store store, Long amount,
+            Long fdAmount, String payGroup) {
+        Date now = new Date();
+        StorePurchase data = new StorePurchase();
+        data.setCode(OrderNoGenerater.generateM(EGeneratePrefix.STORE_PURCHASW
+            .getCode()));
+        data.setUserId(user.getUserId());
+        data.setStoreCode(store.getCode());
+        data.setPrice(amount);
+
+        data.setCreateDatetime(now);
+        data.setStatus(EStorePurchaseStatus.TO_PAY.getCode());
+        data.setPayType(EO2OPayType.WEIXIN_H5.getCode());
+        data.setPayGroup(payGroup);
+
+        data.setPayAmount3(0L);
+        data.setPayDatetime(now);
+        data.setBackAmount(fdAmount);
+        data.setBackCurrency(ECurrency.YC_CB.getCode());
+        data.setRemark("O2O消费人民币微信H5支付");
+
+        data.setSystemCode(store.getSystemCode());
+        data.setCompanyCode(store.getCompanyCode());
+        storePurchaseDAO.insert(data);
+        return payGroup;
     }
 }

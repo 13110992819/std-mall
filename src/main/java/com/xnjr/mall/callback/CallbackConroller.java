@@ -62,6 +62,12 @@ public class CallbackConroller {
                     storePurchaseAO.paySuccessCG(payGroup, payCode, amount);
                     logger.info("**** 菜狗O2O人民币支付回调 payGroup <" + payGroup
                             + "> payCode <" + payCode + ">end****");
+                } else if (EBizType.YC_O2O.getCode().equals(bizType)) {
+                    logger.info("**** 姚橙O2O人民币支付回调 payGroup <" + payGroup
+                            + "> payCode <" + payCode + ">start****");
+                    storePurchaseAO.paySuccessYC(payGroup, payCode, amount);
+                    logger.info("**** 姚橙O2O人民币支付回调 payGroup <" + payGroup
+                            + "> payCode <" + payCode + ">end****");
                 }
             } catch (Exception e) {
                 logger.error("支付回调异常payGroup <" + payGroup + "> payCode <"

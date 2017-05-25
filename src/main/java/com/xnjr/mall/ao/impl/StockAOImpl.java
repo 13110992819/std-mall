@@ -18,6 +18,7 @@ import com.xnjr.mall.bo.IUserBO;
 import com.xnjr.mall.bo.base.Paginable;
 import com.xnjr.mall.common.AmountUtil;
 import com.xnjr.mall.common.DateUtil;
+import com.xnjr.mall.common.PropertiesUtil;
 import com.xnjr.mall.common.SysConstants;
 import com.xnjr.mall.domain.Account;
 import com.xnjr.mall.domain.SYSConfig;
@@ -71,7 +72,7 @@ public class StockAOImpl implements IStockAO {
     @Override
     public synchronized void doDailyStock() {
         logger.info("***************开始扫描分红权***************");
-        int step = 10;// 每次处理的条数
+        int step = Integer.valueOf(PropertiesUtil.Config.STOCK_STEP); // 每次处理的条数
         while (true) {
             Stock condition = new Stock();
             condition.setStatus(EStockStatus.ING_effect.getCode());

@@ -76,7 +76,7 @@
 		<include refid="where_condition" />
 	</select>
 
-	<insert id="insert_stockBack" parameterType="stockBack">
+	<insert id="insert_stockBack" parameterType="stockBack" useGeneratedKeys="true" keyProperty="id">
 		INSERT INTO
 		tfund_stock_back(
 		fund_code

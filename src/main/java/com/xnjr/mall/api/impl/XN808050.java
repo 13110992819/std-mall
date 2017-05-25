@@ -40,7 +40,9 @@ public class XN808050 extends AProcessor {
             throw new BizException("xn702000", "订单基本信息不能为空");
         }
         // 自提方式无需收货地址// toUser 划分订单归属
-        if (!ESystemCode.Caigo.getCode().equals(req.getPojo().getSystemCode())) {
+        if (!ESystemCode.Caigo.getCode().equals(req.getPojo().getSystemCode())
+                || !ESystemCode.YAOCHENG.getCode().equals(
+                    req.getPojo().getSystemCode())) {
             StringValidater.validateBlank(req.getPojo().getReceiver(), req
                 .getPojo().getReMobile(), req.getPojo().getReAddress());
         }

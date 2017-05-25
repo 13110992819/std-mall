@@ -41,7 +41,7 @@ public class XN808050 extends AProcessor {
         }
         // 自提方式无需收货地址// toUser 划分订单归属
         if (!ESystemCode.Caigo.getCode().equals(req.getPojo().getSystemCode())
-                || !ESystemCode.YAOCHENG.getCode().equals(
+                && !ESystemCode.YAOCHENG.getCode().equals(
                     req.getPojo().getSystemCode())) {
             StringValidater.validateBlank(req.getPojo().getReceiver(), req
                 .getPojo().getReMobile(), req.getPojo().getReAddress());

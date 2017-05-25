@@ -75,6 +75,72 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
 
     @Override
     @Transactional
+    public Object storePurchaseYC(String userId, String storeCode, Long amount,
+            String payType) {
+        User user = userBO.getRemoteUser(userId);
+        Store store = storeBO.getStore(storeCode);
+        if (!EStoreStatus.ON_OPEN.getCode().equals(store.getStatus())) {
+            throw new BizException("xn0000", "店铺不处于可消费状态");
+        }
+        // 1-人民币余额支付 5-微信H5支付 50-橙币余额支付
+        if (EO2OPayType.YC_CB.getCode().equals(payType)) {
+            return storePurchaseYCCB(user, store, amount);
+        } else if (EO2OPayType.ZH_YE.getCode().equals(payType)) {
+            return storePurchaseYCRMBYE(user, store, amount);
+        } else if (EO2OPayType.WEIXIN_H5.getCode().equals(payType)) {
+            return storePurchaseYCWXH5(user, store, amount);
+        } else {
+            throw new BizException("xn0000", "暂不支持此支付方式");
+        }
+    }
+
+    private Object storePurchaseYCWXH5(User user, Store store, Long amount) {
+        // 落地本地系统消费记录
+        Long fxCbAmount = AmountUtil.mul(amount, store.getRate1());
+        String payGroup = OrderNoGenerater.generateM(EGeneratePrefix.PAY_GROUP
+            .getCode());
+        String code = storePurchaseBO.storePurchaseYCRMBWXH5(user, store,
+            amount, fxCbAmount, payGroup);
+        return accountBO.doWeiXinH5PayRemote(user.getUserId(),
+            user.getOpenId(), store.getOwner(), payGroup, code,
+            EBizType.YC_O2O, "O2O消费微信支付", amount);
+    }
+
+    private Object storePurchaseYCRMBYE(User user, Store store, Long amount) {
+        // 落地本地系统消费记录
+        Long fxCbAmount = AmountUtil.mul(amount, store.getRate1());
+        String code = storePurchaseBO.storePurchaseYCRMBYE(user, store, amount,
+            fxCbAmount);
+        // 资金划转开始--------------
+        String systemUser = ESysUser.SYS_USER_YAOCHENG.getCode();
+        // 1、用户付钱给商家
+        accountBO.doTransferAmountRemote(user.getUserId(), store.getOwner(),
+            ECurrency.CNY, amount, EBizType.YC_O2O, "O2O消费人民币支付", "O2O消费人民币支付",
+            code);
+        // 2、平台返橙币给用户
+        accountBO.doTransferAmountRemote(systemUser, user.getUserId(),
+            ECurrency.YC_CB, fxCbAmount, EBizType.YC_O2O, "O2O消费人民币支付返点",
+            "O2O消费人民币支付返点", code);
+        // 资金划转结束--------------
+        return code;
+    }
+
+    public Object storePurchaseYCCB(User user, Store store, Long amount) {
+        // 落地本地系统消费记录
+        String code = storePurchaseBO
+            .storePurchaseYCCB(user, store, amount, 0L);
+        // 资金划转开始--------------
+        // 橙币从消费者回收至平台
+        String systemUser = ESysUser.SYS_USER_YAOCHENG.getCode();
+        accountBO.doTransferAmountRemote(user.getUserId(), systemUser,
+            ECurrency.YC_CB, amount, EBizType.YC_O2O,
+            "O2O消费—" + store.getName(), "O2O消费回收橙币", code);
+        // 资金划转结束--------------
+        return code;
+    }
+
+    @Override
+    @Transactional
     public String storePurchaseCGB(String userId, String storeCode,
             Long cgbTotalAmount, String payType) {
         User user = userBO.getRemoteUser(userId);
@@ -553,6 +619,27 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
                     EBizType.CG_O2O_RMBFD, "O2O消费人民币支付返点", "O2O消费人民币支付返点",
                     storePurchase.getCode());
             }
+        } else {
+            logger.info("订单号：" + storePurchase.getCode() + "已支付，重复回调");
+        }
+    }
+
+    @Override
+    @Transactional
+    public void paySuccessYC(String payGroup, String payCode, Long payAmount) {
+        StorePurchase storePurchase = storePurchaseBO
+            .getStorePurchaseByPayGroup(payGroup);
+        if (EStorePurchaseStatus.TO_PAY.getCode().equals(
+            storePurchase.getStatus())) {
+            // 更新支付记录
+            storePurchaseBO.paySuccess(storePurchase, payCode, payAmount);
+            // 平台返橙币给用户
+            String systemUser = ESysUser.SYS_USER_YAOCHENG.getCode();
+            accountBO.doTransferAmountRemote(systemUser,
+                storePurchase.getUserId(),
+                ECurrency.getCurrency(storePurchase.getBackCurrency()),
+                storePurchase.getBackAmount(), EBizType.YC_O2O, "O2O消费人民币支付返点",
+                "O2O消费人民币支付返点", storePurchase.getCode());
         } else {
             logger.info("订单号：" + storePurchase.getCode() + "已支付，重复回调");
         }

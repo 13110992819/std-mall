@@ -176,6 +176,9 @@ public class UserBOImpl implements IUserBO {
         if (ESystemCode.PIPE.getCode().equals(systemCode)) {
             return ESysUser.SYS_USER_PIPE.getCode();
         }
+        if (ESystemCode.YAOCHENG.getCode().equals(systemCode)) {
+            return ESysUser.SYS_USER_YAOCHENG.getCode();
+        }
         return null;
     }
 }

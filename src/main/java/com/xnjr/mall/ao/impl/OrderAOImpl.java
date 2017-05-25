@@ -179,6 +179,8 @@ public class OrderAOImpl implements IOrderAO {
             return toPayOrderCSW(order, payType);
         } else if (ESystemCode.PIPE.getCode().equals(order.getSystemCode())) {
             return toPayOrderGD(order, payType);
+        } else if (ESystemCode.YAOCHENG.getCode().equals(order.getSystemCode())) {
+            return toPayOrderYC(order, payType);
         } else {
             throw new BizException("xn000000", "系统编号不能识别");
         }
@@ -204,6 +206,82 @@ public class OrderAOImpl implements IOrderAO {
             }
         } else {
             throw new BizException("xn0000", "支付类型不支持");
+        }
+        return new BooleanRes(true);
+    }
+
+    private Object toPayOrderYC(Order order, String payType) {
+        if (EPayType.YC_CB.getCode().equals(payType)) {
+            return toPayOrderYCCB(order);
+        } else if (EPayType.ZH_YE.getCode().equals(payType)) {
+            return toPayOrderYCYE(order);
+        } else if (EPayType.WEIXIN_H5.getCode().equals(payType)) {
+            return toPayOrderYCWXH5(order);
+        } else {
+            throw new BizException("xn0000", "支付类型不支持");
+        }
+
+    }
+
+    private Object toPayOrderYCWXH5(Order order) {
+        Long rmbAmount = order.getAmount1();
+        User user = userBO.getRemoteUser(order.getApplyUser());
+        String payGroup = orderBO.addPayGroup(order.getCode());
+        return accountBO.doWeiXinH5PayRemote(user.getUserId(),
+            user.getOpenId(), order.getToUser(), payGroup, order.getCode(),
+            EBizType.AJ_GW, "购物微信支付", rmbAmount);
+    }
+
+    private Object toPayOrderYCYE(Order order) {
+        Long rmbAmount = order.getAmount1();
+        String systemCode = order.getSystemCode();
+        String fromUserId = order.getApplyUser();
+        Account rmbAccount = accountBO.getRemoteAccount(fromUserId,
+            ECurrency.CNY);
+        if (rmbAmount > rmbAccount.getAmount()) {
+            throw new BizException("xn0000", "人民币账户余额不足");
+        }
+        // 更新订单支付金额
+        orderBO.refreshPaySuccess(order, rmbAmount, 0L, 0L, 0L, null);
+        // 扣除金额
+        if (StringUtils.isNotBlank(order.getToUser())) {// 付给加盟店
+            accountBO.doTransferAmountRemote(fromUserId, order.getToUser(),
+                ECurrency.CNY, rmbAmount, EBizType.AJ_GW,
+                EBizType.AJ_GW.getValue(), EBizType.AJ_GW.getValue(),
+                order.getCode());
+        } else {// 付钱给平台
+            String systemUserId = userBO.getSystemUser(systemCode);
+            accountBO.doTransferAmountRemote(fromUserId, systemUserId,
+                ECurrency.CNY, rmbAmount, EBizType.AJ_GW,
+                EBizType.AJ_GW.getValue(), EBizType.AJ_GW.getValue(),
+                order.getCode());
+        }
+        return new BooleanRes(true);
+    }
+
+    private Object toPayOrderYCCB(Order order) {
+        Long cbAmount = order.getAmount2();
+        String systemCode = order.getSystemCode();
+        String fromUserId = order.getApplyUser();
+        Account cbAccount = accountBO.getRemoteAccount(fromUserId,
+            ECurrency.YC_CB);
+        if (cbAmount > cbAccount.getAmount()) {
+            throw new BizException("xn0000", "橙币不足");
+        }
+        // 更新订单支付金额
+        orderBO.refreshPaySuccess(order, 0L, 0L, cbAmount, 0L, null);
+        // 扣除金额
+        if (StringUtils.isNotBlank(order.getToUser())) {// 付给加盟店
+            accountBO.doTransferAmountRemote(fromUserId, order.getToUser(),
+                ECurrency.YC_CB, cbAmount, EBizType.AJ_GW,
+                EBizType.AJ_GW.getValue(), EBizType.AJ_GW.getValue(),
+                order.getCode());
+        } else {// 付钱给平台
+            String systemUserId = userBO.getSystemUser(systemCode);
+            accountBO.doTransferAmountRemote(fromUserId, systemUserId,
+                ECurrency.YC_CB, cbAmount, EBizType.AJ_GW,
+                EBizType.AJ_GW.getValue(), EBizType.AJ_GW.getValue(),
+                order.getCode());
         }
         return new BooleanRes(true);
     }
@@ -393,6 +471,8 @@ public class OrderAOImpl implements IOrderAO {
             doBackAmountZH(order);
         } else if (ESystemCode.CSW.getCode().equals(order.getSystemCode())) {
             // 订单作废，金额不退还
+        } else if (ESystemCode.YAOCHENG.getCode().equals(order.getSystemCode())) {
+            doBackAmountYC(order);
         } else {
             throw new BizException("xn000000", "系统编号不能识别");
         }
@@ -425,6 +505,23 @@ public class OrderAOImpl implements IOrderAO {
                 order.getApplyUser(), ECurrency.CGJF, jfAmount,
                 EBizType.AJ_GWTK, EBizType.AJ_GWTK.getValue(),
                 EBizType.AJ_GWTK.getValue(), order.getCode());
+        }
+    }
+
+    private void doBackAmountYC(Order order) {
+        Long rmbAmount = order.getPayAmount1(); // 人民币
+        Long cbAmount = order.getPayAmount2(); // 橙币
+        if (rmbAmount > 0) {
+            accountBO.doTransferAmountRemote(order.getToUser(),
+                order.getApplyUser(), ECurrency.CNY, rmbAmount,
+                EBizType.YC_MALL_BACK, EBizType.YC_MALL_BACK.getValue(),
+                EBizType.YC_MALL_BACK.getValue(), order.getCode());
+        }
+        if (cbAmount > 0) {
+            accountBO.doTransferAmountRemote(order.getToUser(),
+                order.getApplyUser(), ECurrency.YC_CB, cbAmount,
+                EBizType.YC_MALL_BACK, EBizType.YC_MALL_BACK.getValue(),
+                EBizType.YC_MALL_BACK.getValue(), order.getCode());
         }
     }
 
@@ -636,7 +733,7 @@ public class OrderAOImpl implements IOrderAO {
      */
     @Override
     @Transactional
-    public void paySuccess(String payGroup, String payCode, Long payAmount) {
+    public void paySuccessZH(String payGroup, String payCode, Long payAmount) {
         List<Order> orderList = orderBO.queryOrderListByPayGroup(payGroup);
         if (CollectionUtils.isEmpty(orderList)) {
             throw new BizException("XN000000", "找不到对应的订单记录");
@@ -687,6 +784,25 @@ public class OrderAOImpl implements IOrderAO {
         // // 扣除金额(购物币和钱包币)
         // accountBO.doGWBQBBPay(systemCode, applyUser,
         // ESysUser.SYS_USER.getCode(), gwAmount, qbAmount, EBizType.AJ_GW);
+    }
+
+    /**
+     * @see com.xnjr.mall.ao.IOrderAO#paySuccess(java.lang.String)
+     */
+    @Override
+    @Transactional
+    public void paySuccessYC(String payGroup, String payCode, Long amount) {
+        List<Order> orderList = orderBO.queryOrderListByPayGroup(payGroup);
+        if (CollectionUtils.isEmpty(orderList)) {
+            throw new BizException("XN000000", "找不到对应的订单记录");
+        }
+        Order order = orderList.get(0);
+        if (EOrderStatus.TO_PAY.getCode().equals(order.getStatus())) {
+            // 更新订单支付金额
+            orderBO.refreshPaySuccess(order, amount, 0L, 0L, 0L, null);
+        } else {
+            logger.info("订单号：" + order.getCode() + "已支付，重复回调");
+        }
     }
 
     /** 

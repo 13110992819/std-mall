@@ -128,15 +128,15 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
             "O2O消费人民币支付", "O2O消费人民币支付", code);
         // 3、平台返现等比例橙币(回收人民币)
         accountBO.doTransferAmountRemote(systemUser, user.getUserId(),
-            ECurrency.CG_CGB, fxCbAmount, EBizType.YC_O2O_RMBFD,
-            "O2O消费人民币支付返点", "O2O消费人民币支付返点", code);
+            ECurrency.YC_CB, fxCbAmount, EBizType.YC_O2O_RMBFD, "O2O消费人民币支付返点",
+            "O2O消费人民币支付返点", code);
         // 资金划转结束--------------
         return code;
     }
 
     public Object storePurchaseYCCB(User user, Store store, Long amount) {
         Account cbAccount = accountBO.getRemoteAccount(user.getUserId(),
-            ECurrency.CG_CGB);
+            ECurrency.YC_CB);
         if (cbAccount.getAmount() < amount) {
             throw new BizException("xn0000", "橙币账户余额不足");
         }

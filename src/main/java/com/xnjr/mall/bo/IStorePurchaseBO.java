@@ -41,7 +41,7 @@ public interface IStorePurchaseBO extends IPaginableBO<StorePurchase> {
             Long fdAmount);
 
     public String storePurchaseYCRMBYE(User user, Store store, Long amount,
-            Long fdAmount);
+            Long payRMB, Long fdAmount);
 
     public String storePurchaseYCRMBWXH5(User user, Store store, Long amount,
             Long fdAmount, String payGroup);

@@ -357,7 +357,7 @@ public class StorePurchaseBOImpl extends PaginableBOImpl<StorePurchase>
 
     @Override
     public String storePurchaseYCRMBYE(User user, Store store, Long amount,
-            Long fdAmount) {
+            Long payRMB, Long fdAmount) {
         String code = OrderNoGenerater.generateM(EGeneratePrefix.STORE_PURCHASW
             .getCode());
         Date now = new Date();
@@ -371,7 +371,7 @@ public class StorePurchaseBOImpl extends PaginableBOImpl<StorePurchase>
         data.setStatus(EStorePurchaseStatus.PAYED.getCode());
         data.setPayType(EO2OPayType.ZH_YE.getCode());
 
-        data.setPayAmount1(amount);
+        data.setPayAmount1(payRMB);
         data.setPayAmount3(0L);
         data.setBackAmount(fdAmount);
         data.setBackCurrency(ECurrency.YC_CB.getCode());
@@ -381,6 +381,7 @@ public class StorePurchaseBOImpl extends PaginableBOImpl<StorePurchase>
         data.setSystemCode(store.getSystemCode());
         data.setCompanyCode(store.getCompanyCode());
         storePurchaseDAO.insert(data);
+
         return code;
     }
 

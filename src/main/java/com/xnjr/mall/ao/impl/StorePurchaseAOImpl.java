@@ -96,7 +96,7 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
 
     private Object storePurchaseYCWXH5(User user, Store store, Long amount) {
         // 落地本地系统消费记录
-        Long fxCbAmount = AmountUtil.mul(amount, store.getRate1());
+        Long fxCbAmount = AmountUtil.mul(amount, store.getRate2());
         String payGroup = OrderNoGenerater.generateM(EGeneratePrefix.PAY_GROUP
             .getCode());
         String code = storePurchaseBO.storePurchaseYCRMBWXH5(user, store,
@@ -655,8 +655,7 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
             storePurchaseBO.paySuccess(storePurchase, payCode, payAmount);
             // 资金划转逻辑--------------
             Store store = storeBO.getStore(storePurchase.getStoreCode());
-            // 返给C端多少钱 = 支付总金额 * 商家返橙币比例
-            Long fxCbAmount = AmountUtil.mul(payAmount, store.getRate2());
+            Long fxCbAmount = storePurchase.getBackAmount();
             // 付给商家多少钱 = 支付总金额 - 返点给C端用户的橙币
             Long payStoreRmbAmount = payAmount - fxCbAmount;
             String systemUser = ESysUser.SYS_USER_YAOCHENG.getCode();

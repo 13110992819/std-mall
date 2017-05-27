@@ -33,7 +33,7 @@ INSERT INTO `tmall_product` (`code`,`category`,`type`,`name`,`slogan`,`adv_pic`,
 INSERT INTO `tmall_product` (`code`,`category`,`type`,`name`,`slogan`,`adv_pic`,`pic`,`description`,`original_price`,`price1`,`price2`,`price3`,`location`,`order_no`,`status`,`updater`,`update_datetime`,`remark`,`bought_count`,`company_code`,`system_code`) VALUES ('YcProductB','FL201705252109099874007','FL201705252109517559017','杨梅采摘','新鲜','9b427697de67e5ec92efa203312068ba_1495793622395.jpg','9461d820526894fd1392e98eacdf8716_1495793633544.png||419b3b16cd02679ff326d30748ffd40e_1495793718938.jpg','<p><img src=\"http://oq4vi26fi.bkt.clouddn.com/timg (10)_1495717861064.jpeg\" style=\"max-width:100%;\"><img src=\"http://oq4vi26fi.bkt.clouddn.com/timg (11)_1495717861538.jpeg\" style=\"font-size: 9pt; max-width: 100%;\"><img src=\"http://oq4vi26fi.bkt.clouddn.com/timg (12)_1495717861760.jpeg\" style=\"font-size: 9pt; max-width: 100%;\"><img src=\"http://oq4vi26fi.bkt.clouddn.com/timg (13)_1495717861844.jpeg\" style=\"font-size: 9pt; max-width: 100%;\"><img src=\"http://oq4vi26fi.bkt.clouddn.com/timg (14)_1495717861923.jpeg\" style=\"font-size: 9pt; max-width: 100%;\"><br></p><p><br></p>',599000,199000,200000,0,'1',1,'3','yaocheng','2017-05-27 09:40:44',NULL,0,'CD-CYC000009','CD-CYC000009');
 
 
-INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('S','STORE_XFFX','0.2','',now(),' C端消费橙币返现人民币比例','CD-CYC000009','CD-CYC000009');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('S','STORE_XFFX','0.2','',now(),' C端消费橙卡返现人民币比例','CD-CYC000009','CD-CYC000009');
 /*
 -- Query: SELECT `type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code` FROM tsys_dict where system_code = 'CD-CYC000009'
 LIMIT 0, 10000
@@ -99,7 +99,7 @@ INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_d
 INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('0',NULL,'store_pay_type','店铺支付类型','admin',now(),'','CD-CYC000009','CD-CYC000009');
 INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('1','store_pay_type','1','人民币余额','admin',now(),'','CD-CYC000009','CD-CYC000009');
 INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('1','store_pay_type','5','微信H5支付','admin',now(),'','CD-CYC000009','CD-CYC000009');
-INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('1','store_pay_type','50','姚橙020橙币支付','admin',now(),'','CD-CYC000009','CD-CYC000009');
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('1','store_pay_type','50','姚橙020橙卡支付','admin',now(),'','CD-CYC000009','CD-CYC000009');
 
 INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('0',NULL,'vproduct_type','虚拟产品类型','admin',now(),'','CD-CYC000009','CD-CYC000009');
 INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('1','vproduct_type','1','中石化充值','admin',now(),'','CD-CYC000009','CD-CYC000009');

@@ -294,7 +294,7 @@ CREATE TABLE `to2o_store` (
   `pdf` varchar(255) DEFAULT NULL COMMENT '附件',
   `ui_location` varchar(32) DEFAULT NULL COMMENT 'UI位置',
   `ui_order` int(11) DEFAULT NULL COMMENT 'UI序号',
-  `legal_person_name` varchar(64) DEFAULT NULL COMMENT '法人姓名',
+  `legal_person_name` varchar(64) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '法人姓名',
   `user_referee` varchar(32) DEFAULT NULL COMMENT '推荐人',
   `rate1` decimal(18,8) DEFAULT NULL COMMENT '使用券的折扣',
   `rate2` decimal(18,8) DEFAULT NULL COMMENT '不使用券的折扣',

@@ -25,9 +25,9 @@ public enum EBizType {
             "200", "币种兑换")
 
     , YC_O2O_RMB("YC_O2O_RMB", "姚橙O2O人民币支付"), YC_O2O_RMBFD("YC_O2O_RMBFD",
-            "姚橙O2O人民币支付返橙币"), YC_O2O_CB("YC_O2O_CB", "姚橙O2O橙币支付"), YC_O2O_CBFD(
-            "YC_O2O_CBFD", "姚橙O2O橙币支付返人民币"), YC_MALL("YC_MALL", "姚橙商城购物支付"), YC_MALL_BACK(
-            "YC_MALL_BACK", "姚橙商城购物退款"), YC_XNCZ_P("YC_XNCZ_P", "姚橙充值专区用款"), YC_XNCZ_M(
+            "姚橙O2O人民币支付返橙券"), YC_O2O_CB("YC_O2O_CB", "姚橙O2O橙券支付"), YC_O2O_CBFD(
+            "YC_O2O_CBFD", "姚橙O2O橙券支付返人民币"), YC_MALL("YC_MALL", "姚橙商城购物支付"), YC_MALL_BACK(
+            "YC_MALL_BACK", "姚橙商城购物退款"), YC_XNCZ_P("YC_XNCZ_P", "姚橙充值专区支付"), YC_XNCZ_M(
             "YC_XNCZ_M", "姚橙充值专区退款");
     public static Map<String, EBizType> getBizTypeMap() {
         Map<String, EBizType> map = new HashMap<String, EBizType>();

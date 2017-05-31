@@ -188,4 +188,10 @@
 		AND
 		status = #{status}
 	</delete>
+	
+	<select id="select_totalBackAmount" parameterType="storePurchase"
+		resultType="java.lang.Long">
+		SELECT ifnull(sum(back_amount),0) FROM tfund_stock t 
+		<include refid="where_condition" />
+	</select>
 </mapper>

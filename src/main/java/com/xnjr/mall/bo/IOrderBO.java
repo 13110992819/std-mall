@@ -41,4 +41,5 @@ public interface IOrderBO extends IPaginableBO<Order> {
 
     public List<Order> queryOrderListByPayGroup(String payGroup);
 
+    public Long getTotalAmount(String userId);
 }

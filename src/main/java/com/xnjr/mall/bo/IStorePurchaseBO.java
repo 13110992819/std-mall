@@ -61,4 +61,6 @@ public interface IStorePurchaseBO extends IPaginableBO<StorePurchase> {
     public void paySuccess(StorePurchase storePurchase, String payCode,
             Long payAmount);
 
+    public Long getTotalPrice(String storeCode);
+
 }

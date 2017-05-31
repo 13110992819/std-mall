@@ -10,7 +10,7 @@ import com.xnjr.mall.exception.ParaException;
 import com.xnjr.mall.spring.SpringContextHolder;
 
 /**
- * 我今日分红权个数及收益统计
+ * 我今日收益统计，用户分红权个数统计，以及该类用户分红权总数
  * @author: myb858 
  * @since: 2017年3月31日 上午10:38:15 
  * @history:

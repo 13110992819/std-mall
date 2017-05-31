@@ -57,4 +57,13 @@ public class StorePurchaseDAOImpl extends AMybatisTemplate implements
         return super.update(NAMESPACE.concat("update_paySuccess"), data);
     }
 
+    /** 
+     * @see com.xnjr.mall.dao.IStorePurchaseDAO#selectTotalPrice(com.xnjr.mall.domain.StorePurchase)
+     */
+    @Override
+    public Long selectTotalPrice(StorePurchase condition) {
+        return super.selectTotalCount(NAMESPACE.concat("select_totalPrice"),
+            condition);
+    }
+
 }

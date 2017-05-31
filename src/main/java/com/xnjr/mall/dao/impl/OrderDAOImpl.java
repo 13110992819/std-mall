@@ -111,4 +111,9 @@ public class OrderDAOImpl extends AMybatisTemplate implements IOrderDAO {
         return super.update(NAMESPACE.concat("update_payGroup"), data);
     }
 
+    @Override
+    public Long selectTotalAmount(Order condition) {
+        return super.selectTotalCount(NAMESPACE.concat("select_totalAmount"),
+            condition);
+    }
 }

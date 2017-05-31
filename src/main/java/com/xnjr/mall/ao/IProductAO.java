@@ -54,5 +54,4 @@ public interface IProductAO {
     public void putOn(XN808013Req req);
 
     public void putOff(String code, String updater, String remark);
-
 }

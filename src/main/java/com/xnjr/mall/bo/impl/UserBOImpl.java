@@ -65,6 +65,7 @@ public class UserBOImpl implements IUserBO {
             user = new User();
             user.setUserId(res.getUserId());
             user.setOpenId(res.getOpenId());
+            user.setKind(res.getKind());
             user.setLoginName(res.getLoginName());
             user.setNickname(res.getNickname());
             user.setPhoto(res.getPhoto());

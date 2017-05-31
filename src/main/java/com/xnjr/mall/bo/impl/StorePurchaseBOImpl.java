@@ -412,4 +412,15 @@ public class StorePurchaseBOImpl extends PaginableBOImpl<StorePurchase>
         storePurchaseDAO.insert(data);
         return payGroup;
     }
+
+    /** 
+     * @see com.xnjr.mall.bo.IStoreBO#getTotalAmount(java.lang.String)
+     */
+    @Override
+    public Long getTotalPrice(String storeCode) {
+        StorePurchase condition = new StorePurchase();
+        condition.setStoreCode(storeCode);
+        condition.setStatus(EStorePurchaseStatus.PAYED.getCode());
+        return storePurchaseDAO.selectTotalPrice(condition);
+    }
 }

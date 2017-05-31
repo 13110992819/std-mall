@@ -17,11 +17,13 @@ import com.xnjr.mall.domain.Store;
 import com.xnjr.mall.domain.StoreTicket;
 import com.xnjr.mall.domain.User;
 import com.xnjr.mall.domain.UserTicket;
+import com.xnjr.mall.dto.res.XN808268Res;
 import com.xnjr.mall.enums.EBizType;
 import com.xnjr.mall.enums.ECurrency;
 import com.xnjr.mall.enums.EStoreStatus;
 import com.xnjr.mall.enums.EStoreTicketStatus;
 import com.xnjr.mall.enums.ESysUser;
+import com.xnjr.mall.enums.EUserTicketStatus;
 import com.xnjr.mall.exception.BizException;
 
 @Service
@@ -84,4 +86,17 @@ public class UserTicketAOImpl implements IUserTicketAO {
         return page;
     }
 
+    @Override
+    public XN808268Res getMyStoreTicketCount(String storeCode, String systemCode) {
+        UserTicket condition = new UserTicket();
+        condition.setStoreCode(storeCode);
+        condition.setSystemCode(systemCode);
+        condition.setStatus(EUserTicketStatus.UNUSED.getCode());
+        long unUseCount = userTicketBO.getTotalCount(condition);
+        condition.setStatus(EUserTicketStatus.USED.getCode());
+        long useCount = userTicketBO.getTotalCount(condition);
+        condition.setStatus(EUserTicketStatus.INVAILD.getCode());
+        long invalidCount = userTicketBO.getTotalCount(condition);
+        return new XN808268Res(unUseCount, useCount, invalidCount);
+    }
 }

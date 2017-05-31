@@ -329,4 +329,14 @@ public class OrderBOImpl extends PaginableBOImpl<Order> implements IOrderBO {
         return orderDAO.selectList(condition);
     }
 
+    /** 
+     * @see com.xnjr.mall.bo.IOrderBO#getTotalAmount(java.lang.String)
+     */
+    @Override
+    public Long getTotalAmount(String userId) {
+        Order condition = new Order();
+        condition.setCompanyCode(userId);
+        condition.setStatus(EOrderStatus.RECEIVE.getCode());
+        return orderDAO.selectTotalAmount(condition);
+    }
 }

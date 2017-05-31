@@ -7,6 +7,8 @@ import com.xnjr.mall.domain.StorePurchase;
 public interface IStorePurchaseDAO extends IBaseDAO<StorePurchase> {
     String NAMESPACE = IStorePurchaseDAO.class.getName().concat(".");
 
+    public Long selectTotalPrice(StorePurchase condition);
+
     public int updateStatus(StorePurchase data);
 
     public int updatePaySuccess(StorePurchase data);

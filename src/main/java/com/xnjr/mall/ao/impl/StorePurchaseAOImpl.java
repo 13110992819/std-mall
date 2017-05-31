@@ -153,8 +153,9 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
             "O2O消费—" + store.getName(), "O2O消费回收橙币", code);
         // 商家从平台处拿到返点
         accountBO.doTransferAmountRemote(systemUser, store.getOwner(),
-            ECurrency.CNY, fdAmount, EBizType.YC_O2O_CBFD, "O2O消费橙币返人民币",
-            "O2O消费橙币返人民币", code);
+            ECurrency.CNY, fdAmount, EBizType.YC_O2O_CBFD,
+            EBizType.YC_O2O_CBFD.getValue(), EBizType.YC_O2O_CBFD.getValue(),
+            code);
         // 加盟商从平台拿到返点
         User storeUser = userBO.getRemoteUser(store.getOwner());
         User jmsUser = userBO.getRemoteUser(storeUser.getUserReferee());

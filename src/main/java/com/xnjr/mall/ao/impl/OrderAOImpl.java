@@ -229,7 +229,7 @@ public class OrderAOImpl implements IOrderAO {
         String payGroup = orderBO.addPayGroup(order.getCode());
         return accountBO.doWeiXinH5PayRemote(user.getUserId(),
             user.getOpenId(), order.getToUser(), payGroup, order.getCode(),
-            EBizType.AJ_GW, "购物微信支付", rmbAmount);
+            EBizType.YC_MALL, "购物微信支付", rmbAmount);
     }
 
     private Object toPayOrderYCYE(Order order) {
@@ -246,14 +246,14 @@ public class OrderAOImpl implements IOrderAO {
         // 扣除金额
         if (StringUtils.isNotBlank(order.getToUser())) {// 付给加盟店
             accountBO.doTransferAmountRemote(fromUserId, order.getToUser(),
-                ECurrency.CNY, rmbAmount, EBizType.AJ_GW,
-                EBizType.AJ_GW.getValue(), EBizType.AJ_GW.getValue(),
+                ECurrency.CNY, rmbAmount, EBizType.YC_MALL,
+                EBizType.YC_MALL.getValue(), EBizType.YC_MALL.getValue(),
                 order.getCode());
         } else {// 付钱给平台
             String systemUserId = userBO.getSystemUser(systemCode);
             accountBO.doTransferAmountRemote(fromUserId, systemUserId,
-                ECurrency.CNY, rmbAmount, EBizType.AJ_GW,
-                EBizType.AJ_GW.getValue(), EBizType.AJ_GW.getValue(),
+                ECurrency.CNY, rmbAmount, EBizType.YC_MALL,
+                EBizType.YC_MALL.getValue(), EBizType.YC_MALL.getValue(),
                 order.getCode());
         }
         return new BooleanRes(true);
@@ -273,14 +273,14 @@ public class OrderAOImpl implements IOrderAO {
         // 扣除金额
         if (StringUtils.isNotBlank(order.getToUser())) {// 付给加盟店
             accountBO.doTransferAmountRemote(fromUserId, order.getToUser(),
-                ECurrency.YC_CB, cbAmount, EBizType.AJ_GW,
-                EBizType.AJ_GW.getValue(), EBizType.AJ_GW.getValue(),
+                ECurrency.YC_CB, cbAmount, EBizType.YC_MALL,
+                EBizType.YC_MALL.getValue(), EBizType.YC_MALL.getValue(),
                 order.getCode());
         } else {// 付钱给平台
             String systemUserId = userBO.getSystemUser(systemCode);
             accountBO.doTransferAmountRemote(fromUserId, systemUserId,
-                ECurrency.YC_CB, cbAmount, EBizType.AJ_GW,
-                EBizType.AJ_GW.getValue(), EBizType.AJ_GW.getValue(),
+                ECurrency.YC_CB, cbAmount, EBizType.YC_MALL,
+                EBizType.YC_MALL.getValue(), EBizType.YC_MALL.getValue(),
                 order.getCode());
         }
         return new BooleanRes(true);

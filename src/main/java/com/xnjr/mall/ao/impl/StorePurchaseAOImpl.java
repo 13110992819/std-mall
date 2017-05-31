@@ -82,7 +82,7 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
         if (!EStoreStatus.ON_OPEN.getCode().equals(store.getStatus())) {
             throw new BizException("xn0000", "店铺不处于可消费状态");
         }
-        // 1-人民币余额支付 5-微信H5支付 50-橙币余额支付
+        // 1-人民币余额支付 5-微信H5支付 50-橙券余额支付
         if (EO2OPayType.YC_CB.getCode().equals(payType)) {
             return storePurchaseYCCB(user, store, amount);
         } else if (EO2OPayType.ZH_YE.getCode().equals(payType)) {
@@ -109,9 +109,9 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
 
     private Object storePurchaseYCRMBYE(User user, Store store,
             Long rmbTotalAmount) {
-        // 返给C端多少钱 = 支付总金额 * 商家返橙币比例
+        // 返给C端多少钱 = 支付总金额 * 商家返橙券比例
         Long fxCbAmount = AmountUtil.mul(rmbTotalAmount, store.getRate2());
-        // 付给商家多少钱 = 支付总金额 - 返点给C端用户的橙币
+        // 付给商家多少钱 = 支付总金额 - 返点给C端用户的橙券
         Long payStoreRmbAmount = rmbTotalAmount - fxCbAmount;
         // 落地本地系统消费记录
         String code = storePurchaseBO.storePurchaseYCRMBYE(user, store,
@@ -126,7 +126,7 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
         accountBO.doTransferAmountRemote(systemUser, store.getOwner(),
             ECurrency.CNY, payStoreRmbAmount, EBizType.YC_O2O_RMB,
             "O2O消费人民币支付", "O2O消费人民币支付", code);
-        // 3、平台返现等比例橙币(回收人民币)
+        // 3、平台返现等比例橙券(回收人民币)
         accountBO.doTransferAmountRemote(systemUser, user.getUserId(),
             ECurrency.YC_CB, fxCbAmount, EBizType.YC_O2O_RMBFD, "O2O消费人民币支付返点",
             "O2O消费人民币支付返点", code);
@@ -138,7 +138,7 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
         Account cbAccount = accountBO.getRemoteAccount(user.getUserId(),
             ECurrency.YC_CB);
         if (cbAccount.getAmount() < amount) {
-            throw new BizException("xn0000", "橙币账户余额不足");
+            throw new BizException("xn0000", "橙券账户余额不足");
         }
         // 计算返点人民币
         Long fdAmount = AmountUtil.mul(amount, store.getRate1());
@@ -146,11 +146,11 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
         String code = storePurchaseBO
             .storePurchaseYCCB(user, store, amount, 0L);
         // 资金划转开始--------------
-        // 橙币从消费者回收至平台
+        // 橙券从消费者回收至平台
         String systemUser = ESysUser.SYS_USER_YAOCHENG.getCode();
         accountBO.doTransferAmountRemote(user.getUserId(), systemUser,
             ECurrency.YC_CB, amount, EBizType.YC_O2O_CB,
-            "O2O消费—" + store.getName(), "O2O消费回收橙币", code);
+            "O2O消费—" + store.getName(), "O2O消费回收橙券", code);
         // 商家从平台处拿到返点
         accountBO.doTransferAmountRemote(systemUser, store.getOwner(),
             ECurrency.CNY, fdAmount, EBizType.YC_O2O_CBFD,
@@ -664,7 +664,7 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
             // 资金划转逻辑--------------
             Store store = storeBO.getStore(storePurchase.getStoreCode());
             Long fxCbAmount = storePurchase.getBackAmount();
-            // 付给商家多少钱 = 支付总金额 - 返点给C端用户的橙币
+            // 付给商家多少钱 = 支付总金额 - 返点给C端用户的橙券
             Long payStoreRmbAmount = payAmount - fxCbAmount;
             String systemUser = ESysUser.SYS_USER_YAOCHENG.getCode();
             accountBO.doTransferAmountRemote(systemUser, store.getOwner(),

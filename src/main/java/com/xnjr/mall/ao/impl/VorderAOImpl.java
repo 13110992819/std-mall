@@ -111,7 +111,7 @@ public class VorderAOImpl implements IVorderAO {
                 vorderBO.payOrderByCGB(order);
             } else if (ESystemCode.YAOCHENG.getCode().equals(
                 order.getSystemCode())) {
-                // 橙币支付
+                // 橙券支付
                 accountBO.doTransferAmountRemote(order.getApplyUser(),
                     ESysUser.SYS_USER_YAOCHENG.getCode(), ECurrency.YC_CB,
                     payAmount, EBizType.YC_XNCZ_P,

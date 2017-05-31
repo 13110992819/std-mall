@@ -15,6 +15,7 @@ import com.xnjr.mall.bo.base.Paginable;
 import com.xnjr.mall.bo.base.PaginableBOImpl;
 import com.xnjr.mall.core.OrderNoGenerater;
 import com.xnjr.mall.dao.IStoreDAO;
+import com.xnjr.mall.dao.IStorePurchaseDAO;
 import com.xnjr.mall.domain.Store;
 import com.xnjr.mall.enums.EBoolean;
 import com.xnjr.mall.enums.EStoreStatus;
@@ -33,6 +34,9 @@ public class StoreBOImpl extends PaginableBOImpl<Store> implements IStoreBO {
 
     @Autowired
     private IStoreDAO storeDAO;
+
+    @Autowired
+    private IStorePurchaseDAO storePurchaseDAO;
 
     @Autowired
     private IUserBO userBO;
@@ -234,5 +238,4 @@ public class StoreBOImpl extends PaginableBOImpl<Store> implements IStoreBO {
         }
         return result;
     }
-
 }

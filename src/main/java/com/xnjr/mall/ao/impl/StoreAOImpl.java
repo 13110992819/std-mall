@@ -12,7 +12,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.xnjr.mall.ao.IStoreAO;
 import com.xnjr.mall.bo.IAccountBO;
+import com.xnjr.mall.bo.IOrderBO;
 import com.xnjr.mall.bo.ISmsOutBO;
+import com.xnjr.mall.bo.IStockBO;
 import com.xnjr.mall.bo.IStoreActionBO;
 import com.xnjr.mall.bo.IStoreBO;
 import com.xnjr.mall.bo.IStorePurchaseBO;
@@ -30,6 +32,7 @@ import com.xnjr.mall.dto.req.XN808203Req;
 import com.xnjr.mall.dto.req.XN808204Req;
 import com.xnjr.mall.dto.req.XN808208Req;
 import com.xnjr.mall.dto.res.XN808219Res;
+import com.xnjr.mall.dto.res.XN808275Res;
 import com.xnjr.mall.enums.EStoreLevel;
 import com.xnjr.mall.enums.EStoreStatus;
 import com.xnjr.mall.enums.EStoreTicketStatus;
@@ -48,6 +51,9 @@ public class StoreAOImpl implements IStoreAO {
     private IStoreBO storeBO;
 
     @Autowired
+    private IOrderBO orderBO;
+
+    @Autowired
     private IStoreTicketBO storeTicketBO;
 
     @Autowired
@@ -64,6 +70,9 @@ public class StoreAOImpl implements IStoreAO {
 
     @Autowired
     private IStoreActionBO storeActionBO;
+
+    @Autowired
+    private IStockBO stockBO;
 
     @Override
     @Transactional
@@ -476,4 +485,16 @@ public class StoreAOImpl implements IStoreAO {
         return resultList;
     }
 
+    @Override
+    public XN808275Res getStoreTotalAmount(String userId) {
+        // 店铺营收
+        Store store = storeBO.getStoreByUser(userId);
+        Long storeProfit = storePurchaseBO.getTotalPrice(store.getCode());
+        Long orderProfit = orderBO.getTotalAmount(userId);
+        Long profit = storeProfit + orderProfit;
+        // 分红权收益
+        Long totalStockProfit = stockBO.getTotalBackAmount(userId);
+        // 店铺统计金额
+        return new XN808275Res(profit, totalStockProfit);
+    }
 }

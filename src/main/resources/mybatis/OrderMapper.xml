@@ -318,4 +318,9 @@
 		WHERE code = #{code}
 	</update>
 	
+	<select id="select_totalAmount" parameterType="storePurchase"
+		resultType="java.lang.Long">
+		SELECT ifnull(sum(amount1),0) FROM tmall_order t 
+		<include refid="where_condition" />
+	</select>
 </mapper>

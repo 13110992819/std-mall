@@ -17,4 +17,5 @@ public interface IStockDAO extends IBaseDAO<Stock> {
 
     int deleteStock(String userId, EStockStatus toEffect);
 
+    public Long selectTotalBackAmount(Stock condition);
 }

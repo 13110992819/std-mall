@@ -72,7 +72,14 @@ public class StockDAOImpl extends AMybatisTemplate implements IStockDAO {
         data.setUserId(userId);
         data.setStatus(toEffect.getCode());
         return super.delete(NAMESPACE.concat("delete_deleteStock"), data);
-
     }
 
+    /** 
+     * @see com.xnjr.mall.dao.IStorePurchaseDAO#selectTotalPrice(com.xnjr.mall.domain.StorePurchase)
+     */
+    @Override
+    public Long selectTotalBackAmount(Stock condition) {
+        return super.selectTotalCount(
+            NAMESPACE.concat("select_totalBackAmount"), condition);
+    }
 }

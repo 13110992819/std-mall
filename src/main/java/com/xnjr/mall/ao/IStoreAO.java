@@ -11,6 +11,7 @@ import com.xnjr.mall.dto.req.XN808204Req;
 import com.xnjr.mall.dto.req.XN808208Req;
 import com.xnjr.mall.dto.res.XN808219Res;
 import com.xnjr.mall.dto.res.XN808275Res;
+import com.xnjr.mall.dto.res.XN808276Res;
 
 public interface IStoreAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
@@ -47,4 +48,6 @@ public interface IStoreAO {
     public List<XN808219Res> getMyStore(String userId);
 
     public XN808275Res getStoreTotalAmount(String userId);
+
+    public XN808276Res getTotalProductOrder(String userId);
 }

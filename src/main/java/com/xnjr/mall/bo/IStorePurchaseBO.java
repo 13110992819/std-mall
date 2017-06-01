@@ -36,7 +36,7 @@ public interface IStorePurchaseBO extends IPaginableBO<StorePurchase> {
     public String storePurchaseGDYE(User user, Store store, Long amount,
             Long jfAmount);
 
-    // 姚橙橙币
+    // 姚橙橙券
     public String storePurchaseYCCB(User user, Store store, Long amount,
             Long fdAmount);
 

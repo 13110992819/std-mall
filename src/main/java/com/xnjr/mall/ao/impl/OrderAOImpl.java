@@ -266,7 +266,7 @@ public class OrderAOImpl implements IOrderAO {
         Account cbAccount = accountBO.getRemoteAccount(fromUserId,
             ECurrency.YC_CB);
         if (cbAmount > cbAccount.getAmount()) {
-            throw new BizException("xn0000", "橙币不足");
+            throw new BizException("xn0000", "橙券不足");
         }
         // 更新订单支付金额
         orderBO.refreshPaySuccess(order, 0L, 0L, cbAmount, 0L, null);
@@ -510,7 +510,7 @@ public class OrderAOImpl implements IOrderAO {
 
     private void doBackAmountYC(Order order) {
         Long rmbAmount = order.getPayAmount1(); // 人民币
-        Long cbAmount = order.getPayAmount2(); // 橙币
+        Long cbAmount = order.getPayAmount2(); // 橙券
         if (rmbAmount > 0) {
             accountBO.doTransferAmountRemote(order.getToUser(),
                 order.getApplyUser(), ECurrency.CNY, rmbAmount,

@@ -14,6 +14,7 @@ import com.xnjr.mall.dao.IStorePurchaseDAO;
 import com.xnjr.mall.domain.Store;
 import com.xnjr.mall.domain.StorePurchase;
 import com.xnjr.mall.domain.User;
+import com.xnjr.mall.enums.EBizType;
 import com.xnjr.mall.enums.ECurrency;
 import com.xnjr.mall.enums.EGeneratePrefix;
 import com.xnjr.mall.enums.EO2OPayType;
@@ -348,7 +349,7 @@ public class StorePurchaseBOImpl extends PaginableBOImpl<StorePurchase>
 
         data.setPayAmount2(amount);
         data.setPayDatetime(now);
-        data.setRemark("橙币支付O2O消费");
+        data.setRemark(EBizType.YC_O2O_CB.getValue());
         data.setSystemCode(store.getSystemCode());
         data.setCompanyCode(store.getCompanyCode());
         storePurchaseDAO.insert(data);

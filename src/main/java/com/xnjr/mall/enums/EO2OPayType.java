@@ -9,7 +9,7 @@ public enum EO2OPayType {
 
     GD_YE("40", "管道余额支付"),
 
-    YC_CB("50", "姚橙020橙币支付");
+    YC_CB("50", "姚橙020橙券支付");
 
     EO2OPayType(String code, String value) {
         this.code = code;

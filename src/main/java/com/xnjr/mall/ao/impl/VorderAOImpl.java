@@ -111,7 +111,7 @@ public class VorderAOImpl implements IVorderAO {
                 vorderBO.payOrderByCGB(order);
             } else if (ESystemCode.YAOCHENG.getCode().equals(
                 order.getSystemCode())) {
-                // 橙币支付
+                // 橙券支付
                 accountBO.doTransferAmountRemote(order.getApplyUser(),
                     ESysUser.SYS_USER_YAOCHENG.getCode(), ECurrency.YC_CB,
                     payAmount, EBizType.YC_XNCZ_P,
@@ -142,11 +142,23 @@ public class VorderAOImpl implements IVorderAO {
             smsOutBO.sentContent(applyUser, "尊敬的用户，您的订单[" + order.getCode()
                     + "]已取消");
         } else if (EVorderStatus.PAYED.getCode().equals(order.getStatus())) {
-            // 菜狗币退款
-            accountBO.doTransferAmountRemote(ESysUser.SYS_USER_CAIGO.getCode(),
-                order.getApplyUser(), ECurrency.CG_CGB, order.getPayAmount(),
-                EBizType.CG_XNCZ_M, EBizType.CG_XNCZ_M.getValue(),
-                EBizType.CG_XNCZ_M.getValue(), order.getCode());
+            if (ESystemCode.YAOCHENG.getCode().equals(order.getSystemCode())) {
+                // 菜狗币退款
+                accountBO.doTransferAmountRemote(
+                    ESysUser.SYS_USER_YAOCHENG.getCode(), order.getApplyUser(),
+                    ECurrency.YC_CB, order.getPayAmount(), EBizType.YC_XNCZ_M,
+                    EBizType.YC_XNCZ_M.getValue(),
+                    EBizType.YC_XNCZ_M.getValue(), order.getCode());
+            } else if (ESystemCode.Caigo.getCode()
+                .equals(order.getSystemCode())) {
+                // 菜狗币退款
+                accountBO.doTransferAmountRemote(
+                    ESysUser.SYS_USER_CAIGO.getCode(), order.getApplyUser(),
+                    ECurrency.CG_CGB, order.getPayAmount(), EBizType.CG_XNCZ_M,
+                    EBizType.CG_XNCZ_M.getValue(),
+                    EBizType.CG_XNCZ_M.getValue(), order.getCode());
+            }
+
             // 发短信
             smsOutBO.sentContent(applyUser, "尊敬的用户，您的订单[" + order.getCode()
                     + "]已取消,退款原因:[" + remark + "],请及时查看退款。");

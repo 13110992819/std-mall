@@ -13,7 +13,7 @@ public enum EPayType {
 
     , GD_YE("40", "管道余额支付")
 
-    , YC_CB("50", "姚橙橙币支付");
+    , YC_CB("50", "姚橙橙券支付");
 
     EPayType(String code, String value) {
         this.code = code;

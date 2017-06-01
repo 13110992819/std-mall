@@ -42,6 +42,7 @@ import com.xnjr.mall.enums.EProductStatus;
 import com.xnjr.mall.enums.EStoreLevel;
 import com.xnjr.mall.enums.EStoreStatus;
 import com.xnjr.mall.enums.EStoreTicketStatus;
+import com.xnjr.mall.enums.ESystemCode;
 import com.xnjr.mall.enums.EUserKind;
 import com.xnjr.mall.enums.EZhPool;
 import com.xnjr.mall.exception.BizException;
@@ -223,7 +224,12 @@ public class StoreAOImpl implements IStoreAO {
         Store data = new Store();
         data.setCode(code);
         data.setName(req.getName());
-        data.setLevel(EStoreLevel.NOMAL.getCode());
+        // 正汇店铺直接升级为理财型店铺
+        if (ESystemCode.ZHPAY.getCode().equals(req.getSystemCode())) {
+            data.setLevel(EStoreLevel.FINANCIAL.getCode());
+        } else {
+            data.setLevel(EStoreLevel.NOMAL.getCode());
+        }
         data.setType(req.getType());
         data.setSlogan(req.getSlogan());
 

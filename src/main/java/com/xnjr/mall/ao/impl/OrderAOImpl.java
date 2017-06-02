@@ -419,10 +419,17 @@ public class OrderAOImpl implements IOrderAO {
             String systemUserId = userBO.getSystemUser(systemCode);
             accountBO.doCSWJfPay(fromUserId, systemUserId, jfAmount,
                 EBizType.GD_MALL, order.getCode());
+            return new BooleanRes(true);
+        } else if (EPayType.WEIXIN_H5.getCode().equals(payType)) {
+            Long rmbAmount = order.getAmount1();
+            User user = userBO.getRemoteUser(order.getApplyUser());
+            String payGroup = orderBO.addPayGroup(order.getCode());
+            return accountBO.doWeiXinH5PayRemote(user.getUserId(),
+                user.getOpenId(), order.getToUser(), payGroup, order.getCode(),
+                EBizType.YC_MALL, "购物微信支付", rmbAmount);
         } else {
             throw new BizException("xn0000", "支付类型不支持");
         }
-        return new BooleanRes(true);
     }
 
     /** 
@@ -792,6 +799,22 @@ public class OrderAOImpl implements IOrderAO {
     @Override
     @Transactional
     public void paySuccessYC(String payGroup, String payCode, Long amount) {
+        List<Order> orderList = orderBO.queryOrderListByPayGroup(payGroup);
+        if (CollectionUtils.isEmpty(orderList)) {
+            throw new BizException("XN000000", "找不到对应的订单记录");
+        }
+        Order order = orderList.get(0);
+        if (EOrderStatus.TO_PAY.getCode().equals(order.getStatus())) {
+            // 更新订单支付金额
+            orderBO.refreshPaySuccess(order, amount, 0L, 0L, 0L, null);
+        } else {
+            logger.info("订单号：" + order.getCode() + "已支付，重复回调");
+        }
+    }
+
+    @Override
+    @Transactional
+    public void paySuccessGD(String payGroup, String payCode, Long amount) {
         List<Order> orderList = orderBO.queryOrderListByPayGroup(payGroup);
         if (CollectionUtils.isEmpty(orderList)) {
             throw new BizException("XN000000", "找不到对应的订单记录");

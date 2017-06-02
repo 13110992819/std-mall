@@ -76,6 +76,12 @@ public class CallbackConroller {
                     orderAO.paySuccessYC(payGroup, payCode, amount);
                     logger.info("**** 姚橙商城人民币支付回调 payGroup <" + payGroup
                             + "> payCode <" + payCode + ">end****");
+                } else if (EBizType.GD_MALL.getCode().equals(bizType)) {
+                    logger.info("**** 管道积分商城人民币支付回调 payGroup <" + payGroup
+                            + "> payCode <" + payCode + ">start****");
+                    orderAO.paySuccessGD(payGroup, payCode, amount);
+                    logger.info("**** 管道积分商城人民币支付回调 payGroup <" + payGroup
+                            + "> payCode <" + payCode + ">end****");
                 }
             } catch (Exception e) {
                 logger.error("支付回调异常payGroup <" + payGroup + "> payCode <"

@@ -50,4 +50,5 @@ public interface IOrderAO {
 
     public void paySuccessYC(String payGroup, String payCode, Long amount);
 
+    public void paySuccessGD(String payGroup, String payCode, Long amount);
 }

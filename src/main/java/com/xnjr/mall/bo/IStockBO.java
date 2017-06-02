@@ -34,4 +34,5 @@ public interface IStockBO extends IPaginableBO<Stock> {
     // 统计累计返现金额
     public Long getTotalBackAmount(String userId);
 
+    public Long getTotalCount(String userId, String fundCode);
 }

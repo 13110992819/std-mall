@@ -12,14 +12,14 @@ import com.xnjr.mall.common.DateUtil;
 public class OrderNoGenerater {
 
     /**
-     * 产生毫秒级别主键序列
+     * 产生毫秒级+后5位随机数别主键序列
      * @param prefix
      * @return 
      * @create: 2015年9月28日 下午5:18:38 xieyj
      * @history:
      */
     public static String generateM(String prefix) {
-        int random = Math.abs(new Random().nextInt()) % 10000;
+        int random = Math.abs(new Random().nextInt()) % 100000;
         String today = DateUtil.getToday(DateUtil.DATA_TIME_PATTERN_5);
         return prefix + today + String.valueOf(random);
     }

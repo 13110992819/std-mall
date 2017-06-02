@@ -363,14 +363,19 @@ public class StockBOImpl extends PaginableBOImpl<Stock> implements IStockBO {
         return stockDAO.selectTotalCount(condition);
     }
 
-    /** 
-     * @see com.xnjr.mall.bo.IStockBO#getTotalBackAmount(java.lang.String)
-     */
     @Override
     public Long getTotalBackAmount(String userId) {
         Stock condition = new Stock();
         condition.setUserId(userId);
         condition.setNoStatus(EStockStatus.TO_effect.getCode());
         return stockDAO.selectTotalBackAmount(condition);
+    }
+
+    @Override
+    public Long getTotalCount(String userId, String fundCode) {
+        Stock condition = new Stock();
+        condition.setUserId(userId);
+        condition.setNoStatus(EStockStatus.TO_effect.getCode());
+        return stockDAO.selectTotalCount(condition);
     }
 }

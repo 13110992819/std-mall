@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.xnjr.mall.ao.IStoreAO;
 import com.xnjr.mall.bo.IAccountBO;
 import com.xnjr.mall.bo.IOrderBO;
+import com.xnjr.mall.bo.IProductBO;
 import com.xnjr.mall.bo.ISmsOutBO;
 import com.xnjr.mall.bo.IStockBO;
 import com.xnjr.mall.bo.IStoreActionBO;
@@ -23,6 +24,8 @@ import com.xnjr.mall.bo.IUserBO;
 import com.xnjr.mall.bo.base.Paginable;
 import com.xnjr.mall.core.OrderNoGenerater;
 import com.xnjr.mall.core.StringValidater;
+import com.xnjr.mall.domain.Order;
+import com.xnjr.mall.domain.Product;
 import com.xnjr.mall.domain.Store;
 import com.xnjr.mall.domain.StoreTicket;
 import com.xnjr.mall.domain.User;
@@ -33,15 +36,20 @@ import com.xnjr.mall.dto.req.XN808204Req;
 import com.xnjr.mall.dto.req.XN808208Req;
 import com.xnjr.mall.dto.res.XN808219Res;
 import com.xnjr.mall.dto.res.XN808275Res;
+import com.xnjr.mall.dto.res.XN808276Res;
+import com.xnjr.mall.enums.EOrderStatus;
+import com.xnjr.mall.enums.EProductStatus;
 import com.xnjr.mall.enums.EStoreLevel;
 import com.xnjr.mall.enums.EStoreStatus;
 import com.xnjr.mall.enums.EStoreTicketStatus;
+import com.xnjr.mall.enums.ESystemCode;
 import com.xnjr.mall.enums.EUserKind;
+import com.xnjr.mall.enums.EZhPool;
 import com.xnjr.mall.exception.BizException;
 
-/** 
- * @author: zuixian 
- * @since: 2016年9月20日 下午1:27:27 
+/**
+ * @author: xieyj 
+ * @since: 2017年5月31日 下午9:18:16 
  * @history:
  */
 @Service
@@ -49,6 +57,9 @@ public class StoreAOImpl implements IStoreAO {
 
     @Autowired
     private IStoreBO storeBO;
+
+    @Autowired
+    private IProductBO productBO;
 
     @Autowired
     private IOrderBO orderBO;
@@ -213,7 +224,12 @@ public class StoreAOImpl implements IStoreAO {
         Store data = new Store();
         data.setCode(code);
         data.setName(req.getName());
-        data.setLevel(EStoreLevel.NOMAL.getCode());
+        // 正汇店铺直接升级为理财型店铺
+        if (ESystemCode.ZHPAY.getCode().equals(req.getSystemCode())) {
+            data.setLevel(EStoreLevel.FINANCIAL.getCode());
+        } else {
+            data.setLevel(EStoreLevel.NOMAL.getCode());
+        }
         data.setType(req.getType());
         data.setSlogan(req.getSlogan());
 
@@ -494,7 +510,43 @@ public class StoreAOImpl implements IStoreAO {
         Long profit = storeProfit + orderProfit;
         // 分红权收益
         Long totalStockProfit = stockBO.getTotalBackAmount(userId);
-        // 店铺统计金额
-        return new XN808275Res(profit, totalStockProfit);
+        // 分红权个数
+        Long stockCount = stockBO.getTotalCount(userId,
+            EZhPool.ZHPAY_STORE.getCode());
+        // 获取某池分红权数量
+        Long totalStockCount = stockBO.getStockPoolCount(EZhPool.ZHPAY_STORE
+            .getCode());
+        return new XN808275Res(profit, totalStockProfit, stockCount.intValue(),
+            totalStockCount.intValue());
+    }
+
+    /** 
+     * @see com.xnjr.mall.ao.IStoreAO#getTotalProductOrder(java.lang.String)
+     */
+    @Override
+    public XN808276Res getTotalProductOrder(String userId) {
+        XN808276Res res = new XN808276Res();
+        Product condition = new Product();
+        condition.setCompanyCode(userId);
+        Long productCount = productBO.getTotalCount(condition);
+        res.setProductCount(productCount.intValue());// 所有产品数
+
+        condition.setStatus(EProductStatus.PUBLISH_YES.getCode());
+        Long putOnProductCount = productBO.getTotalCount(condition);
+        res.setPutOnProductCount(putOnProductCount.intValue());// 上架产品数
+        res.setPutOffProductCount((productCount.intValue() - putOnProductCount
+            .intValue()));// 下架产品数
+
+        Order orderCondition = new Order();
+        orderCondition.setCompanyCode(userId);
+        Long orderCount = orderBO.getTotalCount(orderCondition);// 订单总数
+        res.setOrderCount(orderCount.intValue());
+        orderCondition.setStatus(EOrderStatus.PAY_YES.getCode());
+        Long toSendOrderCount = orderBO.getTotalCount(orderCondition);// 待发货总数
+        res.setToSendOrderCount(toSendOrderCount.intValue());
+        orderCondition.setStatus(EOrderStatus.SEND.getCode());
+        Long toReceiveOrderCount = orderBO.getTotalCount(orderCondition);// 待收货总数
+        res.setToReceiveOrderCount(toReceiveOrderCount.intValue());
+        return res;
     }
 }

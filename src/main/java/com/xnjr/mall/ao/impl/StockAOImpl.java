@@ -23,7 +23,6 @@ import com.xnjr.mall.common.SysConstants;
 import com.xnjr.mall.domain.Account;
 import com.xnjr.mall.domain.SYSConfig;
 import com.xnjr.mall.domain.Stock;
-import com.xnjr.mall.domain.User;
 import com.xnjr.mall.dto.res.XN808419Res;
 import com.xnjr.mall.dto.res.XN808420Res;
 import com.xnjr.mall.enums.EBizType;
@@ -31,9 +30,7 @@ import com.xnjr.mall.enums.ECurrency;
 import com.xnjr.mall.enums.EStockStatus;
 import com.xnjr.mall.enums.ESysUser;
 import com.xnjr.mall.enums.ESystemCode;
-import com.xnjr.mall.enums.EUserKind;
 import com.xnjr.mall.enums.EZhPool;
-import com.xnjr.mall.exception.BizException;
 
 @Service
 public class StockAOImpl implements IStockAO {
@@ -95,57 +92,65 @@ public class StockAOImpl implements IStockAO {
 
     private void doDailyStock(List<Stock> list) {
         for (Stock ele : list) {
-            Account fund = accountBO.getRemoteAccount(ele.getFundCode(),
-                ECurrency.ZH_FRB);
-            // 更新返还金额
-            String status = null;
-            Date nextBackDate = null;
-            Long todayAmount = getTodayAmount(ele);
-            Long backAmount = ele.getBackAmount() + todayAmount;
-            if (backAmount >= ele.getProfitAmount()) {// 本分红权返利结束
-                status = EStockStatus.DONE.getCode();
-                nextBackDate = null;
-                todayAmount = ele.getProfitAmount() - ele.getBackAmount();
-                backAmount = ele.getProfitAmount();
-            } else {
-                status = ele.getStatus();
-                nextBackDate = DateUtil.getRelativeDate(
-                    DateUtil.getTodayStart(),
-                    ele.getBackInterval() * 24 * 60 * 60);
-            }
-            if (fund.getAmount() < todayAmount) {// 池不够钱时
-                continue;
-            }
-            if (EStockStatus.DONE.getCode().equals(status)) {
-                stockBO.awakenStock(ele.getUserId());
-            }
-            // 更新股权
-            ele.setBackCount(ele.getBackCount() + 1);
-            ele.setBackAmount(backAmount);
-            ele.setTodayAmount(todayAmount);
-            ele.setNextBackDate(nextBackDate);
-            ele.setStatus(status);
-            stockBO.doDailyStock(ele);
-            // 落地返还记录
-            String backCode = String.valueOf(stockBackBO.saveStockBack(ele));
-            // 扣减池金额
-            if (EZhPool.ZHPAY_STORE.getCode().equals(ele.getFundCode())) {
-                accountBO.doTransferAmountRemote(ele.getFundCode(),
-                    ele.getUserId(), ECurrency.ZH_FRB, todayAmount,
-                    EBizType.ZH_STOCK, "正汇分红权分红", "正汇分红权分红", backCode);
-            }
-            if (EZhPool.ZHPAY_CUSTOMER.getCode().equals(ele.getFundCode())) {
-                Long half = Double.valueOf(todayAmount / 2).longValue();
-                accountBO.doTransferAmountRemote(ele.getFundCode(),
-                    ele.getUserId(), ECurrency.ZH_FRB, half, EBizType.ZH_STOCK,
-                    "正汇分红权分红", "正汇分红权分红", backCode);
-                accountBO.doTransferAmountRemote(ele.getFundCode(),
-                    ESysUser.SYS_USER_ZHPAY.getCode(), ECurrency.ZH_FRB, half,
-                    EBizType.ZH_STOCK, "正汇分红权分红", "正汇分红权分红", backCode);
-                accountBO.doTransferAmountRemote(
-                    ESysUser.SYS_USER_ZHPAY.getCode(), ele.getUserId(),
-                    ECurrency.ZH_GXZ, half, EBizType.ZH_STOCK, "正汇分红权分红",
-                    "正汇分红权分红", backCode);
+            try {
+                Account fund = accountBO.getRemoteAccount(ele.getFundCode(),
+                    ECurrency.ZH_FRB);
+                // 更新返还金额
+                String status = null;
+                Date nextBackDate = null;
+                Long todayAmount = getTodayAmount(ele);
+                Long backAmount = ele.getBackAmount() + todayAmount;
+                if (backAmount >= ele.getProfitAmount()) {// 本分红权返利结束
+                    status = EStockStatus.DONE.getCode();
+                    nextBackDate = null;
+                    todayAmount = ele.getProfitAmount() - ele.getBackAmount();
+                    backAmount = ele.getProfitAmount();
+                } else {
+                    status = ele.getStatus();
+                    nextBackDate = DateUtil.getRelativeDate(
+                        DateUtil.getTodayStart(),
+                        ele.getBackInterval() * 24 * 60 * 60);
+                }
+                if (fund.getAmount() < todayAmount) {// 池不够钱时
+                    continue;
+                }
+                if (EStockStatus.DONE.getCode().equals(status)) {
+                    stockBO.awakenStock(ele.getUserId());
+                }
+                // 更新股权
+                ele.setBackCount(ele.getBackCount() + 1);
+                ele.setBackAmount(backAmount);
+                ele.setTodayAmount(todayAmount);
+                ele.setNextBackDate(nextBackDate);
+                ele.setStatus(status);
+                stockBO.doDailyStock(ele);
+                // 落地返还记录
+                String backCode = String
+                    .valueOf(stockBackBO.saveStockBack(ele));
+                // 扣减池金额
+                if (EZhPool.ZHPAY_STORE.getCode().equals(ele.getFundCode())) {
+                    accountBO.doTransferAmountRemote(ele.getFundCode(),
+                        ele.getUserId(), ECurrency.ZH_FRB, todayAmount,
+                        EBizType.ZH_STOCK, "正汇分红权分红", "正汇分红权分红", backCode);
+                }
+                if (EZhPool.ZHPAY_CUSTOMER.getCode().equals(ele.getFundCode())) {
+                    Long half = Double.valueOf(todayAmount / 2).longValue();
+                    accountBO.doTransferAmountRemote(ele.getFundCode(),
+                        ele.getUserId(), ECurrency.ZH_FRB, half,
+                        EBizType.ZH_STOCK, "正汇分红权分红", "正汇分红权分红", backCode);
+                    accountBO
+                        .doTransferAmountRemote(ele.getFundCode(),
+                            ESysUser.SYS_USER_ZHPAY.getCode(),
+                            ECurrency.ZH_FRB, half, EBizType.ZH_STOCK,
+                            "正汇分红权分红", "正汇分红权分红", backCode);
+                    accountBO.doTransferAmountRemote(
+                        ESysUser.SYS_USER_ZHPAY.getCode(), ele.getUserId(),
+                        ECurrency.ZH_GXZ, half, EBizType.ZH_STOCK, "正汇分红权分红",
+                        "正汇分红权分红", backCode);
+                }
+            } catch (Exception e) {
+                logger.error("分红权编号:" + ele.getCode() + ",返利异常如下："
+                        + e.getMessage());
             }
         }
     }
@@ -172,7 +177,6 @@ public class StockAOImpl implements IStockAO {
 
     @Override
     public XN808419Res getMyTodayStocks(String userId) {
-        User user = userBO.getRemoteUser(userId);
         XN808419Res res = new XN808419Res();
         List<Stock> list = stockBO.queryMyStockList(userId);
         if (CollectionUtils.isNotEmpty(list)) {
@@ -186,20 +190,6 @@ public class StockAOImpl implements IStockAO {
             res.setStockCount(0);
             res.setTodayProfitAmount(0L);
         }
-
-        // 获取某池分红权数量
-        String fundCode = null;
-        if (EUserKind.F1.getCode().equals(user.getKind())) {
-            fundCode = EZhPool.ZHPAY_CUSTOMER.getCode();
-        } else if (EUserKind.F2.getCode().equals(user.getKind())) {
-            fundCode = EZhPool.ZHPAY_STORE.getCode();
-        } else if (EUserKind.Operator.getCode().equals(user.getKind())) {
-            fundCode = EZhPool.ZHPAY_JJ.getCode();
-        } else {
-            throw new BizException("xn000000", "资金池编号不支持查询");
-        }
-        Long totalStockCount = stockBO.getStockPoolCount(fundCode);
-        res.setTotalStockCount(totalStockCount.intValue());
         return res;
     }
 

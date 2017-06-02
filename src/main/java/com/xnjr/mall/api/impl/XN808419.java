@@ -10,7 +10,7 @@ import com.xnjr.mall.exception.ParaException;
 import com.xnjr.mall.spring.SpringContextHolder;
 
 /**
- * 我今日收益统计，用户分红权个数统计，以及该类用户分红权总数
+ * 我今日收益统计,用户分红权个数统计(320版本前接口)
  * @author: myb858 
  * @since: 2017年3月31日 上午10:38:15 
  * @history:
@@ -29,7 +29,5 @@ public class XN808419 extends AProcessor {
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN808419Req.class);
         StringValidater.validateBlank(req.getUserId());
-
     }
-
 }

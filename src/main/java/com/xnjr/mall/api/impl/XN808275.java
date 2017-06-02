@@ -10,7 +10,7 @@ import com.xnjr.mall.exception.ParaException;
 import com.xnjr.mall.spring.SpringContextHolder;
 
 /**
- * 获取店家营业额,分红权收益，以及分红权个数
+ * 获取店家营业额,分红权收益，以及分红权个数,以及系统对应用户总分红权
  * @author: xieyj 
  * @since: 2017年5月31日 下午2:42:36 
  * @history:

@@ -513,7 +513,11 @@ public class StoreAOImpl implements IStoreAO {
         // 分红权个数
         Long stockCount = stockBO.getTotalCount(userId,
             EZhPool.ZHPAY_STORE.getCode());
-        return new XN808275Res(profit, totalStockProfit, stockCount.intValue());
+        // 获取某池分红权数量
+        Long totalStockCount = stockBO.getStockPoolCount(EZhPool.ZHPAY_STORE
+            .getCode());
+        return new XN808275Res(profit, totalStockProfit, stockCount.intValue(),
+            totalStockCount.intValue());
     }
 
     /** 

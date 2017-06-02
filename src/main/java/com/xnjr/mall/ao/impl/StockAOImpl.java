@@ -23,7 +23,6 @@ import com.xnjr.mall.common.SysConstants;
 import com.xnjr.mall.domain.Account;
 import com.xnjr.mall.domain.SYSConfig;
 import com.xnjr.mall.domain.Stock;
-import com.xnjr.mall.domain.User;
 import com.xnjr.mall.dto.res.XN808419Res;
 import com.xnjr.mall.dto.res.XN808420Res;
 import com.xnjr.mall.enums.EBizType;
@@ -31,9 +30,7 @@ import com.xnjr.mall.enums.ECurrency;
 import com.xnjr.mall.enums.EStockStatus;
 import com.xnjr.mall.enums.ESysUser;
 import com.xnjr.mall.enums.ESystemCode;
-import com.xnjr.mall.enums.EUserKind;
 import com.xnjr.mall.enums.EZhPool;
-import com.xnjr.mall.exception.BizException;
 
 @Service
 public class StockAOImpl implements IStockAO {
@@ -172,7 +169,6 @@ public class StockAOImpl implements IStockAO {
 
     @Override
     public XN808419Res getMyTodayStocks(String userId) {
-        User user = userBO.getRemoteUser(userId);
         XN808419Res res = new XN808419Res();
         List<Stock> list = stockBO.queryMyStockList(userId);
         if (CollectionUtils.isNotEmpty(list)) {
@@ -186,20 +182,6 @@ public class StockAOImpl implements IStockAO {
             res.setStockCount(0);
             res.setTodayProfitAmount(0L);
         }
-
-        // 获取某池分红权数量
-        String fundCode = null;
-        if (EUserKind.F1.getCode().equals(user.getKind())) {
-            fundCode = EZhPool.ZHPAY_CUSTOMER.getCode();
-        } else if (EUserKind.F2.getCode().equals(user.getKind())) {
-            fundCode = EZhPool.ZHPAY_STORE.getCode();
-        } else if (EUserKind.Operator.getCode().equals(user.getKind())) {
-            fundCode = EZhPool.ZHPAY_JJ.getCode();
-        } else {
-            throw new BizException("xn000000", "资金池编号不支持查询");
-        }
-        Long totalStockCount = stockBO.getStockPoolCount(fundCode);
-        res.setTotalStockCount(totalStockCount.intValue());
         return res;
     }
 

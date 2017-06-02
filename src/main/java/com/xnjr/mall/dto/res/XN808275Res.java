@@ -11,15 +11,27 @@ public class XN808275Res {
     // 该用户拥有分红权个数
     private Integer stockCount;
 
+    // 总的分红权个数
+    private Integer totalStockCount;
+
+    public Integer getTotalStockCount() {
+        return totalStockCount;
+    }
+
+    public void setTotalStockCount(Integer totalStockCount) {
+        this.totalStockCount = totalStockCount;
+    }
+
     public XN808275Res() {
 
     }
 
     public XN808275Res(Long totalProfit, Long totalStockProfit,
-            Integer stockCount) {
+            Integer stockCount, Integer totalStockCount) {
         this.totalProfit = totalProfit;
         this.totalStockProfit = totalStockProfit;
         this.stockCount = stockCount;
+        this.totalStockCount = totalStockCount;
     }
 
     public Long getTotalProfit() {

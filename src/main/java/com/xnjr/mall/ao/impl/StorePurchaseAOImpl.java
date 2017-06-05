@@ -310,8 +310,9 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
         // 积分从消费者回收至平台，
         String systemUser = ESysUser.SYS_USER_PIPE.getCode();
         accountBO.doTransferAmountRemote(user.getUserId(), systemUser,
-            ECurrency.JF, payJF, EBizType.GD_O2O, "O2O消费积分回收", "O2O消费积分回收",
-            code);
+            ECurrency.JF, payJF, EBizType.GD_O2O, "[" + store.getName()
+                    + "]消费支付",
+            "用户[" + user.getMobile() + "]在[" + store.getName() + "]消费支付", code);
         // 资金划转结束--------------
         return new BooleanRes(true);
     }

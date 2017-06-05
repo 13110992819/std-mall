@@ -28,6 +28,7 @@ import com.xnjr.mall.bo.IDistributeBO;
 import com.xnjr.mall.bo.IOrderBO;
 import com.xnjr.mall.bo.IProductBO;
 import com.xnjr.mall.bo.IProductOrderBO;
+import com.xnjr.mall.bo.ISYSConfigBO;
 import com.xnjr.mall.bo.ISmsOutBO;
 import com.xnjr.mall.bo.IStoreBO;
 import com.xnjr.mall.bo.IUserBO;
@@ -64,6 +65,9 @@ import com.xnjr.mall.exception.BizException;
 public class OrderAOImpl implements IOrderAO {
     protected static final Logger logger = LoggerFactory
         .getLogger(OrderAOImpl.class);
+
+    @Autowired
+    private ISYSConfigBO sysConfigBO;
 
     @Autowired
     private IOrderBO orderBO;
@@ -254,6 +258,8 @@ public class OrderAOImpl implements IOrderAO {
                 gwbAmount, qbbAmount, EBizType.AJ_GW, order.getCode());
             return new BooleanRes(true);
         } else if (EPayType.ALIPAY.getCode().equals(payType)) {
+            // 验证支付渠道是否开通
+            sysConfigBO.doCheckPayOpen(EPayType.ALIPAY);
             // 检查购物币和钱包币是否充足
             accountBO.checkZHGwbQbb(fromUserId, gwbAmount, qbbAmount);
             // 生成payGroup,并把这组订单（orderCodeList）归为一组进行支付。
@@ -262,6 +268,8 @@ public class OrderAOImpl implements IOrderAO {
                 ESysUser.SYS_USER_ZHPAY.getCode(), payGroup, order.getCode(),
                 EBizType.AJ_GW, EBizType.AJ_GW.getValue(), cnyAmount);
         } else if (EPayType.WEIXIN_APP.getCode().equals(payType)) {
+            // 验证支付渠道是否开通
+            sysConfigBO.doCheckPayOpen(EPayType.WEIXIN_APP);
             // 检查购物币和钱包币是否充足
             accountBO.checkZHGwbQbb(fromUserId, gwbAmount, qbbAmount);
             // 生成payGroup,并把这组订单（orderCodeList）归为一组进行支付。

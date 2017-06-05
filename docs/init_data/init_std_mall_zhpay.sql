@@ -11,6 +11,11 @@ INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`r
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('P','SP_YUNFEI','0','',now(),'订单运费，全系统统一','CD-CZH000001','CD-CZH000001');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('P','SP_BYJE','0','',now(),'包邮金额，订单人民币金额大于该值，运费为0','CD-CZH000001','CD-CZH000001');
 
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('O','wxPayOpen','0','admin',now(),'是否开启微信支付,1是0否','CD-CZH000001','CD-CZH000001');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('O','zfbPayOpen','0','admin',now(),'是否开启支付宝支付,1是0否','CD-CZH000001','CD-CZH000001');
+
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('O','stockStep','500','admin',now(),'分红权每次读取数量','CD-CZH000001','CD-CZH000001');
+
 /*
 -- Query: SELECT `code`,`type`,`parent_code`,`name`,`pic`,`order_no`,`status`,`company_code`,`system_code` FROM std_mall_200.tmall_category where system_code = 'CD-CZH000001'
 LIMIT 0, 10000

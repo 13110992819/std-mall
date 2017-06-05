@@ -28,4 +28,11 @@ public class SysConstants {
     public static final String STORE_XFFX = "STORE_XFFX"; // C端消费返现人民币比例
 
     // *************************************菜狗*************************************
+
+    public static final String WX_PAY_OPEN = "wxPayOpen"; // 是否开启微信支付
+
+    public static final String ZFB_PAY_OPEN = "zfbPayOpen"; // 是否开启支付宝支付
+
+    public static final String STOCK_STEP = "stockStep"; // 分红权每次读取数量
+
 }

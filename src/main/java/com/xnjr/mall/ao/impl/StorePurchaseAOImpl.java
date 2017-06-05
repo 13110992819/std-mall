@@ -411,6 +411,8 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
 
     private Object storePurchaseZHWX(User user, Store store, Long amount,
             String ticketCode) {
+        // 验证支付渠道是否开通
+        sysConfigBO.doCheckPayOpen(EPayType.WEIXIN_APP);
         // 落地本地系统消费记录
         String payGroup = OrderNoGenerater.generateM(EGeneratePrefix.PAY_GROUP
             .getCode());
@@ -426,6 +428,8 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
 
     private Object storePurchaseZHZFB(User user, Store store, Long amount,
             String ticketCode) {
+        // 验证支付渠道是否开通
+        sysConfigBO.doCheckPayOpen(EPayType.ALIPAY);
         // 落地本地系统消费记录
         String payGroup = OrderNoGenerater.generateM(EGeneratePrefix.PAY_GROUP
             .getCode());

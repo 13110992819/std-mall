@@ -36,7 +36,5 @@ public class PropertiesUtil {
         public static String SHARE_URL = props.getProperty("SHARE_URL");
 
         public static String PAY_BACK_URL = props.getProperty("PAY_BACK_URL");
-
-        public static String STOCK_STEP = props.getProperty("STOCK_STEP");
     }
 }

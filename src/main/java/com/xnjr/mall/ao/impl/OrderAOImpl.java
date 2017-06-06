@@ -488,6 +488,8 @@ public class OrderAOImpl implements IOrderAO {
             // 订单作废，金额不退还
         } else if (ESystemCode.YAOCHENG.getCode().equals(order.getSystemCode())) {
             doBackAmountYC(order);
+        } else if (ESystemCode.PIPE.getCode().equals(order.getSystemCode())) {
+            // 管道项目线上不退款，线下处理
         } else {
             throw new BizException("xn000000", "系统编号不能识别");
         }
@@ -497,12 +499,16 @@ public class OrderAOImpl implements IOrderAO {
 
         String userId = order.getApplyUser();
         // 发送短信
-        if (!ESystemCode.CSW.getCode().equals(order.getSystemCode())) {
-            smsOutBO.sentContent(userId, "尊敬的用户，您的订单[" + order.getCode()
-                    + "]已取消,请及时查看退款。");
-        } else {
+
+        if (ESystemCode.CSW.getCode().equals(order.getSystemCode())) {
             smsOutBO.sentContent(userId, "尊敬的用户，您的订单[" + order.getCode()
                     + "]已取消。");
+        } else if (ESystemCode.PIPE.getCode().equals(order.getSystemCode())) {
+            smsOutBO.sentContent(userId, "尊敬的用户，您的订单[" + order.getCode()
+                    + "]已取消，请联系平台处理退款事宜。");
+        } else {
+            smsOutBO.sentContent(userId, "尊敬的用户，您的订单[" + order.getCode()
+                    + "]已取消,请及时查看退款。");
         }
     }
 

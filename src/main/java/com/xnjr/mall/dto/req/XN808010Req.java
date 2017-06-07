@@ -8,6 +8,8 @@
  */
 package com.xnjr.mall.dto.req;
 
+import java.util.List;
+
 /** 
  * @author: haiqingzheng 
  * @since: 2016年5月17日 上午9:08:54 
@@ -53,6 +55,9 @@ public class XN808010Req {
 
     // 所属系统编号(必填)
     private String systemCode;
+
+    // 产品参数列表
+    private List<XN808030Req> productSpecsList;
 
     public String getPrice1() {
         return price1;

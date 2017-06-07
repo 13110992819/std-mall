@@ -31,17 +31,11 @@ public class XN808010 extends AProcessor {
 
     private XN808010Req req = null;
 
-    /** 
-     * @see com.xnjr.mall.api.IProcessor#doBusiness()
-     */
     @Override
     public Object doBusiness() throws BizException {
         return new PKCodeRes(productAO.addProduct(req));
     }
 
-    /** 
-     * @see com.xnjr.mall.api.IProcessor#doCheck(java.lang.String)
-     */
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN808010Req.class);

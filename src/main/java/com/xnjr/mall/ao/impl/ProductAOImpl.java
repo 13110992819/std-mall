@@ -112,19 +112,8 @@ public class ProductAOImpl implements IProductAO {
         Category category = categoryBO.getCategory(req.getType());
         Product data = new Product();
         Product dbProduct = productBO.getProduct(req.getCode());
-        if (ESystemCode.ZHPAY.getCode().equals(category.getSystemCode())) {
-            if (!EProductStatus.TO_APPROVE.getCode().equals(
-                dbProduct.getStatus())
-                    && !EProductStatus.APPROVE_NO.getCode().equals(
-                        dbProduct.getStatus())
-                    && !EProductStatus.PUBLISH_NO.getCode().equals(
-                        dbProduct.getStatus())) {
-                throw new BizException("xn000000", "该产品不是已提交,审核不通过和已下架状态，无法修改");
-            }
-            data.setStatus(EProductStatus.TO_APPROVE.getCode());
-        } else {
-            data.setStatus(dbProduct.getStatus());
-        }
+
+        data.setStatus(dbProduct.getStatus());
 
         data.setCode(req.getCode());
         data.setCategory(category.getParentCode());
@@ -185,10 +174,6 @@ public class ProductAOImpl implements IProductAO {
             List<ProductSpecs> productSpecs = productSpecsBO
                 .queryProductSpecsList(code);
             product.setProductSpecs(productSpecs);
-            if (ESystemCode.ZHPAY.getCode().equals(product.getSystemCode())) {
-                product.setStore(storeBO.getStoreByUser(product
-                    .getCompanyCode()));
-            }
         }
         return product;
     }

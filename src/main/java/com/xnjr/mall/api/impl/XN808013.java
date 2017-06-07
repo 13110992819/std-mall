@@ -21,7 +21,7 @@ import com.xnjr.mall.spring.SpringContextHolder;
 /** 
  * 产品上架
  * @author: haiqingzheng 
- * @since: 2016年5月17日 上午9:06:30 
+ * @since: 2016年5月17日 上午9:06:30
  * @history:
  */
 public class XN808013 extends AProcessor {

@@ -17,6 +17,12 @@ import java.util.List;
  */
 public class XN808010Req {
 
+    // 所属商家
+    private String storeCode;
+
+    // 所属商城类型（如积分商城）
+    private String kind;
+
     // 产品小类(必填)
     private String type;
 
@@ -35,15 +41,6 @@ public class XN808010Req {
     // 产品详情(必填)
     private String description;
 
-    // 价格1(选填)
-    private String price1;
-
-    // 价格2(选填)
-    private String price2;
-
-    // 价格3(选填)
-    private String price3;
-
     // 更新人(必填)
     private String updater;
 
@@ -59,28 +56,20 @@ public class XN808010Req {
     // 产品参数列表
     private List<XN808030Req> productSpecsList;
 
-    public String getPrice1() {
-        return price1;
+    public String getStoreCode() {
+        return storeCode;
     }
 
-    public void setPrice1(String price1) {
-        this.price1 = price1;
+    public void setStoreCode(String storeCode) {
+        this.storeCode = storeCode;
     }
 
-    public String getPrice2() {
-        return price2;
+    public String getKind() {
+        return kind;
     }
 
-    public void setPrice2(String price2) {
-        this.price2 = price2;
-    }
-
-    public String getPrice3() {
-        return price3;
-    }
-
-    public void setPrice3(String price3) {
-        this.price3 = price3;
+    public void setKind(String kind) {
+        this.kind = kind;
     }
 
     public String getType() {
@@ -161,6 +150,14 @@ public class XN808010Req {
 
     public void setSystemCode(String systemCode) {
         this.systemCode = systemCode;
+    }
+
+    public List<XN808030Req> getProductSpecsList() {
+        return productSpecsList;
+    }
+
+    public void setProductSpecsList(List<XN808030Req> productSpecsList) {
+        this.productSpecsList = productSpecsList;
     }
 
 }

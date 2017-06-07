@@ -2,17 +2,37 @@ package com.xnjr.mall.dto.req;
 
 public class XN808030Req {
 
-    // 产品名称(必填)
+    // 名称(必填)
+    private String name;
+
+    // 产品(必填)
     private String productCode;
 
-    // key（(必填)
-    private String dkey;
+    // 市场参考价，原价
+    private Long originalPrice;
 
-    // value(必填)
-    private String dvalue;
+    // 价格1(人民币)(必填)
+    private String price1;
+
+    // 价格2(购物币)(必填)
+    private String price2;
+
+    // 价格3(钱包币)(必填)
+    private String price3;
+
+    // 库存(必填)
+    private String quantity;
 
     // 相对位置编号(必填)
     private String orderNo;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public String getProductCode() {
         return productCode;
@@ -22,20 +42,44 @@ public class XN808030Req {
         this.productCode = productCode;
     }
 
-    public String getDkey() {
-        return dkey;
+    public Long getOriginalPrice() {
+        return originalPrice;
     }
 
-    public void setDkey(String dkey) {
-        this.dkey = dkey;
+    public void setOriginalPrice(Long originalPrice) {
+        this.originalPrice = originalPrice;
     }
 
-    public String getDvalue() {
-        return dvalue;
+    public String getPrice1() {
+        return price1;
     }
 
-    public void setDvalue(String dvalue) {
-        this.dvalue = dvalue;
+    public void setPrice1(String price1) {
+        this.price1 = price1;
+    }
+
+    public String getPrice2() {
+        return price2;
+    }
+
+    public void setPrice2(String price2) {
+        this.price2 = price2;
+    }
+
+    public String getPrice3() {
+        return price3;
+    }
+
+    public void setPrice3(String price3) {
+        this.price3 = price3;
+    }
+
+    public String getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(String quantity) {
+        this.quantity = quantity;
     }
 
     public String getOrderNo() {

@@ -4,35 +4,38 @@
 <mapper namespace="com.xnjr.mall.dao.IProductDAO">
 	<resultMap id="product_DB_Result" type="product">
 		<result column="code" property="code" />
+		<result column="store_code" property="storeCode" />
+		<result column="kind" property="kind" />
 		<result column="category" property="category" />
 		<result column="type" property="type" />
+		
 		<result column="name" property="name" />
 		<result column="slogan" property="slogan" />
-		
 		<result column="adv_pic" property="advPic" />
 		<result column="pic" property="pic" />
 		<result column="description" property="description" />
-		<result column="original_price" property="originalPrice" />
-		<result column="price1" property="price1" />
 		
-		<result column="price2" property="price2" />
-		<result column="price3" property="price3" />
 		<result column="location" property="location" />
 		<result column="order_no" property="orderNo" />
 		<result column="status" property="status" />
-		
 	    <result column="updater" property="updater" />
 		<result column="update_datetime" property="updateDatetime" />
+		
 		<result column="remark" property="remark" />
 		<result column="bought_count" property="boughtCount" />
 		<result column="company_code" property="companyCode" />
-		
 		<result column="system_code" property="systemCode" />
 	</resultMap>
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="code != null and code != '' ">
 				AND t.code = #{code}
+			</if>
+			<if test="storeCode != null and storeCode != '' ">
+				AND t.store_code = #{storeCode}
+			</if>
+			<if test="kind != null and kind != '' ">
+				AND t.kind = #{kind}
 			</if>
 			<if test="category != null and category != '' ">
 				AND t.category = #{category}
@@ -75,33 +78,29 @@
 	<select id="select_product" parameterType="product" resultMap="product_DB_Result">
 		SELECT
 		t.code
+		,t.store_code
+		,t.kind
 		,t.category
 		,t.type
+		
 		,t.name
 		,t.slogan
-		
 		,t.adv_pic
 		,t.pic
 		,t.description
-		,t.original_price
-		,t.price1
 		
-		,t.price2
-		,t.price3
 		,t.location
 		,t.order_no
 		,t.status
-		
 		,t.updater
 		,t.update_datetime
+		
 		,t.remark
 		,t.bought_count
 		,t.company_code
-		
 		,t.system_code
-		<!-- ,tu.mobile -->
 		FROM
-		tmall_product t <!-- LEFT JOIN ${userDB}.tstd_user tu ON t.company_code = tu.user_id -->
+		tmall_product t
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
@@ -119,7 +118,7 @@
 
 	<select id="select_product_count" parameterType="product"
 		resultType="java.lang.Long">
-		SELECT count(1) FROM tmall_product t <!-- LEFT JOIN ${userDB}.tstd_user tu ON t.company_code = tu.user_id -->
+		SELECT count(1) FROM tmall_product t
 		<include refid="where_condition" />
 	</select>
 
@@ -127,43 +126,45 @@
 		INSERT INTO
 		tmall_product(
 		code
+		,store_code
+		,kind
 		,category
 		,type
+		
 		,name
 		,slogan
 		,adv_pic
 		,pic
 		,description
-		,price1
-		,price2
-		,price3
 		
 		,status
 		,updater
 		,update_datetime
 		,remark
 		,bought_count
+		
 		,company_code
 		,system_code
 		)
 		VALUES(
 		#{code}
 		,#{category}
+		,#{storeCode}
+		,#{kind}
 		,#{type}
+		
 		,#{name}
 		,#{slogan}
 		,#{advPic}
 		,#{pic}
 		,#{description}
-		,#{price1}
-		,#{price2}
-		,#{price3}
 		
 		,#{status}
 		,#{updater}
 		,#{updateDatetime}
 		,#{remark}
 		,#{boughtCount}
+		
 		,#{companyCode}
 		,#{systemCode}
 		)
@@ -172,20 +173,18 @@
 	<update id="update_product" parameterType="product">
 		UPDATE tmall_product
 		SET
-		category = #{category}
+		kind = #{kind}
+		,category = #{category}
 		,type = #{type}
 		,name = #{name}
 		,slogan = #{slogan}
-		,adv_pic = #{advPic}
 		
+		,adv_pic = #{advPic}
 		,pic = #{pic}
 		,description = #{description}
-		,price1 = #{price1}
-		,price2 = #{price2}
-		,price3 = #{price3}
-		
 		,status = #{status}
 		,updater = #{updater}
+		
 		,update_datetime = #{updateDatetime}
 		,remark = #{remark}
 		WHERE code = #{code}
@@ -204,11 +203,7 @@
 	<update id="update_putOn" parameterType="product">
 		UPDATE tmall_product
 		SET
-		original_price = #{originalPrice}
-		,price1 = #{price1}
-		,price2 = #{price2}
-		,price3 = #{price3}
-		,location = #{location}
+		location = #{location}
 		,order_no = #{orderNo}
 		,status = #{status}
 		,updater = #{updater}

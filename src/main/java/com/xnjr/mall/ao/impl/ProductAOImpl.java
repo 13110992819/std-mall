@@ -11,6 +11,7 @@ package com.xnjr.mall.ao.impl;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,7 @@ import com.xnjr.mall.domain.ProductSpecs;
 import com.xnjr.mall.dto.req.XN808010Req;
 import com.xnjr.mall.dto.req.XN808012Req;
 import com.xnjr.mall.dto.req.XN808013Req;
+import com.xnjr.mall.dto.req.XN808030Req;
 import com.xnjr.mall.enums.EGeneratePrefix;
 import com.xnjr.mall.enums.EProductStatus;
 import com.xnjr.mall.enums.ESystemCode;
@@ -55,6 +57,7 @@ public class ProductAOImpl implements IProductAO {
     private IStoreBO storeBO;
 
     @Override
+    @Transactional
     public String addProduct(XN808010Req req) {
 
         // 根据小类获取大类
@@ -72,20 +75,45 @@ public class ProductAOImpl implements IProductAO {
         data.setAdvPic(req.getAdvPic());
         data.setPic(req.getPic());
         data.setDescription(req.getDescription());
-        data.setPrice1(StringValidater.toLong(req.getPrice1()));
-        data.setPrice2(StringValidater.toLong(req.getPrice2()));
-
-        data.setPrice3(StringValidater.toLong(req.getPrice3()));
-
         data.setStatus(EProductStatus.APPROVE_YES.getCode());
-
         data.setUpdater(req.getUpdater());
+
         data.setUpdateDatetime(new Date());
         data.setRemark(req.getRemark());
         data.setBoughtCount(0);
         data.setCompanyCode(req.getCompanyCode());
         data.setSystemCode(req.getSystemCode());
         productBO.saveProduct(data);
+
+        // 保存规格参数
+        List<XN808030Req> productSpecsList = req.getProductSpecsList();
+        if (CollectionUtils.isNotEmpty(productSpecsList)) {
+            for (XN808030Req xn808030Req : productSpecsList) {
+                String psCode = OrderNoGenerater
+                    .generateM(EGeneratePrefix.PRODUCT_SPECS.getCode());
+                ProductSpecs productSpecs = new ProductSpecs();
+                productSpecs.setCode(psCode);
+                productSpecs.setName(xn808030Req.getName());
+                productSpecs.setProductCode(code);
+                productSpecs.setOriginalPrice(xn808030Req.getOriginalPrice());
+                productSpecs.setPrice1(StringValidater.toLong(xn808030Req
+                    .getPrice1()));
+                productSpecs.setPrice2(StringValidater.toLong(xn808030Req
+                    .getPrice2()));
+                productSpecs.setPrice3(StringValidater.toLong(xn808030Req
+                    .getPrice3()));
+
+                productSpecs.setQuantity(StringValidater.toInteger(xn808030Req
+                    .getQuantity()));
+                productSpecs.setOrderNo(StringValidater.toInteger(xn808030Req
+                    .getOrderNo()));
+                productSpecs.setCompanyCode(req.getCompanyCode());
+                productSpecs.setSystemCode(req.getSystemCode());
+                productSpecsBO.saveProductSpecs(productSpecs);
+            }
+        } else {
+            throw new BizException("xn000000", "请至少填写一个产品规格");
+        }
         return code;
 
     }

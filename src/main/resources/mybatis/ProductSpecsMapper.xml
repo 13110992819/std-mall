@@ -4,11 +4,17 @@
 <mapper namespace="com.xnjr.mall.dao.IProductSpecsDAO">
 	<resultMap id="productSpecs_DB_Result" type="productSpecs">
 		<result column="code" property="code" />
+		<result column="name" property="name" />
 		<result column="product_code" property="productCode" />
-		<result column="dkey" property="dkey" />
-		<result column="dvalue" property="dvalue" />
+		<result column="original_price" property="originalPrice" />
+		<result column="price1" property="price1" />
+		
+		<result column="price2" property="price2" />
+		<result column="price3" property="price3" />
+		<result column="quantity" property="quantity" />
 		<result column="order_no" property="orderNo" />
 		<result column="company_code" property="companyCode" />
+		
 		<result column="system_code" property="systemCode" />
 	</resultMap>
 	<sql id="where_condition">
@@ -16,11 +22,11 @@
 			<if test="code != null and code != '' ">
 				AND t.code = #{code}
 			</if>
+			<if test="name != null and name != '' ">
+				AND t.name like "%"#{name}"%"
+			</if>
 			<if test="productCode != null and productCode != '' ">
 				AND t.product_code = #{productCode}
-			</if>
-			<if test="dkey != null and dkey != '' ">
-				AND t.dkey = #{dkey}
 			</if>
 			<if test="companyCode != null and companyCode != '' ">
 				AND t.company_code = #{companyCode}
@@ -33,11 +39,17 @@
 	<select id="select_productSpecs" parameterType="productSpecs" resultMap="productSpecs_DB_Result">
 		SELECT
 		t.code
+		,t.name
 		,t.product_code
-		,t.dkey
-		,t.dvalue
+		,t.original_price
+		,t.price1
+		
+		,t.price2
+		,t.price3
+		,t.quantity
 		,t.order_no
 		,t.company_code
+		
 		,t.system_code
 		FROM
 		tmall_product_specs t
@@ -59,20 +71,32 @@
 		INSERT INTO
 		tmall_product_specs(
 		code
+		,name
 		,product_code
-		,dkey
-		,dvalue
+		,original_price
+		,price1
+		
+		,price2
+		,price3
+		,quantity
 		,order_no
 		,company_code
+		
 		,system_code
 		)
 		VALUES(
 		#{code}
+		,#{name}
 		,#{productCode}
-		,#{dkey}
-		,#{dvalue}
+		,#{originalPrice}
+		,#{price1}
+		
+		,#{price2}
+		,#{price3}
+		,#{quantity}
 		,#{orderNo}
 		,#{companyCode}
+		
 		,#{systemCode}
 		)
 	</insert>
@@ -80,8 +104,13 @@
 	<update id="update_productSpecs" parameterType="productSpecs">
 		UPDATE tmall_product_specs
 		SET
-		dkey = #{dkey}
-		,dvalue = #{dvalue}
+		name = #{name}
+		,original_price = #{originalPrice}
+		,price1 = #{price1}
+		,price2 = #{price2}
+		,price3 = #{price3}
+		
+		,quantity = #{quantity}
 		,order_no = #{orderNo}
 		WHERE code = #{code}
 	</update>

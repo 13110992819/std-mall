@@ -28,7 +28,13 @@ public class Product extends ABaseDO {
     // 产品编号
     private String code;
 
-    // 产品大类(冗余)
+    // 所属商家编号
+    private String storeCode;
+
+    // 所属商城类型（如积分商城）
+    private String kind;
+
+    // 产品大类
     private String category;
 
     // 产品小类
@@ -48,18 +54,6 @@ public class Product extends ABaseDO {
 
     // 产品详情
     private String description;
-
-    // 原价
-    private Long originalPrice;
-
-    // 价格1(人民币)
-    private Long price1;
-
-    // 价格2(购物币)
-    private Long price2;
-
-    // 价格3(钱包币)
-    private Long price3;
 
     // 位置
     private String location;
@@ -97,7 +91,7 @@ public class Product extends ABaseDO {
     private Store store;
 
     // 产品参数
-    private List<ProductSpecs> productSpecs;
+    private List<ProductSpecs> productSpecsList;
 
     public Store getStore() {
         return store;
@@ -107,12 +101,28 @@ public class Product extends ABaseDO {
         this.store = store;
     }
 
-    public List<ProductSpecs> getProductSpecs() {
-        return productSpecs;
+    public String getStoreCode() {
+        return storeCode;
     }
 
-    public void setProductSpecs(List<ProductSpecs> productSpecs) {
-        this.productSpecs = productSpecs;
+    public void setStoreCode(String storeCode) {
+        this.storeCode = storeCode;
+    }
+
+    public String getKind() {
+        return kind;
+    }
+
+    public void setKind(String kind) {
+        this.kind = kind;
+    }
+
+    public List<ProductSpecs> getProductSpecsList() {
+        return productSpecsList;
+    }
+
+    public void setProductSpecsList(List<ProductSpecs> productSpecsList) {
+        this.productSpecsList = productSpecsList;
     }
 
     public String getCode() {
@@ -177,38 +187,6 @@ public class Product extends ABaseDO {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public Long getOriginalPrice() {
-        return originalPrice;
-    }
-
-    public void setOriginalPrice(Long originalPrice) {
-        this.originalPrice = originalPrice;
-    }
-
-    public Long getPrice1() {
-        return price1;
-    }
-
-    public void setPrice1(Long price1) {
-        this.price1 = price1;
-    }
-
-    public Long getPrice2() {
-        return price2;
-    }
-
-    public void setPrice2(Long price2) {
-        this.price2 = price2;
-    }
-
-    public Long getPrice3() {
-        return price3;
-    }
-
-    public void setPrice3(Long price3) {
-        this.price3 = price3;
     }
 
     public String getLocation() {

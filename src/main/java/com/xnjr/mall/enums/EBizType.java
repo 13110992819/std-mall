@@ -17,10 +17,6 @@ public enum EBizType {
             "93", "菜狗O2O积分支付"), CG_O2O_RMBFD("95", "菜狗O2O人民币支付返点菜狗币"), CG_XNCZ_P(
             "94", "菜狗充值专区用款"), CG_XNCZ_M("-94", "菜狗充值专区退款")
 
-    , ZH_O2O("-ZH1", "正汇O2O支付"), ZH_STOCK("-ZH2", "正汇分红权分红")
-
-    , CSW_PAY("100", "城市网商品积分购买支付")
-
     , GD_MALL("GD_MALL", "积分商城消费"), GD_O2O("GD_O2O", "O2O店铺积分消费"), EXCHANGE_CURRENCY(
             "200", "币种兑换")
 

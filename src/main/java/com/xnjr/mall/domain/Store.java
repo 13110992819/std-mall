@@ -20,7 +20,10 @@ public class Store extends ABaseDO {
     // 等级
     private String level;
 
-    // 类型
+    // 大类
+    private String category;
+
+    // 小类
     private String type;
 
     // 广告语
@@ -74,13 +77,13 @@ public class Store extends ABaseDO {
     // 店铺推荐人
     private String userReferee;
 
-    // 费率1 使用折扣券分成比例,菜狗纯人民币消费，返现菜狗币比例
+    // 费率1 人民币消返虚拟币比例
     private Double rate1;
 
-    // 费率2 不使用折扣券分成比例
+    // 费率2 虚拟币消费返人民币比例
     private Double rate2;
 
-    // 费率3 返点比例
+    // 费率3（备用）
     private Double rate3;
 
     // 是否默认
@@ -97,9 +100,6 @@ public class Store extends ABaseDO {
 
     // 备注
     private String remark;
-
-    // 升级为理财型商家时间
-    private Date fundDatetime;
 
     // 店铺主人
     private String owner;
@@ -554,11 +554,4 @@ public class Store extends ABaseDO {
         this.refereeMobile = refereeMobile;
     }
 
-    public Date getFundDatetime() {
-        return fundDatetime;
-    }
-
-    public void setFundDatetime(Date fundDatetime) {
-        this.fundDatetime = fundDatetime;
-    }
 }

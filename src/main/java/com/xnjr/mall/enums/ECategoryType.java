@@ -1,10 +1,8 @@
 package com.xnjr.mall.enums;
 
-public enum EZhPool {
-    ZHPAY_JJ("PLAT_POOL_ZHPAY", "正汇基金池"), ZHPAY_CUSTOMER("USER_POOL_ZHPAY",
-            "正汇消费者池"), ZHPAY_STORE("STORE_POOL_ZHPAY", "正汇商家池");
-
-    EZhPool(String code, String value) {
+public enum ECategoryType {
+    Product("1", "商品分类"), Store("2", "店铺分类"), Serve("3", "服务分类");
+    ECategoryType(String code, String value) {
         this.code = code;
         this.value = value;
     }
@@ -20,5 +18,4 @@ public enum EZhPool {
     public String getValue() {
         return value;
     }
-
 }

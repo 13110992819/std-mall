@@ -42,12 +42,6 @@ public class Order extends ABaseDO {
     // 收货地址
     private String reAddress;
 
-    // 发票类型(1 个人，2 企业)
-    private String receiptType;
-
-    // 发票抬头
-    private String receiptTitle;
-
     // 下单人
     private String applyUser;
 
@@ -72,6 +66,9 @@ public class Order extends ABaseDO {
     // 状态
     private String status;
 
+    // 支付方式
+    private String payType;
+
     private String payGroup;
 
     private String payCode;
@@ -81,9 +78,6 @@ public class Order extends ABaseDO {
 
     // 实际支付金额1
     private Long payAmount1;
-
-    // 实际支付金额1_1（正汇系统用来记录贡献值）
-    private Long payAmount11;
 
     // 实际支付金额2
     private Long payAmount2;
@@ -147,6 +141,12 @@ public class Order extends ABaseDO {
     // 状态list
     private List<String> statusList;
 
+    // 产品信息
+    private Product product;
+
+    // 规格信息
+    private ProductSpecs productSpecs;
+
     public User getCompanyUser() {
         return companyUser;
     }
@@ -201,22 +201,6 @@ public class Order extends ABaseDO {
 
     public void setReAddress(String reAddress) {
         this.reAddress = reAddress;
-    }
-
-    public String getReceiptType() {
-        return receiptType;
-    }
-
-    public void setReceiptType(String receiptType) {
-        this.receiptType = receiptType;
-    }
-
-    public String getReceiptTitle() {
-        return receiptTitle;
-    }
-
-    public void setReceiptTitle(String receiptTitle) {
-        this.receiptTitle = receiptTitle;
     }
 
     public String getApplyUser() {
@@ -313,14 +297,6 @@ public class Order extends ABaseDO {
 
     public void setPayAmount1(Long payAmount1) {
         this.payAmount1 = payAmount1;
-    }
-
-    public Long getPayAmount11() {
-        return payAmount11;
-    }
-
-    public void setPayAmount11(Long payAmount11) {
-        this.payAmount11 = payAmount11;
     }
 
     public Long getPayAmount2() {

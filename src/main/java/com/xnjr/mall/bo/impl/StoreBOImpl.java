@@ -19,8 +19,6 @@ import com.xnjr.mall.dao.IStorePurchaseDAO;
 import com.xnjr.mall.domain.Store;
 import com.xnjr.mall.enums.EBoolean;
 import com.xnjr.mall.enums.EStoreStatus;
-import com.xnjr.mall.enums.ESystemCode;
-import com.xnjr.mall.enums.EUserKind;
 import com.xnjr.mall.exception.BizException;
 
 /** 
@@ -93,18 +91,10 @@ public class StoreBOImpl extends PaginableBOImpl<Store> implements IStoreBO {
     }
 
     @Override
-    public String isUserRefereeExist(String userReferee, String systemCode) {
-        if (ESystemCode.ZHPAY.getCode().equals(systemCode)) {
-            String userId = userBO.isUserExist(userReferee, EUserKind.F1,
-                systemCode);
-            if (StringUtils.isBlank(userId)) {
-                throw new BizException("xn702002", "推荐人不存在");
-            }
-            return userId;
-        } else {// 加盟商帮商家代注册，所以userReferee是加盟商的userId
-            userBO.getRemoteUser(userReferee);
-            return userReferee;
-        }
+    public String isUserRefereeExist(String userReferee) {
+        // 加盟商帮商家代注册，所以userReferee是加盟商的userId
+        userBO.getRemoteUser(userReferee);
+        return userReferee;
 
     }
 

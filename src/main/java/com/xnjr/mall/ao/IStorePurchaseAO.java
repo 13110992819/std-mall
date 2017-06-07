@@ -6,9 +6,6 @@ import com.xnjr.mall.domain.StorePurchase;
 public interface IStorePurchaseAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
 
-    public Object storePurchaseZH(String userId, String storeCode, Long amount,
-            String payType, String ticketCode, String tradePwd);
-
     public Object storePurchaseCGB(String userId, String storeCode,
             Long cgbTotalAmount, String payType);
 
@@ -23,8 +20,6 @@ public interface IStorePurchaseAO {
 
     public Object storePurchaseYC(String userId, String storeCode, Long amount,
             String payType);
-
-    public void paySuccessZH(String payGroup, String payCode, Long payAmount);
 
     public void paySuccessCG(String payGroup, String payCode, Long payAmount);
 

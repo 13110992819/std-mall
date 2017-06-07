@@ -14,7 +14,10 @@ public class Vproduct extends ABaseDO {
     // 产品编号
     private String code;
 
-    // 类型1=中石化充值；2=中石油充值；3=手机充值
+    // 大类
+    private String category;
+
+    // 小类1=中石化充值；2=中石油充值；3=手机充值
     private String type;
 
     // 产品名称

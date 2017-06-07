@@ -52,7 +52,7 @@ public interface IStoreBO {
 
     public Store getStoreByUser(String userId);
 
-    public String isUserRefereeExist(String userReferee, String systemCode);
+    public String isUserRefereeExist(String userReferee);
 
     /**
      * 一个人只能有一家店铺

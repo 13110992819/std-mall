@@ -8,17 +8,30 @@ public class ProductSpecs extends ABaseDO {
      */
     private static final long serialVersionUID = 2484198146787764549L;
 
+    // ******************db properties ********************
     // 编号
     private String code;
 
-    // 产品名称
+    // 名称
+    private String name;
+
+    // 产品编号
     private String productCode;
 
-    // key（随便填，不是数据字典）
-    private String dkey;
+    // 市场参考价，原价
+    private Long originalPrice;
 
-    // value
-    private String dvalue;
+    // 价格1(人民币)
+    private Long price1;
+
+    // 价格2(虚拟币1)
+    private Long price2;
+
+    // 价格3(虚拟币2)
+    private Long price3;
+
+    // 数量
+    private Integer quantity;
 
     // 相对位置编号
     private Integer orderNo;
@@ -29,6 +42,7 @@ public class ProductSpecs extends ABaseDO {
     // 所属系统编号
     private String systemCode;
 
+    // ******************db properties ********************
     public String getCode() {
         return code;
     }
@@ -37,28 +51,28 @@ public class ProductSpecs extends ABaseDO {
         this.code = code;
     }
 
+    public Long getOriginalPrice() {
+        return originalPrice;
+    }
+
+    public void setOriginalPrice(Long originalPrice) {
+        this.originalPrice = originalPrice;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getProductCode() {
         return productCode;
     }
 
     public void setProductCode(String productCode) {
         this.productCode = productCode;
-    }
-
-    public String getDkey() {
-        return dkey;
-    }
-
-    public void setDkey(String dkey) {
-        this.dkey = dkey;
-    }
-
-    public String getDvalue() {
-        return dvalue;
-    }
-
-    public void setDvalue(String dvalue) {
-        this.dvalue = dvalue;
     }
 
     public Integer getOrderNo() {
@@ -83,6 +97,38 @@ public class ProductSpecs extends ABaseDO {
 
     public void setSystemCode(String systemCode) {
         this.systemCode = systemCode;
+    }
+
+    public Long getPrice1() {
+        return price1;
+    }
+
+    public void setPrice1(Long price1) {
+        this.price1 = price1;
+    }
+
+    public Long getPrice2() {
+        return price2;
+    }
+
+    public void setPrice2(Long price2) {
+        this.price2 = price2;
+    }
+
+    public Long getPrice3() {
+        return price3;
+    }
+
+    public void setPrice3(Long price3) {
+        this.price3 = price3;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
     }
 
 }

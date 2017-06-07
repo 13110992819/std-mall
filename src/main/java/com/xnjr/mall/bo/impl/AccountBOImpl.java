@@ -186,53 +186,6 @@ public class AccountBOImpl implements IAccountBO {
         return res;
     }
 
-    @Override
-    public void doZHYEPay(String fromUserId, String toUserId, Long frbAmount,
-            Long gxzAmount, Long gwbAmount, Long qbbAmount, EBizType bizType,
-            String refNo) {
-        if (frbAmount > 0) {
-            doTransferAmountRemote(fromUserId, toUserId, ECurrency.ZH_FRB,
-                frbAmount, bizType, bizType.getValue(), bizType.getValue(),
-                refNo);
-        }
-        if (gxzAmount > 0) {
-            doTransferAmountRemote(fromUserId, toUserId, ECurrency.ZH_GXZ,
-                gxzAmount, bizType, bizType.getValue(), bizType.getValue(),
-                refNo);
-        }
-        if (gwbAmount > 0) {
-            doTransferAmountRemote(fromUserId, toUserId, ECurrency.ZH_GWB,
-                gwbAmount, bizType, bizType.getValue(), bizType.getValue(),
-                refNo);
-        }
-        if (qbbAmount > 0) {
-            doTransferAmountRemote(fromUserId, toUserId, ECurrency.ZH_QBB,
-                qbbAmount, bizType, bizType.getValue(), bizType.getValue(),
-                refNo);
-        }
-    }
-
-    @Override
-    public void checkZHYE(String userId, Long frbAmount, Long gxzAmount,
-            Long cnyAmount, Long gwbAmount, Long qbbAmount) {
-        if (cnyAmount > frbAmount + gxzAmount) {
-            throw new BizException("xn0000", "分润币+贡献值不足");
-        }
-        checkZHGwbQbb(userId, gwbAmount, qbbAmount);
-    }
-
-    @Override
-    public void checkZHGwbQbb(String userId, Long gwbAmount, Long qbbAmount) {
-        Account gwbAccount = getRemoteAccount(userId, ECurrency.ZH_GWB);
-        if (gwbAmount > gwbAccount.getAmount()) {
-            throw new BizException("xn0000", "购物币不足");
-        }
-        Account qbbAccount = getRemoteAccount(userId, ECurrency.ZH_QBB);
-        if (qbbAmount > qbbAccount.getAmount()) {
-            throw new BizException("xn0000", "钱包币不足");
-        }
-    }
-
     // ************************************菜狗************************************
     @Override
     public void doCgbJfPay(String fromUserId, String toUserId, Long cgbPrice,

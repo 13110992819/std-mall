@@ -22,7 +22,6 @@ import com.xnjr.mall.enums.EBizType;
 import com.xnjr.mall.enums.ECurrency;
 import com.xnjr.mall.enums.EStoreStatus;
 import com.xnjr.mall.enums.EStoreTicketStatus;
-import com.xnjr.mall.enums.ESysUser;
 import com.xnjr.mall.enums.EUserTicketStatus;
 import com.xnjr.mall.exception.BizException;
 
@@ -62,7 +61,7 @@ public class UserTicketAOImpl implements IUserTicketAO {
         // 折扣券落地
         String ticketCode = userTicketBO.saveUserTicket(user, storeTicket);
         // 资金划转：用户的钱包币给平台
-        String systemUser = ESysUser.SYS_USER_ZHPAY.getCode();
+        String systemUser = userBO.getSystemUser(storeTicket.getSystemCode());
         ECurrency currency = ECurrency.getResultMap().get(
             storeTicket.getCurrency());
         accountBO.doTransferAmountRemote(userId, systemUser, currency,

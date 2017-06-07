@@ -25,9 +25,6 @@ public interface IUserBO {
      */
     public String isUserExist(String mobile, EUserKind kind, String systemCode);
 
-    public User getPartner(String province, String city, String area,
-            EUserKind kind);
-
     public String doSaveCUser(String mobile, String loginPwd, String updater,
             String remark, String systemCode);
 

@@ -30,6 +30,9 @@ public class ProductOrder extends ABaseDO {
     // 产品编号
     private String productCode;
 
+    // 产品规格编号
+    private String productSpecsCode;
+
     // 数量
     private Integer quantity;
 
@@ -59,6 +62,14 @@ public class ProductOrder extends ABaseDO {
 
     public void setProduct(Product product) {
         this.product = product;
+    }
+
+    public String getProductSpecsCode() {
+        return productSpecsCode;
+    }
+
+    public void setProductSpecsCode(String productSpecsCode) {
+        this.productSpecsCode = productSpecsCode;
     }
 
     public String getCode() {

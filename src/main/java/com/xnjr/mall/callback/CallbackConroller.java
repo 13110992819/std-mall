@@ -50,19 +50,12 @@ public class CallbackConroller {
                     orderAO.paySuccessZH(payGroup, payCode, amount);
                     logger.info("**** 购物支付回调 payGroup <" + payGroup
                             + "> payCode <" + payCode + ">end****");
-                } else if (EBizType.ZH_O2O.getCode().equals(bizType)) {
-                    logger.info("**** 正汇O2O支付回调 payGroup <" + payGroup
-                            + "> payCode <" + payCode + ">start****");
-                    storePurchaseAO.paySuccessZH(payGroup, payCode, amount);
-                    logger.info("**** 正汇O2O支付回调 payGroup <" + payGroup
-                            + "> payCode <" + payCode + ">end****");
                 } else if (EBizType.CG_O2O_RMB.getCode().equals(bizType)) {
                     logger.info("**** 菜狗O2O人民币支付回调 payGroup <" + payGroup
                             + "> payCode <" + payCode + ">start****");
                     storePurchaseAO.paySuccessCG(payGroup, payCode, amount);
                     logger.info("**** 菜狗O2O人民币支付回调 payGroup <" + payGroup
                             + "> payCode <" + payCode + ">end****");
-
                 } else if (EBizType.YC_O2O_RMB.getCode().equals(bizType)) {
                     logger.info("**** 姚橙O2O人民币支付回调 payGroup <" + payGroup
                             + "> payCode <" + payCode + ">start****");

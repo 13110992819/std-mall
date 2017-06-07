@@ -75,15 +75,6 @@ public interface IAccountBO {
             String payGroup, String refNo, EBizType bizType, String bizNote,
             Long amount);
 
-    public void doZHYEPay(String fromUserId, String systemUserId,
-            Long frbAmount, Long gxzAmount, Long gwbAmount, Long qbbAmount,
-            EBizType ajGw, String refNo);
-
-    public void checkZHYE(String userId, Long frbAmount, Long gxzAmount,
-            Long cnyAmount, Long gwbAmount, Long qbbAmount);
-
-    public void checkZHGwbQbb(String userId, Long gwbAmount, Long qbbAmount);
-
     // ************************************菜狗************************************
     public void doCgbJfPay(String fromUserId, String toUserId, Long cgbPrice,
             Long jfPrice, EBizType bizType, String refNo);

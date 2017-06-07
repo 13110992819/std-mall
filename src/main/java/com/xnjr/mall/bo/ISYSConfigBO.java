@@ -12,7 +12,6 @@ import java.util.Map;
 
 import com.xnjr.mall.bo.base.IPaginableBO;
 import com.xnjr.mall.domain.SYSConfig;
-import com.xnjr.mall.enums.EPayType;
 
 /** 
  * @author: haiqingzheng 
@@ -46,7 +45,5 @@ public interface ISYSConfigBO extends IPaginableBO<SYSConfig> {
 
     public SYSConfig getSYSConfig(String key, String companyCode,
             String systemCode);
-
-    public void doCheckPayOpen(EPayType payType);
 
 }

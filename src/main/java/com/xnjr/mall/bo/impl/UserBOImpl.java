@@ -1,13 +1,8 @@
 package com.xnjr.mall.bo.impl;
 
-import java.util.List;
-
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.xnjr.mall.bo.IUserBO;
 import com.xnjr.mall.core.StringValidater;
 import com.xnjr.mall.domain.User;
@@ -16,12 +11,9 @@ import com.xnjr.mall.dto.req.XN001102Req;
 import com.xnjr.mall.dto.req.XN001301Req;
 import com.xnjr.mall.dto.req.XN001350Req;
 import com.xnjr.mall.dto.req.XN001400Req;
-import com.xnjr.mall.dto.req.XN001403Req;
 import com.xnjr.mall.dto.res.XN001102Res;
 import com.xnjr.mall.dto.res.XN001400Res;
-import com.xnjr.mall.dto.res.XN001403Res;
 import com.xnjr.mall.dto.res.XNUserRes;
-import com.xnjr.mall.enums.EBoolean;
 import com.xnjr.mall.enums.ESysUser;
 import com.xnjr.mall.enums.ESystemCode;
 import com.xnjr.mall.enums.EUserKind;
@@ -78,40 +70,6 @@ public class UserBOImpl implements IUserBO {
     }
 
     @Override
-    public User getPartner(String province, String city, String area,
-            EUserKind kind) {
-        if (StringUtils.isBlank(city) && StringUtils.isBlank(area)) {
-            city = province;
-            area = province;
-        } else if (StringUtils.isBlank(area)) {
-            area = city;
-        }
-        XN001403Req req = new XN001403Req();
-        req.setProvince(province);
-        req.setCity(city);
-        req.setArea(area);
-        req.setKind(kind.getCode());
-        req.setSystemCode(ESystemCode.ZHPAY.getCode());
-        req.setCompanyCode(ESystemCode.ZHPAY.getCode());
-        XN001403Res result = null;
-        String jsonStr = BizConnecter.getBizData("001403",
-            JsonUtils.object2Json(req));
-        Gson gson = new Gson();
-        List<XN001403Res> list = gson.fromJson(jsonStr,
-            new TypeToken<List<XN001403Res>>() {
-            }.getType());
-        User user = null;
-        if (CollectionUtils.isNotEmpty(list)) {
-            result = list.get(0);
-            user = new User();
-            user.setUserId(result.getUserId());
-            user.setLoginName(result.getLoginName());
-            user.setMobile(result.getMobile());
-        }
-        return user;
-    }
-
-    @Override
     public String isUserExist(String mobile, EUserKind kind, String systemCode) {
         String userId = null;
         XN001102Req req = new XN001102Req();
@@ -135,11 +93,7 @@ public class UserBOImpl implements IUserBO {
         req.setUserReferee(userReferee);
         req.setUpdater(updater);
         req.setRemark("代注册商家");
-        if (ESystemCode.ZHPAY.getCode().equals(systemCode)) {
-            req.setIsRegHx(EBoolean.YES.getCode());
-            // 正汇推荐人是店铺推荐人 用户推荐人置为空
-            req.setUserReferee(null);
-        }
+
         req.setSystemCode(systemCode);
         req.setCompanyCode(companyCode);
         XNUserRes res = BizConnecter.getBizData("001350",
@@ -165,14 +119,8 @@ public class UserBOImpl implements IUserBO {
 
     @Override
     public String getSystemUser(String systemCode) {
-        if (ESystemCode.ZHPAY.getCode().equals(systemCode)) {
-            return ESysUser.SYS_USER_ZHPAY.getCode();
-        }
         if (ESystemCode.Caigo.getCode().equals(systemCode)) {
             return ESysUser.SYS_USER_CAIGO.getCode();
-        }
-        if (ESystemCode.CSW.getCode().equals(systemCode)) {
-            return ESysUser.SYS_USER_CSW.getCode();
         }
         if (ESystemCode.PIPE.getCode().equals(systemCode)) {
             return ESysUser.SYS_USER_PIPE.getCode();

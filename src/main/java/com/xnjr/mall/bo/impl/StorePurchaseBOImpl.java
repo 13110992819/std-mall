@@ -17,7 +17,7 @@ import com.xnjr.mall.domain.User;
 import com.xnjr.mall.enums.EBizType;
 import com.xnjr.mall.enums.ECurrency;
 import com.xnjr.mall.enums.EGeneratePrefix;
-import com.xnjr.mall.enums.EO2OPayType;
+import com.xnjr.mall.enums.EPayType;
 import com.xnjr.mall.enums.EStorePurchaseStatus;
 import com.xnjr.mall.exception.BizException;
 
@@ -48,7 +48,7 @@ public class StorePurchaseBOImpl extends PaginableBOImpl<StorePurchase>
         data.setBackCurrency(ECurrency.CNY.getCode());
         data.setCreateDatetime(now);
         data.setStatus(EStorePurchaseStatus.PAYED.getCode());
-        data.setPayType(EO2OPayType.CG_O2O_CGB.getCode());
+        data.setPayType(EPayType.CG_O2O_CGB.getCode());
 
         data.setPayAmount2(amount);
         data.setPayDatetime(now);
@@ -73,7 +73,7 @@ public class StorePurchaseBOImpl extends PaginableBOImpl<StorePurchase>
 
         data.setCreateDatetime(now);
         data.setStatus(EStorePurchaseStatus.PAYED.getCode());
-        data.setPayType(EO2OPayType.CG_02O_RMBJF.getCode());
+        data.setPayType(EPayType.CG_02O_RMBJF.getCode());
 
         data.setPayAmount1(payRMB);
         data.setPayAmount3(payJF);
@@ -100,7 +100,7 @@ public class StorePurchaseBOImpl extends PaginableBOImpl<StorePurchase>
 
         data.setCreateDatetime(now);
         data.setStatus(EStorePurchaseStatus.PAYED.getCode());
-        data.setPayType(EO2OPayType.CG_02O_RMB.getCode());
+        data.setPayType(EPayType.CG_02O_RMB.getCode());
 
         data.setPayAmount1(payRMB);
         data.setPayAmount3(0L);
@@ -128,7 +128,7 @@ public class StorePurchaseBOImpl extends PaginableBOImpl<StorePurchase>
 
         data.setCreateDatetime(now);
         data.setStatus(EStorePurchaseStatus.TO_PAY.getCode());
-        data.setPayType(EO2OPayType.WEIXIN_H5.getCode());
+        data.setPayType(EPayType.WEIXIN_H5.getCode());
         data.setPayGroup(payGroup);
 
         data.setPayAmount3(0L);
@@ -156,7 +156,7 @@ public class StorePurchaseBOImpl extends PaginableBOImpl<StorePurchase>
 
         data.setCreateDatetime(now);
         data.setStatus(EStorePurchaseStatus.TO_PAY.getCode());
-        data.setPayType(EO2OPayType.CG_RMBJF_WEIXIN_H5.getCode());
+        data.setPayType(EPayType.CG_RMBJF_WEIXIN_H5.getCode());
         data.setPayGroup(payGroup);
 
         data.setPayAmount3(jfAmount);
@@ -184,7 +184,7 @@ public class StorePurchaseBOImpl extends PaginableBOImpl<StorePurchase>
 
         data.setCreateDatetime(now);
         data.setStatus(EStorePurchaseStatus.TO_PAY.getCode());
-        data.setPayType(EO2OPayType.WEIXIN_APP.getCode());
+        data.setPayType(EPayType.WEIXIN_APP.getCode());
 
         data.setPayGroup(payGroup);
 
@@ -211,39 +211,11 @@ public class StorePurchaseBOImpl extends PaginableBOImpl<StorePurchase>
 
         data.setCreateDatetime(now);
         data.setStatus(EStorePurchaseStatus.TO_PAY.getCode());
-        data.setPayType(EO2OPayType.ALIPAY.getCode());
+        data.setPayType(EPayType.ALIPAY.getCode());
 
         data.setPayGroup(payGroup);
 
         data.setRemark("支付宝支付O2O消费");
-        data.setSystemCode(store.getSystemCode());
-        data.setCompanyCode(store.getCompanyCode());
-        storePurchaseDAO.insert(data);
-        return code;
-    }
-
-    @Override
-    public String storePurchaseZHYE(User user, Store store, String ticketCode,
-            Long amount, Long frResultAmount, Long gxjlResultAmount) {
-        String code = OrderNoGenerater.generateM(EGeneratePrefix.STORE_PURCHASW
-            .getCode());
-        Date now = new Date();
-        StorePurchase data = new StorePurchase();
-        data.setCode(code);
-        data.setUserId(user.getUserId());
-        data.setStoreCode(store.getCode());
-        data.setTicketCode(ticketCode);
-        data.setPrice(amount);
-
-        data.setCreateDatetime(now);
-        data.setStatus(EStorePurchaseStatus.PAYED.getCode());
-        data.setPayType(EO2OPayType.ZH_YE.getCode());
-
-        data.setPayAmount2(frResultAmount);
-        data.setPayAmount3(gxjlResultAmount);
-
-        data.setPayDatetime(now);
-        data.setRemark("余额支付O2O消费");
         data.setSystemCode(store.getSystemCode());
         data.setCompanyCode(store.getCompanyCode());
         storePurchaseDAO.insert(data);
@@ -264,7 +236,7 @@ public class StorePurchaseBOImpl extends PaginableBOImpl<StorePurchase>
 
         data.setCreateDatetime(now);
         data.setStatus(EStorePurchaseStatus.PAYED.getCode());
-        data.setPayType(EO2OPayType.GD_YE.getCode());
+        data.setPayType(EPayType.GD_YE.getCode());
 
         data.setPayAmount2(jfAmount);
 
@@ -287,18 +259,18 @@ public class StorePurchaseBOImpl extends PaginableBOImpl<StorePurchase>
         condition.setStatus(EStorePurchaseStatus.PAYED.getCode());
         List<StorePurchase> list = storePurchaseDAO.selectList(condition);
         for (StorePurchase storePurchase : list) {
-            if (EO2OPayType.WEIXIN_APP.getCode().equals(
-                storePurchase.getPayType())
-                    || EO2OPayType.WEIXIN_H5.getCode().equals(
+            if (EPayType.WEIXIN_APP.getCode()
+                .equals(storePurchase.getPayType())
+                    || EPayType.WEIXIN_H5.getCode().equals(
                         storePurchase.getPayType())
-                    || EO2OPayType.ALIPAY.getCode().equals(
+                    || EPayType.ALIPAY.getCode().equals(
                         storePurchase.getPayType())
-                    || EO2OPayType.CG_02O_RMBJF.getCode().equals(
+                    || EPayType.CG_02O_RMBJF.getCode().equals(
                         storePurchase.getPayType())) {
                 if (null != storePurchase.getPayAmount1()) {
                     result += storePurchase.getPayAmount1();
                 }
-            } else if (EO2OPayType.CG_O2O_CGB.getCode().equals(
+            } else if (EPayType.CG_O2O_CGB.getCode().equals(
                 storePurchase.getPayType())) { // 加上返现金额
                 if (ECurrency.CNY.getCode().equals(
                     storePurchase.getBackCurrency())) {
@@ -345,7 +317,7 @@ public class StorePurchaseBOImpl extends PaginableBOImpl<StorePurchase>
         data.setBackCurrency(ECurrency.CNY.getCode());
         data.setCreateDatetime(now);
         data.setStatus(EStorePurchaseStatus.PAYED.getCode());
-        data.setPayType(EO2OPayType.YC_CB.getCode());
+        data.setPayType(EPayType.YC_CB.getCode());
 
         data.setPayAmount2(amount);
         data.setPayDatetime(now);
@@ -370,7 +342,7 @@ public class StorePurchaseBOImpl extends PaginableBOImpl<StorePurchase>
 
         data.setCreateDatetime(now);
         data.setStatus(EStorePurchaseStatus.PAYED.getCode());
-        data.setPayType(EO2OPayType.ZH_YE.getCode());
+        data.setPayType(EPayType.YE.getCode());
 
         data.setPayAmount1(payRMB);
         data.setPayAmount3(0L);
@@ -399,7 +371,7 @@ public class StorePurchaseBOImpl extends PaginableBOImpl<StorePurchase>
 
         data.setCreateDatetime(now);
         data.setStatus(EStorePurchaseStatus.TO_PAY.getCode());
-        data.setPayType(EO2OPayType.WEIXIN_H5.getCode());
+        data.setPayType(EPayType.WEIXIN_H5.getCode());
         data.setPayGroup(payGroup);
 
         data.setPayAmount3(0L);

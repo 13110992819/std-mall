@@ -22,9 +22,7 @@ import com.xnjr.mall.bo.IOrderBO;
 import com.xnjr.mall.bo.ISYSConfigBO;
 import com.xnjr.mall.bo.base.PaginableBOImpl;
 import com.xnjr.mall.common.DateUtil;
-import com.xnjr.mall.common.SysConstants;
 import com.xnjr.mall.core.OrderNoGenerater;
-import com.xnjr.mall.core.StringValidater;
 import com.xnjr.mall.dao.IOrderDAO;
 import com.xnjr.mall.dao.IProductOrderDAO;
 import com.xnjr.mall.domain.Cart;
@@ -32,11 +30,9 @@ import com.xnjr.mall.domain.CommitOrderPOJO;
 import com.xnjr.mall.domain.Order;
 import com.xnjr.mall.domain.Product;
 import com.xnjr.mall.domain.ProductOrder;
-import com.xnjr.mall.domain.SYSConfig;
 import com.xnjr.mall.enums.EGeneratePrefix;
 import com.xnjr.mall.enums.EOrderStatus;
 import com.xnjr.mall.enums.EOrderType;
-import com.xnjr.mall.enums.ESystemCode;
 import com.xnjr.mall.exception.BizException;
 
 /** 
@@ -123,19 +119,15 @@ public class OrderBOImpl extends PaginableBOImpl<Order> implements IOrderBO {
         return data;
     }
 
-    /** 
-     * @see com.xnjr.mall.bo.IOrderBO#refreshOrderPayAmount(java.lang.String, java.lang.Long)
-     */
     @Override
-    public int refreshPaySuccess(Order order, Long payAmount1,
-            Long payAmount11, Long payAmount2, Long payAmount3, String payCode) {
+    public int refreshPaySuccess(Order order, Long payAmount1, Long payAmount2,
+            Long payAmount3, String payCode) {
         int count = 0;
         if (order != null && StringUtils.isNotBlank(order.getCode())) {
             Date now = new Date();
             order.setStatus(EOrderStatus.PAY_YES.getCode());
             order.setPayDatetime(now);
             order.setPayAmount1(payAmount1);
-            order.setPayAmount11(payAmount11);
             order.setPayAmount2(payAmount2);
             order.setPayAmount3(payAmount3);
             order.setPayCode(payCode);
@@ -214,12 +206,9 @@ public class OrderBOImpl extends PaginableBOImpl<Order> implements IOrderBO {
             // 落地订单产品关联信息
             saveProductOrder(order.getCode(), product, cart.getQuantity());
         }
-        // 计算订单运费（菜狗暂时不考虑运费）
+        // 计算订单运费（暂时不考虑运费）
         Long yunfei = 0L;
-        if (ESystemCode.ZHPAY.getCode().equals(pojo.getSystemCode())) {
-            yunfei = totalYunfei(pojo.getSystemCode(), pojo.getSystemCode(),
-                amount1);
-        }
+
         // 计算订单金额
         order = getOrder(order, amount1, amount2, amount3, yunfei);
         // 落地订单
@@ -234,7 +223,6 @@ public class OrderBOImpl extends PaginableBOImpl<Order> implements IOrderBO {
         order.setAmount3(amount3);
         order.setYunfei(yunfei);
         order.setPayAmount1(0L);
-        order.setPayAmount11(0L);
         order.setPayAmount2(0L);
         order.setPayAmount3(0L);
         return order;
@@ -252,8 +240,7 @@ public class OrderBOImpl extends PaginableBOImpl<Order> implements IOrderBO {
         order.setReMobile(pojo.getReMobile());
 
         order.setReAddress(pojo.getReAddress());
-        order.setReceiptType(pojo.getReceiptType());
-        order.setReceiptTitle(pojo.getReceiptTitle());
+
         order.setApplyUser(pojo.getApplyUser());
         order.setApplyNote(pojo.getApplyNote());
 
@@ -282,30 +269,6 @@ public class OrderBOImpl extends PaginableBOImpl<Order> implements IOrderBO {
         productOrder.setCompanyCode(product.getCompanyCode());
         productOrder.setSystemCode(product.getSystemCode());
         productOrderDAO.insert(productOrder);
-    }
-
-    private Long totalYunfei(String systemCode, String companyCode, Long amount) {
-        Long yunfei = 0L;
-        Long byje = 0L;
-        // 取包邮金额
-        SYSConfig byjeConfig = sysConfigBO.getSYSConfig(SysConstants.SP_BYJE,
-            companyCode, systemCode);
-        try {
-            byje = StringValidater.toLong(byjeConfig.getCvalue()) * 1000;
-        } catch (Exception e) {
-            logger.error("包邮金额参数取值发生转换错误");
-        }
-        // 若订单金额小于包邮金额，则设置运费
-        if (amount < byje) {
-            SYSConfig yunfeiConfig = sysConfigBO.getSYSConfig(
-                SysConstants.SP_YUNFEI, companyCode, systemCode);
-            try {
-                yunfei = (StringValidater.toLong(yunfeiConfig.getCvalue()) * 1000);
-            } catch (Exception e) {
-                logger.error("运费参数取值发生转换错误");
-            }
-        }
-        return yunfei;
     }
 
     @Override

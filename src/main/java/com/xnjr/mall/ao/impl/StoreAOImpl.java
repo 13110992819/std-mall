@@ -15,7 +15,6 @@ import com.xnjr.mall.bo.IAccountBO;
 import com.xnjr.mall.bo.IOrderBO;
 import com.xnjr.mall.bo.IProductBO;
 import com.xnjr.mall.bo.ISmsOutBO;
-import com.xnjr.mall.bo.IStockBO;
 import com.xnjr.mall.bo.IStoreActionBO;
 import com.xnjr.mall.bo.IStoreBO;
 import com.xnjr.mall.bo.IStorePurchaseBO;
@@ -35,16 +34,13 @@ import com.xnjr.mall.dto.req.XN808203Req;
 import com.xnjr.mall.dto.req.XN808204Req;
 import com.xnjr.mall.dto.req.XN808208Req;
 import com.xnjr.mall.dto.res.XN808219Res;
-import com.xnjr.mall.dto.res.XN808275Res;
 import com.xnjr.mall.dto.res.XN808276Res;
 import com.xnjr.mall.enums.EOrderStatus;
 import com.xnjr.mall.enums.EProductStatus;
 import com.xnjr.mall.enums.EStoreLevel;
 import com.xnjr.mall.enums.EStoreStatus;
 import com.xnjr.mall.enums.EStoreTicketStatus;
-import com.xnjr.mall.enums.ESystemCode;
 import com.xnjr.mall.enums.EUserKind;
-import com.xnjr.mall.enums.EZhPool;
 import com.xnjr.mall.exception.BizException;
 
 /**
@@ -82,9 +78,6 @@ public class StoreAOImpl implements IStoreAO {
     @Autowired
     private IStoreActionBO storeActionBO;
 
-    @Autowired
-    private IStockBO stockBO;
-
     @Override
     @Transactional
     public String addStoreOss(XN808200Req req) {
@@ -95,8 +88,7 @@ public class StoreAOImpl implements IStoreAO {
         // 验证推荐人是否是平台的已注册用户,将userReferee手机号转化为用户编号
         String systemCode = req.getSystemCode();
         String userReferee = req.getUserReferee();
-        String userRefereeUserId = storeBO.isUserRefereeExist(userReferee,
-            systemCode);
+        String userRefereeUserId = storeBO.isUserRefereeExist(userReferee);
         // 验证B端用户
         String bUser = userBO.isUserExist(req.getMobile(), EUserKind.F2,
             req.getSystemCode());
@@ -166,8 +158,8 @@ public class StoreAOImpl implements IStoreAO {
         }
 
         // 验证推荐人是否是平台的已注册用户,将userReferee手机号转化为用户编号
-        String userRefereeUserId = storeBO.isUserRefereeExist(
-            req.getUserReferee(), dbStore.getSystemCode());
+        String userRefereeUserId = storeBO.isUserRefereeExist(req
+            .getUserReferee());
 
         dbStore.setName(req.getName());
         dbStore.setLevel(req.getLevel());
@@ -216,20 +208,17 @@ public class StoreAOImpl implements IStoreAO {
         }
 
         // 验证推荐人是否是平台的已注册用户,将userReferee手机号转化为用户编号
-        String systemCode = req.getSystemCode();
+
         String userReferee = req.getUserReferee();
-        String userId = storeBO.isUserRefereeExist(userReferee, systemCode);
+        String userId = storeBO.isUserRefereeExist(userReferee);
 
         String code = OrderNoGenerater.generateM("SJ");
         Store data = new Store();
         data.setCode(code);
         data.setName(req.getName());
-        // 正汇店铺直接升级为理财型店铺
-        if (ESystemCode.ZHPAY.getCode().equals(req.getSystemCode())) {
-            data.setLevel(EStoreLevel.FINANCIAL.getCode());
-        } else {
-            data.setLevel(EStoreLevel.NOMAL.getCode());
-        }
+
+        data.setLevel(EStoreLevel.NOMAL.getCode());
+
         data.setType(req.getType());
         data.setSlogan(req.getSlogan());
 
@@ -377,24 +366,6 @@ public class StoreAOImpl implements IStoreAO {
     }
 
     @Override
-    public void upLevel(String code) {
-        Store dbStore = storeBO.getStore(code);
-        if (EStoreStatus.TOCHECK.getCode().equals(dbStore.getStatus())
-                || EStoreStatus.UNPASS.getCode().equals(dbStore.getStatus())
-                || EStoreStatus.OFF.getCode().equals(dbStore.getStatus())) {
-            throw new BizException("xn000000", "商家店铺不是审核通过或者上架状态，不能升级");
-        }
-        if (EStoreLevel.NOMAL.getCode().equals(dbStore.getLevel())) {
-            dbStore.setLevel(EStoreLevel.FINANCIAL.getCode());
-            dbStore.setFundDatetime(new Date());
-            dbStore.setRemark("商家自行升级成公益型店铺");
-            storeBO.upLevel(dbStore);
-        } else {
-            throw new BizException("xn000000", "店铺不能进行升级操作");
-        }
-    }
-
-    @Override
     public Paginable<Store> queryStorePageFront(int start, int limit,
             Store condition) {
         Paginable<Store> paginable = storeBO.queryFrontPage(start, limit,
@@ -499,25 +470,6 @@ public class StoreAOImpl implements IStoreAO {
             resultList.add(result);
         }
         return resultList;
-    }
-
-    @Override
-    public XN808275Res getStoreTotalAmount(String userId) {
-        // 店铺营收
-        Store store = storeBO.getStoreByUser(userId);
-        Long storeProfit = storePurchaseBO.getTotalPrice(store.getCode());
-        Long orderProfit = orderBO.getTotalAmount(userId);
-        Long profit = storeProfit + orderProfit;
-        // 分红权收益
-        Long totalStockProfit = stockBO.getTotalBackAmount(userId);
-        // 分红权个数
-        Long stockCount = stockBO.getTotalCount(userId,
-            EZhPool.ZHPAY_STORE.getCode());
-        // 获取某池分红权数量
-        Long totalStockCount = stockBO.getStockPoolCount(EZhPool.ZHPAY_STORE
-            .getCode());
-        return new XN808275Res(profit, totalStockProfit, stockCount.intValue(),
-            totalStockCount.intValue());
     }
 
     /** 

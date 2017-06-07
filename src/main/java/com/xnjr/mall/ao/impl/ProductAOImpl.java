@@ -27,13 +27,11 @@ import com.xnjr.mall.core.StringValidater;
 import com.xnjr.mall.domain.Category;
 import com.xnjr.mall.domain.Product;
 import com.xnjr.mall.domain.ProductSpecs;
-import com.xnjr.mall.domain.Store;
 import com.xnjr.mall.dto.req.XN808010Req;
 import com.xnjr.mall.dto.req.XN808012Req;
 import com.xnjr.mall.dto.req.XN808013Req;
 import com.xnjr.mall.enums.EGeneratePrefix;
 import com.xnjr.mall.enums.EProductStatus;
-import com.xnjr.mall.enums.EStoreLevel;
 import com.xnjr.mall.enums.ESystemCode;
 import com.xnjr.mall.exception.BizException;
 
@@ -58,13 +56,7 @@ public class ProductAOImpl implements IProductAO {
 
     @Override
     public String addProduct(XN808010Req req) {
-        // 正汇系统只有公益型商家才可以发布产品
-        if (ESystemCode.ZHPAY.getCode().equals(req.getSystemCode())) {
-            Store store = storeBO.getStoreByUser(req.getCompanyCode());
-            if (!EStoreLevel.FINANCIAL.getCode().equals(store.getLevel())) {
-                throw new BizException("xn000000", "亲，您还不是公益型商家，不可以发布产品噢！");
-            }
-        }
+
         // 根据小类获取大类
         Category category = categoryBO.getCategory(req.getType());
 
@@ -84,11 +76,8 @@ public class ProductAOImpl implements IProductAO {
         data.setPrice2(StringValidater.toLong(req.getPrice2()));
 
         data.setPrice3(StringValidater.toLong(req.getPrice3()));
-        if (ESystemCode.ZHPAY.getCode().equals(req.getSystemCode())) {
-            data.setStatus(EProductStatus.TO_APPROVE.getCode());
-        } else {
-            data.setStatus(EProductStatus.APPROVE_YES.getCode());
-        }
+
+        data.setStatus(EProductStatus.APPROVE_YES.getCode());
 
         data.setUpdater(req.getUpdater());
         data.setUpdateDatetime(new Date());

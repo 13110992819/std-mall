@@ -1,7 +1,5 @@
 package com.xnjr.mall.bo;
 
-import com.xnjr.mall.domain.Store;
-import com.xnjr.mall.domain.User;
 
 /**
  * 分销BO，专门用于分销
@@ -10,14 +8,5 @@ import com.xnjr.mall.domain.User;
  * @history:
  */
 public interface IDistributeBO {
-
-    void distribute1Amount(Long storeFrAmount, Store store, User user,
-            String storePurchase);
-
-    void distribute10Amount(Long storeFrAmount, Store store, User user,
-            String storePurchase);
-
-    void distribute25Amount(Long storeFrAmount, Long userFrAmount, Store store,
-            User user, String storePurchase);
 
 }

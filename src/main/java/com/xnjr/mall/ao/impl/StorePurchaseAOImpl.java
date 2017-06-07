@@ -35,9 +35,7 @@ import com.xnjr.mall.dto.res.BooleanRes;
 import com.xnjr.mall.enums.EBizType;
 import com.xnjr.mall.enums.ECurrency;
 import com.xnjr.mall.enums.EGeneratePrefix;
-import com.xnjr.mall.enums.EO2OPayType;
 import com.xnjr.mall.enums.EPayType;
-import com.xnjr.mall.enums.EStoreLevel;
 import com.xnjr.mall.enums.EStorePurchaseStatus;
 import com.xnjr.mall.enums.EStoreStatus;
 import com.xnjr.mall.enums.EStoreTicketType;
@@ -83,11 +81,11 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
             throw new BizException("xn0000", "店铺不处于可消费状态");
         }
         // 1-人民币余额支付 5-微信H5支付 50-橙券余额支付
-        if (EO2OPayType.YC_CB.getCode().equals(payType)) {
+        if (EPayType.YC_CB.getCode().equals(payType)) {
             return storePurchaseYCCB(user, store, amount);
-        } else if (EO2OPayType.ZH_YE.getCode().equals(payType)) {
+        } else if (EPayType.YE.getCode().equals(payType)) {
             return storePurchaseYCRMBYE(user, store, amount);
-        } else if (EO2OPayType.WEIXIN_H5.getCode().equals(payType)) {
+        } else if (EPayType.WEIXIN_H5.getCode().equals(payType)) {
             return storePurchaseYCWXH5(user, store, amount);
         } else {
             throw new BizException("xn0000", "暂不支持此支付方式");
@@ -410,65 +408,6 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
         // 资金划转结束--------------
     }
 
-    private Object storePurchaseZHWX(User user, Store store, Long amount,
-            String ticketCode) {
-        // 验证支付渠道是否开通
-        sysConfigBO.doCheckPayOpen(EPayType.WEIXIN_APP);
-        // 落地本地系统消费记录
-        String payGroup = OrderNoGenerater.generateM(EGeneratePrefix.PAY_GROUP
-            .getCode());
-        String code = storePurchaseBO.storePurchaseZHWX(user, store, amount,
-            ticketCode, payGroup);
-
-        // 资金划转开始--------------
-        // RMB调用微信渠道至商家
-        return accountBO.doWeiXinPayRemote(user.getUserId(), store.getOwner(),
-            payGroup, code, EBizType.ZH_O2O, "O2O消费微信支付", amount);
-        // 资金划转结束--------------
-    }
-
-    private Object storePurchaseZHZFB(User user, Store store, Long amount,
-            String ticketCode) {
-        // 验证支付渠道是否开通
-        sysConfigBO.doCheckPayOpen(EPayType.ALIPAY);
-        // 落地本地系统消费记录
-        String payGroup = OrderNoGenerater.generateM(EGeneratePrefix.PAY_GROUP
-            .getCode());
-        String code = storePurchaseBO.storePurchaseZHZFB(user, store, amount,
-            ticketCode, payGroup);
-
-        // 资金划转开始--------------
-        // RMB调用支付宝渠道至商家
-        return accountBO.doAlipayRemote(user.getUserId(), store.getOwner(),
-            payGroup, code, EBizType.ZH_O2O, "O2O消费支付宝支付", amount);
-        // 资金划转结束--------------
-    }
-
-    @Override
-    @Transactional
-    public Object storePurchaseZH(String userId, String storeCode, Long amount,
-            String payType, String ticketCode, String tradePwd) {
-        Store store = storeBO.getStore(storeCode);
-        if (!EStoreStatus.ON_OPEN.getCode().equals(store.getStatus())) {
-            throw new BizException("xn0000", "店铺不处于可消费状态");
-        }
-        User user = userBO.getRemoteUser(userId);
-        // 折扣券可扣减优惠金额
-        Long ticketAmount = getTicketAmount(ticketCode, amount);
-        if (ticketAmount > 0) {
-            amount = amount - ticketAmount;
-        }
-        if (EO2OPayType.ZH_YE.getCode().equals(payType)) {
-            return storePurchaseZHYE(user, store, amount, ticketCode, tradePwd);
-        } else if (EO2OPayType.ALIPAY.getCode().equals(payType)) {
-            return storePurchaseZHZFB(user, store, amount, ticketCode);
-        } else if (EO2OPayType.WEIXIN_APP.getCode().equals(payType)) {
-            return storePurchaseZHWX(user, store, amount, ticketCode);
-        } else {
-            throw new BizException("xn0000", payType + "支付方式暂不支持");
-        }
-    }
-
     private Long getTicketAmount(String ticketCode, Long amount) {
         Long ticketAmount = 0L; // 扣除折扣券优惠
         if (StringUtils.isNotBlank(ticketCode)) {// 使用折扣券
@@ -495,128 +434,6 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
         return ticketAmount;
     }
 
-    private String storePurchaseZHYE(User user, Store store, Long amount,
-            String ticketCode, String tradePwd) {
-        // 验证交易密码
-        userBO.checkTradePwd(user.getUserId(), tradePwd);
-
-        // 优惠券状态修改
-        userTicketBO.ticketUsed(ticketCode);
-        Long frResultAmount = 0L;// 需要支付的分润金额
-        Long gxjlResultAmount = 0L;// 需要支付的贡献值金额计算
-        String buyUserId = user.getUserId();
-        String storeUserId = store.getOwner();
-        // 1、贡献奖励+分润<yhAmount 余额不足
-        Account gxjlAccount = accountBO.getRemoteAccount(buyUserId,
-            ECurrency.ZH_GXZ);
-        Long gxjlAmount = gxjlAccount.getAmount();
-        Account frAccount = accountBO.getRemoteAccount(buyUserId,
-            ECurrency.ZH_FRB);
-        Long frAmount = frAccount.getAmount();
-        Double gxjl2cnyRate = accountBO.getExchangeRateRemote(ECurrency.ZH_GXZ);
-        Double fr2cnyRate = accountBO.getExchangeRateRemote(ECurrency.ZH_FRB);
-        if (gxjlAmount / gxjl2cnyRate + frAmount / fr2cnyRate < amount) {
-            throw new BizException("xn0000", "余额不足");
-        }
-        // 2、计算frResultAmount和gxjlResultAmount
-        if (gxjlAmount <= 0L) {
-            frResultAmount = Double.valueOf(amount * fr2cnyRate).longValue();
-            gxjlResultAmount = 0L;
-        } else if (gxjlAmount > 0L && gxjlAmount / gxjl2cnyRate < amount) {// 0<贡献奖励<yhAmount
-            frResultAmount = Double
-                .valueOf(
-                    (amount - Double.valueOf(gxjlAmount / gxjl2cnyRate)
-                        .longValue()) * fr2cnyRate).longValue();
-            gxjlResultAmount = gxjlAmount;
-        } else if (gxjlAccount.getAmount() / gxjl2cnyRate >= amount) { // 4、贡献奖励>=yhAmount
-            frResultAmount = 0L;
-            gxjlResultAmount = Double.valueOf(amount * gxjl2cnyRate)
-                .longValue();
-        }
-        // 落地本地系统消费记录
-        String code = storePurchaseBO.storePurchaseZHYE(user, store,
-            ticketCode, amount, frResultAmount, gxjlResultAmount);
-        // ---资金划拨开始-----
-        // 会员扣分润和贡献值，商家收分润，先全额收掉。
-        String systemUser = ESysUser.SYS_USER_ZHPAY.getCode();
-        if (gxjlResultAmount > 0L) {// 贡献值是给平台的，贡献值等值的(1:1)分润有平台给商家
-            accountBO.doTransferAmountRemote(buyUserId, systemUser,
-                ECurrency.ZH_GXZ, gxjlResultAmount, EBizType.ZH_O2O,
-                "正汇O2O贡献值消费", "正汇O2O消费者的贡献值回收", code);
-            accountBO.doTransferAmountRemote(systemUser, storeUserId,
-                ECurrency.ZH_FRB, gxjlResultAmount, EBizType.ZH_O2O,
-                "正汇O2O平台返现分润", "正汇O2O平台返现分润", code);
-        }
-        if (frResultAmount > 0L) {
-            accountBO.doTransferAmountRemote(buyUserId, storeUserId,
-                ECurrency.ZH_FRB, frResultAmount, EBizType.ZH_O2O,
-                "正汇O2O消费者的分润支付", "正汇O2O消费者的分润支付", code);
-        }
-        // 用商家的钱开始分销
-        if (StringUtils.isNotBlank(ticketCode)) {
-            distributeBO.distribute1Amount(amount, store, user, code);
-        } else {
-            if (EStoreLevel.NOMAL.getCode().equals(store.getLevel())) {
-                distributeBO.distribute10Amount(amount, store, user, code);
-            }
-            if (EStoreLevel.FINANCIAL.getCode().equals(store.getLevel())) {
-                distributeBO.distribute25Amount(amount, frResultAmount, store,
-                    user, code);
-            }
-        }
-        return code;
-    }
-
-    @Override
-    @Transactional
-    public void paySuccessZH(String payGroup, String payCode, Long payAmount) {
-        StorePurchase storePurchase = storePurchaseBO
-            .getStorePurchaseByPayGroup(payGroup);
-        if (EStorePurchaseStatus.TO_PAY.getCode().equals(
-            storePurchase.getStatus())) {
-            // 更新支付记录
-            storePurchaseBO.paySuccess(storePurchase, payCode, payAmount);
-
-            // 优惠券状态修改
-            String ticketCode = storePurchase.getTicketCode();
-            UserTicket userTicket = userTicketBO.getUserTicket(ticketCode);
-            if (null != userTicket
-                    && !EUserTicketStatus.UNUSED.getCode().equals(
-                        userTicket.getStatus())) {
-                throw new BizException("xn000000", "该折扣券["
-                        + userTicket.getCode() + "]不是未使用状态，无法支付");
-            } else {
-                userTicketBO.ticketUsed(ticketCode);
-            }
-
-            // 将商家人民币金额划转成分润币种
-            Store store = storeBO.getStore(storePurchase.getStoreCode());
-            accountBO.doTransferAmountRemote(store.getOwner(), ECurrency.CNY,
-                store.getOwner(), ECurrency.ZH_FRB, payAmount,
-                EBizType.EXCHANGE_CURRENCY, "O2O消费人民币转分润", "O2O消费加分润",
-                storePurchase.getCode());
-            // 用商家的钱开始分销
-            Long storeFrAmount = storePurchase.getPrice();// 商家收到的分润
-            Long userFrAmount = storeFrAmount;// 用户支付的分润
-            User user = userBO.getRemoteUser(storePurchase.getUserId());
-            if (StringUtils.isNotBlank(ticketCode)) {
-                distributeBO.distribute1Amount(storeFrAmount, store, user,
-                    storePurchase.getCode());
-            } else {
-                if (EStoreLevel.NOMAL.getCode().equals(store.getLevel())) {
-                    distributeBO.distribute10Amount(storeFrAmount, store, user,
-                        storePurchase.getCode());
-                }
-                if (EStoreLevel.FINANCIAL.getCode().equals(store.getLevel())) {
-                    distributeBO.distribute25Amount(storeFrAmount,
-                        userFrAmount, store, user, storePurchase.getCode());
-                }
-            }
-        } else {
-            logger.error("订单号：" + storePurchase.getCode() + "已支付，重复回调");
-        }
-    }
-
     @Override
     @Transactional
     public void paySuccessCG(String payGroup, String payCode, Long payAmount) {
@@ -626,7 +443,7 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
             storePurchase.getStatus())) {
             // 更新支付记录
             storePurchaseBO.paySuccess(storePurchase, payCode, payAmount);
-            if (EO2OPayType.CG_RMBJF_WEIXIN_H5.getCode().equals(
+            if (EPayType.CG_RMBJF_WEIXIN_H5.getCode().equals(
                 storePurchase.getPayType())) {
                 // 支付成功后，将积分从消费者回收至平台
                 String systemUser = ESysUser.SYS_USER_CAIGO.getCode();
@@ -634,7 +451,7 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
                     systemUser, ECurrency.CGJF, storePurchase.getPayAmount3(),
                     EBizType.CG_O2O_CGJF, "O2O消费使用积分", "O2O消费回收积分",
                     storePurchase.getCode());
-            } else if (EO2OPayType.WEIXIN_H5.getCode().equals( // 全人民币支付
+            } else if (EPayType.WEIXIN_H5.getCode().equals( // 全人民币支付
                 storePurchase.getPayType())) {
                 // 资金划转逻辑--------------
                 // 1、平台给商家一定比例人民币

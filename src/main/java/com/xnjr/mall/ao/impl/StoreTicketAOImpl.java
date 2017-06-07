@@ -20,7 +20,6 @@ import com.xnjr.mall.domain.UserTicket;
 import com.xnjr.mall.dto.req.XN808250Req;
 import com.xnjr.mall.dto.req.XN808252Req;
 import com.xnjr.mall.enums.EBoolean;
-import com.xnjr.mall.enums.ECurrency;
 import com.xnjr.mall.enums.EGeneratePrefix;
 import com.xnjr.mall.enums.EStoreTicketStatus;
 import com.xnjr.mall.enums.EUserTicketStatus;
@@ -55,7 +54,7 @@ public class StoreTicketAOImpl implements IStoreTicketAO {
         data.setKey2(StringValidater.toLong(req.getKey2()));
         data.setDescription(req.getDescription());
         data.setPrice(StringValidater.toLong(req.getPrice()));
-        data.setCurrency(ECurrency.ZH_QBB.getCode());
+        data.setCurrency(null);// BUG BUG BUG
         data.setValidateStart(validateStart);
         data.setValidateEnd(validateEnd);
         data.setCreateDatetime(new Date());
@@ -100,7 +99,7 @@ public class StoreTicketAOImpl implements IStoreTicketAO {
         data.setKey2(StringValidater.toLong(req.getKey2()));
         data.setDescription(req.getDescription());
         data.setPrice(StringValidater.toLong(req.getPrice()));
-        data.setCurrency(ECurrency.ZH_QBB.getCode());
+        data.setCurrency(null);// BUG BUG BUG
         data.setValidateStart(validateStart);
         data.setValidateEnd(validateEnd);
         if (EBoolean.YES.getCode().equals(req.getIsPutaway())) {

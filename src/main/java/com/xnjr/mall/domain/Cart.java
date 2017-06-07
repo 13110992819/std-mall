@@ -24,6 +24,9 @@ public class Cart extends ABaseDO {
     // 商品编号
     private String productCode;
 
+    // 产品规格编号
+    private String productSpecsCode;
+
     // 数量
     private Integer quantity;
 

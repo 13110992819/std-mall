@@ -303,4 +303,12 @@ public class Sorder extends ABaseDO {
         this.systemCode = systemCode;
     }
 
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
 }

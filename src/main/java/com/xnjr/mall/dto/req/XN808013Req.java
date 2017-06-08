@@ -23,18 +23,6 @@ public class XN808013Req {
     // 相对位置编号(必填)
     private String orderNo;
 
-    // 市场价/原价(必填)
-    private String originalPrice;
-
-    // 价格1(必填)
-    private String price1;
-
-    // 价格2(必填)
-    private String price2;
-
-    // 价格3(必填)
-    private String price3;
-
     // 更新人(必填)
     private String updater;
 
@@ -43,30 +31,6 @@ public class XN808013Req {
 
     public String getCode() {
         return code;
-    }
-
-    public String getPrice1() {
-        return price1;
-    }
-
-    public void setPrice1(String price1) {
-        this.price1 = price1;
-    }
-
-    public String getPrice2() {
-        return price2;
-    }
-
-    public void setPrice2(String price2) {
-        this.price2 = price2;
-    }
-
-    public String getPrice3() {
-        return price3;
-    }
-
-    public void setPrice3(String price3) {
-        this.price3 = price3;
     }
 
     public String getLocation() {
@@ -103,14 +67,6 @@ public class XN808013Req {
 
     public void setCode(String code) {
         this.code = code;
-    }
-
-    public String getOriginalPrice() {
-        return originalPrice;
-    }
-
-    public void setOriginalPrice(String originalPrice) {
-        this.originalPrice = originalPrice;
     }
 
 }

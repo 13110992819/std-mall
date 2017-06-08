@@ -15,8 +15,6 @@
 	    <typeAlias alias="storeTicket" type="com.xnjr.mall.domain.StoreTicket" />
 	    <typeAlias alias="userTicket" type="com.xnjr.mall.domain.UserTicket" />
 	    
-	    <typeAlias alias="stock" type="com.xnjr.mall.domain.Stock" />
-	    <typeAlias alias="stockBack" type="com.xnjr.mall.domain.StockBack" />
 	    <typeAlias alias="caigopool" type="com.xnjr.mall.domain.Caigopool" />
 	    <typeAlias alias="caigopoolBack" type="com.xnjr.mall.domain.CaigopoolBack" />
 	    

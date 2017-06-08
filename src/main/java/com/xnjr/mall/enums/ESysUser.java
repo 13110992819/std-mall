@@ -20,7 +20,8 @@ public enum ESysUser {
     // SYS_USER 这样前缀，系统账户钱可以扣成负数
     SYS_USER_CAIGO("SYS_USER_CAIGO", "菜狗系统用户编号"), SYS_USER_PIPE(
             "SYS_USER_PIPE", "全能水电工助手系统用户编号"), SYS_USER_YAOCHENG(
-            "SYS_USER_YAOCHENG", "姚橙系统用户编号");
+            "SYS_USER_YAOCHENG", "姚橙系统用户编号"), SYS_USER_JKEG("SYS_USER_JKEG",
+            "健康E购系统用户编号");
     public static Map<String, ESysUser> getDirectionMap() {
         Map<String, ESysUser> map = new HashMap<String, ESysUser>();
         for (ESysUser direction : ESysUser.values()) {

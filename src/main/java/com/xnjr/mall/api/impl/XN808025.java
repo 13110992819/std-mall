@@ -39,6 +39,8 @@ public class XN808025 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         Product condition = new Product();
+        condition.setStoreCode(req.getStoreCode());
+        condition.setKind(req.getKind());
         condition.setCategory(req.getCategory());
         condition.setType(req.getType());
         condition.setName(req.getName());

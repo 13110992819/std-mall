@@ -6,46 +6,46 @@
 		<result column="code" property="code" />
 		<result column="name" property="name" />
 		<result column="level" property="level" />
+		<result column="category" property="category" />
 		<result column="type" property="type" />
+		
 	    <result column="slogan" property="slogan" />
-	    
 		<result column="adv_pic" property="advPic" />
 		<result column="pic" property="pic" />
 		<result column="description" property="description" />
 		<result column="province" property="province" />
-		<result column="city" property="city" />
 		
+		<result column="city" property="city" />
 		<result column="area" property="area" />
 		<result column="address" property="address" />
 		<result column="longitude" property="longitude" />
 		<result column="latitude" property="latitude" />
-		<result column="book_mobile" property="bookMobile" />
 		
+		<result column="book_mobile" property="bookMobile" />
 		<result column="sms_mobile" property="smsMobile" />
 		<result column="pdf" property="pdf" />
 		<result column="ui_location" property="uiLocation" />
 		<result column="ui_order" property="uiOrder" />
-		<result column="legal_person_name" property="legalPersonName" />
 		
+		<result column="legal_person_name" property="legalPersonName" />
 		<result column="user_referee" property="userReferee" />
 		<result column="rate1" property="rate1" />
 		<result column="rate2" property="rate2" />
 		<result column="rate3" property="rate3" />
-		<result column="is_default" property="isDefault" />
 		
+		<result column="is_default" property="isDefault" />
 		<result column="status" property="status" />
 		<result column="updater" property="updater" />
 		<result column="update_datetime" property="updateDatetime" />
 		<result column="remark" property="remark" />
-		<result column="fund_datetime" property="fundDatetime" />
-		<result column="owner" property="owner" />
 		
+		<result column="owner" property="owner" />
 		<result column="contract_no" property="contractNo" />
 		<result column="total_jf_num" property="totalJfNum" />
 		<result column="total_dz_num" property="totalDzNum" />
 		<result column="total_sc_num" property="totalScNum" />
-		<result column="distance" property="distance" />
 		
+		<result column="distance" property="distance" />
 		<result column="company_code" property="companyCode" />
 		<result column="system_code" property="systemCode" />
 	</resultMap>
@@ -59,6 +59,9 @@
 			</if>
 			<if test="level != null and level != '' ">
 				AND t.level = #{level}
+			</if>
+			<if test="category != null and category != '' ">
+				AND t.category = #{category}
 			</if>
 			<if test="type != null and type != '' ">
 				AND t.type = #{type}
@@ -128,6 +131,7 @@
 		t.code
 		,t.name
 		,t.level
+		,t.category
 		,t.type
 		,t.slogan
 		
@@ -159,7 +163,6 @@
 		,t.updater
 		,t.update_datetime
 		,t.remark
-		,t.fund_datetime
 		,t.owner
 		
 		,t.contract_no
@@ -195,6 +198,7 @@
 		t.code
 		,t.name
 		,t.level
+		,t.category
 		,t.type
 		,t.slogan
 		
@@ -226,7 +230,6 @@
 		,t.updater
 		,t.update_datetime
 		,t.remark
-		,t.fund_datetime
 		,t.owner
 		
 		,t.contract_no
@@ -258,6 +261,7 @@
 		code
 		,name
 		,level
+		,category
 		,type
 		,slogan
 		
@@ -301,6 +305,7 @@
 		#{code}
 		,#{name}
 		,#{level}
+		,#{category}
 		,#{type}
 		,#{slogan}
 		
@@ -347,6 +352,7 @@
 		code
 		,name
 		,level
+		,category
 		,type
 		,slogan
 		
@@ -389,6 +395,7 @@
 		#{code}
 		,#{name}
 		,#{level}
+		,#{category}
 		,#{type}
 		,#{slogan}
 		
@@ -432,6 +439,7 @@
 		UPDATE to2o_store
 		SET
 		name = #{name}
+		,category = #{category}
 		,level = #{level}
 		,type = #{type}
 		,slogan = #{slogan}
@@ -468,6 +476,7 @@
 		UPDATE to2o_store
 		SET
 		name = #{name}
+		,category = #{category}
 		,type = #{type}
 		,slogan = #{slogan}
 		
@@ -540,15 +549,6 @@
 		UPDATE to2o_store
 		SET
 		status = #{status}
-		WHERE code = #{code}
-	</update>
-	
-	<update id="update_level" parameterType="store">
-		UPDATE to2o_store
-		SET
-		level = #{level}
-		,fund_datetime = #{fundDatetime}
-		,remark = #{remark}
 		WHERE code = #{code}
 	</update>
 	

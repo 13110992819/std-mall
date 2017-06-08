@@ -8,6 +8,8 @@
  */
 package com.xnjr.mall.dto.req;
 
+import java.util.List;
+
 /** 
  * @author: haiqingzheng 
  * @since: 2016年5月17日 上午9:08:54 
@@ -36,44 +38,14 @@ public class XN808012Req {
     // 产品详情(必填)
     private String description;
 
-    // 价格1(选填)
-    private String price1;
-
-    // 价格2(选填)
-    private String price2;
-
-    // 价格3(选填)
-    private String price3;
-
     // 更新人(必填)
     private String updater;
 
     // 备注(选填)
     private String remark;
 
-    public String getPrice1() {
-        return price1;
-    }
-
-    public void setPrice1(String price1) {
-        this.price1 = price1;
-    }
-
-    public String getPrice2() {
-        return price2;
-    }
-
-    public void setPrice2(String price2) {
-        this.price2 = price2;
-    }
-
-    public String getPrice3() {
-        return price3;
-    }
-
-    public void setPrice3(String price3) {
-        this.price3 = price3;
-    }
+    // 产品参数列表
+    private List<XN808030Req> productSpecsList;
 
     public String getCode() {
         return code;
@@ -145,6 +117,14 @@ public class XN808012Req {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public List<XN808030Req> getProductSpecsList() {
+        return productSpecsList;
+    }
+
+    public void setProductSpecsList(List<XN808030Req> productSpecsList) {
+        this.productSpecsList = productSpecsList;
     }
 
 }

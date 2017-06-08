@@ -21,4 +21,6 @@ public interface IProductSpecsBO extends IPaginableBO<ProductSpecs> {
 
     public List<ProductSpecs> queryProductSpecsList(String productCode);
 
+    public int removeProductSpecsByProductCode(String code);
+
 }

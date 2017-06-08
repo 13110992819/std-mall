@@ -1,22 +1,23 @@
 /**
- * @Title EOrderType.java 
+ * @Title EProductKind.java 
  * @Package com.xnjr.mall.enums 
  * @Description 
- * @author haiqingzheng  
- * @date 2016年11月17日 下午12:41:01 
+ * @author leo(haiqing)  
+ * @date 2017年6月8日 上午7:01:30 
  * @version V1.0   
  */
 package com.xnjr.mall.enums;
 
 /** 
  * @author: haiqingzheng 
- * @since: 2016年11月17日 下午12:41:01 
+ * @since: 2017年6月8日 上午7:01:30 
  * @history:
  */
-public enum EOrderType {
-    SH_SALE("1", "散买"), INTEGRAL_EXCHANGE("2", "积分兑换");
+public enum EProductKind {
 
-    EOrderType(String code, String value) {
+    NORMAL("1", "标准商城"), INTEGRAL("2", "积分商城");
+
+    EProductKind(String code, String value) {
         this.code = code;
         this.value = value;
     }

@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xnjr.mall.dao.ISproductDAO">
+	<resultMap id="sproduct_DB_Result" type="sproduct">
+		<result column="code" property="code" />
+		<result column="name" property="name" />
+		<result column="category" property="category" />
+		<result column="type" property="type" />
+		<result column="store_code" property="storeCode" />
+	
+		<result column="slogan" property="slogan" />
+		<result column="adv_pic" property="advPic" />
+		<result column="pic" property="pic" />
+		<result column="description" property="description" />
+		<result column="price" property="price" />
+		
+		<result column="status" property="status" />
+		<result column="total_num" property="totalNum" />
+		<result column="remain_num" property="remainNum" />
+		<result column="location" property="location" />
+		<result column="order_no" property="orderNo" />
+		
+		<result column="company_code" property="companyCode" />
+		<result column="system_code" property="systemCode" />
+	</resultMap>
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="code != null and code != '' ">
+				AND t.code = #{code}
+			</if>
+			<if test="name != null and name != '' ">
+				AND t.name = #{name}
+			</if>
+			<if test="category != null and category != '' ">
+				AND t.category = #{category}
+			</if>
+			<if test="type != null and type != '' ">
+				AND t.type = #{type}
+			</if>
+			<if test="storeCode != null and storeCode != '' ">
+				AND t.store_code = #{storeCode}
+			</if>
+			
+			<if test="status != null and status != '' ">
+				AND t.status = #{status}
+			</if>
+			<if test="location != null and location != '' ">
+				AND t.location = #{location}
+			</if>
+			<if test="companyCode != null and companyCode != '' ">
+				AND t.company_code = #{companyCode}
+			</if>
+			<if test="systemCode != null and systemCode != '' ">
+				AND t.system_code = #{systemCode}
+			</if>
+		</trim>
+	</sql>
+	<select id="select_sproduct" parameterType="sproduct" resultMap="sproduct_DB_Result">
+		SELECT
+		t.code
+		,t.name
+		,t.category
+		,t.type
+		,t.store_code
+		
+		,t.slogan
+		,t.adv_pic
+		,t.pic
+		,t.description
+		,t.price
+		
+		,t.status
+		,t.total_num
+		,t.remain_num
+		,t.location
+		,t.order_no
+		
+		,t.company_code
+		,t.system_code 
+		FROM
+		to2o_sproduct t 
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+
+	<select id="select_sproduct_count" parameterType="sproduct"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM to2o_sproduct t
+		<include refid="where_condition" />
+	</select>
+
+	<insert id="insert_sproduct" parameterType="sproduct">
+		INSERT INTO
+		to2o_sproduct(
+		code
+		,name
+		,category
+		,type
+		,store_code
+		
+		,slogan
+		,adv_pic
+		,pic
+		,description
+		,price
+		
+		,status
+		,total_num
+		,remain_num
+		,company_code
+		,system_code 
+		)
+		VALUES(
+		#{code}
+		,#{name}
+		,#{category}
+		,#{type}
+		,#{storeCode}
+		
+		,#{slogan}
+		,#{advPic}
+		,#{pic}
+		,#{description}
+		,#{price}
+		
+		,#{status}
+		,#{totalNum}
+		,#{remainNum}
+		,#{companyCode}
+		,#{systemCode} 
+		)
+	</insert>
+	
+	<update id="update_sproduct" parameterType="sproduct">
+		UPDATE to2o_sproduct
+		SET
+		name=#{name}
+		,category=#{category}
+		,type=#{type}
+		
+		,slogan=#{slogan}
+		,adv_pic=#{advPic}
+		,pic=#{pic}
+		,description=#{description}
+		,price=#{price}
+
+		,status=#{status}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_putOn" parameterType="sproduct">
+		UPDATE to2o_sproduct
+		SET
+		location=#{location}
+		,order_no=#{orderNo}
+		,price=#{price}
+		,status = #{status}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_putOff" parameterType="sproduct">
+		UPDATE to2o_sproduct
+		SET
+		status = #{status}
+		WHERE code = #{code}
+	</update>
+	
+	<delete id="delete_sproduct" parameterType="sproduct">
+		DELETE FROM
+		to2o_sproduct
+		WHERE
+		code = #{code}
+	</delete>
+	
+</mapper>

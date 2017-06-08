@@ -22,6 +22,9 @@
 	    <typeAlias alias="sysConfig" type="com.xnjr.mall.domain.SYSConfig" />
 	    <typeAlias alias="vproduct" type="com.xnjr.mall.domain.Vproduct" />
 	    <typeAlias alias="vorder" type="com.xnjr.mall.domain.Vorder" />
+	    
+	    <typeAlias alias="sproduct" type="com.xnjr.mall.domain.Sproduct" />
+	    <typeAlias alias="sorder" type="com.xnjr.mall.domain.Sorder" />
 	</typeAliases>	
 </configuration>
 

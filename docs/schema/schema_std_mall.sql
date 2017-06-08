@@ -15,6 +15,9 @@ CREATE TABLE `to2o_sproduct` (
   `status` varchar(4) DEFAULT NULL COMMENT '产品状态',
   `total_num` int(11) DEFAULT NULL COMMENT '当天总数',
   `remain_num` int(11) DEFAULT NULL COMMENT '当天剩余数',
+  `location` varchar(32) DEFAULT NULL COMMENT '位置(0 普通)',
+  `order_no` int(11) DEFAULT NULL COMMENT '相对位置编号',
+  
   `company_code` varchar(32) DEFAULT NULL COMMENT '所属公司',
   `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
   PRIMARY KEY (`code`) COMMENT '服务产品'

@@ -46,6 +46,12 @@ public class Sproduct extends ABaseDO {
     // 当天剩余数
     private Integer remainNum;
 
+    // 位置
+    private String location;
+
+    // 相对位置编号
+    private Integer orderNo;
+
     // 所属公司编号
     private String companyCode;
 
@@ -170,6 +176,34 @@ public class Sproduct extends ABaseDO {
 
     public void setSystemCode(String systemCode) {
         this.systemCode = systemCode;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public Integer getOrderNo() {
+        return orderNo;
+    }
+
+    public void setOrderNo(Integer orderNo) {
+        this.orderNo = orderNo;
+    }
+
+    @Override
+    public String toString() {
+        return "Sproduct [code=" + code + ", name=" + name + ", category="
+                + category + ", type=" + type + ", storeCode=" + storeCode
+                + ", slogan=" + slogan + ", advPic=" + advPic + ", pic=" + pic
+                + ", description=" + description + ", price=" + price
+                + ", status=" + status + ", totalNum=" + totalNum
+                + ", remainNum=" + remainNum + ", location=" + location
+                + ", orderNo=" + orderNo + ", companyCode=" + companyCode
+                + ", systemCode=" + systemCode + "]";
     }
 
 }

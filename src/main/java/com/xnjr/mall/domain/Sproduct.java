@@ -44,7 +44,7 @@ public class Sproduct extends ABaseDO {
     private Integer totalNum;
 
     // 当天剩余数
-    private Integer remain;
+    private Integer remainNum;
 
     public String getCode() {
         return code;
@@ -60,6 +60,22 @@ public class Sproduct extends ABaseDO {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getStoreCode() {
@@ -126,12 +142,12 @@ public class Sproduct extends ABaseDO {
         this.totalNum = totalNum;
     }
 
-    public Integer getRemain() {
-        return remain;
+    public Integer getRemainNum() {
+        return remainNum;
     }
 
-    public void setRemain(Integer remain) {
-        this.remain = remain;
+    public void setRemainNum(Integer remainNum) {
+        this.remainNum = remainNum;
     }
 
 }

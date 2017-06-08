@@ -83,4 +83,11 @@ public class ProductSpecsBOImpl extends PaginableBOImpl<ProductSpecs> implements
         condition.setProductCode(productCode);
         return productSpecsDAO.selectList(condition);
     }
+
+    @Override
+    public int removeProductSpecsByProductCode(String productCode) {
+        ProductSpecs condition = new ProductSpecs();
+        condition.setProductCode(productCode);
+        return productSpecsDAO.deleteByProductCode(condition);
+    }
 }

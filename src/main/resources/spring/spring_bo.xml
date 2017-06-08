@@ -55,14 +55,6 @@
 		<property name="paginableDAO" ref="storePurchaseDAOImpl"/>
 	</bean>
 	
-	
-	<bean id="stockBO" class="com.xnjr.mall.bo.impl.StockBOImpl">
-		<property name="paginableDAO" ref="stockDAOImpl"/>
-	</bean>
-	<bean id="stockBackBO" class="com.xnjr.mall.bo.impl.StockBackBOImpl">
-		<property name="paginableDAO" ref="stockBackDAOImpl"/>
-	</bean>
-	
 	<bean id="caigopoolBO" class="com.xnjr.mall.bo.impl.CaigopoolBOImpl">
 		<property name="paginableDAO" ref="caigopoolDAOImpl"/>
 	</bean>

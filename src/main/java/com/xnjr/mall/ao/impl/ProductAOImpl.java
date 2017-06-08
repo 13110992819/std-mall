@@ -59,6 +59,11 @@ public class ProductAOImpl implements IProductAO {
     @Override
     @Transactional
     public String addProduct(XN808010Req req) {
+        String storeCode = ESystemCode.JKYG.getCode();
+        if (StringUtils.isNotBlank(req.getStoreCode())) {
+            storeBO.getStore(req.getStoreCode());
+            storeCode = req.getStoreCode();
+        }
 
         // 根据小类获取大类
         Category category = categoryBO.getCategory(req.getType());
@@ -67,20 +72,23 @@ public class ProductAOImpl implements IProductAO {
         String code = OrderNoGenerater.generateM(EGeneratePrefix.PRODUCT
             .getCode());
         data.setCode(code);
+        data.setStoreCode(storeCode);
+        data.setKind(req.getKind());
         data.setCategory(category.getParentCode());
         data.setType(req.getType());
+
         data.setName(req.getName());
         data.setSlogan(req.getSlogan());
-
         data.setAdvPic(req.getAdvPic());
         data.setPic(req.getPic());
         data.setDescription(req.getDescription());
+
         data.setStatus(EProductStatus.APPROVE_YES.getCode());
         data.setUpdater(req.getUpdater());
-
         data.setUpdateDatetime(new Date());
         data.setRemark(req.getRemark());
         data.setBoughtCount(0);
+
         data.setCompanyCode(req.getCompanyCode());
         data.setSystemCode(req.getSystemCode());
         productBO.saveProduct(data);
@@ -119,6 +127,7 @@ public class ProductAOImpl implements IProductAO {
     }
 
     @Override
+    @Transactional
     public void dropProduct(String code) {
         if (StringUtils.isNotBlank(code)) {
             Product product = productBO.getProduct(code);
@@ -128,6 +137,7 @@ public class ProductAOImpl implements IProductAO {
                     || EProductStatus.APPROVE_NO.getCode().equals(
                         product.getStatus())) {
                 productBO.removeProduct(code);
+                productSpecsBO.removeProductSpecsByProductCode(code);
             } else {
                 throw new BizException("xn000000", "产品已上架过，不能删除");
             }
@@ -135,32 +145,58 @@ public class ProductAOImpl implements IProductAO {
     }
 
     @Override
+    @Transactional
     public void editProduct(XN808012Req req) {
+        Product dbProduct = productBO.getProduct(req.getCode());
+        if (EProductStatus.PUBLISH_YES.getCode().equals(dbProduct.getStatus())) {
+            throw new BizException("xn000000", "该产品已上架，不能修改，请先下架");
+        }
         // 根据小类获取大类
         Category category = categoryBO.getCategory(req.getType());
         Product data = new Product();
-        Product dbProduct = productBO.getProduct(req.getCode());
-
-        data.setStatus(dbProduct.getStatus());
-
         data.setCode(req.getCode());
         data.setCategory(category.getParentCode());
         data.setType(req.getType());
         data.setName(req.getName());
         data.setSlogan(req.getSlogan());
-
         data.setAdvPic(req.getAdvPic());
-
         data.setPic(req.getPic());
         data.setDescription(req.getDescription());
-        data.setPrice1(StringValidater.toLong(req.getPrice1()));
-        data.setPrice2(StringValidater.toLong(req.getPrice2()));
-        data.setPrice3(StringValidater.toLong(req.getPrice3()));
-
         data.setUpdater(req.getUpdater());
         data.setUpdateDatetime(new Date());
         data.setRemark(req.getRemark());
         productBO.refreshProduct(data);
+
+        // 删除原来的规格参数，重新插入
+        productSpecsBO.removeProductSpecsByProductCode(req.getCode());
+        List<XN808030Req> productSpecsList = req.getProductSpecsList();
+        if (CollectionUtils.isNotEmpty(productSpecsList)) {
+            for (XN808030Req xn808030Req : productSpecsList) {
+                String psCode = OrderNoGenerater
+                    .generateM(EGeneratePrefix.PRODUCT_SPECS.getCode());
+                ProductSpecs productSpecs = new ProductSpecs();
+                productSpecs.setCode(psCode);
+                productSpecs.setName(xn808030Req.getName());
+                productSpecs.setProductCode(req.getCode());
+                productSpecs.setOriginalPrice(xn808030Req.getOriginalPrice());
+                productSpecs.setPrice1(StringValidater.toLong(xn808030Req
+                    .getPrice1()));
+                productSpecs.setPrice2(StringValidater.toLong(xn808030Req
+                    .getPrice2()));
+                productSpecs.setPrice3(StringValidater.toLong(xn808030Req
+                    .getPrice3()));
+
+                productSpecs.setQuantity(StringValidater.toInteger(xn808030Req
+                    .getQuantity()));
+                productSpecs.setOrderNo(StringValidater.toInteger(xn808030Req
+                    .getOrderNo()));
+                productSpecs.setCompanyCode(dbProduct.getCompanyCode());
+                productSpecs.setSystemCode(dbProduct.getSystemCode());
+                productSpecsBO.saveProductSpecs(productSpecs);
+            }
+        } else {
+            throw new BizException("xn000000", "请至少保留一个产品规格");
+        }
 
     }
 
@@ -172,15 +208,6 @@ public class ProductAOImpl implements IProductAO {
             Product condition) {
         Paginable<Product> results = productBO.getPaginable(start, limit,
             condition);
-        if (org.apache.commons.collections.CollectionUtils.isNotEmpty(results
-            .getList())) {
-            for (Product product : results.getList()) {
-                if (ESystemCode.ZHPAY.getCode().equals(product.getSystemCode())) {
-                    product.setStore(storeBO.getStoreByUser(product
-                        .getCompanyCode()));
-                }
-            }
-        }
         return results;
     }
 

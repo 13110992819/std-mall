@@ -173,18 +173,14 @@
 	<update id="update_product" parameterType="product">
 		UPDATE tmall_product
 		SET
-		kind = #{kind}
-		,category = #{category}
+		category = #{category}
 		,type = #{type}
 		,name = #{name}
 		,slogan = #{slogan}
-		
 		,adv_pic = #{advPic}
 		,pic = #{pic}
 		,description = #{description}
-		,status = #{status}
 		,updater = #{updater}
-		
 		,update_datetime = #{updateDatetime}
 		,remark = #{remark}
 		WHERE code = #{code}

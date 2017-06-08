@@ -10,7 +10,7 @@ import java.util.Map;
  */
 public enum ESystemCode {
     Caigo("CD-CCG000007", "菜狗商城"), PIPE("CD-CGD000006", "全能水电工助手"), YAOCHENG(
-            "CD-CYC000009", "姚橙");
+            "CD-CYC000009", "姚橙"), JKYG("CD-JKEG000011", "健康E购");
 
     public static Map<String, ESystemCode> getMap() {
         Map<String, ESystemCode> map = new HashMap<String, ESystemCode>();

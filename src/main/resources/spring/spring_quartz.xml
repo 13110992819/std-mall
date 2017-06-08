@@ -20,7 +20,6 @@
            <list>
            	  <ref bean="orderTrigger"/> 
               <ref bean="storeTicketTrigger"/>
-              <ref bean="stockTrigger"/>
           </list>  
        </property>  
        <property name="autoStartup" value="true"/>  
@@ -46,13 +45,4 @@
 	        <property name="concurrent" value="true"/>  <!-- 是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程   -->
 	</bean> 
 	
-	<bean id="stockTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
-       <property name="jobDetail" ref="stockJobDetail"/>  
-       <property name="cronExpression" value="0 0/30 * * * ?"/><!-- 每隔30分钟  -->
-	</bean>
-	<bean id="stockJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">   
-	        <property name="targetObject" ref="stockAOImpl"/>  
-	        <property name="targetMethod" value="doDailyStock"/>  
-	        <property name="concurrent" value="true"/>  <!-- 是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程   -->
-	</bean> 
 </beans>

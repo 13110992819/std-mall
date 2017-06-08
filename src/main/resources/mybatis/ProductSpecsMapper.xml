@@ -121,5 +121,12 @@
 		WHERE
 		code = #{code}
 	</delete>
+	
+	<delete id="delete_productSpecs_by_product_code" parameterType="productSpecs">
+		DELETE FROM
+		tmall_product_specs
+		WHERE
+		product_code = #{productCode}
+	</delete>
 
 </mapper>

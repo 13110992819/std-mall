@@ -18,7 +18,10 @@ public class Sorder extends ABaseDO {
     // 产品编号
     private String sproductCode;
 
-    // 类型(同产品类型)
+    // 大类（同产品）
+    private String category;
+
+    // 小类（同产品）
     private String type;
 
     // 预定时间起

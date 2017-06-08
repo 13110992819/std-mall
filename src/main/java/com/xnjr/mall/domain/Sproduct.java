@@ -46,6 +46,12 @@ public class Sproduct extends ABaseDO {
     // 当天剩余数
     private Integer remainNum;
 
+    // 所属公司编号
+    private String companyCode;
+
+    // 所属系统编号
+    private String systemCode;
+
     public String getCode() {
         return code;
     }
@@ -148,6 +154,22 @@ public class Sproduct extends ABaseDO {
 
     public void setRemainNum(Integer remainNum) {
         this.remainNum = remainNum;
+    }
+
+    public String getCompanyCode() {
+        return companyCode;
+    }
+
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
+    }
+
+    public String getSystemCode() {
+        return systemCode;
+    }
+
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
     }
 
 }

@@ -13,50 +13,46 @@ public class SorderDAOImpl extends AMybatisTemplate implements ISorderDAO {
 
     @Override
     public int insert(Sorder data) {
-        // TODO Auto-generated method stub
-        return 0;
+        return super.insert(NAMESPACE.concat("insert_sorder"), data);
     }
 
     @Override
     public int delete(Sorder data) {
-        // TODO Auto-generated method stub
         return 0;
     }
 
     @Override
     public Sorder select(Sorder condition) {
-        // TODO Auto-generated method stub
-        return null;
+        return super.select(NAMESPACE.concat("select_sorder"), condition,
+            Sorder.class);
     }
 
     @Override
     public Long selectTotalCount(Sorder condition) {
-        // TODO Auto-generated method stub
-        return null;
+        return super.selectTotalCount(NAMESPACE.concat("select_sorder_count"),
+            condition);
     }
 
     @Override
     public List<Sorder> selectList(Sorder condition) {
-        // TODO Auto-generated method stub
-        return null;
+        return super.selectList(NAMESPACE.concat("select_sorder"), condition,
+            Sorder.class);
     }
 
     @Override
     public List<Sorder> selectList(Sorder condition, int start, int count) {
-        // TODO Auto-generated method stub
-        return null;
+        return super.selectList(NAMESPACE.concat("select_sorder"), start,
+            count, condition, Sorder.class);
     }
 
     @Override
     public int cancelOrder(Sorder order) {
-        // TODO Auto-generated method stub
-        return 0;
+        return super.update(NAMESPACE.concat("update_cancelOrder"), order);
     }
 
     @Override
     public int deliverOrder(Sorder order) {
-        // TODO Auto-generated method stub
-        return 0;
+        return super.update(NAMESPACE.concat("update_deliverOrder"), order);
     }
 
 }

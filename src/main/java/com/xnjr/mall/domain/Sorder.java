@@ -16,7 +16,7 @@ public class Sorder extends ABaseDO {
     private String code;
 
     // 产品编号
-    private String sproductCode;
+    private String productCode;
 
     // 大类（同产品）
     private String category;
@@ -103,12 +103,12 @@ public class Sorder extends ABaseDO {
         this.code = code;
     }
 
-    public String getSproductCode() {
-        return sproductCode;
+    public String getProductCode() {
+        return productCode;
     }
 
-    public void setSproductCode(String sproductCode) {
-        this.sproductCode = sproductCode;
+    public void setProductCode(String productCode) {
+        this.productCode = productCode;
     }
 
     public String getType() {
@@ -311,4 +311,21 @@ public class Sorder extends ABaseDO {
         this.category = category;
     }
 
+    @Override
+    public String toString() {
+        return "Sorder [code=" + code + ", productCode=" + productCode
+                + ", category=" + category + ", type=" + type + ", startDate="
+                + startDate + ", endDate=" + endDate + ", reName=" + reName
+                + ", reMobile=" + reMobile + ", applyUser=" + applyUser
+                + ", applyNote=" + applyNote + ", applyDatetime="
+                + applyDatetime + ", amount1=" + amount1 + ", amount2="
+                + amount2 + ", amount3=" + amount3 + ", payAmount1="
+                + payAmount1 + ", payAmount2=" + payAmount2 + ", payAmount3="
+                + payAmount3 + ", status=" + status + ", payType=" + payType
+                + ", payGroup=" + payGroup + ", payCode=" + payCode
+                + ", payDatetime=" + payDatetime + ", handleUser=" + handleUser
+                + ", handleDatetime=" + handleDatetime + ", remark=" + remark
+                + ", companyCode=" + companyCode + ", systemCode=" + systemCode
+                + "]";
+    }
 }

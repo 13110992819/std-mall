@@ -29,8 +29,8 @@ public class ISproductDAOTest extends ADAOTest {
         data.setStatus(ESproductStatus.MAN_NO.getCode());
         data.setTotalNum(100);
         data.setRemainNum(0);
-        data.setLocation("location");
-        data.setOrderNo(1);
+        // data.setLocation("location");
+        // data.setOrderNo(1);
 
         data.setCompanyCode("companyCode");
         data.setSystemCode("systemCode");

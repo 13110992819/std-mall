@@ -103,7 +103,8 @@ public class ProductAOImpl implements IProductAO {
                 productSpecs.setCode(psCode);
                 productSpecs.setName(xn808030Req.getName());
                 productSpecs.setProductCode(code);
-                productSpecs.setOriginalPrice(xn808030Req.getOriginalPrice());
+                productSpecs.setOriginalPrice(StringValidater
+                    .toLong(xn808030Req.getOriginalPrice()));
                 productSpecs.setPrice1(StringValidater.toLong(xn808030Req
                     .getPrice1()));
                 productSpecs.setPrice2(StringValidater.toLong(xn808030Req
@@ -178,7 +179,8 @@ public class ProductAOImpl implements IProductAO {
                 productSpecs.setCode(psCode);
                 productSpecs.setName(xn808030Req.getName());
                 productSpecs.setProductCode(req.getCode());
-                productSpecs.setOriginalPrice(xn808030Req.getOriginalPrice());
+                productSpecs.setOriginalPrice(StringValidater
+                    .toLong(xn808030Req.getOriginalPrice()));
                 productSpecs.setPrice1(StringValidater.toLong(xn808030Req
                     .getPrice1()));
                 productSpecs.setPrice2(StringValidater.toLong(xn808030Req

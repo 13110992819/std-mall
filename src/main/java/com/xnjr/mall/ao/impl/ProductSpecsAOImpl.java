@@ -9,8 +9,11 @@ import com.xnjr.mall.ao.IProductSpecsAO;
 import com.xnjr.mall.bo.IProductBO;
 import com.xnjr.mall.bo.IProductSpecsBO;
 import com.xnjr.mall.core.OrderNoGenerater;
+import com.xnjr.mall.core.StringValidater;
 import com.xnjr.mall.domain.Product;
 import com.xnjr.mall.domain.ProductSpecs;
+import com.xnjr.mall.dto.req.XN808030Req;
+import com.xnjr.mall.dto.req.XN808032Req;
 import com.xnjr.mall.enums.EGeneratePrefix;
 
 @Service
@@ -23,34 +26,39 @@ public class ProductSpecsAOImpl implements IProductSpecsAO {
     private IProductBO productBO;
 
     @Override
-    public String addProductSpecs(String productCode, String dkey,
-            String dvalue, Integer orderNo) {
-        Product product = productBO.getProduct(productCode);
+    public String addProductSpecs(XN808030Req req) {
+        Product product = productBO.getProduct(req.getProductCode());
         String code = OrderNoGenerater.generateM(EGeneratePrefix.PRODUCT_SPECS
             .getCode());
-        ProductSpecs data = new ProductSpecs();
-
-        data.setCode(code);
-        data.setProductCode(productCode);
-        data.setDkey(dkey);
-        data.setDvalue(dvalue);
-        data.setOrderNo(orderNo);
-
-        data.setCompanyCode(product.getCompanyCode());
-        data.setSystemCode(product.getSystemCode());
-        productSpecsBO.saveProductSpecs(data);
+        ProductSpecs productSpecs = new ProductSpecs();
+        productSpecs.setCode(code);
+        productSpecs.setName(req.getName());
+        productSpecs.setProductCode(product.getCode());
+        productSpecs.setOriginalPrice(StringValidater.toLong(req
+            .getOriginalPrice()));
+        productSpecs.setPrice1(StringValidater.toLong(req.getPrice1()));
+        productSpecs.setPrice2(StringValidater.toLong(req.getPrice2()));
+        productSpecs.setPrice3(StringValidater.toLong(req.getPrice3()));
+        productSpecs.setQuantity(StringValidater.toInteger(req.getQuantity()));
+        productSpecs.setOrderNo(StringValidater.toInteger(req.getOrderNo()));
+        productSpecs.setCompanyCode(product.getCompanyCode());
+        productSpecs.setSystemCode(product.getSystemCode());
+        productSpecsBO.saveProductSpecs(productSpecs);
 
         return code;
     }
 
     @Override
-    public void editProductSpecs(String code, String dkey, String dvalue,
-            Integer orderNo) {
+    public void editProductSpecs(XN808032Req req) {
         ProductSpecs data = new ProductSpecs();
-        data.setCode(code);
-        data.setDkey(dkey);
-        data.setDvalue(dvalue);
-        data.setOrderNo(orderNo);
+        data.setCode(req.getCode());
+        data.setName(req.getName());
+        data.setPrice1(StringValidater.toLong(req.getPrice1()));
+        data.setPrice2(StringValidater.toLong(req.getPrice2()));
+        data.setPrice3(StringValidater.toLong(req.getPrice3()));
+
+        data.setQuantity(StringValidater.toInteger(req.getQuantity()));
+        data.setOrderNo(StringValidater.toInteger(req.getOrderNo()));
         productSpecsBO.refreshProductSpecs(data);
     }
 

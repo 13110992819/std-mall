@@ -4,11 +4,23 @@ public class XN808032Req {
     // 编号(必填)
     private String code;
 
-    // key(必填)
-    private String dkey;
+    // 名称(必填)
+    private String name;
 
-    // value(必填)
-    private String dvalue;
+    // 市场参考价，原价
+    private Long originalPrice;
+
+    // 价格1(人民币)(必填)
+    private String price1;
+
+    // 价格2(购物币)(必填)
+    private String price2;
+
+    // 价格3(钱包币)(必填)
+    private String price3;
+
+    // 库存(必填)
+    private String quantity;
 
     // 相对位置编号(必填)
     private String orderNo;
@@ -21,20 +33,52 @@ public class XN808032Req {
         this.code = code;
     }
 
-    public String getDkey() {
-        return dkey;
+    public String getName() {
+        return name;
     }
 
-    public void setDkey(String dkey) {
-        this.dkey = dkey;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getDvalue() {
-        return dvalue;
+    public Long getOriginalPrice() {
+        return originalPrice;
     }
 
-    public void setDvalue(String dvalue) {
-        this.dvalue = dvalue;
+    public void setOriginalPrice(Long originalPrice) {
+        this.originalPrice = originalPrice;
+    }
+
+    public String getPrice1() {
+        return price1;
+    }
+
+    public void setPrice1(String price1) {
+        this.price1 = price1;
+    }
+
+    public String getPrice2() {
+        return price2;
+    }
+
+    public void setPrice2(String price2) {
+        this.price2 = price2;
+    }
+
+    public String getPrice3() {
+        return price3;
+    }
+
+    public void setPrice3(String price3) {
+        this.price3 = price3;
+    }
+
+    public String getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(String quantity) {
+        this.quantity = quantity;
     }
 
     public String getOrderNo() {

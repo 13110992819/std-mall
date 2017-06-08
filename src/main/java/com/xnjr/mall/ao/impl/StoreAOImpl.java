@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.xnjr.mall.ao.IStoreAO;
 import com.xnjr.mall.bo.IAccountBO;
+import com.xnjr.mall.bo.ICategoryBO;
 import com.xnjr.mall.bo.IOrderBO;
 import com.xnjr.mall.bo.IProductBO;
 import com.xnjr.mall.bo.ISmsOutBO;
@@ -23,6 +24,7 @@ import com.xnjr.mall.bo.IUserBO;
 import com.xnjr.mall.bo.base.Paginable;
 import com.xnjr.mall.core.OrderNoGenerater;
 import com.xnjr.mall.core.StringValidater;
+import com.xnjr.mall.domain.Category;
 import com.xnjr.mall.domain.Order;
 import com.xnjr.mall.domain.Product;
 import com.xnjr.mall.domain.Store;
@@ -78,6 +80,9 @@ public class StoreAOImpl implements IStoreAO {
     @Autowired
     private IStoreActionBO storeActionBO;
 
+    @Autowired
+    private ICategoryBO categoryBO;
+
     @Override
     @Transactional
     public String addStoreOss(XN808200Req req) {
@@ -86,7 +91,6 @@ public class StoreAOImpl implements IStoreAO {
             throw new BizException("xn000000", "推荐人手机号不能和申请人手机号一样");
         }
         // 验证推荐人是否是平台的已注册用户,将userReferee手机号转化为用户编号
-        String systemCode = req.getSystemCode();
         String userReferee = req.getUserReferee();
         String userRefereeUserId = storeBO.isUserRefereeExist(userReferee);
         // 验证B端用户
@@ -100,12 +104,16 @@ public class StoreAOImpl implements IStoreAO {
             storeBO.checkStoreByUser(bUser);
         }
 
+        // 根据小类获取大类
+        Category category = categoryBO.getCategory(req.getType());
+
         // 更新字段
         String code = OrderNoGenerater.generateM("SJ");
         Store store = new Store();
         store.setCode(code);
         store.setName(req.getName());
         store.setLevel(req.getLevel());
+        store.setCategory(category.getParentCode());
         store.setType(req.getType());
         store.setSlogan(req.getSlogan());
 
@@ -161,8 +169,12 @@ public class StoreAOImpl implements IStoreAO {
         String userRefereeUserId = storeBO.isUserRefereeExist(req
             .getUserReferee());
 
+        // 根据小类获取大类
+        Category category = categoryBO.getCategory(req.getType());
+
         dbStore.setName(req.getName());
         dbStore.setLevel(req.getLevel());
+        dbStore.setCategory(category.getParentCode());
         dbStore.setType(req.getType());
         dbStore.setSlogan(req.getSlogan());
 
@@ -212,13 +224,16 @@ public class StoreAOImpl implements IStoreAO {
         String userReferee = req.getUserReferee();
         String userId = storeBO.isUserRefereeExist(userReferee);
 
+        // 根据小类获取大类
+        Category category = categoryBO.getCategory(req.getType());
+
         String code = OrderNoGenerater.generateM("SJ");
         Store data = new Store();
         data.setCode(code);
         data.setName(req.getName());
 
         data.setLevel(EStoreLevel.NOMAL.getCode());
-
+        data.setCategory(category.getParentCode());
         data.setType(req.getType());
         data.setSlogan(req.getSlogan());
 
@@ -265,10 +280,14 @@ public class StoreAOImpl implements IStoreAO {
         // 验证店铺是否存在
         storeBO.getStore(req.getCode());
 
+        // 根据小类获取大类
+        Category category = categoryBO.getCategory(req.getType());
+
         // 更新字段
         Store data = new Store();
         data.setCode(req.getCode());
         data.setName(req.getName());
+        data.setCategory(category.getParentCode());
         data.setType(req.getType());
         data.setSlogan(req.getSlogan());
 

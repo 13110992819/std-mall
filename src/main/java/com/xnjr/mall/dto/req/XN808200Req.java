@@ -14,7 +14,7 @@ public class XN808200Req {
     // 等级（必填）
     private String level;
 
-    // 类型（必填）
+    // 小类（必填）
     private String type;
 
     // 法人姓名（选填）

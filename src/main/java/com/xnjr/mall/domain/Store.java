@@ -186,6 +186,14 @@ public class Store extends ABaseDO {
         this.level = level;
     }
 
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
     public String getType() {
         return type;
     }

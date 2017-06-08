@@ -34,7 +34,7 @@ import com.xnjr.mall.dto.req.XN808013Req;
 import com.xnjr.mall.dto.req.XN808030Req;
 import com.xnjr.mall.enums.EGeneratePrefix;
 import com.xnjr.mall.enums.EProductStatus;
-import com.xnjr.mall.enums.ESystemCode;
+import com.xnjr.mall.enums.ESysUser;
 import com.xnjr.mall.exception.BizException;
 
 /** 
@@ -59,7 +59,7 @@ public class ProductAOImpl implements IProductAO {
     @Override
     @Transactional
     public String addProduct(XN808010Req req) {
-        String storeCode = ESystemCode.JKYG.getCode();
+        String storeCode = ESysUser.SYS_USER_JKEG.getCode();
         if (StringUtils.isNotBlank(req.getStoreCode())) {
             storeBO.getStore(req.getStoreCode());
             storeCode = req.getStoreCode();
@@ -226,9 +226,9 @@ public class ProductAOImpl implements IProductAO {
     public Product getProduct(String code) {
         Product product = productBO.getProduct(code);
         if (null != product) {
-            List<ProductSpecs> productSpecs = productSpecsBO
+            List<ProductSpecs> productSpecsList = productSpecsBO
                 .queryProductSpecsList(code);
-            product.setProductSpecs(productSpecs);
+            product.setProductSpecsList(productSpecsList);
         }
         return product;
     }
@@ -264,11 +264,6 @@ public class ProductAOImpl implements IProductAO {
             product.setCode(code);
             product.setLocation(req.getLocation());
             product.setOrderNo(StringValidater.toInteger(req.getOrderNo()));
-            product.setOriginalPrice(StringValidater.toLong(req
-                .getOriginalPrice()));
-            product.setPrice1(StringValidater.toLong(req.getPrice1()));
-            product.setPrice2(StringValidater.toLong(req.getPrice2()));
-            product.setPrice3(StringValidater.toLong(req.getPrice3()));
             product.setUpdater(req.getUpdater());
             product.setUpdateDatetime(new Date());
             product.setStatus(EProductStatus.PUBLISH_YES.getCode());

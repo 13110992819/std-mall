@@ -20,6 +20,12 @@ public class XN808025Req extends APageReq {
      */
     private static final long serialVersionUID = 7405232977567267123L;
 
+    // 所属商家编号
+    private String storeCode;
+
+    // 所属商城类型（如积分商城）
+    private String kind;
+
     // 产品大类(选填)
     private String category;
 
@@ -40,6 +46,22 @@ public class XN808025Req extends APageReq {
 
     // 所属系统编号(必填)
     private String systemCode;
+
+    public String getStoreCode() {
+        return storeCode;
+    }
+
+    public void setStoreCode(String storeCode) {
+        this.storeCode = storeCode;
+    }
+
+    public String getKind() {
+        return kind;
+    }
+
+    public void setKind(String kind) {
+        this.kind = kind;
+    }
 
     public String getCategory() {
         return category;

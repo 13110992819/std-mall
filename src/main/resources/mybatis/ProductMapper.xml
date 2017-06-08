@@ -148,9 +148,9 @@
 		)
 		VALUES(
 		#{code}
-		,#{category}
 		,#{storeCode}
 		,#{kind}
+		,#{category}
 		,#{type}
 		
 		,#{name}

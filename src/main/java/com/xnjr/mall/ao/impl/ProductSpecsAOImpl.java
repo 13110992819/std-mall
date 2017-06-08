@@ -37,11 +37,13 @@ public class ProductSpecsAOImpl implements IProductSpecsAO {
         productSpecs.setOriginalPrice(StringValidater.toLong(req
             .getOriginalPrice()));
         productSpecs.setPrice1(StringValidater.toLong(req.getPrice1()));
+
         productSpecs.setPrice2(StringValidater.toLong(req.getPrice2()));
         productSpecs.setPrice3(StringValidater.toLong(req.getPrice3()));
         productSpecs.setQuantity(StringValidater.toInteger(req.getQuantity()));
         productSpecs.setOrderNo(StringValidater.toInteger(req.getOrderNo()));
         productSpecs.setCompanyCode(product.getCompanyCode());
+
         productSpecs.setSystemCode(product.getSystemCode());
         productSpecsBO.saveProductSpecs(productSpecs);
 
@@ -53,10 +55,11 @@ public class ProductSpecsAOImpl implements IProductSpecsAO {
         ProductSpecs data = new ProductSpecs();
         data.setCode(req.getCode());
         data.setName(req.getName());
+        data.setOriginalPrice(StringValidater.toLong(req.getOriginalPrice()));
         data.setPrice1(StringValidater.toLong(req.getPrice1()));
         data.setPrice2(StringValidater.toLong(req.getPrice2()));
-        data.setPrice3(StringValidater.toLong(req.getPrice3()));
 
+        data.setPrice3(StringValidater.toLong(req.getPrice3()));
         data.setQuantity(StringValidater.toInteger(req.getQuantity()));
         data.setOrderNo(StringValidater.toInteger(req.getOrderNo()));
         productSpecsBO.refreshProductSpecs(data);

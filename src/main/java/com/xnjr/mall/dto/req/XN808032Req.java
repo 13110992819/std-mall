@@ -8,7 +8,7 @@ public class XN808032Req {
     private String name;
 
     // 市场参考价，原价
-    private Long originalPrice;
+    private String originalPrice;
 
     // 价格1(人民币)(必填)
     private String price1;
@@ -41,11 +41,11 @@ public class XN808032Req {
         this.name = name;
     }
 
-    public Long getOriginalPrice() {
+    public String getOriginalPrice() {
         return originalPrice;
     }
 
-    public void setOriginalPrice(Long originalPrice) {
+    public void setOriginalPrice(String originalPrice) {
         this.originalPrice = originalPrice;
     }
 

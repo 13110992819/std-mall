@@ -5,6 +5,7 @@ CREATE TABLE `to2o_sproduct` (
   `category` varchar(32) DEFAULT NULL COMMENT '大类',
   `type` varchar(32) DEFAULT NULL COMMENT '小类',
   `store_code` varchar(32) DEFAULT NULL COMMENT '商家编号',
+  `store_user` varchar(32) DEFAULT NULL COMMENT '商家主人编号',
   
   `slogan` varchar(255) DEFAULT NULL COMMENT '广告语',
   `adv_pic` varchar(255) DEFAULT NULL COMMENT '广告图',
@@ -29,9 +30,11 @@ CREATE TABLE `to2o_sorder` (
   `product_code` varchar(32) DEFAULT NULL COMMENT '产品编号',
    `category` varchar(32) DEFAULT NULL COMMENT '大类',
    `type` varchar(32) DEFAULT NULL COMMENT '小类',
+   `store_code` varchar(32) DEFAULT NULL COMMENT '商家编号',
+   `store_user` varchar(32) DEFAULT NULL COMMENT '商家主人编号',
+  
    `start_date` datetime DEFAULT NULL COMMENT '预定时间起',
    `end_date` datetime DEFAULT NULL COMMENT '预定时间止',
-
   `re_name` varchar(255) DEFAULT NULL COMMENT '收件人姓名',
   `re_mobile` varchar(32) DEFAULT NULL COMMENT '收件人电话',
   `apply_user` varchar(32) DEFAULT NULL COMMENT '下单人',

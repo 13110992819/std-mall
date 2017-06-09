@@ -120,8 +120,6 @@ public class ProductAOImpl implements IProductAO {
                 productSpecs.setSystemCode(req.getSystemCode());
                 productSpecsBO.saveProductSpecs(productSpecs);
             }
-        } else {
-            throw new BizException("xn000000", "请至少填写一个产品规格");
         }
         return code;
 
@@ -196,8 +194,6 @@ public class ProductAOImpl implements IProductAO {
                 productSpecs.setSystemCode(dbProduct.getSystemCode());
                 productSpecsBO.saveProductSpecs(productSpecs);
             }
-        } else {
-            throw new BizException("xn000000", "请至少保留一个产品规格");
         }
 
     }
@@ -262,6 +258,11 @@ public class ProductAOImpl implements IProductAO {
         if (EProductStatus.APPROVE_YES.getCode().equals(dbProduct.getStatus())
                 || EProductStatus.PUBLISH_NO.getCode().equals(
                     dbProduct.getStatus())) {
+            List<ProductSpecs> productSpecsList = productSpecsBO
+                .queryProductSpecsList(code);
+            if (CollectionUtils.isEmpty(productSpecsList)) {
+                throw new BizException("xn000000", "产品规格为空，请先添加");
+            }
             Product product = new Product();
             product.setCode(code);
             product.setLocation(req.getLocation());

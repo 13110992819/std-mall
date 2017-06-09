@@ -40,6 +40,8 @@ public class Cart extends ABaseDO {
 
     private Product product;
 
+    private ProductSpecs productSpecs;
+
     public String getCode() {
         return code;
     }
@@ -64,20 +66,20 @@ public class Cart extends ABaseDO {
         this.productCode = productCode;
     }
 
+    public String getProductSpecsCode() {
+        return productSpecsCode;
+    }
+
+    public void setProductSpecsCode(String productSpecsCode) {
+        this.productSpecsCode = productSpecsCode;
+    }
+
     public Integer getQuantity() {
         return quantity;
     }
 
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
-    }
-
-    public String getSystemCode() {
-        return systemCode;
-    }
-
-    public void setSystemCode(String systemCode) {
-        this.systemCode = systemCode;
     }
 
     public String getCompanyCode() {
@@ -88,12 +90,28 @@ public class Cart extends ABaseDO {
         this.companyCode = companyCode;
     }
 
+    public String getSystemCode() {
+        return systemCode;
+    }
+
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
+    }
+
     public Product getProduct() {
         return product;
     }
 
     public void setProduct(Product product) {
         this.product = product;
+    }
+
+    public ProductSpecs getProductSpecs() {
+        return productSpecs;
+    }
+
+    public void setProductSpecs(ProductSpecs productSpecs) {
+        this.productSpecs = productSpecs;
     }
 
 }

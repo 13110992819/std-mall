@@ -6,6 +6,7 @@
 		<result column="code" property="code" />
 		<result column="user_id" property="userId" />
 		<result column="product_code" property="productCode" />
+		<result column="product_specs_code" property="productSpecsCode" />
 		<result column="quantity" property="quantity" />
 		<result column="company_code" property="companyCode" />
 		<result column="system_code" property="systemCode" />
@@ -13,11 +14,14 @@
 		<result column="product_code" property="product.code" />
 		<result column="product_name" property="product.name" />
 		<result column="product_adv_pic" property="product.advPic" />
-		<result column="product_price1" property="product.price1" />
-		<result column="product_price2" property="product.price2" />
-		<result column="product_price3" property="product.price3" />
-		<result column="product_company_code" property="product.companyCode" />
-		<result column="product_system_code" property="product.systemCode" />
+		
+		<result column="productSpecs_code" property="productSpecs.code" />
+		<result column="productSpecs_name" property="productSpecs.name" />
+		<result column="productSpecs_original_price" property="productSpecs.originalPrice" />
+		<result column="productSpecs_price1" property="productSpecs.price1" />
+		<result column="productSpecs_price2" property="productSpecs.price2" />
+		<result column="productSpecs_price3" property="productSpecs.price3" />
+		<result column="productSpecs_quantity" property="productSpecs.quantity" />
 	</resultMap>
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
@@ -50,13 +54,17 @@
 		,tp.code product_code
 		,tp.name product_name
 		,tp.adv_pic product_adv_pic
-		,tp.price1 product_price1
-		,tp.price2 product_price2
-		,tp.price3 product_price3
-		,tp.company_code product_company_code
-		,tp.system_code product_system_code
+
+        ,tps.code productSpecs_code
+        ,tps.name productSpecs_name
+        ,tps.originnal_price productSpecs_original_price
+        ,tps.price1 productSpecs_price1
+        ,tps.price2 productSpecs_price2
+        ,tps.price3 productSpecs_price3
+        ,tps.quantity productSpecs_quantity
 		FROM
-		tmall_cart t INNER JOIN tmall_product tp ON t.product_code = tp.code
+		tmall_cart t INNER JOIN tmall_product tp ON t.product_code = tp.code 
+		             INNER JOIN tmall_product_specs tps ON t.product_specs_code = tps.code 
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
@@ -68,6 +76,7 @@
 	<select id="select_cart_count" parameterType="cart"
 		resultType="java.lang.Long">
 		SELECT count(1) FROM tmall_cart t INNER JOIN tmall_product tp ON t.product_code = tp.code
+		                                  INNER JOIN tmall_product_specs tps ON t.product_specs_code = tps.code
 		<include refid="where_condition" />
 	</select>
 

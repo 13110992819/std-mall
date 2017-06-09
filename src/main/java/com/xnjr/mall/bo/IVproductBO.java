@@ -12,7 +12,7 @@ public interface IVproductBO extends IPaginableBO<Vproduct> {
 
     public int refreshVproduct(Vproduct product);
 
-    public int putOff(String code, String updater, String remark);
+    public int putOff(Vproduct dbProduct, String updater, String remark);
 
     public int putOn(Vproduct product);
 

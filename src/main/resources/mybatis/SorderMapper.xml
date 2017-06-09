@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xnjr.mall.dao.ISorderDAO">
+	<resultMap id="sorder_DB_Result" type="sorder">
+		<result column="code" property="code" />
+		<result column="product_code" property="productCode" />
+		<result column="category" property="category" />
+		<result column="type" property="type" />
+		<result column="store_code" property="storeCode" />
+		<result column="store_user" property="storeUser" />
+		
+		
+		<result column="start_date" property="startDate" />
+		<result column="end_date" property="endDate" />
+		<result column="re_name" property="reName" />
+		<result column="re_mobile" property="reMobile" />
+		<result column="apply_user" property="applyUser" />
+		<result column="apply_note" property="applyNote" />
+		<result column="apply_datetime" property="applyDatetime" />
+		
+		<result column="amount1" property="amount1" />
+		<result column="amount2" property="amount2" />
+		<result column="amount3" property="amount3" />
+		<result column="pay_amount1" property="payAmount1" />
+		<result column="pay_amount2" property="payAmount2" />
+		<result column="pay_amount3" property="payAmount3" />
+		
+		<result column="status" property="status" />
+		<result column="pay_type" property="payType" />
+		<result column="pay_group" property="payGroup" />
+		<result column="pay_code" property="payCode" />
+		<result column="pay_datetime" property="payDatetime" />
+		
+		<result column="handle_user" property="handleUser" />
+		<result column="handle_datetime" property="handleDatetime" />
+		<result column="remark" property="remark" />
+		<result column="company_code" property="companyCode" />
+		<result column="system_code" property="systemCode" />
+	</resultMap>
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="code != null and code != '' ">
+				AND t.code = #{code}
+			</if>
+			<if test="productCode != null and productCode != '' ">
+				AND t.product_code = #{productCode}
+			</if>
+			<if test="category != null and category != '' ">
+				AND t.category = #{category}
+			</if>
+			<if test="type != null and type != '' ">
+				AND t.type = #{type}
+			</if>
+			<if test="storeCode != null and storeCode != '' ">
+				AND t.store_code = #{storeCode}
+			</if>
+			<if test="storeUser != null and storeUser != '' ">
+				AND t.store_user = #{storeUser}
+			</if>
+			<if test="reName != null and reName != '' ">
+				AND t.re_name = #{reName}
+			</if>
+			<if test="reMobile != null and reMobile != '' ">
+				AND t.re_mobile = #{reMobile}
+			</if>
+			<if test="applyUser != null and applyUser != '' ">
+				AND t.apply_user = #{applyUser}
+			</if>
+			<if test="status != null and status != '' ">
+				AND t.status = #{status}
+			</if>
+			<if test="payType != null and payType != '' ">
+				AND t.pay_type = #{payType}
+			</if>
+			<if test="payGroup != null and payGroup != '' ">
+				AND t.pay_group = #{payGroup}
+			</if>
+			<if test="payCode != null and payCode != '' ">
+				AND t.pay_code = #{payCode}
+			</if>
+			<if test="handleUser != null and handleUser != '' ">
+				AND t.handle_user = #{handleUser}
+			</if>
+			<if test="companyCode != null and companyCode != '' ">
+				AND t.company_code = #{companyCode}
+			</if>
+			<if test="systemCode != null and systemCode != '' ">
+				AND t.system_code = #{systemCode}
+			</if>
+		</trim>
+	</sql>
+	<select id="select_sorder" parameterType="sorder" resultMap="sorder_DB_Result">
+		SELECT
+		t.code
+		,t.product_code
+		,t.category
+		,t.type
+		,t.store_code
+		,t.store_user
+		
+		,t.start_date
+		,t.end_date
+		,t.re_name
+		,t.re_mobile
+		,t.apply_user
+		,t.apply_note
+		,t.apply_datetime
+		
+		,t.amount1
+		,t.amount2
+		,t.amount3
+		,t.pay_amount1
+		,t.pay_amount2
+		,t.pay_amount3
+		
+		,t.status
+		,t.pay_type
+		,t.pay_group
+		,t.pay_code
+		,t.pay_datetime
+		
+		,t.handle_user
+		,t.handle_datetime
+		,t.remark
+		,t.company_code
+		,t.system_code
+		FROM
+		to2o_sorder t 
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+
+	<select id="select_sorder_count" parameterType="sorder"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM to2o_sorder t
+		<include refid="where_condition" />
+	</select>
+
+	<insert id="insert_sorder" parameterType="sorder">
+		INSERT INTO
+		to2o_sorder(
+		code
+		,product_code
+		,category
+		,type
+		,t.store_code
+		,t.store_user
+		
+		,start_date
+		,end_date
+		,re_name
+		,re_mobile
+		,apply_user
+		,apply_note
+		,apply_datetime
+		
+		,amount1
+		,amount2
+		,amount3
+		,status
+		,company_code
+		
+		,system_code
+		)
+		VALUES(
+		#{code} 
+		,#{productCode}
+		,#{category}
+		,#{type}
+		,#{storeCode}
+		,#{storeUser}
+		
+		,#{startDate}
+		,#{endDate}
+		
+		,#{reName}
+		,#{reMobile}
+		,#{applyUser}
+		,#{applyNote}
+		,#{applyDatetime}
+		
+		,#{amount1}
+		,#{amount2}
+		,#{amount3}
+		,#{status}
+		,#{companyCode}
+		
+		,#{systemCode}
+		)
+	</insert>
+	
+	<update id="update_cancelOrder" parameterType="sorder">
+		UPDATE to2o_sorder
+		SET
+		status=#{status}
+		,handle_user=#{handleUser}
+		,handle_datetime=#{handleDatetime}
+		,remark=#{remark}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_deliverOrder" parameterType="sorder">
+		UPDATE to2o_sorder
+		SET
+		status=#{status}
+		,handle_user=#{handleUser}
+		,handle_datetime=#{handleDatetime}
+		,remark=#{remark}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_payGroup" parameterType="sorder">
+		UPDATE to2o_sorder
+		SET
+		payGroup=#{pay_group}
+		,pay_type=#{payType}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_paySuccess" parameterType="sorder">
+		UPDATE to2o_sorder
+		SET
+		status=#{status}
+		,pay_amount1=#{payAmount1}
+		,pay_amount2=#{payAmount2}
+		,pay_amount3=#{payAmount3}
+		,pay_code=#{payCode}
+		,pay_datetime=#{payDatetime}
+		,remark=#{remark}
+		WHERE code = #{code}
+	</update>
+</mapper>

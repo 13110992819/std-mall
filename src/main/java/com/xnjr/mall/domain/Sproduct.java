@@ -22,6 +22,9 @@ public class Sproduct extends ABaseDO {
     // 所属商家编号
     private String storeCode;
 
+    // 所属商家主人编号
+    private String storeUser;
+
     // 广告语
     private String slogan;
 
@@ -37,14 +40,26 @@ public class Sproduct extends ABaseDO {
     // 价格
     private Long price;
 
-    // 当天的状态（未满/已满）
+    // 状态（1 待上架，2 已上架，3 已下架）
     private String status;
 
     // 当天总数
     private Integer totalNum;
 
     // 当天剩余数
-    private Integer remain;
+    private Integer remainNum;
+
+    // 位置
+    private String location;
+
+    // 相对位置编号
+    private Integer orderNo;
+
+    // 所属公司编号
+    private String companyCode;
+
+    // 所属系统编号
+    private String systemCode;
 
     public String getCode() {
         return code;
@@ -60,6 +75,30 @@ public class Sproduct extends ABaseDO {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getStoreUser() {
+        return storeUser;
+    }
+
+    public void setStoreUser(String storeUser) {
+        this.storeUser = storeUser;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getStoreCode() {
@@ -126,12 +165,56 @@ public class Sproduct extends ABaseDO {
         this.totalNum = totalNum;
     }
 
-    public Integer getRemain() {
-        return remain;
+    public Integer getRemainNum() {
+        return remainNum;
     }
 
-    public void setRemain(Integer remain) {
-        this.remain = remain;
+    public void setRemainNum(Integer remainNum) {
+        this.remainNum = remainNum;
+    }
+
+    public String getCompanyCode() {
+        return companyCode;
+    }
+
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
+    }
+
+    public String getSystemCode() {
+        return systemCode;
+    }
+
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public Integer getOrderNo() {
+        return orderNo;
+    }
+
+    public void setOrderNo(Integer orderNo) {
+        this.orderNo = orderNo;
+    }
+
+    @Override
+    public String toString() {
+        return "Sproduct [code=" + code + ", name=" + name + ", category="
+                + category + ", type=" + type + ", storeCode=" + storeCode
+                + ", slogan=" + slogan + ", advPic=" + advPic + ", pic=" + pic
+                + ", description=" + description + ", price=" + price
+                + ", status=" + status + ", totalNum=" + totalNum
+                + ", remainNum=" + remainNum + ", location=" + location
+                + ", orderNo=" + orderNo + ", companyCode=" + companyCode
+                + ", systemCode=" + systemCode + "]";
     }
 
 }

@@ -1,36 +1,35 @@
 package com.xnjr.mall.api.impl;
 
-import com.xnjr.mall.ao.IVproductAO;
+import com.xnjr.mall.ao.ISproductAO;
 import com.xnjr.mall.api.AProcessor;
 import com.xnjr.mall.common.JsonUtil;
 import com.xnjr.mall.core.StringValidater;
-import com.xnjr.mall.dto.req.XN808616Req;
+import com.xnjr.mall.dto.req.XN808416Req;
 import com.xnjr.mall.exception.BizException;
 import com.xnjr.mall.exception.ParaException;
 import com.xnjr.mall.spring.SpringContextHolder;
 
 /**
- * 详情查询虚拟产品
+ * 详情查询服务产品
  * @author: myb858 
- * @since: 2017年4月20日 下午3:41:05 
+ * @since: 2017年6月7日 下午6:06:56 
  * @history:
  */
-public class XN808616 extends AProcessor {
-    private IVproductAO vproductAO = SpringContextHolder
-        .getBean(IVproductAO.class);
+public class XN808416 extends AProcessor {
+    private ISproductAO sproductAO = SpringContextHolder
+        .getBean(ISproductAO.class);
 
-    private XN808616Req req = null;
+    private XN808416Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
-        return vproductAO.getVproduct(req.getCode());
+        return sproductAO.getSproduct(req.getCode());
     }
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN808616Req.class);
+        req = JsonUtil.json2Bean(inputparams, XN808416Req.class);
         StringValidater.validateBlank(req.getCode());
-
     }
 
 }

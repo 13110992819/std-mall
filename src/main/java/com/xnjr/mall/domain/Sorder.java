@@ -16,10 +16,19 @@ public class Sorder extends ABaseDO {
     private String code;
 
     // 产品编号
-    private String sproductCode;
+    private String productCode;
 
-    // 类型(同产品类型)
+    // 大类（同产品）
+    private String category;
+
+    // 小类（同产品）
     private String type;
+
+    // 所属商家编号（同产品）
+    private String storeCode;
+
+    // 所属商家主人编号（同产品）
+    private String storeUser;
 
     // 预定时间起
     private Date startDate;
@@ -100,12 +109,28 @@ public class Sorder extends ABaseDO {
         this.code = code;
     }
 
-    public String getSproductCode() {
-        return sproductCode;
+    public String getProductCode() {
+        return productCode;
     }
 
-    public void setSproductCode(String sproductCode) {
-        this.sproductCode = sproductCode;
+    public void setProductCode(String productCode) {
+        this.productCode = productCode;
+    }
+
+    public String getStoreCode() {
+        return storeCode;
+    }
+
+    public void setStoreCode(String storeCode) {
+        this.storeCode = storeCode;
+    }
+
+    public String getStoreUser() {
+        return storeUser;
+    }
+
+    public void setStoreUser(String storeUser) {
+        this.storeUser = storeUser;
     }
 
     public String getType() {
@@ -300,4 +325,29 @@ public class Sorder extends ABaseDO {
         this.systemCode = systemCode;
     }
 
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    @Override
+    public String toString() {
+        return "Sorder [code=" + code + ", productCode=" + productCode
+                + ", category=" + category + ", type=" + type + ", startDate="
+                + startDate + ", endDate=" + endDate + ", reName=" + reName
+                + ", reMobile=" + reMobile + ", applyUser=" + applyUser
+                + ", applyNote=" + applyNote + ", applyDatetime="
+                + applyDatetime + ", amount1=" + amount1 + ", amount2="
+                + amount2 + ", amount3=" + amount3 + ", payAmount1="
+                + payAmount1 + ", payAmount2=" + payAmount2 + ", payAmount3="
+                + payAmount3 + ", status=" + status + ", payType=" + payType
+                + ", payGroup=" + payGroup + ", payCode=" + payCode
+                + ", payDatetime=" + payDatetime + ", handleUser=" + handleUser
+                + ", handleDatetime=" + handleDatetime + ", remark=" + remark
+                + ", companyCode=" + companyCode + ", systemCode=" + systemCode
+                + "]";
+    }
 }

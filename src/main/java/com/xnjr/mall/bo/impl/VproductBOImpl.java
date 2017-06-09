@@ -46,14 +46,12 @@ public class VproductBOImpl extends PaginableBOImpl<Vproduct> implements
     }
 
     @Override
-    public int putOff(String code, String updater, String remark) {
-        Vproduct product = new Vproduct();
-        product.setCode(code);
-        product.setStatus(EVproductStatus.PUBLISH_NO.getCode());
-        product.setUpdater(updater);
-        product.setUpdateDatetime(new Date());
-        product.setRemark(remark);
-        return vproductDAO.putOff(product);
+    public int putOff(Vproduct dbProduct, String updater, String remark) {
+        dbProduct.setStatus(EVproductStatus.PUBLISH_NO.getCode());
+        dbProduct.setUpdater(updater);
+        dbProduct.setUpdateDatetime(new Date());
+        dbProduct.setRemark(remark);
+        return vproductDAO.putOff(dbProduct);
     }
 
     @Override

@@ -92,13 +92,14 @@ public class VorderAOImpl implements IVorderAO {
         // 暂时只实现单笔订单支付
         String code = codeList.get(0);
         Vorder order = vorderBO.getVorder(code);
+        if (!EVorderStatus.TOPAY.getCode().equals(order.getStatus())) {
+            throw new BizException("xn000000", "订单不处于待支付状态");
+        }
         Vproduct product = vproductBO.getVproduct(order.getProductCode());
         if (!EVproductStatus.PUBLISH_YES.getCode().equals(product.getStatus())) {
             throw new BizException("xn000000", "产品未上架，无法支付");
         }
-        if (!EVorderStatus.TOPAY.getCode().equals(order.getStatus())) {
-            throw new BizException("xn000000", "订单不处于待支付状态");
-        }
+
         Long payAmount = order.getPayAmount();
         if (EPayType.INTEGRAL.getCode().equals(payType)) {
             if (ESystemCode.Caigo.getCode().equals(order.getSystemCode())) {
@@ -128,19 +129,12 @@ public class VorderAOImpl implements IVorderAO {
     }
 
     @Override
-    public void cancelOrder(List<String> codeList, String updater, String remark) {
-        for (String code : codeList) {
-            cancelOrderSingle(code, updater, remark);
-        }
-    }
-
-    private void cancelOrderSingle(String code, String updater, String remark) {
+    public void cancelOrder(String code, String updater, String remark) {
         Vorder order = vorderBO.getVorder(code);
-        String applyUser = order.getApplyUser();
         if (EVorderStatus.TOPAY.getCode().equals(order.getStatus())) {
             // 发短信
-            smsOutBO.sentContent(applyUser, "尊敬的用户，您的订单[" + order.getCode()
-                    + "]已取消");
+            smsOutBO.sentContent(order.getApplyUser(),
+                "尊敬的用户，您的订单[" + order.getCode() + "]已取消");
         } else if (EVorderStatus.PAYED.getCode().equals(order.getStatus())) {
             if (ESystemCode.YAOCHENG.getCode().equals(order.getSystemCode())) {
                 // 菜狗币退款
@@ -158,10 +152,10 @@ public class VorderAOImpl implements IVorderAO {
                     EBizType.CG_XNCZ_M.getValue(),
                     EBizType.CG_XNCZ_M.getValue(), order.getCode());
             }
-
             // 发短信
-            smsOutBO.sentContent(applyUser, "尊敬的用户，您的订单[" + order.getCode()
-                    + "]已取消,退款原因:[" + remark + "],请及时查看退款。");
+            smsOutBO.sentContent(order.getApplyUser(),
+                "尊敬的用户，您的订单[" + order.getCode() + "]已取消,退款原因:[" + remark
+                        + "],请及时查看退款。");
         } else {
             throw new BizException("xn0000", "该订单，无法操作");
         }
@@ -169,14 +163,7 @@ public class VorderAOImpl implements IVorderAO {
     }
 
     @Override
-    public void deliverOrder(List<String> codeList, String updater,
-            String remark) {
-        for (String code : codeList) {
-            deliverOrderSingle(code, updater, remark);
-        }
-    }
-
-    private void deliverOrderSingle(String code, String updater, String remark) {
+    public void deliverOrder(String code, String updater, String remark) {
         Vorder order = vorderBO.getVorder(code);
         if (EVorderStatus.PAYED.getCode().equals(order.getStatus())) {
             vorderBO.deliverOrder(order, updater, remark);
@@ -190,9 +177,8 @@ public class VorderAOImpl implements IVorderAO {
                         + "》已处理，充值金额" + CalculationUtil.divi(order.getAmount())
                         + "元，请注意查收。");
         } else {
-            throw new BizException("xn0000", "该订单不是已支付状态，无法发货");
+            throw new BizException("xn0000", "该订单不是已支付状态，无法兑换");
         }
-
     }
 
     @Override

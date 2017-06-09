@@ -58,10 +58,12 @@ public class SproductBOImpl extends PaginableBOImpl<Sproduct> implements
     }
 
     @Override
-    public void putOn(Sproduct data, String location, Integer orderNo) {
+    public void putOn(Sproduct data, String location, Integer orderNo,
+            Long price) {
         data.setStatus(ESproductStatus.PUBLISH_YES.getCode());
         data.setLocation(location);
         data.setOrderNo(orderNo);
+        data.setPrice(price);
         sproductDAO.putOn(data);
     }
 

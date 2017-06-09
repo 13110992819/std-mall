@@ -1,7 +1,5 @@
 package com.xnjr.mall.api.impl;
 
-import org.apache.commons.lang3.StringUtils;
-
 import com.xnjr.mall.ao.ISproductAO;
 import com.xnjr.mall.api.AProcessor;
 import com.xnjr.mall.common.JsonUtil;
@@ -31,14 +29,10 @@ public class XN808417 extends AProcessor {
         condition.setType(req.getType());
         condition.setStoreCode(req.getStoreCode());
         condition.setStatus(req.getStatus());
+
         condition.setLocation(req.getLocation());
         condition.setCompanyCode(req.getCompanyCode());
         condition.setSystemCode(req.getSystemCode());
-        String orderColumn = req.getOrderColumn();
-        if (StringUtils.isBlank(orderColumn)) {
-            orderColumn = ISproductAO.DEFAULT_ORDER_COLUMN;
-        }
-        condition.setOrder(orderColumn, req.getOrderDir());
         return sproductAO.querySproductList(condition);
     }
 

@@ -25,15 +25,17 @@ public class XN808403 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         sproductAO.putOn(req.getCode(), req.getLocation(),
-            StringValidater.toInteger(req.getOrderNo()));
+            StringValidater.toInteger(req.getOrderNo()),
+            StringValidater.toLong(req.getPrice()));
         return new BooleanRes(true);
     }
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN808403Req.class);
-        StringValidater.validateBlank(req.getCode(), req.getLocation(),
-            req.getOrderNo());
+        StringValidater.validateBlank(req.getCode(), req.getLocation());
+        StringValidater.validateNumber(req.getOrderNo());
+        StringValidater.validateAmount(req.getPrice());
     }
 
 }

@@ -24,21 +24,15 @@ public class XN808400 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        return new PKCodeRes(sproductAO.saveSproductAO(req.getName(),
-            req.getCategory(), req.getType(), req.getStoreCode(),
-            req.getSlogan(), req.getAdvPic(), req.getPic(),
-            req.getDescription(), StringValidater.toLong(req.getPrice()),
-            StringValidater.toInteger(req.getTotalNum()), req.getCompanyCode(),
-            req.getSystemCode()));
+        return new PKCodeRes(sproductAO.saveSproduct(req));
     }
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN808400Req.class);
-        StringValidater.validateBlank(req.getName(), req.getCategory(),
-            req.getType(), req.getStoreCode(), req.getSlogan(),
-            req.getAdvPic(), req.getPic(), req.getDescription(),
-            req.getCompanyCode(), req.getSystemCode());
+        StringValidater.validateBlank(req.getName(), req.getType(),
+            req.getStoreCode(), req.getSlogan(), req.getAdvPic(), req.getPic(),
+            req.getDescription());
         StringValidater.validateAmount(req.getPrice());
         StringValidater.validateNumber(req.getTotalNum());
     }

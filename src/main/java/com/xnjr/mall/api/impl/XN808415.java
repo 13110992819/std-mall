@@ -32,6 +32,7 @@ public class XN808415 extends AProcessor {
         condition.setType(req.getType());
         condition.setStoreCode(req.getStoreCode());
         condition.setStatus(req.getStatus());
+
         condition.setLocation(req.getLocation());
         condition.setCompanyCode(req.getCompanyCode());
         condition.setSystemCode(req.getSystemCode());

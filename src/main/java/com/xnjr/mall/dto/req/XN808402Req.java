@@ -14,9 +14,6 @@ public class XN808402Req {
     // 名字
     private String name;
 
-    // 大类
-    private String category;
-
     // 小类
     private String type;
 
@@ -52,14 +49,6 @@ public class XN808402Req {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
     }
 
     public String getType() {

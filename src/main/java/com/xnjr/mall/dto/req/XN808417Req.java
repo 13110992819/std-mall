@@ -25,17 +25,8 @@ public class XN808417Req extends APageReq {
     // 所属商家编号
     private String storeCode;
 
-    // 价格
-    private Long price;
-
     // 状态（1 待上架，2 已上架，3 已下架）
     private String status;
-
-    // 当天总数
-    private String totalNum;
-
-    // 当天剩余数
-    private String remainNum;
 
     // 位置
     private String location;

@@ -7,18 +7,14 @@ package com.xnjr.mall.dto.req;
  * @history:
  */
 public class XN808400Req {
+    // 所属商家编号（必填）
+    private String storeCode;
 
     // 名字（必填）
     private String name;
 
-    // 大类（必填）
-    private String category;
-
     // 小类（必填）
     private String type;
-
-    // 所属商家编号（必填）
-    private String storeCode;
 
     // 广告语（必填）
     private String slogan;
@@ -38,26 +34,12 @@ public class XN808400Req {
     // 当天总数（必填）
     private String totalNum;
 
-    // 所属公司编号（必填）
-    private String companyCode;
-
-    // 所属系统编号（必填）
-    private String systemCode;
-
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
     }
 
     public String getType() {
@@ -124,19 +106,4 @@ public class XN808400Req {
         this.totalNum = totalNum;
     }
 
-    public String getCompanyCode() {
-        return companyCode;
-    }
-
-    public void setCompanyCode(String companyCode) {
-        this.companyCode = companyCode;
-    }
-
-    public String getSystemCode() {
-        return systemCode;
-    }
-
-    public void setSystemCode(String systemCode) {
-        this.systemCode = systemCode;
-    }
 }

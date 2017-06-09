@@ -17,7 +17,8 @@ public interface ISproductBO extends IPaginableBO<Sproduct> {
 
     public List<Sproduct> quarySproductList(String location, Integer orderNo);
 
-    public void putOn(Sproduct data, String location, Integer orderNo);
+    public void putOn(Sproduct data, String location, Integer orderNo,
+            Long price);
 
     public void putOff(Sproduct data);
 

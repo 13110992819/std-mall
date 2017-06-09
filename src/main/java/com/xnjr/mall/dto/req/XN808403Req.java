@@ -16,6 +16,9 @@ public class XN808403Req {
     // 相对位置编号
     private String orderNo;
 
+    // 价格(必填)
+    private String price;
+
     public String getCode() {
         return code;
     }
@@ -39,4 +42,13 @@ public class XN808403Req {
     public void setLocation(String location) {
         this.location = location;
     }
+
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
+    }
+
 }

@@ -26,7 +26,7 @@ public class ISproductDAOTest extends ADAOTest {
         data.setDescription("description");
         data.setPrice(100000L);
 
-        data.setStatus(ESproductStatus.MAN_NO.getCode());
+        data.setStatus(ESproductStatus.PUBLISH_YES.getCode());
         data.setTotalNum(100);
         data.setRemainNum(0);
         // data.setLocation("location");

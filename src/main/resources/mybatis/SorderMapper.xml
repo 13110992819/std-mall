@@ -150,12 +150,9 @@
 		,amount1
 		,amount2
 		,amount3
-		,pay_amount1
-		,pay_amount2
-		,pay_amount3
-		
 		,status
 		,company_code
+		
 		,system_code
 		)
 		VALUES(
@@ -175,17 +172,12 @@
 		,#{amount1}
 		,#{amount2}
 		,#{amount3}
-		,#{payAmount1}
-		,#{payAmount2}
-		,#{payAmount3}
-		
 		,#{status}
 		,#{companyCode}
+		
 		,#{systemCode}
 		)
 	</insert>
-	
-	
 	
 	<update id="update_cancelOrder" parameterType="sorder">
 		UPDATE to2o_sorder
@@ -207,4 +199,23 @@
 		WHERE code = #{code}
 	</update>
 	
+	<update id="update_payGroup" parameterType="sorder">
+		UPDATE to2o_sorder
+		SET
+		payGroup=#{pay_group}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_paySuccess" parameterType="sorder">
+		UPDATE to2o_sorder
+		SET
+		status=#{status}
+		,pay_amount1=#{payAmount1}
+		,pay_amount2=#{payAmount2}
+		,pay_amount3=#{payAmount3}
+		,pay_code=#{payCode}
+		,pay_datetime=#{payDatetime}
+		,remark=#{remark}
+		WHERE code = #{code}
+	</update>
 </mapper>

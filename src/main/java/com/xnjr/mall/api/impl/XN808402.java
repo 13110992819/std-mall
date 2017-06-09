@@ -1,8 +1,14 @@
 package com.xnjr.mall.api.impl;
 
+import com.xnjr.mall.ao.ISproductAO;
 import com.xnjr.mall.api.AProcessor;
+import com.xnjr.mall.common.JsonUtil;
+import com.xnjr.mall.core.StringValidater;
+import com.xnjr.mall.dto.req.XN808402Req;
+import com.xnjr.mall.dto.res.BooleanRes;
 import com.xnjr.mall.exception.BizException;
 import com.xnjr.mall.exception.ParaException;
+import com.xnjr.mall.spring.SpringContextHolder;
 
 /**
  * 修改服务产品
@@ -11,17 +17,28 @@ import com.xnjr.mall.exception.ParaException;
  * @history:
  */
 public class XN808402 extends AProcessor {
+    private ISproductAO sproductAO = SpringContextHolder
+        .getBean(ISproductAO.class);
+
+    private XN808402Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
-        // TODO Auto-generated method stub
-        return null;
+        sproductAO.editSproduct(req.getCode(), req.getName(),
+            req.getCategory(), req.getType(), req.getSlogan(), req.getAdvPic(),
+            req.getPic(), req.getDescription(),
+            StringValidater.toLong(req.getPrice()),
+            StringValidater.toInteger(req.getTotalNum()));
+        return new BooleanRes(true);
     }
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        // TODO Auto-generated method stub
-
+        req = JsonUtil.json2Bean(inputparams, XN808402Req.class);
+        StringValidater.validateBlank(req.getCode(), req.getName(),
+            req.getCategory(), req.getType(), req.getSlogan(), req.getAdvPic(),
+            req.getPic(), req.getDescription());
+        StringValidater.validateAmount(req.getPrice());
+        StringValidater.validateNumber(req.getTotalNum());
     }
-
 }

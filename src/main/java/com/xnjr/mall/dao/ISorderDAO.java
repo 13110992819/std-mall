@@ -9,4 +9,8 @@ public interface ISorderDAO extends IBaseDAO<Sorder> {
     public int cancelOrder(Sorder order);
 
     public int deliverOrder(Sorder order);
+
+    public int updatePayGroup(Sorder data);
+
+    public int updatePaySuccess(Sorder order);
 }

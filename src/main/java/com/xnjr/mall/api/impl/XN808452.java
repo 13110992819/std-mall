@@ -1,21 +1,30 @@
 package com.xnjr.mall.api.impl;
 
+import com.xnjr.mall.ao.ISorderAO;
 import com.xnjr.mall.api.AProcessor;
+import com.xnjr.mall.common.JsonUtil;
+import com.xnjr.mall.core.StringValidater;
+import com.xnjr.mall.dto.req.XN808452Req;
+import com.xnjr.mall.dto.res.BooleanRes;
 import com.xnjr.mall.exception.BizException;
 import com.xnjr.mall.exception.ParaException;
+import com.xnjr.mall.spring.SpringContextHolder;
 
 public class XN808452 extends AProcessor {
+    private ISorderAO sorderAO = SpringContextHolder.getBean(ISorderAO.class);
+
+    private XN808452Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
-        // TODO Auto-generated method stub
-        return null;
+        sorderAO.deliver(req.getCode(), req.getHandleUser(), req.getRemark());
+        return new BooleanRes(true);
     }
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        // TODO Auto-generated method stub
-
+        req = JsonUtil.json2Bean(inputparams, XN808452Req.class);
+        StringValidater.validateBlank(req.getCode(), req.getHandleUser());
     }
 
 }

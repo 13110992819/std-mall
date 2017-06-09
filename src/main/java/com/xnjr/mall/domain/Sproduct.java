@@ -37,7 +37,7 @@ public class Sproduct extends ABaseDO {
     // 价格
     private Long price;
 
-    // 当天的状态（未满/已满）
+    // 状态（1 待上架，2 已上架，3 已下架）
     private String status;
 
     // 当天总数

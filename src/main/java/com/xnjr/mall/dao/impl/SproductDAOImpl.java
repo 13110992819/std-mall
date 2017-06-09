@@ -60,4 +60,9 @@ public class SproductDAOImpl extends AMybatisTemplate implements ISproductDAO {
         return super.update(NAMESPACE.concat("update_sproduct"), product);
     }
 
+    @Override
+    public int updateRemainNum(Sproduct product) {
+        return super.update(NAMESPACE.concat("update_remainNum"), product);
+    }
+
 }

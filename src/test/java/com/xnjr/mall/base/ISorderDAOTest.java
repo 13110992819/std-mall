@@ -36,7 +36,7 @@ public class ISorderDAOTest extends ADAOTest {
         data.setPayAmount2(200L);
         data.setPayAmount3(300L);
 
-        data.setStatus(ESproductStatus.MAN_NO.getCode());
+        data.setStatus(ESproductStatus.PUBLISH_YES.getCode());
         data.setCompanyCode("companyCode");
         data.setSystemCode("systemCode");
         sorderDAO.insert(data);

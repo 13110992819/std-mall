@@ -150,6 +150,8 @@
 		,price=#{price}
 
 		,status=#{status}
+		,total_num = #{totalNum}
+		,remain_num = #{remainNum}
 		WHERE code = #{code}
 	</update>
 	
@@ -177,4 +179,10 @@
 		code = #{code}
 	</delete>
 	
+	<update id="update_remainNum" parameterType="sproduct">
+		UPDATE to2o_sproduct
+		SET
+		remain_num = #{remainNum}
+		WHERE code = #{code}
+	</update>
 </mapper>

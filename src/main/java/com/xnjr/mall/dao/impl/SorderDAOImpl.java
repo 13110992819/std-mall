@@ -55,4 +55,14 @@ public class SorderDAOImpl extends AMybatisTemplate implements ISorderDAO {
         return super.update(NAMESPACE.concat("update_deliverOrder"), order);
     }
 
+    @Override
+    public int updatePayGroup(Sorder data) {
+        return super.update(NAMESPACE.concat("update_payGroup"), data);
+    }
+
+    @Override
+    public int updatePaySuccess(Sorder data) {
+        return super.update(NAMESPACE.concat("update_paySuccess"), data);
+    }
+
 }

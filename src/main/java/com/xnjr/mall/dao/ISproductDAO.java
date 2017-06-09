@@ -11,4 +11,6 @@ public interface ISproductDAO extends IBaseDAO<Sproduct> {
     public int putOn(Sproduct product);
 
     public int update(Sproduct product);
+
+    public int updateRemainNum(Sproduct sproduct);
 }

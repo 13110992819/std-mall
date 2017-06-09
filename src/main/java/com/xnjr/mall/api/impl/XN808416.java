@@ -1,8 +1,13 @@
 package com.xnjr.mall.api.impl;
 
+import com.xnjr.mall.ao.ISproductAO;
 import com.xnjr.mall.api.AProcessor;
+import com.xnjr.mall.common.JsonUtil;
+import com.xnjr.mall.core.StringValidater;
+import com.xnjr.mall.dto.req.XN808416Req;
 import com.xnjr.mall.exception.BizException;
 import com.xnjr.mall.exception.ParaException;
+import com.xnjr.mall.spring.SpringContextHolder;
 
 /**
  * 详情查询服务产品
@@ -11,17 +16,20 @@ import com.xnjr.mall.exception.ParaException;
  * @history:
  */
 public class XN808416 extends AProcessor {
+    private ISproductAO sproductAO = SpringContextHolder
+        .getBean(ISproductAO.class);
+
+    private XN808416Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
-        // TODO Auto-generated method stub
-        return null;
+        return sproductAO.getSproduct(req.getCode());
     }
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        // TODO Auto-generated method stub
-
+        req = JsonUtil.json2Bean(inputparams, XN808416Req.class);
+        StringValidater.validateBlank(req.getCode());
     }
 
 }

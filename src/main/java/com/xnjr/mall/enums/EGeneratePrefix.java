@@ -13,7 +13,8 @@ public enum EGeneratePrefix {
     CATEGORY("FL", "分类"), PRODUCT("CP", "产品"), PRODUCT_SPECS("PS", "产品"), CART(
             "GW", "购物车"), ORDER("DD", "定单"), PRODUCT_ORDER("CD", "产品订单"), STORE_TICKET(
             "ZKQ", "店铺折扣券"), USER_TICKET("UT", "用户折扣券"), STORE_ACTION("HD",
-            "店铺互动"), STORE_PURCHASW("XF", "商家消费记录"), PAY_GROUP("PG", "支付组号");
+            "店铺互动"), STORE_PURCHASW("XF", "商家消费记录"), PAY_GROUP("PG", "支付组号"), SPRODUCT(
+            "FW", "服务"), SORDER("SD", "定单");
 
     public static Map<String, EGeneratePrefix> getMap() {
         Map<String, EGeneratePrefix> map = new HashMap<String, EGeneratePrefix>();

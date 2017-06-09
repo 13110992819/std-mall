@@ -21,7 +21,7 @@ import com.xnjr.mall.domain.Cart;
  */
 public interface ICartBO extends IPaginableBO<Cart> {
 
-    public Cart getCart(String userId, String modelCode);
+    public Cart getCart(String userId, String productSpecsCode);
 
     public void saveCart(Cart data);
 

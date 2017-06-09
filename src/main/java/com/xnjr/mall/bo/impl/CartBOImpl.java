@@ -41,11 +41,11 @@ public class CartBOImpl extends PaginableBOImpl<Cart> implements ICartBO {
      * @see com.xnjr.mall.bo.ICartBO#isCartExist(java.lang.String, java.lang.String)
      */
     @Override
-    public Cart getCart(String userId, String productCode) {
+    public Cart getCart(String userId, String productSpecsCode) {
         Cart result = null;
         Cart condition = new Cart();
         condition.setUserId(userId);
-        condition.setProductCode(productCode);
+        condition.setProductSpecsCode(productSpecsCode);
         List<Cart> list = cartDAO.selectList(condition);
         if (!CollectionUtils.sizeIsEmpty(list)) {
             result = list.get(0);

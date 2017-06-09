@@ -13,7 +13,8 @@ import com.xnjr.mall.domain.Cart;
 public interface ICartAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
 
-    public String addCart(String userId, String productCode, Integer quantity);
+    public String addCart(String userId, String productSpecsCode,
+            Integer quantity);
 
     public void dropCartList(List<String> cartCodeList);
 

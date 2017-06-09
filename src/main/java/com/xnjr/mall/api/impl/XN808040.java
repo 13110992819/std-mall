@@ -28,7 +28,7 @@ public class XN808040 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         return new PKCodeRes(cartAO.addCart(req.getUserId(),
-            req.getProductCode(), Integer.valueOf(req.getQuantity())));
+            req.getProductSpecsCode(), Integer.valueOf(req.getQuantity())));
     }
 
     /** 
@@ -37,7 +37,8 @@ public class XN808040 extends AProcessor {
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN808040Req.class);
-        StringValidater.validateBlank(req.getUserId(), req.getProductCode());
+        StringValidater.validateBlank(req.getUserId(),
+            req.getProductSpecsCode());
         StringValidater.validateNumber(req.getQuantity());
     }
 }

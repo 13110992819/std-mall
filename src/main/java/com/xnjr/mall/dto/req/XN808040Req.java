@@ -10,8 +10,8 @@ public class XN808040Req {
     // 用户编号（必填）
     private String userId;
 
-    // 产品编号（必填）
-    private String productCode;
+    // 产品型号编号（必填）
+    private String productSpecsCode;
 
     // 数量（必填）
     private String quantity;
@@ -24,12 +24,12 @@ public class XN808040Req {
         this.userId = userId;
     }
 
-    public String getProductCode() {
-        return productCode;
+    public String getProductSpecsCode() {
+        return productSpecsCode;
     }
 
-    public void setProductCode(String productCode) {
-        this.productCode = productCode;
+    public void setProductSpecsCode(String productSpecsCode) {
+        this.productSpecsCode = productSpecsCode;
     }
 
     public String getQuantity() {

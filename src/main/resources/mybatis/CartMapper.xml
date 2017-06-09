@@ -34,6 +34,9 @@
 			<if test="productCode != null and productCode != '' ">
 				AND t.product_code = #{productCode}
 			</if>
+			<if test="productSpecsCode != null and productSpecsCode != '' ">
+				AND t.product_specs_code = #{productSpecsCode}
+			</if>
 			<if test="companyCode != null and companyCode != '' ">
 				AND t.company_code = #{companyCode}
 			</if>
@@ -57,7 +60,7 @@
 
         ,tps.code productSpecs_code
         ,tps.name productSpecs_name
-        ,tps.originnal_price productSpecs_original_price
+        ,tps.original_price productSpecs_original_price
         ,tps.price1 productSpecs_price1
         ,tps.price2 productSpecs_price2
         ,tps.price3 productSpecs_price3

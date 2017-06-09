@@ -6,7 +6,6 @@ import java.util.List;
 import com.xnjr.mall.bo.base.IPaginableBO;
 import com.xnjr.mall.domain.Sorder;
 import com.xnjr.mall.domain.Sproduct;
-import com.xnjr.mall.enums.EOrderStatus;
 import com.xnjr.mall.enums.EPayType;
 
 public interface ISorderBO extends IPaginableBO<Sorder> {
@@ -23,8 +22,7 @@ public interface ISorderBO extends IPaginableBO<Sorder> {
 
     public void deliver(Sorder order, String handleUser, String remark);
 
-    public void cancelSorder(Sorder order, EOrderStatus status,
-            String handleUser, String remark);
+    public void cancelSorder(Sorder order, String handleUser, String remark);
 
     public List<Sorder> querySorderList(Sorder condition);
 

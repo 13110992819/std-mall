@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.xnjr.mall.ao.ISorderAO;
 import com.xnjr.mall.bo.IAccountBO;
+import com.xnjr.mall.bo.ISmsOutBO;
 import com.xnjr.mall.bo.ISorderBO;
 import com.xnjr.mall.bo.ISproductBO;
 import com.xnjr.mall.bo.IStoreBO;
@@ -24,9 +25,10 @@ import com.xnjr.mall.domain.User;
 import com.xnjr.mall.dto.res.BooleanRes;
 import com.xnjr.mall.enums.EBizType;
 import com.xnjr.mall.enums.ECurrency;
-import com.xnjr.mall.enums.EOrderStatus;
 import com.xnjr.mall.enums.EPayType;
 import com.xnjr.mall.enums.ESproductStatus;
+import com.xnjr.mall.enums.ESystemCode;
+import com.xnjr.mall.enums.EVorderStatus;
 import com.xnjr.mall.exception.BizException;
 
 @Service
@@ -48,8 +50,11 @@ public class SorderAOImpl implements ISorderAO {
     @Autowired
     private IStoreBO storeBO;
 
+    @Autowired
+    private ISmsOutBO smsOutBO;
+
     @Override
-    public String commitSorder(String productCode, String startDate,
+    public String commitOrder(String productCode, String startDate,
             String endDate, String reName, String reMobile, String applyUser,
             String applyNote) {
         Sproduct sproduct = sproductBO.getSproduct(productCode);
@@ -78,7 +83,7 @@ public class SorderAOImpl implements ISorderAO {
     public Object payOrder(List<String> codeList, String payType) {
         String code = codeList.get(0);
         Sorder order = sorderBO.getSorder(code);
-        if (!EOrderStatus.TO_PAY.getCode().equals(order.getStatus())) {
+        if (!EVorderStatus.TOPAY.getCode().equals(order.getStatus())) {
             throw new BizException("xn000000", "订单不处于待支付状态");
         }
         Sproduct sproduct = sproductBO.getSproduct(order.getProductCode());
@@ -142,36 +147,42 @@ public class SorderAOImpl implements ISorderAO {
     }
 
     @Override
-    public void deliver(String code, String handleUser, String remark) {
+    public void deliverOrder(String code, String handleUser, String remark) {
         Sorder order = sorderBO.getSorder(code);
-        if (!EOrderStatus.PAY_YES.getCode().equals(order.getStatus())) {
-            throw new BizException("xn0000", "订单不处于已支付状态,不能出理");
+        if (EVorderStatus.PAYED.getCode().equals(order.getStatus())) {
+            sorderBO.deliver(order, handleUser, remark);
+            // 发送短信
+            smsOutBO.sentContent(order.getApplyUser(),
+                "尊敬的用户，您的订单《" + order.getCode() + "》已兑现，请注意查收。");
+        } else {
+            throw new BizException("xn0000", "该订单不是已支付状态，无法兑换");
         }
-        sorderBO.deliver(order, handleUser, remark);
     }
 
     @Override
-    public void cancelSorder(String code, String handleUser, String remark) {
+    public void cancelOrder(String code, String handleUser, String remark) {
         Sorder order = sorderBO.getSorder(code);
-        EOrderStatus status = EOrderStatus.SHYC;
-        Long rmbAmount = order.getPayAmount1(); // 人民币
+        if (EVorderStatus.TOPAY.getCode().equals(order.getStatus())) {
+            // 发短信
+            smsOutBO.sentContent(order.getApplyUser(),
+                "尊敬的用户，您的订单[" + order.getCode() + "]已取消");
+        } else if (EVorderStatus.PAYED.getCode().equals(order.getStatus())) {
+            if (ESystemCode.JKYG.getCode().equals(order.getSystemCode())) {
+                accountBO.doTransferAmountRemote(order.getStoreUser(),
+                    order.getApplyUser(), ECurrency.CNY, order.getPayAmount1(),
+                    EBizType.FWTK, EBizType.FWTK.getValue(),
+                    EBizType.FWTK.getValue(), order.getCode());
+            }
+            // 发短信
+            smsOutBO.sentContent(order.getApplyUser(),
+                "尊敬的用户，您的订单[" + order.getCode() + "]已取消,请及时查看退款。");
+        } else {
+            throw new BizException("xn0000", "该订单，无法操作");
+        }
+        sorderBO.cancelSorder(order, handleUser, remark);
         Sproduct sproduct = sproductBO.getSproduct(order.getProductCode());
-        Store store = storeBO.getStore(sproduct.getStoreCode());
-        if (!EOrderStatus.PAY_YES.getCode().equals(order.getStatus())
-                || EOrderStatus.TO_PAY.getCode().equals(order.getStatus())) {
-            throw new BizException("xn0000", "订单不处于可取消的范围内");
-        }
-        if (EOrderStatus.PAY_YES.getCode().equals(order.getStatus())) {
-            accountBO.doTransferAmountRemote(store.getOwner(),
-                order.getApplyUser(), ECurrency.CNY, rmbAmount, EBizType.FWTK,
-                EBizType.FWTK.getValue(), EBizType.FWTK.getValue(),
-                order.getCode());
-        }
-        if (order.getApplyUser().equals(handleUser)) {
-            status = EOrderStatus.YHYC;
-        }
-        sorderBO.cancelSorder(order, status, handleUser, remark);
         sproductBO.refreshSproduct(sproduct, sproduct.getRemainNum() - 1);
+
     }
 
     @Override
@@ -199,7 +210,7 @@ public class SorderAOImpl implements ISorderAO {
         }
         Sorder order = orderList.get(0);
         Sproduct sproduct = sproductBO.getSproduct(order.getProductCode());
-        if (EOrderStatus.TO_PAY.getCode().equals(order.getStatus())) {
+        if (EVorderStatus.TOPAY.getCode().equals(order.getStatus())) {
             // 更新订单支付金额
             sorderBO.refreshPaySuccess(order, amount, 0L, 0L, null);
             sproductBO.refreshSproduct(sproduct, sproduct.getRemainNum() + 1);

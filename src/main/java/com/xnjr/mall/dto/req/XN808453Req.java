@@ -1,14 +1,17 @@
 package com.xnjr.mall.dto.req;
 
+import java.util.List;
+
 /**
- * 取消订单
+ * 订单处理（酒店入住）
  * @author: asus 
- * @since: 2017年6月8日 下午4:16:15 
+ * @since: 2017年6月8日 下午4:14:02 
  * @history:
  */
 public class XN808453Req {
-    // 编号
-    private String code;
+
+    // 编号（必填）
+    private List<String> codeList;
 
     // 处理人
     private String handleUser;
@@ -16,12 +19,12 @@ public class XN808453Req {
     // 备注
     private String remark;
 
-    public String getCode() {
-        return code;
+    public List<String> getCodeList() {
+        return codeList;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setCodeList(List<String> codeList) {
+        this.codeList = codeList;
     }
 
     public String getHandleUser() {

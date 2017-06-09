@@ -25,8 +25,9 @@ public class XN808652 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        vorderAO.cancelOrder(req.getCodeList(), req.getUpdater(),
-            req.getRemark());
+        for (String code : req.getCodeList()) {
+            vorderAO.cancelOrder(code, req.getUpdater(), req.getRemark());
+        }
         return new BooleanRes(true);
     }
 

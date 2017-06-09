@@ -13,9 +13,6 @@ public class XN808467Req extends APageReq {
      */
     private static final long serialVersionUID = -2417435891349850405L;
 
-    // 编号
-    private String code;
-
     // 产品编号
     private String productCode;
 
@@ -54,14 +51,6 @@ public class XN808467Req extends APageReq {
 
     // 所属系统编号
     private String systemCode;
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
 
     public String getProductCode() {
         return productCode;

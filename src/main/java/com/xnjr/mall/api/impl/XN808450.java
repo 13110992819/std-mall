@@ -23,7 +23,7 @@ public class XN808450 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        return new PKCodeRes(sorderAO.commitSorder(req.getProductCode(),
+        return new PKCodeRes(sorderAO.commitOrder(req.getProductCode(),
             req.getStartDate(), req.getEndDate(), req.getReName(),
             req.getReMobile(), req.getApplyUser(), req.getApplyNote()));
     }

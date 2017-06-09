@@ -22,6 +22,9 @@ public class Sproduct extends ABaseDO {
     // 所属商家编号
     private String storeCode;
 
+    // 所属商家主人编号
+    private String storeUser;
+
     // 广告语
     private String slogan;
 
@@ -72,6 +75,14 @@ public class Sproduct extends ABaseDO {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getStoreUser() {
+        return storeUser;
+    }
+
+    public void setStoreUser(String storeUser) {
+        this.storeUser = storeUser;
     }
 
     public String getCategory() {

@@ -24,6 +24,12 @@ public class Sorder extends ABaseDO {
     // 小类（同产品）
     private String type;
 
+    // 所属商家编号（同产品）
+    private String storeCode;
+
+    // 所属商家主人编号（同产品）
+    private String storeUser;
+
     // 预定时间起
     private Date startDate;
 
@@ -109,6 +115,22 @@ public class Sorder extends ABaseDO {
 
     public void setProductCode(String productCode) {
         this.productCode = productCode;
+    }
+
+    public String getStoreCode() {
+        return storeCode;
+    }
+
+    public void setStoreCode(String storeCode) {
+        this.storeCode = storeCode;
+    }
+
+    public String getStoreUser() {
+        return storeUser;
+    }
+
+    public void setStoreUser(String storeUser) {
+        this.storeUser = storeUser;
     }
 
     public String getType() {

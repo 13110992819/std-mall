@@ -8,15 +8,15 @@ import com.xnjr.mall.domain.Sorder;
 public interface ISorderAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
 
-    public String commitSorder(String productCode, String startDate,
+    public String commitOrder(String productCode, String startDate,
             String endDate, String reName, String reMobile, String applyUser,
             String applyNote);
 
     public Object payOrder(List<String> codeList, String payType);
 
-    public void deliver(String code, String handleUser, String remark);
+    public void deliverOrder(String code, String handleUser, String remark);
 
-    public void cancelSorder(String code, String handleUser, String remark);
+    public void cancelOrder(String code, String handleUser, String remark);
 
     public Paginable<Sorder> querySorderPage(int start, int limit,
             Sorder condition);

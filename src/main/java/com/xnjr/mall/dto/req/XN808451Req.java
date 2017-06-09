@@ -9,7 +9,8 @@ import java.util.List;
  * @history:
  */
 public class XN808451Req {
-    // 编号
+
+    // 编号（必填）
     private List<String> codeList;
 
     // 支付方式(1 余额,2 微信APP,3 支付宝,5 微信H5)

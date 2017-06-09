@@ -11,6 +11,12 @@ import com.xnjr.mall.exception.BizException;
 import com.xnjr.mall.exception.ParaException;
 import com.xnjr.mall.spring.SpringContextHolder;
 
+/**
+ * 支付产品订单
+ * @author: myb858 
+ * @since: 2017年6月9日 下午12:42:54 
+ * @history:
+ */
 public class XN808451 extends AProcessor {
     private ISorderAO sorderAO = SpringContextHolder.getBean(ISorderAO.class);
 

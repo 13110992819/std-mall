@@ -14,8 +14,8 @@ import com.xnjr.mall.dao.ISorderDAO;
 import com.xnjr.mall.domain.Sorder;
 import com.xnjr.mall.domain.Sproduct;
 import com.xnjr.mall.enums.EGeneratePrefix;
-import com.xnjr.mall.enums.EOrderStatus;
 import com.xnjr.mall.enums.EPayType;
+import com.xnjr.mall.enums.EVorderStatus;
 import com.xnjr.mall.exception.BizException;
 
 @Component
@@ -45,7 +45,7 @@ public class SorderBOImpl extends PaginableBOImpl<Sorder> implements ISorderBO {
         data.setAmount1(sproduct.getPrice());
         data.setAmount2(0L);
         data.setAmount3(0L);
-        data.setStatus(EOrderStatus.TO_PAY.getCode());
+        data.setStatus(EVorderStatus.TOPAY.getCode());
 
         data.setCompanyCode(sproduct.getCompanyCode());
         data.setSystemCode(sproduct.getSystemCode());
@@ -83,7 +83,7 @@ public class SorderBOImpl extends PaginableBOImpl<Sorder> implements ISorderBO {
         int count = 0;
         if (order != null && StringUtils.isNotBlank(order.getCode())) {
             Date now = new Date();
-            order.setStatus(EOrderStatus.PAY_YES.getCode());
+            order.setStatus(EVorderStatus.PAYED.getCode());
             order.setPayAmount1(payAmount1);
             order.setPayAmount2(payAmount2);
             order.setPayAmount3(payAmount3);
@@ -97,7 +97,7 @@ public class SorderBOImpl extends PaginableBOImpl<Sorder> implements ISorderBO {
 
     @Override
     public void deliver(Sorder order, String handleUser, String remark) {
-        order.setStatus(EOrderStatus.RECEIVE.getCode());
+        order.setStatus(EVorderStatus.DELIVER.getCode());
         order.setHandleUser(handleUser);
         order.setHandleDatetime(new Date());
         order.setRemark(remark);
@@ -105,9 +105,8 @@ public class SorderBOImpl extends PaginableBOImpl<Sorder> implements ISorderBO {
     }
 
     @Override
-    public void cancelSorder(Sorder order, EOrderStatus status,
-            String handleUser, String remark) {
-        order.setStatus(status.getCode());
+    public void cancelSorder(Sorder order, String handleUser, String remark) {
+        order.setStatus(EVorderStatus.CANCEL.getCode());
         order.setHandleUser(handleUser);
         order.setHandleDatetime(new Date());
         order.setRemark(remark);

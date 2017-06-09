@@ -12,7 +12,6 @@ import com.xnjr.mall.bo.base.PaginableBOImpl;
 import com.xnjr.mall.core.OrderNoGenerater;
 import com.xnjr.mall.dao.ISorderDAO;
 import com.xnjr.mall.domain.Sorder;
-import com.xnjr.mall.domain.Sproduct;
 import com.xnjr.mall.enums.EGeneratePrefix;
 import com.xnjr.mall.enums.EPayType;
 import com.xnjr.mall.enums.EVorderStatus;
@@ -24,33 +23,8 @@ public class SorderBOImpl extends PaginableBOImpl<Sorder> implements ISorderBO {
     private ISorderDAO sorderDAO;
 
     @Override
-    public String saveSorder(Sproduct sproduct, Date startDate, Date endDate,
-            String reName, String reMobile, String applyUser, String applyNote) {
-        Sorder data = new Sorder();
-        String code = OrderNoGenerater.generateM(EGeneratePrefix.SORDER
-            .getCode());
-        data.setCode(code);
-        data.setProductCode(sproduct.getCode());
-        data.setCategory(sproduct.getCategory());
-        data.setType(sproduct.getType());
-        data.setStartDate(startDate);
-
-        data.setEndDate(endDate);
-        data.setReName(reName);
-        data.setReMobile(reMobile);
-        data.setApplyUser(applyUser);
-        data.setApplyNote(applyNote);
-
-        data.setApplyDatetime(new Date());
-        data.setAmount1(sproduct.getPrice());
-        data.setAmount2(0L);
-        data.setAmount3(0L);
-        data.setStatus(EVorderStatus.TOPAY.getCode());
-
-        data.setCompanyCode(sproduct.getCompanyCode());
-        data.setSystemCode(sproduct.getSystemCode());
-        sorderDAO.insert(data);
-        return code;
+    public void saveSorder(Sorder order) {
+        sorderDAO.insert(order);
     }
 
     @Override

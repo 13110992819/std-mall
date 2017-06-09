@@ -92,13 +92,14 @@ public class VorderAOImpl implements IVorderAO {
         // 暂时只实现单笔订单支付
         String code = codeList.get(0);
         Vorder order = vorderBO.getVorder(code);
+        if (!EVorderStatus.TOPAY.getCode().equals(order.getStatus())) {
+            throw new BizException("xn000000", "订单不处于待支付状态");
+        }
         Vproduct product = vproductBO.getVproduct(order.getProductCode());
         if (!EVproductStatus.PUBLISH_YES.getCode().equals(product.getStatus())) {
             throw new BizException("xn000000", "产品未上架，无法支付");
         }
-        if (!EVorderStatus.TOPAY.getCode().equals(order.getStatus())) {
-            throw new BizException("xn000000", "订单不处于待支付状态");
-        }
+
         Long payAmount = order.getPayAmount();
         if (EPayType.INTEGRAL.getCode().equals(payType)) {
             if (ESystemCode.Caigo.getCode().equals(order.getSystemCode())) {

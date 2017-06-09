@@ -8,6 +8,7 @@
 		<result column="category" property="category" />
 		<result column="type" property="type" />
 		<result column="store_code" property="storeCode" />
+		<result column="store_user" property="storeUser" />
 	
 		<result column="slogan" property="slogan" />
 		<result column="adv_pic" property="advPic" />
@@ -41,7 +42,9 @@
 			<if test="storeCode != null and storeCode != '' ">
 				AND t.store_code = #{storeCode}
 			</if>
-			
+			<if test="storeUser != null and storeUser != '' ">
+				AND t.store_user = #{storeUser}
+			</if>
 			<if test="status != null and status != '' ">
 				AND t.status = #{status}
 			</if>
@@ -63,6 +66,7 @@
 		,t.category
 		,t.type
 		,t.store_code
+		,t.store_user
 		
 		,t.slogan
 		,t.adv_pic
@@ -102,6 +106,7 @@
 		,category
 		,type
 		,store_code
+		,store_user
 		
 		,slogan
 		,adv_pic
@@ -112,8 +117,6 @@
 		,status
 		,total_num
 		,remain_num
-		,location
-		,order_no
 		,company_code
 		,system_code 
 		)
@@ -123,6 +126,7 @@
 		,#{category}
 		,#{type}
 		,#{storeCode}
+		,#{storeUser}
 		
 		,#{slogan}
 		,#{advPic}
@@ -133,8 +137,6 @@
 		,#{status}
 		,#{totalNum}
 		,#{remainNum}
-		,#{location}
-		,#{orderNo}
 		,#{companyCode}
 		,#{systemCode} 
 		)
@@ -153,7 +155,6 @@
 		,description=#{description}
 		,price=#{price}
 
-		,status=#{status}
 		,total_num = #{totalNum}
 		,remain_num = #{remainNum}
 		WHERE code = #{code}

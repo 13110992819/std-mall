@@ -23,16 +23,15 @@ public class XN808450 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        return new PKCodeRes(sorderAO.commitOrder(req.getProductCode(),
-            req.getStartDate(), req.getEndDate(), req.getReName(),
-            req.getReMobile(), req.getApplyUser(), req.getApplyNote()));
+        return new PKCodeRes(sorderAO.commitOrder(req));
     }
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN808450Req.class);
-        StringValidater.validateBlank(req.getProductCode(), req.getReName(),
-            req.getReMobile(), req.getApplyUser());
+        StringValidater.validateBlank(req.getProductCode(), req.getStartDate(),
+            req.getEndDate(), req.getReName(), req.getReMobile(),
+            req.getApplyUser());
     }
 
 }

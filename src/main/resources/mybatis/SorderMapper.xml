@@ -7,9 +7,12 @@
 		<result column="product_code" property="productCode" />
 		<result column="category" property="category" />
 		<result column="type" property="type" />
+		<result column="store_code" property="storeCode" />
+		<result column="store_user" property="storeUser" />
+		
+		
 		<result column="start_date" property="startDate" />
 		<result column="end_date" property="endDate" />
-		
 		<result column="re_name" property="reName" />
 		<result column="re_mobile" property="reMobile" />
 		<result column="apply_user" property="applyUser" />
@@ -49,7 +52,12 @@
 			<if test="type != null and type != '' ">
 				AND t.type = #{type}
 			</if>
-			
+			<if test="storeCode != null and storeCode != '' ">
+				AND t.store_code = #{storeCode}
+			</if>
+			<if test="storeUser != null and storeUser != '' ">
+				AND t.store_user = #{storeUser}
+			</if>
 			<if test="reName != null and reName != '' ">
 				AND t.re_name = #{reName}
 			</if>
@@ -88,9 +96,11 @@
 		,t.product_code
 		,t.category
 		,t.type
+		,t.store_code
+		,t.store_user
+		
 		,t.start_date
 		,t.end_date
-		
 		,t.re_name
 		,t.re_mobile
 		,t.apply_user
@@ -138,9 +148,11 @@
 		,product_code
 		,category
 		,type
+		,t.store_code
+		,t.store_user
+		
 		,start_date
 		,end_date
-		
 		,re_name
 		,re_mobile
 		,apply_user
@@ -160,6 +172,9 @@
 		,#{productCode}
 		,#{category}
 		,#{type}
+		,#{storeCode}
+		,#{storeUser}
+		
 		,#{startDate}
 		,#{endDate}
 		

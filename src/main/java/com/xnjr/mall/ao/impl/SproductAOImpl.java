@@ -43,7 +43,8 @@ public class SproductAOImpl implements ISproductAO {
         data.setName(req.getName());
         data.setCategory(type.getParentCode());
         data.setType(type.getCode());
-        data.setStoreCode(req.getStoreCode());
+        data.setStoreCode(store.getCode());
+        data.setStoreUser(store.getOwner());
 
         data.setSlogan(req.getSlogan());
         data.setAdvPic(req.getAdvPic());

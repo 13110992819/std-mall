@@ -1,6 +1,5 @@
 package com.xnjr.mall.dto.req;
 
-
 /**
  * 服务下单
  * @author: asus 
@@ -8,25 +7,25 @@ package com.xnjr.mall.dto.req;
  * @history:
  */
 public class XN808450Req {
-    // 产品编号
+    // 产品编号（必填）
     private String productCode;
 
-    // 预定时间起
+    // 预定时间起（必填）
     private String startDate;
 
-    // 预定时间止
+    // 预定时间止（必填）
     private String endDate;
 
-    // 服务真正享受人姓名
+    // 服务真正享受人姓名（必填）
     private String reName;
 
-    // 服务真正享受人电话
+    // 服务真正享受人电话（必填）
     private String reMobile;
 
-    // 下单人
+    // 下单人（必填）
     private String applyUser;
 
-    // 申请备注
+    // 申请备注（选填）
     private String applyNote;
 
     public String getProductCode() {

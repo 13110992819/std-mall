@@ -4,15 +4,16 @@ import java.util.List;
 
 import com.xnjr.mall.bo.base.Paginable;
 import com.xnjr.mall.domain.Sorder;
+import com.xnjr.mall.dto.req.XN808450Req;
 
 public interface ISorderAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
 
-    public String commitOrder(String productCode, String startDate,
-            String endDate, String reName, String reMobile, String applyUser,
-            String applyNote);
+    public String commitOrder(XN808450Req req);
 
-    public Object payOrder(List<String> codeList, String payType);
+    public Object toPayOrder(List<String> codeList, String payType);
+
+    public void paySuccess(String payGroup, String payCode, Long amount);
 
     public void deliverOrder(String code, String handleUser, String remark);
 
@@ -25,5 +26,4 @@ public interface ISorderAO {
 
     public List<Sorder> querySorderList(Sorder condition);
 
-    public void paySuccess(String payGroup, String payCode, Long amount);
 }

@@ -69,6 +69,14 @@
 		<property name="paginableDAO" ref="vorderDAOImpl"/>
 	</bean>	
 	
+	<bean id="sproductBO" class="com.xnjr.mall.bo.impl.SproductBOImpl">
+		<property name="paginableDAO" ref="sproductDAOImpl"/>
+	</bean>	
+	
+	<bean id="sorderBO" class="com.xnjr.mall.bo.impl.SorderBOImpl">
+		<property name="paginableDAO" ref="sorderDAOImpl"/>
+	</bean>	
+	
 	<bean id="sysDictBO" class="com.xnjr.mall.bo.impl.SYSDictBOImpl">
 		<property name="paginableDAO" ref="sysDictDAOImpl"/>
 	</bean>	

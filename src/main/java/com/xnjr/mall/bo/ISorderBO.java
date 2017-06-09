@@ -7,6 +7,7 @@ import com.xnjr.mall.bo.base.IPaginableBO;
 import com.xnjr.mall.domain.Sorder;
 import com.xnjr.mall.domain.Sproduct;
 import com.xnjr.mall.enums.EOrderStatus;
+import com.xnjr.mall.enums.EPayType;
 
 public interface ISorderBO extends IPaginableBO<Sorder> {
 
@@ -15,7 +16,7 @@ public interface ISorderBO extends IPaginableBO<Sorder> {
 
     public Sorder getSorder(String code);
 
-    public String addPayGroup(String code);
+    public String addPayGroup(Sorder order, EPayType payType);
 
     public int refreshPaySuccess(Sorder order, Long payAmount1,
             Long payAmount2, Long payAmount3, String payCode);

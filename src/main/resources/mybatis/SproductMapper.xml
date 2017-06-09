@@ -112,6 +112,8 @@
 		,status
 		,total_num
 		,remain_num
+		,location
+		,order_no
 		,company_code
 		,system_code 
 		)
@@ -131,6 +133,8 @@
 		,#{status}
 		,#{totalNum}
 		,#{remainNum}
+		,#{location}
+		,#{orderNo}
 		,#{companyCode}
 		,#{systemCode} 
 		)

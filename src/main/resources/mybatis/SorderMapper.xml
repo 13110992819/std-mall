@@ -203,6 +203,7 @@
 		UPDATE to2o_sorder
 		SET
 		payGroup=#{pay_group}
+		,pay_type=#{payType}
 		WHERE code = #{code}
 	</update>
 	

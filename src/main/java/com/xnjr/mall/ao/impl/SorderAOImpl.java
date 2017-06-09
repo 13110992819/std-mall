@@ -82,52 +82,47 @@ public class SorderAOImpl implements ISorderAO {
             throw new BizException("xn000000", "订单不处于待支付状态");
         }
         Sproduct sproduct = sproductBO.getSproduct(order.getProductCode());
+        Store store = storeBO.getStore(sproduct.getStoreCode());
         this.check(sproduct);
         if (EPayType.YE.getCode().equals(payType)) {
-            return toPayOrderYE(order);
+            return toPayOrderYE(order, store);
         } else if (EPayType.WEIXIN_APP.getCode().equals(payType)) {
-            return toPayOrderWXAPP(order);
+            return toPayOrderWXAPP(order, store);
         } else if (EPayType.ALIPAY.getCode().equals(payType)) {
-            return toPayOrderALIPAY(order);
+            return toPayOrderALIPAY(order, store);
         } else if (EPayType.WEIXIN_H5.getCode().equals(payType)) {
-            return toPayOrderWXH5(order);
+            return toPayOrderWXH5(order, store);
         } else {
             throw new BizException("xn0000", "支付类型不支持");
         }
     }
 
-    private Object toPayOrderWXH5(Sorder order) {
+    private Object toPayOrderWXH5(Sorder order, Store store) {
         Long rmbAmount = order.getAmount1();
         User user = userBO.getRemoteUser(order.getApplyUser());
-        Sproduct sproduct = sproductBO.getSproduct(order.getProductCode());
-        Store store = storeBO.getStore(sproduct.getStoreCode());
-        String payGroup = sorderBO.addPayGroup(order.getCode());
+        String payGroup = sorderBO.addPayGroup(order, EPayType.WEIXIN_H5);
         return accountBO.doWeiXinH5PayRemote(user.getUserId(),
             user.getOpenId(), store.getOwner(), payGroup, order.getCode(),
             EBizType.FW, "购物微信支付", rmbAmount);
     }
 
-    private Object toPayOrderALIPAY(Sorder order) {
+    private Object toPayOrderALIPAY(Sorder order, Store store) {
         Long rmbAmount = order.getAmount1();
         User user = userBO.getRemoteUser(order.getApplyUser());
-        Sproduct sproduct = sproductBO.getSproduct(order.getProductCode());
-        Store store = storeBO.getStore(sproduct.getStoreCode());
-        String payGroup = sorderBO.addPayGroup(order.getCode());
+        String payGroup = sorderBO.addPayGroup(order, EPayType.ALIPAY);
         return accountBO.doAlipayRemote(user.getUserId(), store.getOwner(),
-            payGroup, order.getCode(), EBizType.YC_MALL, "支付宝支付", rmbAmount);
+            payGroup, order.getCode(), EBizType.FW, "支付宝支付", rmbAmount);
     }
 
-    private Object toPayOrderWXAPP(Sorder order) {
+    private Object toPayOrderWXAPP(Sorder order, Store store) {
         Long rmbAmount = order.getAmount1();
         User user = userBO.getRemoteUser(order.getApplyUser());
-        Sproduct sproduct = sproductBO.getSproduct(order.getProductCode());
-        Store store = storeBO.getStore(sproduct.getStoreCode());
-        String payGroup = sorderBO.addPayGroup(order.getCode());
+        String payGroup = sorderBO.addPayGroup(order, EPayType.WEIXIN_APP);
         return accountBO.doWeiXinPayRemote(user.getUserId(), store.getOwner(),
             payGroup, order.getCode(), EBizType.FW, "微信APP支付", rmbAmount);
     }
 
-    private Object toPayOrderYE(Sorder order) {
+    private Object toPayOrderYE(Sorder order, Store store) {
         Long rmbAmount = order.getAmount1();
         String fromUserId = order.getApplyUser();
         Account rmbAccount = accountBO.getRemoteAccount(fromUserId,
@@ -136,7 +131,7 @@ public class SorderAOImpl implements ISorderAO {
             throw new BizException("xn0000", "人民币账户余额不足");
         }
         Sproduct sproduct = sproductBO.getSproduct(order.getProductCode());
-        Store store = storeBO.getStore(sproduct.getStoreCode());
+        sorderBO.addPayGroup(order, EPayType.YE);
         // 更新订单支付金额
         sorderBO.refreshPaySuccess(order, rmbAmount, 0L, 0L, null);
         sproductBO.refreshSproduct(sproduct, sproduct.getRemainNum() + 1);

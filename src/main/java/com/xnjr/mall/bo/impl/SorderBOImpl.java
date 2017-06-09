@@ -15,6 +15,7 @@ import com.xnjr.mall.domain.Sorder;
 import com.xnjr.mall.domain.Sproduct;
 import com.xnjr.mall.enums.EGeneratePrefix;
 import com.xnjr.mall.enums.EOrderStatus;
+import com.xnjr.mall.enums.EPayType;
 import com.xnjr.mall.exception.BizException;
 
 @Component
@@ -67,16 +68,12 @@ public class SorderBOImpl extends PaginableBOImpl<Sorder> implements ISorderBO {
     }
 
     @Override
-    public String addPayGroup(String code) {
-        String payGroup = null;
-        if (StringUtils.isNotBlank(code)) {
-            Sorder data = new Sorder();
-            data.setCode(code);
-            payGroup = OrderNoGenerater.generateM(EGeneratePrefix.PAY_GROUP
-                .getCode());
-            data.setPayGroup(payGroup);
-            sorderDAO.updatePayGroup(data);
-        }
+    public String addPayGroup(Sorder order, EPayType payType) {
+        String payGroup = OrderNoGenerater.generateM(EGeneratePrefix.PAY_GROUP
+            .getCode());
+        order.setPayGroup(payGroup);
+        order.setPayType(payType.getCode());
+        sorderDAO.updatePayGroup(order);
         return payGroup;
     }
 

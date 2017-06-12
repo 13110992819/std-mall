@@ -163,7 +163,14 @@ public class VorderAOImpl implements IVorderAO {
     }
 
     @Override
-    public void deliverOrder(String code, String updater, String remark) {
+    public void deliverOrder(List<String> codeList, String updater,
+            String remark) {
+        for (String code : codeList) {
+            deleverOrder(code, updater, remark);
+        }
+    }
+
+    private void deleverOrder(String code, String updater, String remark) {
         Vorder order = vorderBO.getVorder(code);
         if (EVorderStatus.PAYED.getCode().equals(order.getStatus())) {
             vorderBO.deliverOrder(order, updater, remark);

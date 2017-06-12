@@ -16,7 +16,7 @@ public interface IVorderAO {
 
     void cancelOrder(String code, String updater, String remark);
 
-    void deliverOrder(String code, String updater, String remark);
+    void deliverOrder(List<String> codeList, String updater, String remark);
 
     Paginable<Vorder> queryVorderPage(int start, int limit, Vorder condition);
 

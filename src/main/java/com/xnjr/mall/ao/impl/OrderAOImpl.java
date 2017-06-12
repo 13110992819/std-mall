@@ -142,18 +142,19 @@ public class OrderAOImpl implements IOrderAO {
     @Transactional
     public String commitOrder(XN808050Req req) {
         // 立即下单，构造成购物车单个产品下单
-        Product product = productBO.getProduct(req.getProductCode());
-        if (!EProductStatus.PUBLISH_YES.getCode().equals(product.getStatus())) {
-            throw new BizException("xn0000", "该产品未上架，无法下单");
-        }
-        req.getPojo().setCompanyCode(product.getCompanyCode());
-        req.getPojo().setSystemCode(product.getSystemCode());
+        // Product product = productBO.getProduct(req.getProductCode());
+        // if
+        // (!EProductStatus.PUBLISH_YES.getCode().equals(product.getStatus())) {
+        // throw new BizException("xn0000", "该产品未上架，无法下单");
+        // }
+        // req.getPojo().setCompanyCode(product.getCompanyCode());
+        // req.getPojo().setSystemCode(product.getSystemCode());
 
         Cart cart = new Cart();
-        cart.setProductCode(req.getProductCode());
+        // cart.setProductCode(req.getProductCode());
         cart.setQuantity(StringValidater.toInteger(req.getQuantity()));
         cart.setUserId(req.getPojo().getApplyUser());
-        cart.setProduct(product);
+        // cart.setProduct(product);
         List<Cart> cartList = new ArrayList<Cart>();
         cartList.add(cart);
 

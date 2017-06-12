@@ -29,10 +29,7 @@ public class XN808051 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         Object result = null;
-        if (ESystemCode.ZHPAY.getCode().equals(req.getPojo().getSystemCode())) {
-            result = orderAO.commitCartOrderZH(req);
-        } else if (ESystemCode.Caigo.getCode().equals(
-            req.getPojo().getSystemCode())) {
+        if (ESystemCode.Caigo.getCode().equals(req.getPojo().getSystemCode())) {
             result = orderAO.commitCartOrderCG(req);
         } else if (ESystemCode.PIPE.getCode().equals(
             req.getPojo().getSystemCode())) {

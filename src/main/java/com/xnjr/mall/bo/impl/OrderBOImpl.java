@@ -194,15 +194,15 @@ public class OrderBOImpl extends PaginableBOImpl<Order> implements IOrderBO {
         Long amount3 = 0L;
         for (Cart cart : cartList) {
             Product product = cart.getProduct();
-            if (null != product.getPrice1()) {
-                amount1 = amount1 + (cart.getQuantity() * product.getPrice1());
-            }
-            if (null != product.getPrice2()) {
-                amount2 = amount2 + (cart.getQuantity() * product.getPrice2());
-            }
-            if (null != product.getPrice3()) {
-                amount3 = amount3 + (cart.getQuantity() * product.getPrice3());
-            }
+            // if (null != product.getPrice1()) {
+            // amount1 = amount1 + (cart.getQuantity() * product.getPrice1());
+            // }
+            // if (null != product.getPrice2()) {
+            // amount2 = amount2 + (cart.getQuantity() * product.getPrice2());
+            // }
+            // if (null != product.getPrice3()) {
+            // amount3 = amount3 + (cart.getQuantity() * product.getPrice3());
+            // }
             // 落地订单产品关联信息
             saveProductOrder(order.getCode(), product, cart.getQuantity());
         }
@@ -263,9 +263,9 @@ public class OrderBOImpl extends PaginableBOImpl<Order> implements IOrderBO {
         productOrder.setOrderCode(orderCode);
         productOrder.setProductCode(product.getCode());
         productOrder.setQuantity(quantity);
-        productOrder.setPrice1(product.getPrice1());
-        productOrder.setPrice2(product.getPrice2());
-        productOrder.setPrice3(product.getPrice3());
+        // productOrder.setPrice1(product.getPrice1());
+        // productOrder.setPrice2(product.getPrice2());
+        // productOrder.setPrice3(product.getPrice3());
         productOrder.setCompanyCode(product.getCompanyCode());
         productOrder.setSystemCode(product.getSystemCode());
         productOrderDAO.insert(productOrder);

@@ -22,11 +22,22 @@ public class XN001350Req {
     // 是否注册环信(选填)
     private String isRegHx;
 
+    // 角色编号(选填)
+    private String roleCode;
+
     // 系统编号(必填)
     private String systemCode;
 
     // 公司编号(必填)
     private String companyCode;
+
+    public String getRoleCode() {
+        return roleCode;
+    }
+
+    public void setRoleCode(String roleCode) {
+        this.roleCode = roleCode;
+    }
 
     public String getUserReferee() {
         return userReferee;

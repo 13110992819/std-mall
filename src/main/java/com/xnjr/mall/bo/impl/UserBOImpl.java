@@ -85,11 +85,13 @@ public class UserBOImpl implements IUserBO {
     }
 
     @Override
-    public String doSaveBUser(String mobile, String userReferee,
-            String updater, String systemCode, String companyCode) {
+    public String doSaveBUser(String mobile, String roleCode,
+            String userReferee, String updater, String systemCode,
+            String companyCode) {
         XN001350Req req = new XN001350Req();
         req.setLoginName(mobile);
         req.setMobile(mobile);
+        req.setRoleCode(roleCode);
         req.setUserReferee(userReferee);
         req.setUpdater(updater);
         req.setRemark("代注册商家");

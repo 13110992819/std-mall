@@ -36,5 +36,11 @@ public class PropertiesUtil {
         public static String SHARE_URL = props.getProperty("SHARE_URL");
 
         public static String PAY_BACK_URL = props.getProperty("PAY_BACK_URL");
+
+        public static String JKEG_SHANGHU_ROLECODE = props
+            .getProperty("JKEG_SHANGHU_ROLECODE");
+
+        public static String JKEG_ZHIHUIMINGSU_ROLECODE = props
+            .getProperty("JKEG_ZHIHUIMINGSU_ROLECODE");
     }
 }

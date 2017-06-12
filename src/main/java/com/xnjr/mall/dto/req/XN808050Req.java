@@ -10,8 +10,8 @@ import com.xnjr.mall.domain.CommitOrderPOJO;
  */
 public class XN808050Req {
 
-    // 商品编号（必填）
-    private String productCode;
+    // 商品规格编号（必填）
+    private String productSpecsCode;
 
     // 数量（必填）
     private String quantity;
@@ -22,12 +22,12 @@ public class XN808050Req {
     // 下单个人信息(必填)
     private CommitOrderPOJO pojo;
 
-    public String getProductCode() {
-        return productCode;
+    public String getProductSpecsCode() {
+        return productSpecsCode;
     }
 
-    public void setProductCode(String productCode) {
-        this.productCode = productCode;
+    public void setProductSpecsCode(String productSpecsCode) {
+        this.productSpecsCode = productSpecsCode;
     }
 
     public String getQuantity() {

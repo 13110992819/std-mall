@@ -21,6 +21,9 @@ public interface IStorePurchaseAO {
     public Object storePurchaseYC(String userId, String storeCode, Long amount,
             String payType);
 
+    public Object storePurchaseJKEG(String userId, String storeCode,
+            Long amount, String payType);
+
     public void paySuccessCG(String payGroup, String payCode, Long payAmount);
 
     public void paySuccessYC(String payGroup, String payCode, Long payAmount);

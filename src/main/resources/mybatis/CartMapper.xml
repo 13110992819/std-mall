@@ -50,6 +50,7 @@
 		t.code
 		,t.user_id
 		,t.product_code
+		,t.product_specs_code
 		,t.quantity
 		,t.company_code
 		,t.system_code
@@ -89,6 +90,7 @@
 		code
 		,user_id
 		,product_code
+		,product_specs_code
 		,quantity
 		,company_code
 		,system_code
@@ -97,6 +99,7 @@
 		#{code}
 		,#{userId}
 		,#{productCode}
+		,#{productSpecsCode}
 		,#{quantity}
 		,#{companyCode}
 		,#{systemCode}

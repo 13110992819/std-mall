@@ -92,6 +92,55 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
         }
     }
 
+    @Override
+    @Transactional
+    public Object storePurchaseJKEG(String userId, String storeCode,
+            Long amount, String payType) {
+        User user = userBO.getRemoteUser(userId);
+        Store store = storeBO.getStore(storeCode);
+        if (!EStoreStatus.ON_OPEN.getCode().equals(store.getStatus())) {
+            throw new BizException("xn0000", "店铺不处于可消费状态");
+        }
+        // 1-人民币余额支付 5-微信H5支付 50-橙券余额支付
+        if (EPayType.YE.getCode().equals(payType)) {
+            return storePurchaseJKEGRMBYE(user, store, amount);
+        } else if (EPayType.WEIXIN_H5.getCode().equals(payType)) {
+            return storePurchaseJKEGWXAPP(user, store, amount);
+        } else if (EPayType.WEIXIN_APP.getCode().equals(payType)) {
+            return storePurchaseJKEGZFBAPP(user, store, amount);
+        } else {
+            throw new BizException("xn0000", "暂不支持此支付方式");
+        }
+    }
+
+    private Object storePurchaseJKEGZFBAPP(User user, Store store, Long amount) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    private Object storePurchaseJKEGWXAPP(User user, Store store, Long amount) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    private Object storePurchaseJKEGRMBYE(User user, Store store,
+            Long rmbTotalAmount) {
+        // 折扣金额
+        Long discountAmount = AmountUtil.mul(rmbTotalAmount, store.getRate1());
+        // 付给商家多少钱 = 支付总金额 - 折扣金额
+        Long payStoreRmbAmount = rmbTotalAmount - discountAmount;
+        // 落地本地系统消费记录
+        String code = storePurchaseBO.storePurchaseJKEGRMBYE(user, store,
+            rmbTotalAmount, payStoreRmbAmount);
+        // 资金划转开始--------------
+        // 用户人民币给平台人民币
+        accountBO.doTransferAmountRemote(user.getUserId(), store.getOwner(),
+            ECurrency.CNY, rmbTotalAmount, EBizType.JKEG_O2O_RMB, "店铺消费云币支付",
+            "店铺消费云币支付", code);
+        // 资金划转结束--------------
+        return code;
+    }
+
     private Object storePurchaseYCWXH5(User user, Store store, Long amount) {
         // 落地本地系统消费记录
         Long fxCbAmount = AmountUtil.mul(amount, store.getRate2());

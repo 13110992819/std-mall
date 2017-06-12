@@ -359,6 +359,35 @@ public class StorePurchaseBOImpl extends PaginableBOImpl<StorePurchase>
     }
 
     @Override
+    public String storePurchaseJKEGRMBYE(User user, Store store, Long amount,
+            Long payRMB) {
+        String code = OrderNoGenerater.generateM(EGeneratePrefix.STORE_PURCHASW
+            .getCode());
+        Date now = new Date();
+        StorePurchase data = new StorePurchase();
+        data.setCode(code);
+        data.setUserId(user.getUserId());
+        data.setStoreCode(store.getCode());
+        data.setPrice(amount);
+
+        data.setCreateDatetime(now);
+        data.setStatus(EStorePurchaseStatus.PAYED.getCode());
+        data.setPayType(EPayType.YE.getCode());
+
+        data.setPayAmount1(payRMB);
+        data.setPayAmount3(0L);
+        data.setBackAmount(0L);
+
+        data.setPayDatetime(now);
+        data.setRemark("云币余额支付-O2O消费");
+        data.setSystemCode(store.getSystemCode());
+        data.setCompanyCode(store.getCompanyCode());
+        storePurchaseDAO.insert(data);
+
+        return code;
+    }
+
+    @Override
     public String storePurchaseYCRMBWXH5(User user, Store store, Long amount,
             Long fdAmount, String payGroup) {
         Date now = new Date();

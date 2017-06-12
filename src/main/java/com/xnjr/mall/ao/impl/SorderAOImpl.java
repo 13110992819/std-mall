@@ -129,8 +129,8 @@ public class SorderAOImpl implements ISorderAO {
         User user = userBO.getRemoteUser(order.getApplyUser());
         String payGroup = sorderBO.addPayGroup(order, EPayType.ALIPAY);
         return accountBO.doAlipayRemote(user.getUserId(),
-            sproduct.getStoreUser(), payGroup, order.getCode(), EBizType.FW,
-            "支付宝支付", rmbAmount);
+            sproduct.getStoreUser(), payGroup, order.getCode(),
+            EBizType.JKEG_FW, "支付宝支付", rmbAmount);
     }
 
     private Object toPayOrderWXAPP(Sorder order, Sproduct sproduct) {
@@ -138,8 +138,8 @@ public class SorderAOImpl implements ISorderAO {
         User user = userBO.getRemoteUser(order.getApplyUser());
         String payGroup = sorderBO.addPayGroup(order, EPayType.WEIXIN_APP);
         return accountBO.doWeiXinPayRemote(user.getUserId(),
-            sproduct.getStoreUser(), payGroup, order.getCode(), EBizType.FW,
-            "微信APP支付", rmbAmount);
+            sproduct.getStoreUser(), payGroup, order.getCode(),
+            EBizType.JKEG_FW, "微信APP支付", rmbAmount);
     }
 
     private Object toPayOrderYE(Sorder order, Sproduct sproduct) {
@@ -155,8 +155,9 @@ public class SorderAOImpl implements ISorderAO {
         sorderBO.refreshPaySuccess(order, rmbAmount, 0L, 0L, null);
         sproductBO.refreshSproduct(sproduct, sproduct.getRemainNum() + 1);
         accountBO.doTransferAmountRemote(fromUserId, sproduct.getStoreUser(),
-            ECurrency.CNY, rmbAmount, EBizType.FW, EBizType.FW.getValue(),
-            EBizType.FW.getValue(), order.getCode());
+            ECurrency.CNY, rmbAmount, EBizType.JKEG_FW,
+            EBizType.JKEG_FW.getValue(), EBizType.JKEG_FW.getValue(),
+            order.getCode());
         return new BooleanRes(true);
     }
 
@@ -184,8 +185,8 @@ public class SorderAOImpl implements ISorderAO {
             if (ESystemCode.JKYG.getCode().equals(order.getSystemCode())) {
                 accountBO.doTransferAmountRemote(order.getStoreUser(),
                     order.getApplyUser(), ECurrency.CNY, order.getPayAmount1(),
-                    EBizType.FWTK, EBizType.FWTK.getValue(),
-                    EBizType.FWTK.getValue(), order.getCode());
+                    EBizType.JKEG_FWTK, EBizType.JKEG_FWTK.getValue(),
+                    EBizType.JKEG_FWTK.getValue(), order.getCode());
             }
             // 发短信
             smsOutBO.sentContent(order.getApplyUser(),

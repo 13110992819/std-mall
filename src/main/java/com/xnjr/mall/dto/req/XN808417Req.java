@@ -69,36 +69,12 @@ public class XN808417Req extends APageReq {
         this.storeCode = storeCode;
     }
 
-    public Long getPrice() {
-        return price;
-    }
-
-    public void setPrice(Long price) {
-        this.price = price;
-    }
-
     public String getStatus() {
         return status;
     }
 
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    public String getTotalNum() {
-        return totalNum;
-    }
-
-    public void setTotalNum(String totalNum) {
-        this.totalNum = totalNum;
-    }
-
-    public String getRemainNum() {
-        return remainNum;
-    }
-
-    public void setRemainNum(String remainNum) {
-        this.remainNum = remainNum;
     }
 
     public String getLocation() {

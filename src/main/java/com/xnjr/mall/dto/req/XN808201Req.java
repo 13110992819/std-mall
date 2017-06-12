@@ -11,6 +11,9 @@ public class XN808201Req {
     // 名称（必填）
     private String name;
 
+    // 店铺服务类型（必填）
+    private String kind;
+
     // 类型（必填）
     private String type;
 
@@ -86,6 +89,14 @@ public class XN808201Req {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getKind() {
+        return kind;
+    }
+
+    public void setKind(String kind) {
+        this.kind = kind;
     }
 
     public String getType() {

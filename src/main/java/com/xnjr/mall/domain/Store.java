@@ -17,6 +17,9 @@ public class Store extends ABaseDO {
     // 名称
     private String name;
 
+    // 店铺服务类型(1-普通商户 2-服务型商户)
+    private String kind;
+
     // 等级
     private String level;
 
@@ -176,6 +179,14 @@ public class Store extends ABaseDO {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getKind() {
+        return kind;
+    }
+
+    public void setKind(String kind) {
+        this.kind = kind;
     }
 
     public String getLevel() {

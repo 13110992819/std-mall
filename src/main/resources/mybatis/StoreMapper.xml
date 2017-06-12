@@ -5,7 +5,6 @@
 	<resultMap id="store_DB_Result" type="store">
 		<result column="code" property="code" />
 		<result column="name" property="name" />
-		<result column="kind" property="kind" />
 		<result column="level" property="level" />
 		<result column="category" property="category" />
 		<result column="type" property="type" />
@@ -57,9 +56,6 @@
 			</if>
 			<if test="name != null and name != '' ">
 				AND t.name like "%"#{name}"%"
-			</if>
-			<if test="kind != null and kind != '' ">
-				AND t.kind = #{kind}
 			</if>
 			<if test="level != null and level != '' ">
 				AND t.level = #{level}
@@ -134,7 +130,6 @@
 		SELECT
 		t.code
 		,t.name
-		,t.kind
 		,t.level
 		,t.category
 		,t.type
@@ -202,7 +197,6 @@
 		SELECT
 		t.code
 		,t.name
-		,t.kind
 		,t.level
 		,t.category
 		,t.type
@@ -266,7 +260,6 @@
 		to2o_store(
 		code
 		,name
-		,kind
 		,level
 		,category
 		,type
@@ -311,7 +304,6 @@
 		VALUES(
 		#{code}
 		,#{name}
-		,#{kind}
 		,#{level}
 		,#{category}
 		,#{type}
@@ -359,7 +351,6 @@
 		to2o_store(
 		code
 		,name
-		,kind
 		,level
 		,category
 		,type
@@ -403,7 +394,6 @@
 		VALUES(
 		#{code}
 		,#{name}
-		,#{kind}
 		,#{level}
 		,#{category}
 		,#{type}

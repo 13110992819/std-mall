@@ -112,7 +112,6 @@ public class StoreAOImpl implements IStoreAO {
         Store store = new Store();
         store.setCode(code);
         store.setName(req.getName());
-        store.setKind(req.getKind());
         store.setLevel(req.getLevel());
         store.setCategory(category.getParentCode());
         store.setType(req.getType());
@@ -232,7 +231,6 @@ public class StoreAOImpl implements IStoreAO {
         Store data = new Store();
         data.setCode(code);
         data.setName(req.getName());
-        data.setKind(req.getKind());
         data.setLevel(EStoreLevel.NOMAL.getCode());
         data.setCategory(category.getParentCode());
         data.setType(req.getType());

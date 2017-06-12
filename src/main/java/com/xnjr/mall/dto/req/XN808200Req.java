@@ -11,9 +11,6 @@ public class XN808200Req {
     // 名称（必填）
     private String name;
 
-    // 店铺服务类型（必填）
-    private String kind;
-
     // 等级（必填）
     private String level;
 
@@ -95,14 +92,6 @@ public class XN808200Req {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getKind() {
-        return kind;
-    }
-
-    public void setKind(String kind) {
-        this.kind = kind;
     }
 
     public String getLevel() {

@@ -1,7 +1,7 @@
 package com.xnjr.mall.enums;
 
 public enum EStoreLevel {
-    NOMAL("1", "普通商家"), HOTAL("2", "酒店名宿");
+    NOMAL("1", "普通商家"), MINGSU("2", "酒店名宿");
 
     EStoreLevel(String code, String value) {
         this.code = code;

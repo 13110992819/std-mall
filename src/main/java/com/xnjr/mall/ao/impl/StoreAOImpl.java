@@ -100,7 +100,7 @@ public class StoreAOImpl implements IStoreAO {
         if (ESystemCode.JKYG.getCode().equals(req.getSystemCode())) {
             if (EStoreLevel.NOMAL.getCode().equals(req.getLevel())) {
                 roleCode = PropertiesUtil.Config.JKEG_SHANGHU_ROLECODE;
-            } else if (EStoreLevel.NOMAL.getCode().equals(req.getLevel())) {
+            } else if (EStoreLevel.MINGSU.getCode().equals(req.getLevel())) {
                 roleCode = PropertiesUtil.Config.JKEG_ZHIHUIMINGSU_ROLECODE;
             }
         }

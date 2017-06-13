@@ -62,3 +62,8 @@ INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_d
 INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('1','store_pay_type','1','人民币余额','admin',now(),'','CD-JKEG000011','CD-JKEG000011');
 INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('1','store_pay_type','2','微信APP支付','admin',now(),'','CD-JKEG000011','CD-JKEG000011');
 INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('1','store_pay_type','3','支付宝APP支付','admin',now(),'','CD-JKEG000011','CD-JKEG000011');
+
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('0',NULL,'sproduct_status','服务状态','admin',now(),'','CD-JKEG000011','CD-JKEG000011');
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('1','sproduct_status','1','待上架','admin',now(),'','CD-JKEG000011','CD-JKEG000011');
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('1','sproduct_status','2','已上架','admin',now(),'','CD-JKEG000011','CD-JKEG000011');
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('1','sproduct_status','3','已下架','admin',now(),'','CD-JKEG000011','CD-JKEG000011');

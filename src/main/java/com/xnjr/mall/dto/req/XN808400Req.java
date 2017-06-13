@@ -7,8 +7,8 @@ package com.xnjr.mall.dto.req;
  * @history:
  */
 public class XN808400Req {
-    // 所属商家编号（必填）
-    private String storeCode;
+    // 所属商家用户编号（必填）
+    private String userId;
 
     // 名字（必填）
     private String name;
@@ -34,6 +34,14 @@ public class XN808400Req {
     // 当天总数（必填）
     private String totalNum;
 
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
     public String getName() {
         return name;
     }
@@ -48,14 +56,6 @@ public class XN808400Req {
 
     public void setType(String type) {
         this.type = type;
-    }
-
-    public String getStoreCode() {
-        return storeCode;
-    }
-
-    public void setStoreCode(String storeCode) {
-        this.storeCode = storeCode;
     }
 
     public String getSlogan() {

@@ -11,7 +11,7 @@ public interface ISorderAO {
 
     public String commitOrder(XN808450Req req);
 
-    public Object toPayOrder(List<String> codeList, String payType);
+    public Object toPayOrder(String code, String payType);
 
     public void paySuccess(String payGroup, String payCode, Long amount);
 

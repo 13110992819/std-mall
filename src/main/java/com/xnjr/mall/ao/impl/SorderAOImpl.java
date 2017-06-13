@@ -98,9 +98,8 @@ public class SorderAOImpl implements ISorderAO {
     }
 
     @Override
-    public Object toPayOrder(List<String> codeList, String payType) {
+    public Object toPayOrder(String code, String payType) {
         // 暂时只实现单笔订单支付
-        String code = codeList.get(0);
         Sorder order = sorderBO.getSorder(code);
         if (!EVorderStatus.TOPAY.getCode().equals(order.getStatus())) {
             throw new BizException("xn000000", "订单不处于待支付状态");

@@ -35,7 +35,7 @@ public class SproductAOImpl implements ISproductAO {
     @Override
     public String saveSproduct(XN808400Req req) {
         Category type = categoryBO.getCategory(req.getType());
-        Store store = storeBO.getStore(req.getStoreCode());
+        Store store = storeBO.getStoreByUser(req.getUserId());
         Sproduct data = new Sproduct();
         String code = OrderNoGenerater.generateM(EGeneratePrefix.SPRODUCT
             .getCode());

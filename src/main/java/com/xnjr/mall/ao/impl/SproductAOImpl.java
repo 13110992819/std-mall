@@ -34,15 +34,14 @@ public class SproductAOImpl implements ISproductAO {
 
     @Override
     public String saveSproduct(XN808400Req req) {
-        Category type = categoryBO.getCategory(req.getType());
         Store store = storeBO.getStoreByUser(req.getUserId());
         Sproduct data = new Sproduct();
         String code = OrderNoGenerater.generateM(EGeneratePrefix.SPRODUCT
             .getCode());
         data.setCode(code);
         data.setName(req.getName());
-        data.setCategory(type.getParentCode());
-        data.setType(type.getCode());
+        data.setCategory("0");
+        data.setType("0");
         data.setStoreCode(store.getCode());
         data.setStoreUser(store.getOwner());
 

@@ -148,9 +148,9 @@
 		,product_code
 		,category
 		,type
-		,t.store_code
-		,t.store_user
-		
+		,store_code
+		,store_user
+	
 		,start_date
 		,end_date
 		,re_name

@@ -12,7 +12,6 @@ import com.xnjr.mall.bo.IStoreBO;
 import com.xnjr.mall.bo.base.Paginable;
 import com.xnjr.mall.core.OrderNoGenerater;
 import com.xnjr.mall.core.StringValidater;
-import com.xnjr.mall.domain.Category;
 import com.xnjr.mall.domain.Sproduct;
 import com.xnjr.mall.domain.Store;
 import com.xnjr.mall.dto.req.XN808400Req;
@@ -81,10 +80,9 @@ public class SproductAOImpl implements ISproductAO {
             throw new BizException("xn0000", "总人数小于已报名人数");
         }
 
-        Category type = categoryBO.getCategory(req.getType());
         data.setName(req.getName());
-        data.setCategory(type.getParentCode());
-        data.setType(type.getCode());
+        data.setCategory("0");
+        data.setType("0");
 
         data.setSlogan(req.getSlogan());
         data.setAdvPic(req.getAdvPic());

@@ -14,9 +14,6 @@ public class XN808402Req {
     // 名字
     private String name;
 
-    // 小类
-    private String type;
-
     // 广告语
     private String slogan;
 
@@ -49,14 +46,6 @@ public class XN808402Req {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     public String getSlogan() {

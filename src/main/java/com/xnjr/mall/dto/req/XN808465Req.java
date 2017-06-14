@@ -16,6 +16,12 @@ public class XN808465Req extends APageReq {
     // 产品编号
     private String productCode;
 
+    // 所属商家编号
+    private String storeCode;
+
+    // 所属商家主人编号
+    private String storeUser;
+
     // 大类（同产品）
     private String category;
 
@@ -58,6 +64,22 @@ public class XN808465Req extends APageReq {
 
     public void setProductCode(String productCode) {
         this.productCode = productCode;
+    }
+
+    public String getStoreCode() {
+        return storeCode;
+    }
+
+    public void setStoreCode(String storeCode) {
+        this.storeCode = storeCode;
+    }
+
+    public String getStoreUser() {
+        return storeUser;
+    }
+
+    public void setStoreUser(String storeUser) {
+        this.storeUser = storeUser;
     }
 
     public String getCategory() {

@@ -21,6 +21,8 @@ public class XN808465 extends AProcessor {
     public Object doBusiness() throws BizException {
         Sorder condition = new Sorder();
         condition.setProductCode(req.getProductCode());
+        condition.setStoreUser(req.getStoreUser());
+        condition.setStoreCode(req.getStoreCode());
         condition.setCategory(req.getCategory());
         condition.setType(req.getType());
         condition.setReName(req.getReName());

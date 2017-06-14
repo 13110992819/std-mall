@@ -1,6 +1,5 @@
 package com.xnjr.mall.dto.req;
 
-import java.util.List;
 
 /**
  * 取消订单
@@ -10,7 +9,7 @@ import java.util.List;
  */
 public class XN808452Req {
     // 编号（必填）
-    private List<String> codeList;
+    private String code;
 
     // 处理人
     private String handleUser;
@@ -18,12 +17,12 @@ public class XN808452Req {
     // 备注
     private String remark;
 
-    public List<String> getCodeList() {
-        return codeList;
+    public String getCode() {
+        return code;
     }
 
-    public void setCodeList(List<String> codeList) {
-        this.codeList = codeList;
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public String getHandleUser() {

@@ -1,7 +1,5 @@
 package com.xnjr.mall.api.impl;
 
-import org.apache.commons.collections.CollectionUtils;
-
 import com.xnjr.mall.ao.ISorderAO;
 import com.xnjr.mall.api.AProcessor;
 import com.xnjr.mall.common.JsonUtil;
@@ -25,19 +23,15 @@ public class XN808452 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        for (String code : req.getCodeList()) {
-            sorderAO.cancelOrder(code, req.getHandleUser(), req.getRemark());
-        }
+        sorderAO.cancelOrder(req.getCode(), req.getHandleUser(),
+            req.getRemark());
         return new BooleanRes(true);
     }
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN808452Req.class);
-        if (CollectionUtils.isEmpty(req.getCodeList())) {
-            throw new BizException("xn000000", "订单编号列表不能为空");
-        }
-        StringValidater.validateBlank(req.getHandleUser());
+        StringValidater.validateBlank(req.getCode(), req.getHandleUser());
     }
 
 }

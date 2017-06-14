@@ -126,6 +126,10 @@ public class Store extends ABaseDO {
     private String systemCode;
 
     // ************db properites***********
+
+    // 店铺主人信息
+    User user;
+
     // 登录名
     private String loginName;
 
@@ -560,6 +564,14 @@ public class Store extends ABaseDO {
 
     public void setRefereeMobile(String refereeMobile) {
         this.refereeMobile = refereeMobile;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
 }

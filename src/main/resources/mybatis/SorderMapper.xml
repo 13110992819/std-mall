@@ -217,7 +217,7 @@
 	<update id="update_payGroup" parameterType="sorder">
 		UPDATE to2o_sorder
 		SET
-		payGroup=#{pay_group}
+		pay_group=#{payGroup}
 		,pay_type=#{payType}
 		WHERE code = #{code}
 	</update>

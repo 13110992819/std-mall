@@ -436,6 +436,7 @@ public class StoreAOImpl implements IStoreAO {
                 if (StringUtils.isNotBlank(ownerId)) {
                     User remoteRes = userBO.getRemoteUser(ownerId);
                     ele.setMobile(remoteRes.getMobile());
+                    ele.setUser(remoteRes);
                 }
             }
         }

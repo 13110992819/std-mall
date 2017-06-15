@@ -85,13 +85,11 @@ public class UserBOImpl implements IUserBO {
     }
 
     @Override
-    public String doSaveBUser(String mobile, String roleCode,
-            String userReferee, String updater, String systemCode,
-            String companyCode) {
+    public String doSaveBUser(String mobile, String userReferee,
+            String updater, String systemCode, String companyCode) {
         XN001350Req req = new XN001350Req();
         req.setLoginName(mobile);
         req.setMobile(mobile);
-        req.setRoleCode(roleCode);
         req.setUserReferee(userReferee);
         req.setUpdater(updater);
         req.setRemark("代注册商家");
@@ -99,6 +97,23 @@ public class UserBOImpl implements IUserBO {
         req.setSystemCode(systemCode);
         req.setCompanyCode(companyCode);
         XNUserRes res = BizConnecter.getBizData("001350",
+            JsonUtils.object2Json(req), XNUserRes.class);
+        return res.getUserId();
+    }
+
+    @Override
+    public String doSavePartnerUser(String mobile, String userReferee,
+            String updater, String systemCode, String companyCode) {
+        XN001350Req req = new XN001350Req();
+        req.setLoginName(mobile);
+        req.setMobile(mobile);
+        req.setUserReferee(userReferee);
+        req.setUpdater(updater);
+        req.setRemark("代注册名宿主");
+
+        req.setSystemCode(systemCode);
+        req.setCompanyCode(companyCode);
+        XNUserRes res = BizConnecter.getBizData("001351",
             JsonUtils.object2Json(req), XNUserRes.class);
         return res.getUserId();
     }

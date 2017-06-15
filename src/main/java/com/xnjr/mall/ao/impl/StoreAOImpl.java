@@ -22,7 +22,6 @@ import com.xnjr.mall.bo.IStorePurchaseBO;
 import com.xnjr.mall.bo.IStoreTicketBO;
 import com.xnjr.mall.bo.IUserBO;
 import com.xnjr.mall.bo.base.Paginable;
-import com.xnjr.mall.common.PropertiesUtil;
 import com.xnjr.mall.core.OrderNoGenerater;
 import com.xnjr.mall.core.StringValidater;
 import com.xnjr.mall.domain.Category;
@@ -95,25 +94,31 @@ public class StoreAOImpl implements IStoreAO {
         // 验证推荐人是否是平台的已注册用户,将userReferee手机号转化为用户编号
         String userReferee = req.getUserReferee();
         String userRefereeUserId = storeBO.isUserRefereeExist(userReferee);
-        // 确认角色
-        String roleCode = null;
-        if (ESystemCode.JKYG.getCode().equals(req.getSystemCode())) {
-            if (EStoreLevel.NOMAL.getCode().equals(req.getLevel())) {
-                roleCode = PropertiesUtil.Config.JKEG_SHANGHU_ROLECODE;
-            } else if (EStoreLevel.MINGSU.getCode().equals(req.getLevel())) {
-                roleCode = PropertiesUtil.Config.JKEG_ZHIHUIMINGSU_ROLECODE;
-            }
-        }
         // 验证B端用户
-        String bUser = userBO.isUserExist(req.getMobile(), EUserKind.F2,
-            req.getSystemCode());
-        if (StringUtils.isBlank(bUser)) { // 注册B端用户
-            bUser = userBO.doSaveBUser(req.getMobile(), roleCode,
-                req.getUserReferee(), req.getUpdater(), req.getSystemCode(),
-                req.getCompanyCode());
+        String bUser = null;
+        if (ESystemCode.JKYG.getCode().equals(req.getSystemCode())
+                && EStoreLevel.MINGSU.getCode().equals(req.getLevel())) {
+            bUser = userBO.isUserExist(req.getMobile(), EUserKind.Partner,
+                req.getSystemCode());
+            if (StringUtils.isBlank(bUser)) { // 注册名宿主用户
+                bUser = userBO.doSavePartnerUser(req.getMobile(),
+                    req.getUserReferee(), req.getUpdater(),
+                    req.getSystemCode(), req.getCompanyCode());
+            } else {
+                // 判断该用户是否有店铺了
+                storeBO.checkStoreByUser(bUser);
+            }
         } else {
-            // 判断该用户是否有店铺了
-            storeBO.checkStoreByUser(bUser);
+            bUser = userBO.isUserExist(req.getMobile(), EUserKind.F2,
+                req.getSystemCode());
+            if (StringUtils.isBlank(bUser)) { // 注册B端用户
+                bUser = userBO.doSaveBUser(req.getMobile(),
+                    req.getUserReferee(), req.getUpdater(),
+                    req.getSystemCode(), req.getCompanyCode());
+            } else {
+                // 判断该用户是否有店铺了
+                storeBO.checkStoreByUser(bUser);
+            }
         }
 
         // 根据小类获取大类

@@ -101,6 +101,8 @@ public class Sorder extends ABaseDO {
 
     // *************dp properties **************
 
+    private Sproduct product;
+
     public String getCode() {
         return code;
     }
@@ -331,6 +333,14 @@ public class Sorder extends ABaseDO {
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    public Sproduct getProduct() {
+        return product;
+    }
+
+    public void setProduct(Sproduct product) {
+        this.product = product;
     }
 
     @Override

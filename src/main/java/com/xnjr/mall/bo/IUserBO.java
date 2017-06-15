@@ -28,9 +28,11 @@ public interface IUserBO {
     public String doSaveCUser(String mobile, String loginPwd, String updater,
             String remark, String systemCode);
 
-    public String doSaveBUser(String mobile, String roleCode,
-            String userReferee, String updater, String systemCode,
-            String companyCode);
+    public String doSaveBUser(String mobile, String userReferee,
+            String updater, String systemCode, String companyCode);
+
+    public String doSavePartnerUser(String mobile, String userReferee,
+            String updater, String systemCode, String companyCode);
 
     /**
      * 根据systemCode获取系统userId

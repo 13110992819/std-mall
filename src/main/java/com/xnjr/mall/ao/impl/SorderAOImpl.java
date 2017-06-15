@@ -202,7 +202,12 @@ public class SorderAOImpl implements ISorderAO {
     @Override
     public Paginable<Sorder> querySorderPage(int start, int limit,
             Sorder condition) {
-        return sorderBO.getPaginable(start, limit, condition);
+        Paginable<Sorder> orders = sorderBO.getPaginable(start, limit,
+            condition);
+        for (Sorder order : orders.getList()) {
+            order.setProduct(sproductBO.getSproduct(order.getProductCode()));
+        }
+        return orders;
     }
 
     @Override

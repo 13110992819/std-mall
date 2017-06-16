@@ -13,7 +13,7 @@ import com.xnjr.mall.spring.SpringContextHolder;
 
 /**
  * 批量支付订单
- * @author: xieyj 
+ * @author: xieyj
  * @since: 2016年5月23日 上午9:04:12 
  * @history:
  */

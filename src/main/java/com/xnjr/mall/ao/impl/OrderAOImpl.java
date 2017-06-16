@@ -104,6 +104,7 @@ public class OrderAOImpl implements IOrderAO {
         List<String> cartCodeList = req.getCartCodeList();
         List<Cart> cartList = cartBO.queryCartList(cartCodeList);
         String storeCode = null;
+        String toUser = null;
         // 验证产品是否有记录
         for (Cart cart : cartList) {
             Product product = productBO.getProduct(cart.getProductCode());
@@ -117,17 +118,21 @@ public class OrderAOImpl implements IOrderAO {
             }
         }
         if (StringUtils.isNotBlank(storeCode)) {
-            Store store = storeBO.getStore(storeCode);
-            String orderCode = orderBO.saveOrder(cartList, req.getPojo(),
-                store.getOwner());
-            // 删除购物车选中记录
-            for (String cartCode : cartCodeList) {
-                cartBO.removeCart(cartCode);
+            if (storeCode.startsWith("SYS_USER")) {
+                toUser = storeCode;
+            } else {
+                Store store = storeBO.getStore(storeCode);
+                toUser = store.getOwner();
             }
-            return orderCode;
         } else {
-            throw new BizException("xn0000", "下单产品必须属于同一个商家");
+            throw new BizException("xn0000", "下单产品所属商家不能为空");
         }
+        String orderCode = orderBO.saveOrder(cartList, req.getPojo(), toUser);
+        // 删除购物车选中记录
+        for (String cartCode : cartCodeList) {
+            cartBO.removeCart(cartCode);
+        }
+        return orderCode;
     }
 
     @Override
@@ -174,12 +179,22 @@ public class OrderAOImpl implements IOrderAO {
         List<Cart> cartList = new ArrayList<Cart>();
         cartList.add(cart);
 
+        String toUser = null;
         // 菜狗和姚橙 toUser为加盟商的userId, 其他系统toUser为产品所属的商家userId
-        String toUser = req.getToUser();
-        if (StringUtils.isBlank(toUser)) {
-            Store store = storeBO.getStore(product.getStoreCode());
-            toUser = store.getOwner();
+        if (ESystemCode.Caigo.getCode().equals(product.getCompanyCode())
+                || ESystemCode.YAOCHENG.getCode().equals(
+                    product.getCompanyCode())) {
+            toUser = req.getToUser();
+        } else if (ESystemCode.JKYG.getCode().equals(product.getCompanyCode())) {
+            // 平台的产品所属商家为系统用户编号
+            if (product.getStoreCode().startsWith("SYS_USER")) {
+                toUser = product.getStoreCode();
+            } else { // 获取产品所属商家userId
+                Store store = storeBO.getStore(product.getStoreCode());
+                toUser = store.getOwner();
+            }
         }
+
         return orderBO.saveOrder(cartList, req.getPojo(), toUser);
     }
 

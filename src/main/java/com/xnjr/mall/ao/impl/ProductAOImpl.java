@@ -65,18 +65,18 @@ public class ProductAOImpl implements IProductAO {
             storeCode = req.getStoreCode();
         }
 
-        // 根据小类获取大类
-        Category category = categoryBO.getCategory(req.getType());
-
         Product data = new Product();
+        // 根据小类获取大类
+        if (StringUtils.isNotBlank(req.getType())) {
+            Category category = categoryBO.getCategory(req.getType());
+            data.setCategory(category.getParentCode());
+            data.setType(req.getType());
+        }
         String code = OrderNoGenerater.generateM(EGeneratePrefix.PRODUCT
             .getCode());
         data.setCode(code);
         data.setStoreCode(storeCode);
         data.setKind(req.getKind());
-        data.setCategory(category.getParentCode());
-        data.setType(req.getType());
-
         data.setName(req.getName());
         data.setSlogan(req.getSlogan());
         data.setAdvPic(req.getAdvPic());
@@ -150,12 +150,14 @@ public class ProductAOImpl implements IProductAO {
         if (EProductStatus.PUBLISH_YES.getCode().equals(dbProduct.getStatus())) {
             throw new BizException("xn000000", "该产品已上架，不能修改，请先下架");
         }
-        // 根据小类获取大类
-        Category category = categoryBO.getCategory(req.getType());
         Product data = new Product();
+        // 根据小类获取大类
+        if (StringUtils.isNotBlank(req.getType())) {
+            Category category = categoryBO.getCategory(req.getType());
+            data.setCategory(category.getParentCode());
+            data.setType(req.getType());
+        }
         data.setCode(req.getCode());
-        data.setCategory(category.getParentCode());
-        data.setType(req.getType());
         data.setName(req.getName());
         data.setSlogan(req.getSlogan());
         data.setAdvPic(req.getAdvPic());

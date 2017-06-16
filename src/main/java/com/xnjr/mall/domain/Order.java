@@ -451,4 +451,28 @@ public class Order extends ABaseDO {
         this.store = store;
     }
 
+    public String getPayType() {
+        return payType;
+    }
+
+    public void setPayType(String payType) {
+        this.payType = payType;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
+    public ProductSpecs getProductSpecs() {
+        return productSpecs;
+    }
+
+    public void setProductSpecs(ProductSpecs productSpecs) {
+        this.productSpecs = productSpecs;
+    }
+
 }

@@ -18,7 +18,7 @@ public interface IOrderAO {
 
     public String commitOrder(XN808050Req req);
 
-    public List<String> commitCartOrderZH(XN808051Req req);
+    public String commitCartOrderJKEG(XN808051Req req);
 
     public String commitCartOrderCG(XN808051Req req);
 

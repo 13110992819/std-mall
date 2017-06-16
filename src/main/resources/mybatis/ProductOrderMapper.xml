@@ -6,6 +6,7 @@
 		<result column="code" property="code" />
 		<result column="order_code" property="orderCode" />
 		<result column="product_code" property="productCode" />
+		<result column="product_specs_name" property="productSpecsName" />
 		<result column="quantity" property="quantity" />
 		<result column="price1" property="price1" />
 		<result column="price2" property="price2" />
@@ -33,6 +34,7 @@
 		t.code
 		,t.order_code
 		,t.product_code
+		,t.product_specs_name
 		,t.quantity
 		,t.price1
 		,t.price2
@@ -62,6 +64,7 @@
 		code
 		,order_code
 		,product_code
+		,product_specs_name
 		,quantity
 		,price1
 		,price2
@@ -73,6 +76,7 @@
 		#{code}
 		,#{orderCode}
 		,#{productCode}
+		,#{productSpecsName}
 		,#{quantity}
 		,#{price1}
 		,#{price2}

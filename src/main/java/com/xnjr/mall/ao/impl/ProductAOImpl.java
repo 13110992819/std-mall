@@ -206,6 +206,13 @@ public class ProductAOImpl implements IProductAO {
             Product condition) {
         Paginable<Product> results = productBO.getPaginable(start, limit,
             condition);
+        if (CollectionUtils.isNotEmpty(results.getList())) {
+            for (Product product : results.getList()) {
+                List<ProductSpecs> productSpecsList = productSpecsBO
+                    .queryProductSpecsList(product.getCode());
+                product.setProductSpecsList(productSpecsList);
+            }
+        }
         return results;
     }
 

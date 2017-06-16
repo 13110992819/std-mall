@@ -10,37 +10,35 @@
 		<result column="re_mobile" property="reMobile" />
 		
 		<result column="re_address" property="reAddress" />
-		<result column="receipt_type" property="receiptType" />
-		<result column="receipt_title" property="receiptTitle" />
 		<result column="apply_user" property="applyUser" />
 		<result column="apply_note" property="applyNote" />
-		
 		<result column="apply_datetime" property="applyDatetime" />
 		<result column="amount1" property="amount1" />
+		
 		<result column="amount2" property="amount2" />
 		<result column="amount3" property="amount3" />
 		<result column="yunfei" property="yunfei" />
-		
 		<result column="status" property="status" />
+		<result column="pay_type" property="payType" />
+		
 		<result column="pay_group" property="payGroup" />
 		<result column="pay_code" property="payCode" />
 		<result column="pay_datetime" property="payDatetime" />
 		<result column="pay_amount1" property="payAmount1" />
-		
-		<result column="pay_amount1_1" property="payAmount11" />
 		<result column="pay_amount2" property="payAmount2" />
+		
 		<result column="pay_amount3" property="payAmount3" />
 		<result column="prompt_times" property="promptTimes" />
 		<result column="deliverer" property="deliverer" />
-		
 		<result column="delivery_datetime" property="deliveryDatetime" />
 		<result column="logistics_company" property="logisticsCompany" />
+		
 		<result column="logistics_code" property="logisticsCode" />
 		<result column="pdf" property="pdf" />
 		<result column="updater" property="updater" />
-		
 		<result column="update_datetime" property="updateDatetime" />
 		<result column="remark" property="remark" />
+		
 		<result column="company_code" property="companyCode" />
 		<result column="system_code" property="systemCode" />
 	</resultMap>
@@ -83,6 +81,9 @@
 	            	#{item}
                 </foreach> 
 			</if>
+			<if test="payType != null and payType != '' ">
+				AND t.pay_type = #{payType}
+			</if>
 			<if test="payGroup != null and payGroup != '' ">
 				AND t.pay_group = #{payGroup}
 			</if>
@@ -115,37 +116,35 @@
 		,t.re_mobile
 		
 		,t.re_address
-		,t.receipt_type
-		,t.receipt_title
 		,t.apply_user
 		,t.apply_note
-		
 		,t.apply_datetime
 		,t.amount1
+		
 		,t.amount2
 		,t.amount3
 		,t.yunfei
-		
 		,t.status
+		,t.pay_type
+		
 		,t.pay_group
 		,t.pay_code
 		,t.pay_datetime
 		,t.pay_amount1
-		
-		,t.pay_amount1_1
 		,t.pay_amount2
+		
 		,t.pay_amount3
 		,t.prompt_times
 		,t.deliverer
-		
 		,t.delivery_datetime
 		,t.logistics_company
+		
 		,t.logistics_code
 		,t.pdf
 		,t.updater
-		
 		,t.update_datetime
 		,t.remark
+		
 		,t.company_code
 		,t.system_code
 		FROM
@@ -173,29 +172,25 @@
 		,re_mobile
 		
 		,re_address
-		,receipt_type
-		,receipt_title
 		,apply_user
 		,apply_note
-		
 		,apply_datetime
 		,amount1
+		
 		,amount2
 		,amount3
 		,yunfei
-		
 		,status
 		,prompt_times
+		
 		,updater
 		,update_datetime
 		,remark
-		
 		,pay_amount1
-		,pay_amount1_1
 		,pay_amount2
+		
 		,pay_amount3
 		,company_code
-		
 		,system_code
 		)
 		VALUES(
@@ -206,29 +201,25 @@
 		,#{reMobile}
 		
 		,#{reAddress}
-		,#{receiptType}
-		,#{receiptTitle}
 		,#{applyUser}
 		,#{applyNote}
-		
 		,#{applyDatetime}
 		,#{amount1}
+		
 		,#{amount2}
 		,#{amount3}
 		,#{yunfei}
-		
 		,#{status}
 		,#{promptTimes}
+		
 		,#{updater}
 		,#{updateDatetime}
 		,#{remark}
-		
 		,#{payAmount1}
-		,#{payAmount11}
 		,#{payAmount2}
+		
 		,#{payAmount3}
 		,#{companyCode}
-		
 		,#{systemCode}
 		)
 	</insert>
@@ -287,8 +278,8 @@
 		UPDATE tmall_order
 		SET
 		status = #{status}
+		,pay_type = #{payType}
 		,pay_amount1 = #{payAmount1}
-		,pay_amount1_1 = #{payAmount11}
 		,pay_amount2 = #{payAmount2}
 		,pay_amount3 = #{payAmount3}
 		,pay_datetime = #{payDatetime}

@@ -12,6 +12,7 @@
 		<result column="system_code" property="systemCode" />
 		
 		<result column="product_code" property="product.code" />
+		<result column="store_code" property="product.storeCode" />
 		<result column="product_name" property="product.name" />
 		<result column="product_adv_pic" property="product.advPic" />
 		
@@ -56,6 +57,7 @@
 		,t.system_code
 		
 		,tp.code product_code
+		,tp.store_code store_code
 		,tp.name product_name
 		,tp.adv_pic product_adv_pic
 

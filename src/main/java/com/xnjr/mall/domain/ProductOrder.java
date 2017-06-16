@@ -31,7 +31,7 @@ public class ProductOrder extends ABaseDO {
     private String productCode;
 
     // 产品规格编号
-    private String productSpecsCode;
+    private String productSpecsName;
 
     // 数量
     private Integer quantity;
@@ -64,12 +64,12 @@ public class ProductOrder extends ABaseDO {
         this.product = product;
     }
 
-    public String getProductSpecsCode() {
-        return productSpecsCode;
+    public String getProductSpecsName() {
+        return productSpecsName;
     }
 
-    public void setProductSpecsCode(String productSpecsCode) {
-        this.productSpecsCode = productSpecsCode;
+    public void setProductSpecsName(String productSpecsName) {
+        this.productSpecsName = productSpecsName;
     }
 
     public String getCode() {

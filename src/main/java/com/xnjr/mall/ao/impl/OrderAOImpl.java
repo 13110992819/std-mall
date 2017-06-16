@@ -11,7 +11,6 @@ package com.xnjr.mall.ao.impl;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -28,6 +27,7 @@ import com.xnjr.mall.bo.IDistributeBO;
 import com.xnjr.mall.bo.IOrderBO;
 import com.xnjr.mall.bo.IProductBO;
 import com.xnjr.mall.bo.IProductOrderBO;
+import com.xnjr.mall.bo.IProductSpecsBO;
 import com.xnjr.mall.bo.ISYSConfigBO;
 import com.xnjr.mall.bo.ISmsOutBO;
 import com.xnjr.mall.bo.IStoreBO;
@@ -40,6 +40,8 @@ import com.xnjr.mall.domain.Cart;
 import com.xnjr.mall.domain.Order;
 import com.xnjr.mall.domain.Product;
 import com.xnjr.mall.domain.ProductOrder;
+import com.xnjr.mall.domain.ProductSpecs;
+import com.xnjr.mall.domain.Store;
 import com.xnjr.mall.domain.User;
 import com.xnjr.mall.dto.req.XN808050Req;
 import com.xnjr.mall.dto.req.XN808051Req;
@@ -73,6 +75,9 @@ public class OrderAOImpl implements IOrderAO {
     private IProductOrderBO productOrderBO;
 
     @Autowired
+    private IProductSpecsBO productSpecsBO;
+
+    @Autowired
     private ICartBO cartBO;
 
     @Autowired
@@ -95,24 +100,34 @@ public class OrderAOImpl implements IOrderAO {
 
     @Override
     @Transactional
-    public List<String> commitCartOrderZH(XN808051Req req) {
-        List<String> result = new ArrayList<String>();
-        // 按公司编号进行拆单, 遍历获取公司编号列表
+    public String commitCartOrderJKEG(XN808051Req req) {
         List<String> cartCodeList = req.getCartCodeList();
-        Map<String, List<Cart>> cartList = cartBO.getCartMap(cartCodeList);
-        // 遍历产品编号
-        for (String companyCode : cartList.keySet()) {
-            req.getPojo().setCompanyCode(companyCode);
-            String orderCode = orderBO.saveOrder(cartList.get(companyCode),
-                req.getPojo(), null);
-            result.add(orderCode);
+        List<Cart> cartList = cartBO.queryCartList(cartCodeList);
+        String storeCode = null;
+        // 验证产品是否有记录
+        for (Cart cart : cartList) {
+            Product product = productBO.getProduct(cart.getProductCode());
+            if (StringUtils.isBlank(storeCode)) {
+                storeCode = product.getStoreCode();
+            }
+            if (!EProductStatus.PUBLISH_YES.getCode().equals(
+                product.getStatus())) {
+                throw new BizException("xn0000", "购物车中有未上架产品["
+                        + product.getName() + "]无法下单");
+            }
         }
-        // @TODO清空购物车
-        // 删除购物车选中记录
-        for (String cartCode : cartCodeList) {
-            cartBO.removeCart(cartCode);
+        if (StringUtils.isNotBlank(storeCode)) {
+            Store store = storeBO.getStore(storeCode);
+            String orderCode = orderBO.saveOrder(cartList, req.getPojo(),
+                store.getOwner());
+            // 删除购物车选中记录
+            for (String cartCode : cartCodeList) {
+                cartBO.removeCart(cartCode);
+            }
+            return orderCode;
+        } else {
+            throw new BizException("xn0000", "下单产品必须属于同一个商家");
         }
-        return result;
     }
 
     @Override
@@ -141,24 +156,31 @@ public class OrderAOImpl implements IOrderAO {
     @Override
     @Transactional
     public String commitOrder(XN808050Req req) {
+        ProductSpecs productSpecs = productSpecsBO.getProductSpecs(req
+            .getProductSpecsCode());
         // 立即下单，构造成购物车单个产品下单
-        // Product product = productBO.getProduct(req.getProductCode());
-        // if
-        // (!EProductStatus.PUBLISH_YES.getCode().equals(product.getStatus())) {
-        // throw new BizException("xn0000", "该产品未上架，无法下单");
-        // }
-        // req.getPojo().setCompanyCode(product.getCompanyCode());
-        // req.getPojo().setSystemCode(product.getSystemCode());
+        Product product = productBO.getProduct(productSpecs.getProductCode());
+        if (!EProductStatus.PUBLISH_YES.getCode().equals(product.getStatus())) {
+            throw new BizException("xn0000", "该产品未上架，无法下单");
+        }
+        req.getPojo().setCompanyCode(product.getCompanyCode());
+        req.getPojo().setSystemCode(product.getSystemCode());
 
         Cart cart = new Cart();
-        // cart.setProductCode(req.getProductCode());
-        cart.setQuantity(StringValidater.toInteger(req.getQuantity()));
         cart.setUserId(req.getPojo().getApplyUser());
-        // cart.setProduct(product);
+        cart.setProductSpecsCode(req.getProductSpecsCode());
+        cart.setQuantity(StringValidater.toInteger(req.getQuantity()));
+        cart.setProductSpecs(productSpecs);
         List<Cart> cartList = new ArrayList<Cart>();
         cartList.add(cart);
 
-        return orderBO.saveOrder(cartList, req.getPojo(), req.getToUser());
+        // 菜狗和姚橙 toUser为加盟商的userId, 其他系统toUser为产品所属的商家userId
+        String toUser = req.getToUser();
+        if (StringUtils.isBlank(toUser)) {
+            Store store = storeBO.getStore(product.getStoreCode());
+            toUser = store.getOwner();
+        }
+        return orderBO.saveOrder(cartList, req.getPojo(), toUser);
     }
 
     @Override

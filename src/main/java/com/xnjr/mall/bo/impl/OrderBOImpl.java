@@ -28,8 +28,8 @@ import com.xnjr.mall.dao.IProductOrderDAO;
 import com.xnjr.mall.domain.Cart;
 import com.xnjr.mall.domain.CommitOrderPOJO;
 import com.xnjr.mall.domain.Order;
-import com.xnjr.mall.domain.Product;
 import com.xnjr.mall.domain.ProductOrder;
+import com.xnjr.mall.domain.ProductSpecs;
 import com.xnjr.mall.enums.EGeneratePrefix;
 import com.xnjr.mall.enums.EOrderStatus;
 import com.xnjr.mall.enums.EOrderType;
@@ -193,18 +193,21 @@ public class OrderBOImpl extends PaginableBOImpl<Order> implements IOrderBO {
         Long amount2 = 0L;
         Long amount3 = 0L;
         for (Cart cart : cartList) {
-            Product product = cart.getProduct();
-            // if (null != product.getPrice1()) {
-            // amount1 = amount1 + (cart.getQuantity() * product.getPrice1());
-            // }
-            // if (null != product.getPrice2()) {
-            // amount2 = amount2 + (cart.getQuantity() * product.getPrice2());
-            // }
-            // if (null != product.getPrice3()) {
-            // amount3 = amount3 + (cart.getQuantity() * product.getPrice3());
-            // }
+            ProductSpecs productSpecs = cart.getProductSpecs();
+            if (null != productSpecs.getPrice1()) {
+                amount1 = amount1
+                        + (cart.getQuantity() * productSpecs.getPrice1());
+            }
+            if (null != productSpecs.getPrice2()) {
+                amount2 = amount2
+                        + (cart.getQuantity() * productSpecs.getPrice2());
+            }
+            if (null != productSpecs.getPrice3()) {
+                amount3 = amount3
+                        + (cart.getQuantity() * productSpecs.getPrice3());
+            }
             // 落地订单产品关联信息
-            saveProductOrder(order.getCode(), product, cart.getQuantity());
+            saveProductOrder(order.getCode(), productSpecs, cart.getQuantity());
         }
         // 计算订单运费（暂时不考虑运费）
         Long yunfei = 0L;
@@ -240,12 +243,11 @@ public class OrderBOImpl extends PaginableBOImpl<Order> implements IOrderBO {
         order.setReMobile(pojo.getReMobile());
 
         order.setReAddress(pojo.getReAddress());
-
         order.setApplyUser(pojo.getApplyUser());
         order.setApplyNote(pojo.getApplyNote());
-
         order.setApplyDatetime(new Date());
         order.setStatus(EOrderStatus.TO_PAY.getCode());
+
         order.setPromptTimes(0);
         order.setUpdater(pojo.getApplyUser());
         order.setUpdateDatetime(new Date());
@@ -255,19 +257,20 @@ public class OrderBOImpl extends PaginableBOImpl<Order> implements IOrderBO {
         return order;
     }
 
-    private void saveProductOrder(String orderCode, Product product,
+    private void saveProductOrder(String orderCode, ProductSpecs productSpecs,
             Integer quantity) {
         ProductOrder productOrder = new ProductOrder();
         productOrder.setCode(OrderNoGenerater
             .generateM(EGeneratePrefix.PRODUCT_ORDER.getCode()));
         productOrder.setOrderCode(orderCode);
-        productOrder.setProductCode(product.getCode());
+        productOrder.setProductCode(productSpecs.getProductCode());
+        productOrder.setProductSpecsName(productSpecs.getName());
         productOrder.setQuantity(quantity);
-        // productOrder.setPrice1(product.getPrice1());
-        // productOrder.setPrice2(product.getPrice2());
-        // productOrder.setPrice3(product.getPrice3());
-        productOrder.setCompanyCode(product.getCompanyCode());
-        productOrder.setSystemCode(product.getSystemCode());
+        productOrder.setPrice1(productSpecs.getPrice1());
+        productOrder.setPrice2(productSpecs.getPrice2());
+        productOrder.setPrice3(productSpecs.getPrice3());
+        productOrder.setCompanyCode(productSpecs.getCompanyCode());
+        productOrder.setSystemCode(productSpecs.getSystemCode());
         productOrderDAO.insert(productOrder);
     }
 

@@ -17,12 +17,6 @@ public class CommitOrderPOJO {
     // 申请备注（选填）
     private String applyNote;
 
-    // 发票类型（选填）
-    private String receiptType;
-
-    // 发票抬头（选填）
-    private String receiptTitle;
-
     // 所属公司编号
     private String companyCode;
 
@@ -67,22 +61,6 @@ public class CommitOrderPOJO {
 
     public void setApplyNote(String applyNote) {
         this.applyNote = applyNote;
-    }
-
-    public String getReceiptType() {
-        return receiptType;
-    }
-
-    public void setReceiptType(String receiptType) {
-        this.receiptType = receiptType;
-    }
-
-    public String getReceiptTitle() {
-        return receiptTitle;
-    }
-
-    public void setReceiptTitle(String receiptTitle) {
-        this.receiptTitle = receiptTitle;
     }
 
     public String getCompanyCode() {

@@ -34,7 +34,7 @@ public class XN808051 extends AProcessor {
         } else if (ESystemCode.PIPE.getCode().equals(
             req.getPojo().getSystemCode())) {
             result = orderAO.commitCartOrderCG(req);
-        } else if (ESystemCode.JKYG.getCode().equals(
+        } else if (ESystemCode.JKEG.getCode().equals(
             req.getPojo().getSystemCode())) {
             result = orderAO.commitCartOrderJKEG(req);
         } else {

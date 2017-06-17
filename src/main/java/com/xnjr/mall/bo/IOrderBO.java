@@ -15,7 +15,7 @@ import com.xnjr.mall.domain.Order;
 public interface IOrderBO extends IPaginableBO<Order> {
 
     public String saveOrder(List<Cart> cartList, CommitOrderPOJO pojo,
-            String toUser);
+            String toUser, String orderType);
 
     public int userCancel(String code, String userId, String remark);
 
@@ -42,4 +42,5 @@ public interface IOrderBO extends IPaginableBO<Order> {
     public List<Order> queryOrderListByPayGroup(String payGroup);
 
     public Long getTotalAmount(String userId);
+
 }

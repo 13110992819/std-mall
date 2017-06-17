@@ -96,7 +96,7 @@ public class StoreAOImpl implements IStoreAO {
         String userRefereeUserId = storeBO.isUserRefereeExist(userReferee);
         // 验证B端用户
         String bUser = null;
-        if (ESystemCode.JKYG.getCode().equals(req.getSystemCode())
+        if (ESystemCode.JKEG.getCode().equals(req.getSystemCode())
                 && EStoreLevel.MINGSU.getCode().equals(req.getLevel())) {
             bUser = userBO.isUserExist(req.getMobile(), EUserKind.Partner,
                 req.getSystemCode());

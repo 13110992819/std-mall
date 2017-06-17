@@ -32,7 +32,6 @@ import com.xnjr.mall.domain.ProductOrder;
 import com.xnjr.mall.domain.ProductSpecs;
 import com.xnjr.mall.enums.EGeneratePrefix;
 import com.xnjr.mall.enums.EOrderStatus;
-import com.xnjr.mall.enums.EOrderType;
 import com.xnjr.mall.exception.BizException;
 
 /** 
@@ -185,9 +184,9 @@ public class OrderBOImpl extends PaginableBOImpl<Order> implements IOrderBO {
     @Override
     @Transactional
     public String saveOrder(List<Cart> cartList, CommitOrderPOJO pojo,
-            String toUser) {
+            String toUser, String orderType) {
         // 生成订单基本信息
-        Order order = getOrderBasicInfo(toUser, pojo);
+        Order order = getOrderBasicInfo(orderType, toUser, pojo);
         // 计算订单金额
         Long amount1 = 0L;
         Long amount2 = 0L;
@@ -231,13 +230,14 @@ public class OrderBOImpl extends PaginableBOImpl<Order> implements IOrderBO {
         return order;
     }
 
-    private Order getOrderBasicInfo(String toUser, CommitOrderPOJO pojo) {
+    private Order getOrderBasicInfo(String orderType, String toUser,
+            CommitOrderPOJO pojo) {
         // 生成订单基本信息
         Order order = new Order();
         String code = OrderNoGenerater.generateM(EGeneratePrefix.ORDER
             .getCode());
         order.setCode(code);
-        order.setType(EOrderType.SH_SALE.getCode());
+        order.setType(orderType);
         order.setToUser(toUser);
         order.setReceiver(pojo.getReceiver());
         order.setReMobile(pojo.getReMobile());
@@ -305,4 +305,5 @@ public class OrderBOImpl extends PaginableBOImpl<Order> implements IOrderBO {
         condition.setStatus(EOrderStatus.RECEIVE.getCode());
         return orderDAO.selectTotalAmount(condition);
     }
+
 }

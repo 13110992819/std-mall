@@ -181,7 +181,7 @@ public class SorderAOImpl implements ISorderAO {
             smsOutBO.sentContent(order.getApplyUser(),
                 "尊敬的用户，您的订单[" + order.getCode() + "]已取消");
         } else if (EVorderStatus.PAYED.getCode().equals(order.getStatus())) {
-            if (ESystemCode.JKYG.getCode().equals(order.getSystemCode())) {
+            if (ESystemCode.JKEG.getCode().equals(order.getSystemCode())) {
                 accountBO.doTransferAmountRemote(order.getStoreUser(),
                     order.getApplyUser(), ECurrency.CNY, order.getPayAmount1(),
                     EBizType.JKEG_FWTK, EBizType.JKEG_FWTK.getValue(),

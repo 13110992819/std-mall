@@ -46,7 +46,8 @@ public interface IOrderAO {
 
     public void doChangeOrderStatusDaily();
 
-    public void paySuccessJKEG(String payGroup, String payCode, Long amount);
+    public void paySuccessJKEG(String payGroup, String payType, String payCode,
+            Long amount);
 
     public void paySuccessYC(String payGroup, String payCode, Long amount);
 

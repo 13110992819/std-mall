@@ -260,7 +260,8 @@ public class OrderAOImpl implements IOrderAO {
             throw new BizException("xn0000", "人民币账户余额不足");
         }
         // 更新订单支付金额
-        orderBO.refreshPaySuccess(order, rmbAmount, 0L, 0L, null);
+        orderBO.refreshPaySuccess(order, rmbAmount, 0L, 0L, null,
+            EPayType.YE.getCode());
 
         ECurrency currency = ECurrency.CNY;
         EBizType bizType = EBizType.JKEG_MALL;
@@ -305,7 +306,8 @@ public class OrderAOImpl implements IOrderAO {
         // 余额支付(菜狗币+积分)
         if (EPayType.INTEGRAL.getCode().equals(payType)) {
             // 更新订单支付金额
-            orderBO.refreshPaySuccess(order, 0L, cgbAmount, jfAmount, null);
+            orderBO.refreshPaySuccess(order, 0L, cgbAmount, jfAmount, null,
+                null);
             // 扣除金额
             if (StringUtils.isNotBlank(order.getToUser())) {// 付给加盟店
                 accountBO.doCgbJfPay(fromUserId, order.getToUser(), cgbAmount,
@@ -352,7 +354,8 @@ public class OrderAOImpl implements IOrderAO {
             throw new BizException("xn0000", "人民币账户余额不足");
         }
         // 更新订单支付金额
-        orderBO.refreshPaySuccess(order, rmbAmount, 0L, 0L, null);
+        orderBO.refreshPaySuccess(order, rmbAmount, 0L, 0L, null,
+            EPayType.YE.getCode());
         // 扣除金额
         if (StringUtils.isNotBlank(order.getToUser())) {// 付给加盟店
             accountBO.doTransferAmountRemote(fromUserId, order.getToUser(),
@@ -379,7 +382,8 @@ public class OrderAOImpl implements IOrderAO {
             throw new BizException("xn0000", "橙券不足");
         }
         // 更新订单支付金额
-        orderBO.refreshPaySuccess(order, 0L, cbAmount, 0L, null);
+        orderBO.refreshPaySuccess(order, 0L, cbAmount, 0L, null,
+            EPayType.YC_CB.getCode());
         // 扣除金额
         if (StringUtils.isNotBlank(order.getToUser())) {// 付给加盟店
             accountBO.doTransferAmountRemote(fromUserId, order.getToUser(),
@@ -423,7 +427,8 @@ public class OrderAOImpl implements IOrderAO {
         // 积分支付
         if (EPayType.INTEGRAL.getCode().equals(payType)) {
             // 更新订单支付金额
-            orderBO.refreshPaySuccess(order, 0L, 0L, jfAmount, null);
+            orderBO.refreshPaySuccess(order, 0L, 0L, jfAmount, null,
+                EPayType.INTEGRAL.getCode());
             // 扣除金额
             String systemUserId = userBO.getSystemUser(systemCode);
             accountBO.doCSWJfPay(fromUserId, systemUserId, jfAmount,
@@ -699,7 +704,8 @@ public class OrderAOImpl implements IOrderAO {
 
     @Override
     @Transactional
-    public void paySuccessJKEG(String payGroup, String payCode, Long amount) {
+    public void paySuccessJKEG(String payGroup, String payType, String payCode,
+            Long amount) {
         List<Order> orderList = orderBO.queryOrderListByPayGroup(payGroup);
         if (CollectionUtils.isEmpty(orderList)) {
             throw new BizException("XN000000", "找不到对应的订单记录");
@@ -707,7 +713,7 @@ public class OrderAOImpl implements IOrderAO {
         Order order = orderList.get(0);
         if (EOrderStatus.TO_PAY.getCode().equals(order.getStatus())) {
             // 更新订单支付金额
-            orderBO.refreshPaySuccess(order, amount, 0L, 0L, null);
+            orderBO.refreshPaySuccess(order, amount, 0L, 0L, null, payType);
         } else {
             logger.info("订单号：" + order.getCode() + "已支付，重复回调");
         }
@@ -723,7 +729,7 @@ public class OrderAOImpl implements IOrderAO {
         Order order = orderList.get(0);
         if (EOrderStatus.TO_PAY.getCode().equals(order.getStatus())) {
             // 更新订单支付金额
-            orderBO.refreshPaySuccess(order, amount, 0L, 0L, null);
+            orderBO.refreshPaySuccess(order, amount, 0L, 0L, null, null);
         } else {
             logger.info("订单号：" + order.getCode() + "已支付，重复回调");
         }
@@ -739,7 +745,7 @@ public class OrderAOImpl implements IOrderAO {
         Order order = orderList.get(0);
         if (EOrderStatus.TO_PAY.getCode().equals(order.getStatus())) {
             // 更新订单支付金额
-            orderBO.refreshPaySuccess(order, amount, 0L, 0L, null);
+            orderBO.refreshPaySuccess(order, amount, 0L, 0L, null, null);
         } else {
             logger.info("订单号：" + order.getCode() + "已支付，重复回调");
         }

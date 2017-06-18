@@ -120,7 +120,7 @@ public class OrderBOImpl extends PaginableBOImpl<Order> implements IOrderBO {
 
     @Override
     public int refreshPaySuccess(Order order, Long payAmount1, Long payAmount2,
-            Long payAmount3, String payCode) {
+            Long payAmount3, String payCode, String payType) {
         int count = 0;
         if (order != null && StringUtils.isNotBlank(order.getCode())) {
             Date now = new Date();
@@ -129,6 +129,7 @@ public class OrderBOImpl extends PaginableBOImpl<Order> implements IOrderBO {
             order.setPayAmount1(payAmount1);
             order.setPayAmount2(payAmount2);
             order.setPayAmount3(payAmount3);
+            order.setPayType(payType);
             order.setPayCode(payCode);
             order.setUpdater(order.getApplyUser());
             order.setUpdateDatetime(now);

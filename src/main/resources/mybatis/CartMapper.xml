@@ -18,11 +18,14 @@
 		
 		<result column="productSpecs_code" property="productSpecs.code" />
 		<result column="productSpecs_name" property="productSpecs.name" />
+		<result column="productSpecs_product_code" property="productSpecs.productCode" />
 		<result column="productSpecs_original_price" property="productSpecs.originalPrice" />
 		<result column="productSpecs_price1" property="productSpecs.price1" />
 		<result column="productSpecs_price2" property="productSpecs.price2" />
 		<result column="productSpecs_price3" property="productSpecs.price3" />
 		<result column="productSpecs_quantity" property="productSpecs.quantity" />
+		<result column="productSpecs_company_code" property="productSpecs.companyCode" />
+		<result column="productSpecs_system_code" property="productSpecs.systemCode" />
 	</resultMap>
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
@@ -63,11 +66,14 @@
 
         ,tps.code productSpecs_code
         ,tps.name productSpecs_name
+        ,tps.product_code productSpecs_product_code
         ,tps.original_price productSpecs_original_price
         ,tps.price1 productSpecs_price1
         ,tps.price2 productSpecs_price2
         ,tps.price3 productSpecs_price3
         ,tps.quantity productSpecs_quantity
+        ,tps.company_code productSpecs_company_code
+        ,tps.system_code productSpecs_system_code
 		FROM
 		tmall_cart t INNER JOIN tmall_product tp ON t.product_code = tp.code 
 		             INNER JOIN tmall_product_specs tps ON t.product_specs_code = tps.code 

@@ -73,11 +73,19 @@ public class CallbackConroller {
                     orderAO.paySuccessGD(payGroup, payCode, amount);
                     logger.info("**** 管道积分商城人民币支付回调 payGroup <" + payGroup
                             + "> payCode <" + payCode + ">end****");
+
+                    // 健康e购
                 } else if (EBizType.JKEG_FW.getCode().equals(bizType)) {
                     logger.info("**** 服务人民币支付回调 payGroup <" + payGroup
                             + "> payCode <" + payCode + ">start****");
                     sorderAO.paySuccess(payGroup, payCode, amount);
                     logger.info("**** 服务人民币支付回调 payGroup <" + payGroup
+                            + "> payCode <" + payCode + ">end****");
+                } else if (EBizType.JKEG_MALL.getCode().equals(bizType)) {
+                    logger.info("**** 健康e购健康商城人民币支付回调 payGroup <" + payGroup
+                            + "> payCode <" + payCode + ">start****");
+                    orderAO.paySuccessJKEG(payGroup, payCode, amount);
+                    logger.info("**** 健康e购健康商城人民币支付回调 payGroup <" + payGroup
                             + "> payCode <" + payCode + ">end****");
                 }
             } catch (Exception e) {

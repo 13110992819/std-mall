@@ -283,16 +283,18 @@ public class OrderAOImpl implements IOrderAO {
         String payGroup = orderBO.addPayGroup(order.getCode());
         return accountBO.doWeiXinH5PayRemote(user.getUserId(),
             user.getOpenId(), order.getToUser(), payGroup, order.getCode(),
-            EBizType.YC_MALL, "购物微信支付", rmbAmount);
+            EBizType.JKEG_MALL, EBizType.JKEG_MALL.getValue() + "-微信",
+            rmbAmount);
     }
 
     private Object toPayOrderJKEGZFB(Order order) {
         Long rmbAmount = order.getAmount1();
         User user = userBO.getRemoteUser(order.getApplyUser());
         String payGroup = orderBO.addPayGroup(order.getCode());
-        return accountBO.doWeiXinH5PayRemote(user.getUserId(),
-            user.getOpenId(), order.getToUser(), payGroup, order.getCode(),
-            EBizType.YC_MALL, "购物支付宝支付", rmbAmount);
+        return accountBO.doAlipayRemote(user.getUserId(),
+            ESysUser.SYS_USER_JKEG.getCode(), payGroup, order.getCode(),
+            EBizType.JKEG_MALL, EBizType.JKEG_MALL.getValue() + "-支付宝",
+            rmbAmount);
     }
 
     private Object toPayOrderCG(Order order, String payType) {
@@ -692,6 +694,22 @@ public class OrderAOImpl implements IOrderAO {
         for (ProductOrder productOrder : productOrders) {
             productBO.updateBoughtCount(productOrder.getProductCode(),
                 productOrder.getQuantity());
+        }
+    }
+
+    @Override
+    @Transactional
+    public void paySuccessJKEG(String payGroup, String payCode, Long amount) {
+        List<Order> orderList = orderBO.queryOrderListByPayGroup(payGroup);
+        if (CollectionUtils.isEmpty(orderList)) {
+            throw new BizException("XN000000", "找不到对应的订单记录");
+        }
+        Order order = orderList.get(0);
+        if (EOrderStatus.TO_PAY.getCode().equals(order.getStatus())) {
+            // 更新订单支付金额
+            orderBO.refreshPaySuccess(order, amount, 0L, 0L, null);
+        } else {
+            logger.info("订单号：" + order.getCode() + "已支付，重复回调");
         }
     }
 

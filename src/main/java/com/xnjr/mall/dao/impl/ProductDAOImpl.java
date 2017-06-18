@@ -12,7 +12,6 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import com.xnjr.mall.common.PropertiesUtil;
 import com.xnjr.mall.dao.IProductDAO;
 import com.xnjr.mall.dao.base.support.AMybatisTemplate;
 import com.xnjr.mall.domain.Product;
@@ -46,7 +45,6 @@ public class ProductDAOImpl extends AMybatisTemplate implements IProductDAO {
      */
     @Override
     public Product select(Product condition) {
-        condition.setUserDB(PropertiesUtil.Config.USER_DB);
         return super.select(NAMESPACE.concat("select_product"), condition,
             Product.class);
     }
@@ -56,7 +54,6 @@ public class ProductDAOImpl extends AMybatisTemplate implements IProductDAO {
      */
     @Override
     public Long selectTotalCount(Product condition) {
-        condition.setUserDB(PropertiesUtil.Config.USER_DB);
         return super.selectTotalCount(NAMESPACE.concat("select_product_count"),
             condition);
     }
@@ -66,7 +63,6 @@ public class ProductDAOImpl extends AMybatisTemplate implements IProductDAO {
      */
     @Override
     public List<Product> selectList(Product condition) {
-        condition.setUserDB(PropertiesUtil.Config.USER_DB);
         return super.selectList(NAMESPACE.concat("select_product"), condition,
             Product.class);
     }

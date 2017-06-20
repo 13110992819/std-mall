@@ -1,5 +1,6 @@
 package com.xnjr.mall.ao.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,17 +8,21 @@ import org.springframework.stereotype.Service;
 
 import com.xnjr.mall.ao.ISproductAO;
 import com.xnjr.mall.bo.ICategoryBO;
+import com.xnjr.mall.bo.ISorderBO;
 import com.xnjr.mall.bo.ISproductBO;
 import com.xnjr.mall.bo.IStoreBO;
 import com.xnjr.mall.bo.base.Paginable;
+import com.xnjr.mall.common.DateUtil;
 import com.xnjr.mall.core.OrderNoGenerater;
 import com.xnjr.mall.core.StringValidater;
+import com.xnjr.mall.domain.Sorder;
 import com.xnjr.mall.domain.Sproduct;
 import com.xnjr.mall.domain.Store;
 import com.xnjr.mall.dto.req.XN808400Req;
 import com.xnjr.mall.dto.req.XN808402Req;
 import com.xnjr.mall.enums.EGeneratePrefix;
 import com.xnjr.mall.enums.ESproductStatus;
+import com.xnjr.mall.enums.EVorderStatus;
 import com.xnjr.mall.exception.BizException;
 
 @Service
@@ -30,6 +35,9 @@ public class SproductAOImpl implements ISproductAO {
 
     @Autowired
     private IStoreBO storeBO;
+
+    @Autowired
+    private ISorderBO sorderBO;
 
     @Override
     public String saveSproduct(XN808400Req req) {
@@ -128,4 +136,21 @@ public class SproductAOImpl implements ISproductAO {
     public List<Sproduct> querySproductList(Sproduct condition) {
         return sproductBO.querySproductList(condition);
     }
+
+    @Override
+    public void resetAvaliableNumbers(String code) {
+        Sproduct sproduct = sproductBO.getSproduct(code);
+        List<String> status = new ArrayList<String>();
+        status.add(EVorderStatus.PAYED.getCode());
+        status.add(EVorderStatus.DELIVER.getCode());
+
+        Sorder condition = new Sorder();
+        condition.setProductCode(code);
+        condition.setStatusList(status);
+        condition.setToday(DateUtil.getTodayStart());
+        Long count = sorderBO.getTotalCount(condition);
+        sproductBO.refreshSproduct(sproduct,
+            sproduct.getTotalNum() - count.intValue());
+    }
+
 }

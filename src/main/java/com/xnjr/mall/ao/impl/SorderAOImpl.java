@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.xnjr.mall.ao.ISorderAO;
+import com.xnjr.mall.ao.ISproductAO;
 import com.xnjr.mall.bo.IAccountBO;
 import com.xnjr.mall.bo.ISmsOutBO;
 import com.xnjr.mall.bo.ISorderBO;
@@ -56,6 +57,9 @@ public class SorderAOImpl implements ISorderAO {
     @Autowired
     private ISmsOutBO smsOutBO;
 
+    @Autowired
+    private ISproductAO sproductAO;
+
     @Override
     public String commitOrder(XN808450Req req) {
         Sproduct product = sproductBO.getSproduct(req.getProductCode());
@@ -65,6 +69,19 @@ public class SorderAOImpl implements ISorderAO {
         if (product.getRemainNum() <= 0) {
             throw new BizException("xn0000", "已满数据，不能再购买");
         }
+        String today = DateUtil.getToday(DateUtil.FRONT_DATE_FORMAT_STRING);
+        if (DateUtil.daysBetween(req.getStartDate(), today,
+            DateUtil.FRONT_DATE_FORMAT_STRING) <= 0) {
+            throw new BizException("xn0000", "只能预订今天及以后的服务");
+        }
+        if (DateUtil.daysBetween(req.getStartDate(), req.getEndDate(),
+            DateUtil.FRONT_DATE_FORMAT_STRING) <= 0) {
+            throw new BizException("xn0000", "结束时间必须大于起始时间");
+        }
+        // 计算总价格
+        int count = DateUtil.daysBetween(req.getStartDate(), req.getEndDate(),
+            DateUtil.FRONT_DATE_FORMAT_STRING);
+        Long totalAmount = product.getPrice() * count;
 
         String code = OrderNoGenerater.generateM(EGeneratePrefix.SORDER
             .getCode());
@@ -86,7 +103,7 @@ public class SorderAOImpl implements ISorderAO {
         data.setApplyUser(req.getApplyUser());
         data.setApplyNote(req.getApplyNote());
         data.setApplyDatetime(new Date());
-        data.setAmount1(product.getPrice());
+        data.setAmount1(totalAmount);
         data.setAmount2(0L);
         data.setAmount3(0L);
         data.setStatus(EVorderStatus.TOPAY.getCode());
@@ -98,6 +115,7 @@ public class SorderAOImpl implements ISorderAO {
     }
 
     @Override
+    @Transactional
     public Object toPayOrder(String code, String payType) {
         // 暂时只实现单笔订单支付
         Sorder order = sorderBO.getSorder(code);
@@ -157,6 +175,8 @@ public class SorderAOImpl implements ISorderAO {
             ECurrency.CNY, rmbAmount, EBizType.JKEG_FW,
             EBizType.JKEG_FW.getValue(), EBizType.JKEG_FW.getValue(),
             order.getCode());
+        // 更新服务可用数量
+        sproductAO.resetAvaliableNumbers(order.getProductCode());
         return new BooleanRes(true);
     }
 

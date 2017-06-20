@@ -1,6 +1,7 @@
 package com.xnjr.mall.domain;
 
 import java.util.Date;
+import java.util.List;
 
 import com.xnjr.mall.dao.base.ABaseDO;
 
@@ -102,6 +103,19 @@ public class Sorder extends ABaseDO {
     // *************dp properties **************
 
     private Sproduct product;
+
+    // 状态list
+    private List<String> statusList;
+
+    private Date today;
+
+    public Date getToday() {
+        return today;
+    }
+
+    public void setToday(Date today) {
+        this.today = today;
+    }
 
     public String getCode() {
         return code;
@@ -341,6 +355,14 @@ public class Sorder extends ABaseDO {
 
     public void setProduct(Sproduct product) {
         this.product = product;
+    }
+
+    public List<String> getStatusList() {
+        return statusList;
+    }
+
+    public void setStatusList(List<String> statusList) {
+        this.statusList = statusList;
     }
 
     @Override

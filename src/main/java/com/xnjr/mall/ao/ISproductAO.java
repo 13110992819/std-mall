@@ -27,4 +27,7 @@ public interface ISproductAO {
 
     public List<Sproduct> querySproductList(Sproduct condition);
 
+    // 重置服务可提供的数量
+    public void resetAvaliableNumbers(String code);
+
 }

@@ -88,6 +88,15 @@
 			<if test="systemCode != null and systemCode != '' ">
 				AND t.system_code = #{systemCode}
 			</if>
+			<if test="statusList != null and statusList != '' ">
+				AND t.status in 
+                <foreach item="item" index="index" collection="statusList" open="(" separator="," close=")">
+	            	#{item}
+                </foreach> 
+			</if>
+			<if test="today != null and today != '' ">
+			 	<![CDATA[AND t.start_date <= #{today} AND t.end_date > #{today}]]>
+			</if>
 		</trim>
 	</sql>
 	<select id="select_sorder" parameterType="sorder" resultMap="sorder_DB_Result">

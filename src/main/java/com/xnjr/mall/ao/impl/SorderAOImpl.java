@@ -71,12 +71,12 @@ public class SorderAOImpl implements ISorderAO {
         }
         String today = DateUtil.getToday(DateUtil.FRONT_DATE_FORMAT_STRING);
         if (DateUtil.daysBetween(req.getStartDate(), today,
-            DateUtil.FRONT_DATE_FORMAT_STRING) <= 0) {
-            throw new BizException("xn0000", "只能预订今天及以后的服务");
+            DateUtil.FRONT_DATE_FORMAT_STRING) < 0) {
+            throw new BizException("xn0000", "预订时间起必须是今天或今天之后");
         }
         if (DateUtil.daysBetween(req.getStartDate(), req.getEndDate(),
             DateUtil.FRONT_DATE_FORMAT_STRING) <= 0) {
-            throw new BizException("xn0000", "结束时间必须大于起始时间");
+            throw new BizException("xn0000", "预订时间起必须小于预订时间止");
         }
         // 计算总价格
         int count = DateUtil.daysBetween(req.getStartDate(), req.getEndDate(),
@@ -175,8 +175,6 @@ public class SorderAOImpl implements ISorderAO {
             ECurrency.CNY, rmbAmount, EBizType.JKEG_FW,
             EBizType.JKEG_FW.getValue(), EBizType.JKEG_FW.getValue(),
             order.getCode());
-        // 更新服务可用数量
-        sproductAO.resetAvaliableNumbers(order.getProductCode());
         return new BooleanRes(true);
     }
 
@@ -194,6 +192,7 @@ public class SorderAOImpl implements ISorderAO {
     }
 
     @Override
+    @Transactional
     public void cancelOrder(String code, String handleUser, String remark) {
         Sorder order = sorderBO.getSorder(code);
         if (EVorderStatus.TOPAY.getCode().equals(order.getStatus())) {
@@ -252,7 +251,7 @@ public class SorderAOImpl implements ISorderAO {
         if (EVorderStatus.TOPAY.getCode().equals(order.getStatus())) {
             // 更新订单支付金额
             sorderBO.refreshPaySuccess(order, amount, 0L, 0L, null);
-            sproductBO.refreshSproduct(sproduct, sproduct.getRemainNum() + 1);
+            sproductAO.resetAvaliableNumbers(order.getProductCode());
         } else {
             logger.info("订单号：" + order.getCode() + "已支付，重复回调");
         }

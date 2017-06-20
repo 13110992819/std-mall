@@ -83,6 +83,7 @@ public class CallbackConroller {
                     logger.info("**** 服务人民币支付回调 payGroup <" + payGroup
                             + "> payCode <" + payCode + ">start****");
                     sorderAO.paySuccess(payGroup, payCode, amount);
+                    // 更新房间剩余数量
                     logger.info("**** 服务人民币支付回调 payGroup <" + payGroup
                             + "> payCode <" + payCode + ">end****");
                 } else if (EBizType.JKEG_MALL.getCode().equals(bizType)) {

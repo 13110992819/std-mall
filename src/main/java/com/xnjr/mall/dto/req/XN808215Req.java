@@ -25,7 +25,10 @@ public class XN808215Req extends APageReq {
     // 等级（选填）
     private String level;
 
-    // 类型（选填）
+    // 大类（选填）
+    private String category;
+
+    // 小类（选填）
     private String type;
 
     // 法人姓名（选填）
@@ -75,6 +78,14 @@ public class XN808215Req extends APageReq {
 
     public void setLevel(String level) {
         this.level = level;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 
     public String getType() {

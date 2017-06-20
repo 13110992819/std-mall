@@ -36,6 +36,7 @@ public class XN808215 extends AProcessor {
         Store condition = new Store();
         condition.setName(req.getName());
         condition.setLevel(req.getLevel());
+        condition.setCategory(req.getCategory());
         condition.setType(req.getType());
 
         condition.setLegalPersonName(req.getLegalPersonName());

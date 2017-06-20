@@ -6,6 +6,7 @@
 		<result column="code" property="code" />
 		<result column="order_code" property="orderCode" />
 		<result column="product_code" property="productCode" />
+		<result column="product_specs_code" property="productSpecsCode" />
 		<result column="product_specs_name" property="productSpecsName" />
 		<result column="quantity" property="quantity" />
 		<result column="price1" property="price1" />
@@ -27,6 +28,9 @@
 			<if test="productCode != null and productCode != '' ">
 				AND t.product_code = #{productCode}
 			</if>
+			<if test="productSpecsCode != null and productSpecsCode != '' ">
+				AND t.product_specs_code = #{productSpecsCode}
+			</if>
 		</trim>
 	</sql>
 	<select id="select_productOrder" parameterType="productOrder" resultMap="productOrder_DB_Result">
@@ -34,6 +38,7 @@
 		t.code
 		,t.order_code
 		,t.product_code
+		,t.product_specs_code
 		,t.product_specs_name
 		,t.quantity
 		,t.price1
@@ -64,6 +69,7 @@
 		code
 		,order_code
 		,product_code
+		,product_specs_code
 		,product_specs_name
 		,quantity
 		,price1
@@ -76,6 +82,7 @@
 		#{code}
 		,#{orderCode}
 		,#{productCode}
+		,#{productSpecsCode}
 		,#{productSpecsName}
 		,#{quantity}
 		,#{price1}

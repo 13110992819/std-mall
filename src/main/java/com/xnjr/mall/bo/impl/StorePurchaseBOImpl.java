@@ -379,7 +379,7 @@ public class StorePurchaseBOImpl extends PaginableBOImpl<StorePurchase>
         data.setBackAmount(0L);
 
         data.setPayDatetime(now);
-        data.setRemark("云币余额支付-O2O消费");
+        data.setRemark("健康币余额支付-O2O消费");
         data.setSystemCode(store.getSystemCode());
         data.setCompanyCode(store.getCompanyCode());
         storePurchaseDAO.insert(data);

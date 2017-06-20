@@ -114,6 +114,13 @@
 		,order_no = #{orderNo}
 		WHERE code = #{code}
 	</update>
+	
+	<update id="update_quantity" parameterType="product">
+		UPDATE tmall_product_specs
+		SET
+		quantity = quantity - ${quantity}
+		WHERE code = #{code}
+	</update>
 
     <delete id="delete_productSpecs" parameterType="productSpecs">
 		DELETE FROM

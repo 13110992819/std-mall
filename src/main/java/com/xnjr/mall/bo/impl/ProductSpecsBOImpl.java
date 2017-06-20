@@ -90,4 +90,16 @@ public class ProductSpecsBOImpl extends PaginableBOImpl<ProductSpecs> implements
         condition.setProductCode(productCode);
         return productSpecsDAO.deleteByProductCode(condition);
     }
+
+    @Override
+    public int refreshQuantity(String code, Integer quantity) {
+        int count = 0;
+        if (StringUtils.isNotBlank(code)) {
+            ProductSpecs data = new ProductSpecs();
+            data.setCode(code);
+            data.setQuantity(quantity);
+            count = productSpecsDAO.updateQuantity(data);
+        }
+        return count;
+    }
 }

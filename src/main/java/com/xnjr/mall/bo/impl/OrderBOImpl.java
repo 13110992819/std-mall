@@ -265,6 +265,7 @@ public class OrderBOImpl extends PaginableBOImpl<Order> implements IOrderBO {
             .generateM(EGeneratePrefix.PRODUCT_ORDER.getCode()));
         productOrder.setOrderCode(orderCode);
         productOrder.setProductCode(productSpecs.getProductCode());
+        productOrder.setProductSpecsCode(productSpecs.getCode());
         productOrder.setProductSpecsName(productSpecs.getName());
         productOrder.setQuantity(quantity);
         productOrder.setPrice1(productSpecs.getPrice1());

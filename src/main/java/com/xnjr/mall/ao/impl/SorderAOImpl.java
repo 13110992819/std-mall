@@ -147,7 +147,7 @@ public class SorderAOImpl implements ISorderAO {
         Account rmbAccount = accountBO.getRemoteAccount(fromUserId,
             ECurrency.CNY);
         if (rmbAmount > rmbAccount.getAmount()) {
-            throw new BizException("xn0000", "人民币账户余额不足");
+            throw new BizException("xn0000", "健康币不足");
         }
         sorderBO.addPayGroup(order, EPayType.YE);
         // 更新订单支付金额
@@ -167,9 +167,9 @@ public class SorderAOImpl implements ISorderAO {
             sorderBO.deliver(order, handleUser, remark);
             // 发送短信
             smsOutBO.sentContent(order.getApplyUser(),
-                "尊敬的用户，您的订单《" + order.getCode() + "》已兑现，请注意查收。");
+                "尊敬的用户，您的订单《" + order.getCode() + "》已办理入住，详情请登录网站查询。");
         } else {
-            throw new BizException("xn0000", "该订单不是已支付状态，无法兑换");
+            throw new BizException("xn0000", "该订单不是已支付状态，无法办理入住");
         }
     }
 

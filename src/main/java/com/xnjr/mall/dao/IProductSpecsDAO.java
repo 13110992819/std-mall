@@ -9,4 +9,6 @@ public interface IProductSpecsDAO extends IBaseDAO<ProductSpecs> {
     public int update(ProductSpecs data);
 
     public int deleteByProductCode(ProductSpecs data);
+
+    public int updateQuantity(ProductSpecs data);
 }

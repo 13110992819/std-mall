@@ -23,4 +23,6 @@ public interface IProductSpecsBO extends IPaginableBO<ProductSpecs> {
 
     public int removeProductSpecsByProductCode(String code);
 
+    public int refreshQuantity(String code, Integer quantity);
+
 }

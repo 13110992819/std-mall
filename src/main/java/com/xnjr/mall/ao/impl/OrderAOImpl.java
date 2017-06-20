@@ -111,6 +111,8 @@ public class OrderAOImpl implements IOrderAO {
         // 验证产品是否有记录
         for (Cart cart : cartList) {
             Product product = productBO.getProduct(cart.getProductCode());
+            ProductSpecs productSpecs = productSpecsBO.getProductSpecs(cart
+                .getProductSpecsCode());
             if (StringUtils.isBlank(storeCode)) {
                 storeCode = product.getStoreCode();
             }
@@ -118,6 +120,12 @@ public class OrderAOImpl implements IOrderAO {
                 product.getStatus())) {
                 throw new BizException("xn0000", "购物车中有未上架产品["
                         + product.getName() + "]无法下单");
+            }
+            // 判断库存是否充足
+            Integer quantity = cart.getQuantity();
+            if (productSpecs.getQuantity() - quantity < 0) {
+                throw new BizException("xn0000", "产品[" + product.getName()
+                        + "]库存不足，不能下单");
             }
         }
         if (StringUtils.isNotBlank(storeCode)) {
@@ -171,6 +179,11 @@ public class OrderAOImpl implements IOrderAO {
         Product product = productBO.getProduct(productSpecs.getProductCode());
         if (!EProductStatus.PUBLISH_YES.getCode().equals(product.getStatus())) {
             throw new BizException("xn0000", "该产品未上架，无法下单");
+        }
+        // 判断库存是否充足
+        Integer quantity = StringValidater.toInteger(req.getQuantity());
+        if (productSpecs.getQuantity() - quantity < 0) {
+            throw new BizException("xn0000", "库存不够，不能下单");
         }
         req.getPojo().setCompanyCode(product.getCompanyCode());
         req.getPojo().setSystemCode(product.getSystemCode());
@@ -257,7 +270,7 @@ public class OrderAOImpl implements IOrderAO {
         Account rmbAccount = accountBO.getRemoteAccount(fromUserId,
             ECurrency.CNY);
         if (rmbAmount > rmbAccount.getAmount()) {
-            throw new BizException("xn0000", "人民币账户余额不足");
+            throw new BizException("xn0000", "健康币不足");
         }
         // 更新订单支付金额
         orderBO.refreshPaySuccess(order, rmbAmount, 0L, 0L, null,
@@ -274,6 +287,14 @@ public class OrderAOImpl implements IOrderAO {
         accountBO.doTransferAmountRemote(fromUserId,
             ESysUser.SYS_USER_JKEG.getCode(), currency, rmbAmount, bizType,
             bizType.getValue(), bizType.getValue(), order.getCode());
+
+        List<ProductOrder> productOrders = productOrderBO
+            .queryProductOrderList(order.getCode());
+        for (ProductOrder productOrder : productOrders) {
+            // 更新库存
+            productSpecsBO.refreshQuantity(productOrder.getProductSpecsCode(),
+                productOrder.getQuantity());
+        }
 
         return new BooleanRes(true);
     }
@@ -491,6 +512,14 @@ public class OrderAOImpl implements IOrderAO {
             // 管道项目线上不退款，线下处理
         } else if (ESystemCode.JKEG.getCode().equals(order.getSystemCode())) {
             doBackAmountJKEG(order);
+            List<ProductOrder> productOrders = productOrderBO
+                .queryProductOrderList(order.getCode());
+            for (ProductOrder productOrder : productOrders) {
+                // 更新库存
+                productSpecsBO.refreshQuantity(
+                    productOrder.getProductSpecsCode(),
+                    productOrder.getQuantity());
+            }
         } else {
             throw new BizException("xn000000", "系统编号不能识别");
         }
@@ -500,7 +529,6 @@ public class OrderAOImpl implements IOrderAO {
 
         String userId = order.getApplyUser();
         // 发送短信
-
         if (ESystemCode.PIPE.getCode().equals(order.getSystemCode())) {
             smsOutBO.sentContent(userId, "尊敬的用户，您的订单[" + order.getCode()
                     + "]已取消，请联系平台处理退款事宜。");
@@ -548,7 +576,7 @@ public class OrderAOImpl implements IOrderAO {
         Long rmbAmount = order.getPayAmount1(); // 人民币
         if (rmbAmount > 0) {
             ECurrency currency = ECurrency.CNY;
-            EBizType bizType = EBizType.JKEG_MALL;
+            EBizType bizType = EBizType.JKEG_MALL_BACK;
             if (EOrderType.INTEGRAL_EXCHANGE.getCode().equals(order.getType())) {
                 currency = ECurrency.JF;
                 bizType = EBizType.JKEG_JF_MALL_BACK;
@@ -714,6 +742,15 @@ public class OrderAOImpl implements IOrderAO {
         if (EOrderStatus.TO_PAY.getCode().equals(order.getStatus())) {
             // 更新订单支付金额
             orderBO.refreshPaySuccess(order, amount, 0L, 0L, null, payType);
+
+            List<ProductOrder> productOrders = productOrderBO
+                .queryProductOrderList(order.getCode());
+            for (ProductOrder productOrder : productOrders) {
+                // 更新库存
+                productSpecsBO.refreshQuantity(
+                    productOrder.getProductSpecsCode(),
+                    productOrder.getQuantity());
+            }
         } else {
             logger.info("订单号：" + order.getCode() + "已支付，重复回调");
         }

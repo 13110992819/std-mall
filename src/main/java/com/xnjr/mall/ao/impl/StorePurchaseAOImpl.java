@@ -129,14 +129,18 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
         Long discountAmount = AmountUtil.mul(rmbTotalAmount, store.getRate1());
         // 付给商家多少钱 = 支付总金额 - 折扣金额
         Long payStoreRmbAmount = rmbTotalAmount - discountAmount;
+        Account rmbAccount = accountBO.getRemoteAccount(user.getUserId(),
+            ECurrency.CNY);
+        if (payStoreRmbAmount > rmbAccount.getAmount()) {
+            throw new BizException("xn0000", "健康币不足");
+        }
         // 落地本地系统消费记录
         String code = storePurchaseBO.storePurchaseJKEGRMBYE(user, store,
             rmbTotalAmount, payStoreRmbAmount);
         // 资金划转开始--------------
-        // 用户人民币给平台人民币
         accountBO.doTransferAmountRemote(user.getUserId(), store.getOwner(),
-            ECurrency.CNY, rmbTotalAmount, EBizType.JKEG_O2O_RMB, "店铺消费云币支付",
-            "店铺消费云币支付", code);
+            ECurrency.CNY, payStoreRmbAmount, EBizType.JKEG_O2O_RMB,
+            "店铺消费健康币支付", "店铺消费健康币支付", code);
         // 资金划转结束--------------
         return code;
     }

@@ -39,14 +39,15 @@ public class ProductOrderBOImpl extends PaginableBOImpl<ProductOrder> implements
      */
     @Override
     public String saveProductOrder(String orderCode, String productCode,
-            Integer quantity, Long price1, Long price2, Long price3,
-            String systemCode) {
+            String productSpecsCode, Integer quantity, Long price1,
+            Long price2, Long price3, String systemCode) {
         String code = OrderNoGenerater.generateM(EGeneratePrefix.PRODUCT_ORDER
             .getCode());
         ProductOrder data = new ProductOrder();
         data.setCode(code);
         data.setOrderCode(orderCode);
         data.setProductCode(productCode);
+        data.setProductSpecsCode(productSpecsCode);
         data.setQuantity(quantity);
         data.setPrice1(price1);
         data.setPrice2(price2);

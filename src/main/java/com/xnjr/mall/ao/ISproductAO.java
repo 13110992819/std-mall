@@ -30,4 +30,6 @@ public interface ISproductAO {
     // 重置服务可提供的数量
     public void resetAvaliableNumbers(String code);
 
+    public void doResetAvaliableNumbersDaily();
+
 }

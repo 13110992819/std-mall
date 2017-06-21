@@ -153,4 +153,13 @@ public class SproductAOImpl implements ISproductAO {
             sproduct.getTotalNum() - count.intValue());
     }
 
+    @Override
+    public void doResetAvaliableNumbersDaily() {
+        List<Sproduct> sproductList = sproductBO
+            .querySproductList(new Sproduct());
+        for (Sproduct sproduct : sproductList) {
+            resetAvaliableNumbers(sproduct.getCode());
+        }
+    }
+
 }

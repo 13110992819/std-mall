@@ -704,20 +704,33 @@ public class OrderAOImpl implements IOrderAO {
             throw new BizException("xn000000", "订单不是已发货状态，无法操作");
         }
         doConfirm(order, updater, remark);
-        // 平台付钱给商户
-        Long rmbAmount = order.getAmount1();
-        ECurrency currency = ECurrency.CNY;
-        EBizType bizType = EBizType.JKEG_MALL;
-        if (EOrderType.INTEGRAL_EXCHANGE.getCode().equals(order.getType())) {
-            currency = ECurrency.JF;
-            bizType = EBizType.JKEG_JF_MALL;
+
+        if (ESystemCode.JKEG.getCode().equals(order.getSystemCode())) {
+            // 平台付钱给商户
+            Long rmbAmount = order.getAmount1();
+            ECurrency currency = ECurrency.CNY;
+            EBizType bizType = EBizType.JKEG_MALL;
+            if (EOrderType.INTEGRAL_EXCHANGE.getCode().equals(order.getType())) {
+                currency = ECurrency.JF;
+                bizType = EBizType.JKEG_JF_MALL;
+            }
+            if (StringUtils.isNotBlank(order.getToUser())
+                    && !order.getToUser().startsWith("SYS_USER")) {
+                accountBO.doTransferAmountRemote(
+                    ESysUser.SYS_USER_JKEG.getCode(), order.getToUser(),
+                    currency, rmbAmount, bizType, bizType.getValue(),
+                    bizType.getValue(), order.getCode());
+                if (EBizType.JKEG_MALL.equals(bizType)) {
+                    // 平台返积分给用户
+                    accountBO.doTransferAmountRemote(
+                        ESysUser.SYS_USER_JKEG.getCode(), order.getApplyUser(),
+                        ECurrency.JF, rmbAmount, bizType, bizType.getValue(),
+                        bizType.getValue(), order.getCode());
+                }
+            }
+
         }
-        if (StringUtils.isNotBlank(order.getToUser())
-                && !order.getToUser().startsWith("SYS_USER")) {
-            accountBO.doTransferAmountRemote(ESysUser.SYS_USER_JKEG.getCode(),
-                order.getToUser(), currency, rmbAmount, bizType,
-                bizType.getValue(), bizType.getValue(), order.getCode());
-        }
+
     }
 
     private void doConfirm(Order order, String updater, String remark) {

@@ -425,4 +425,31 @@ public class StorePurchaseBOImpl extends PaginableBOImpl<StorePurchase>
         condition.setStatus(EStorePurchaseStatus.PAYED.getCode());
         return storePurchaseDAO.selectTotalPrice(condition);
     }
+
+    @Override
+    public String storePurchaseJKEGZFBAPP(User user, Store store, Long amount,
+            Long payRMB, String payGroup) {
+        Date now = new Date();
+        StorePurchase data = new StorePurchase();
+        String code = OrderNoGenerater.generateM(EGeneratePrefix.STORE_PURCHASW
+            .getCode());
+        data.setCode(code);
+        data.setUserId(user.getUserId());
+        data.setStoreCode(store.getCode());
+        data.setPrice(amount);
+
+        data.setCreateDatetime(now);
+        data.setStatus(EStorePurchaseStatus.TO_PAY.getCode());
+        data.setPayType(EPayType.ALIPAY.getCode());
+        data.setPayGroup(payGroup);
+
+        data.setBackAmount(0L);
+        data.setRemark(EBizType.JKEG_JF_MALL.getValue());
+
+        data.setSystemCode(store.getSystemCode());
+        data.setCompanyCode(store.getCompanyCode());
+        storePurchaseDAO.insert(data);
+
+        return code;
+    }
 }

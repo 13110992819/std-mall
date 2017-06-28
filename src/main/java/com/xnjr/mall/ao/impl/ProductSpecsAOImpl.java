@@ -15,6 +15,7 @@ import com.xnjr.mall.domain.ProductSpecs;
 import com.xnjr.mall.dto.req.XN808030Req;
 import com.xnjr.mall.dto.req.XN808032Req;
 import com.xnjr.mall.enums.EGeneratePrefix;
+import com.xnjr.mall.exception.BizException;
 
 @Service
 public class ProductSpecsAOImpl implements IProductSpecsAO {
@@ -27,6 +28,10 @@ public class ProductSpecsAOImpl implements IProductSpecsAO {
 
     @Override
     public String addProductSpecs(XN808030Req req) {
+        Integer quantity = StringValidater.toInteger(req.getQuantity());
+        if (quantity <= 0) {
+            throw new BizException("xn000000", "库存数量必须大于0");
+        }
         Product product = productBO.getProduct(req.getProductCode());
         String code = OrderNoGenerater.generateM(EGeneratePrefix.PRODUCT_SPECS
             .getCode());
@@ -52,6 +57,10 @@ public class ProductSpecsAOImpl implements IProductSpecsAO {
 
     @Override
     public void editProductSpecs(XN808032Req req) {
+        Integer quantity = StringValidater.toInteger(req.getQuantity());
+        if (quantity <= 0) {
+            throw new BizException("xn000000", "库存数量必须大于0");
+        }
         ProductSpecs data = new ProductSpecs();
         data.setCode(req.getCode());
         data.setName(req.getName());

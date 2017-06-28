@@ -92,6 +92,12 @@ public class CallbackConroller {
                     orderAO.paySuccessJKEG(payGroup, payType, payCode, amount);
                     logger.info("**** 健康e购健康商城人民币支付回调 payGroup <" + payGroup
                             + "> payCode <" + payCode + ">end****");
+                } else if (EBizType.JKEG_O2O_RMB.getCode().equals(bizType)) {
+                    logger.info("**** 健康e购周边人民币支付回调 payGroup <" + payGroup
+                            + "> payCode <" + payCode + ">start****");
+                    storePurchaseAO.paySuccessJKEG(payGroup, payCode, amount);
+                    logger.info("**** 健康e购周边人民币支付回调 payGroup <" + payGroup
+                            + "> payCode <" + payCode + ">end****");
                 }
             } catch (Exception e) {
                 logger.error("支付回调异常payGroup <" + payGroup + "> payCode <"

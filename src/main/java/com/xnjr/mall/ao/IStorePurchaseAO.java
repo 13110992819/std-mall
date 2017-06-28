@@ -28,6 +28,8 @@ public interface IStorePurchaseAO {
 
     public void paySuccessYC(String payGroup, String payCode, Long payAmount);
 
+    public void paySuccessJKEG(String payGroup, String payCode, Long payAmount);
+
     public Paginable<StorePurchase> queryStorePurchasePage(int start,
             int limit, StorePurchase condition);
 

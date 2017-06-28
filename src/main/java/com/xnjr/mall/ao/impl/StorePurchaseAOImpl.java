@@ -104,9 +104,9 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
         // 1-人民币余额支付 5-微信H5支付 50-橙券余额支付
         if (EPayType.YE.getCode().equals(payType)) {
             return storePurchaseJKEGRMBYE(user, store, amount);
-        } else if (EPayType.WEIXIN_H5.getCode().equals(payType)) {
-            return storePurchaseJKEGWXAPP(user, store, amount);
         } else if (EPayType.WEIXIN_APP.getCode().equals(payType)) {
+            return storePurchaseJKEGWXAPP(user, store, amount);
+        } else if (EPayType.ALIPAY.getCode().equals(payType)) {
             return storePurchaseJKEGZFBAPP(user, store, amount);
         } else {
             throw new BizException("xn0000", "暂不支持此支付方式");
@@ -114,8 +114,15 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
     }
 
     private Object storePurchaseJKEGZFBAPP(User user, Store store, Long amount) {
-        // TODO Auto-generated method stub
-        return null;
+        // 付给商家多少钱
+        Long payStoreRmbAmount = AmountUtil.mul(amount, store.getRate1());
+        String payGroup = OrderNoGenerater.generateM(EGeneratePrefix.PAY_GROUP
+            .getCode());
+        String code = storePurchaseBO.storePurchaseJKEGZFBAPP(user, store,
+            amount, payStoreRmbAmount, payGroup);
+        String systemUser = ESysUser.SYS_USER_JKEG.getCode();
+        return accountBO.doAlipayRemote(user.getUserId(), systemUser, payGroup,
+            code, EBizType.JKEG_O2O_RMB, "周边消费支付宝支付", payStoreRmbAmount);
     }
 
     private Object storePurchaseJKEGWXAPP(User user, Store store, Long amount) {
@@ -125,10 +132,8 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
 
     private Object storePurchaseJKEGRMBYE(User user, Store store,
             Long rmbTotalAmount) {
-        // 折扣金额
-        Long discountAmount = AmountUtil.mul(rmbTotalAmount, store.getRate1());
-        // 付给商家多少钱 = 支付总金额 - 折扣金额
-        Long payStoreRmbAmount = rmbTotalAmount - discountAmount;
+        Long payStoreRmbAmount = AmountUtil.mul(rmbTotalAmount,
+            store.getRate1());
         Account rmbAccount = accountBO.getRemoteAccount(user.getUserId(),
             ECurrency.CNY);
         if (payStoreRmbAmount > rmbAccount.getAmount()) {
@@ -549,6 +554,27 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
                 storePurchase.getUserId(), ECurrency.YC_CB, fxCbAmount,
                 EBizType.YC_O2O_RMBFD, "O2O消费人民币支付返点", "O2O消费人民币支付返点",
                 storePurchase.getCode());
+        } else {
+            logger.info("订单号：" + storePurchase.getCode() + "已支付，重复回调");
+        }
+    }
+
+    @Override
+    @Transactional
+    public void paySuccessJKEG(String payGroup, String payCode, Long payAmount) {
+        StorePurchase storePurchase = storePurchaseBO
+            .getStorePurchaseByPayGroup(payGroup);
+        if (EStorePurchaseStatus.TO_PAY.getCode().equals(
+            storePurchase.getStatus())) {
+            // 更新支付记录
+            storePurchaseBO.paySuccess(storePurchase, payCode, payAmount);
+            // 资金划转逻辑--------------
+            Store store = storeBO.getStore(storePurchase.getStoreCode());
+            Long payStoreRmbAmount = payAmount;
+            String systemUser = ESysUser.SYS_USER_YAOCHENG.getCode();
+            accountBO.doTransferAmountRemote(systemUser, store.getOwner(),
+                ECurrency.CNY, payStoreRmbAmount, EBizType.JKEG_O2O_RMB,
+                "周边消费人民币支付", "周边消费人民币支付", storePurchase.getCode());
         } else {
             logger.info("订单号：" + storePurchase.getCode() + "已支付，重复回调");
         }

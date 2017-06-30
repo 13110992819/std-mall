@@ -25,6 +25,7 @@
 	    
 	    <typeAlias alias="sproduct" type="com.xnjr.mall.domain.Sproduct" />
 	    <typeAlias alias="sorder" type="com.xnjr.mall.domain.Sorder" />
+	    <typeAlias alias="sbook" type="com.xnjr.mall.domain.Sbook" />
 	</typeAliases>	
 </configuration>
 

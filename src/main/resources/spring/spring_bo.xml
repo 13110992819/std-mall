@@ -77,6 +77,10 @@
 		<property name="paginableDAO" ref="sorderDAOImpl"/>
 	</bean>	
 	
+	<bean id="sbookBO" class="com.xnjr.mall.bo.impl.SbookBOImpl">
+		<property name="paginableDAO" ref="sbookDAOImpl"/>
+	</bean>	
+	
 	<bean id="sysDictBO" class="com.xnjr.mall.bo.impl.SYSDictBOImpl">
 		<property name="paginableDAO" ref="sysDictDAOImpl"/>
 	</bean>	

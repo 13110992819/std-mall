@@ -27,7 +27,7 @@ public enum EBizType {
             "YC_XNCZ_M", "姚橙充值专区退款")
 
     , JKEG_FW("JKEG_FW", "服务购买"), JKEG_FWTK("JKEG_FWTK", "服务购买退款"), JKEG_O2O_RMB(
-            "JKEG_O2O_RMB", "店铺消费健康币支付"), JKEG_MALL("JKEG_MALL", "健康商城购物支付"), JKEG_MALL_BACK(
+            "JKEG_O2O_RMB", "店铺消费"), JKEG_MALL("JKEG_MALL", "健康商城购物支付"), JKEG_MALL_BACK(
             "JKEG_MALL_BACK", "健康商城购物退款"), JKEG_JF_MALL("JKEG_JF_MALL",
             "积分商城购物支付"), JKEG_JF_MALL_BACK("JKEG_JF_MALL_BACK", "积分商城购物退款");
 

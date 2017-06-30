@@ -444,7 +444,7 @@ public class StorePurchaseBOImpl extends PaginableBOImpl<StorePurchase>
         data.setPayGroup(payGroup);
 
         data.setBackAmount(0L);
-        data.setRemark(EBizType.JKEG_JF_MALL.getValue());
+        data.setRemark(EBizType.JKEG_O2O_RMB.getValue());
 
         data.setSystemCode(store.getSystemCode());
         data.setCompanyCode(store.getCompanyCode());

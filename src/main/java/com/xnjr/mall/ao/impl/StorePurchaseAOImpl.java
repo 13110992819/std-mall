@@ -116,6 +116,9 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
     private Object storePurchaseJKEGZFBAPP(User user, Store store, Long amount) {
         // 付给商家多少钱
         Long payStoreRmbAmount = AmountUtil.mul(amount, store.getRate1());
+        if (payStoreRmbAmount < 10) {
+            throw new BizException("xn000000", "折扣后支付金额，必须大于0.01元");
+        }
         String payGroup = OrderNoGenerater.generateM(EGeneratePrefix.PAY_GROUP
             .getCode());
         String code = storePurchaseBO.storePurchaseJKEGZFBAPP(user, store,

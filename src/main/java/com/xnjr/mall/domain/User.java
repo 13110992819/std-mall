@@ -30,6 +30,9 @@ public class User extends ABaseDO {
     // kind
     private String kind;
 
+    // 用户等级
+    private String level;
+
     // 登陆名
     private String loginName;
 
@@ -162,6 +165,14 @@ public class User extends ABaseDO {
 
     public void setArea(String area) {
         this.area = area;
+    }
+
+    public String getLevel() {
+        return level;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
     }
 
 }

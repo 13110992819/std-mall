@@ -72,6 +72,8 @@ public class UserBOImpl implements IUserBO {
             user.setMobile(res.getMobile());
             user.setIdentityFlag(res.getIdentityFlag());
             user.setUserReferee(res.getUserReferee());
+            user.setLevel(res.getLevel());
+
             user.setDivRate(StringValidater.toDouble(res.getDivRate()));
         }
         return user;

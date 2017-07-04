@@ -29,7 +29,8 @@ public enum EBizType {
     , JKEG_FW("JKEG_FW", "服务购买"), JKEG_FWTK("JKEG_FWTK", "服务购买退款"), JKEG_O2O_RMB(
             "JKEG_O2O_RMB", "店铺消费"), JKEG_MALL("JKEG_MALL", "健康商城购物支付"), JKEG_MALL_BACK(
             "JKEG_MALL_BACK", "健康商城购物退款"), JKEG_JF_MALL("JKEG_JF_MALL",
-            "积分商城购物支付"), JKEG_JF_MALL_BACK("JKEG_JF_MALL_BACK", "积分商城购物退款");
+            "积分商城购物支付"), JKEG_JF_MALL_BACK("JKEG_JF_MALL_BACK", "积分商城购物退款"), JKEG_O2O_FR(
+            "JKEG_O2O_FR", "店铺消费分润"), JKEG_MALL_FR("JKEG_MALL_FR", "商城消费分润");
 
     public static Map<String, EBizType> getBizTypeMap() {
         Map<String, EBizType> map = new HashMap<String, EBizType>();

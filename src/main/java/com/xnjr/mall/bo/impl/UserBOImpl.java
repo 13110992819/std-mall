@@ -1,8 +1,13 @@
 package com.xnjr.mall.bo.impl;
 
+import java.util.List;
+
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.xnjr.mall.bo.IUserBO;
 import com.xnjr.mall.core.StringValidater;
 import com.xnjr.mall.domain.User;
@@ -10,9 +15,12 @@ import com.xnjr.mall.dto.req.XN001100Req;
 import com.xnjr.mall.dto.req.XN001102Req;
 import com.xnjr.mall.dto.req.XN001301Req;
 import com.xnjr.mall.dto.req.XN001350Req;
+import com.xnjr.mall.dto.req.XN001351Req;
 import com.xnjr.mall.dto.req.XN001400Req;
+import com.xnjr.mall.dto.req.XN001403Req;
 import com.xnjr.mall.dto.res.XN001102Res;
 import com.xnjr.mall.dto.res.XN001400Res;
+import com.xnjr.mall.dto.res.XN001403Res;
 import com.xnjr.mall.dto.res.XNUserRes;
 import com.xnjr.mall.enums.ESysUser;
 import com.xnjr.mall.enums.ESystemCode;
@@ -102,15 +110,15 @@ public class UserBOImpl implements IUserBO {
     }
 
     @Override
-    public String doSavePartnerUser(String mobile, String userReferee,
-            String updater, String systemCode, String companyCode) {
-        XN001350Req req = new XN001350Req();
+    public String doSaveUser(EUserKind kind, String mobile, String userReferee,
+            String updater, String systemCode, String companyCode, String remark) {
+        XN001351Req req = new XN001351Req();
+        req.setKind(kind.getCode());
         req.setLoginName(mobile);
         req.setMobile(mobile);
         req.setUserReferee(userReferee);
         req.setUpdater(updater);
-        req.setRemark("代注册名宿主");
-
+        req.setRemark(remark);
         req.setSystemCode(systemCode);
         req.setCompanyCode(companyCode);
         XNUserRes res = BizConnecter.getBizData("001351",
@@ -146,5 +154,39 @@ public class UserBOImpl implements IUserBO {
             return ESysUser.SYS_USER_YAOCHENG.getCode();
         }
         return null;
+    }
+
+    @Override
+    public User getPartner(String province, String city, String area,
+            EUserKind kind) {
+        if (StringUtils.isBlank(city) && StringUtils.isBlank(area)) {
+            city = province;
+            area = province;
+        } else if (StringUtils.isBlank(area)) {
+            area = city;
+        }
+        XN001403Req req = new XN001403Req();
+        req.setProvince(province);
+        req.setCity(city);
+        req.setArea(area);
+        req.setKind(kind.getCode());
+        req.setSystemCode(ESystemCode.JKEG.getCode());
+        req.setCompanyCode(ESystemCode.JKEG.getCode());
+        XN001403Res result = null;
+        String jsonStr = BizConnecter.getBizData("001403",
+            JsonUtils.object2Json(req));
+        Gson gson = new Gson();
+        List<XN001403Res> list = gson.fromJson(jsonStr,
+            new TypeToken<List<XN001403Res>>() {
+            }.getType());
+        User user = null;
+        if (CollectionUtils.isNotEmpty(list)) {
+            result = list.get(0);
+            user = new User();
+            user.setUserId(result.getUserId());
+            user.setLoginName(result.getLoginName());
+            user.setMobile(result.getMobile());
+        }
+        return user;
     }
 }

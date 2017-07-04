@@ -6,33 +6,79 @@ public class SysConstants {
 
     public static final String SP_YUNFEI = "SP_YUNFEI"; // 订单运费，全系统统一
 
-    // *************************************正汇*************************************
-
-    public static final String MAX_PERSON_STOCK = "MAX_PERSON_STOCK"; // 最大分红权个数
-
-    public static final String MAX_DAY_STOCK = "MAX_DAY_STOCK"; // 每天最多有效分红权个数
-
-    public static final String USER_STOCK_DAYBACK = "USER_STOCK_DAYBACK"; // 用户每个分红权可以领钱金额
-
-    public static final String STORE_STOCK_DAYBACK = "STORE_STOCK_DAYBACK"; // 商家每个分红权可以领钱金额
-
-    // *************************************正汇*************************************
-
     // *************************************管道*************************************
     public static final String STORE_RMB2JF = "STORE_RMB2JF"; // 积分消费比例
 
-    // *************************************管道*************************************
-
     // *************************************菜狗*************************************
-
     public static final String STORE_XFFX = "STORE_XFFX"; // C端消费返现人民币比例
 
-    // *************************************菜狗*************************************
+    // *************************************健康e购*************************************
+    public static final String O2O_FC1 = "o2o_fc1";
 
-    public static final String WX_PAY_OPEN = "wxPayOpen"; // 是否开启微信支付
+    public static final String O2O_FC2 = "o2o_fc2";
 
-    public static final String ZFB_PAY_OPEN = "zfbPayOpen"; // 是否开启支付宝支付
+    public static final String O2O_FC3 = "o2o_fc3";
 
-    public static final String STOCK_STEP = "stockStep"; // 分红权每次读取数量
+    public static final String O2O_FC4 = "o2o_fc4";
+
+    public static final String O2O_FC5 = "o2o_fc5";
+
+    public static final String O2O_FC6 = "o2o_fc6";
+
+    public static final String O2O_FC7 = "o2o_fc7";
+
+    public static final String O2O_FC8 = "o2o_fc8";
+
+    public static final String O2O_FC9 = "o2o_fc9";
+
+    public static final String O2O_FC10 = "o2o_fc10";
+
+    public static final String O2O_FC11 = "o2o_fc11";
+
+    public static final String O2O_FC12 = "o2o_fc12";
+
+    public static final String O2O_FC13 = "o2o_fc13";
+
+    public static final String O2O_FC14 = "o2o_fc14";
+
+    public static final String O2O_FC15 = "o2o_fc15";
+
+    public static final String O2O_FC16 = "o2o_fc16";
+
+    public static final String O2O_FC17 = "o2o_fc17";
+
+    public static final String O2O_FC18 = "o2o_fc18";
+
+    public static final String MALL_FC1 = "mall_fc1";
+
+    public static final String MALL_FC2 = "mall_fc2";
+
+    public static final String MALL_FC3 = "mall_fc3";
+
+    public static final String MALL_FC4 = "mall_fc4";
+
+    public static final String MALL_FC5 = "mall_fc5";
+
+    public static final String MALL_FC6 = "mall_fc6";
+
+    public static final String MALL_FC7 = "mall_fc7";
+
+    public static final String MALL_FC8 = "mall_fc8";
+
+    public static final String MALL_FC9 = "mall_fc9";
+
+    public static final String MALL_FC10 = "mall_fc10";
+
+    public static final String MALL_FC11 = "mall_fc11";
+
+    public static final String MALL_FC12 = "mall_fc12";
+
+    public static final String MALL_FC13 = "mall_fc13";
+
+    public static final String MALL_FC14 = "mall_fc14";
+
+    public static final String MALL_FC15 = "mall_fc15";
+
+    public static final String MALL_FC16 = "mall_fc16";
 
 }

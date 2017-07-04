@@ -9,6 +9,7 @@ import com.xnjr.mall.dto.req.XN808201Req;
 import com.xnjr.mall.dto.req.XN808203Req;
 import com.xnjr.mall.dto.req.XN808204Req;
 import com.xnjr.mall.dto.req.XN808208Req;
+import com.xnjr.mall.dto.req.XN808209Req;
 import com.xnjr.mall.dto.res.XN808219Res;
 import com.xnjr.mall.dto.res.XN808276Res;
 
@@ -18,6 +19,8 @@ public interface IStoreAO {
     public String addStoreOss(XN808200Req req);
 
     public void editStoreOss(XN808208Req req);
+
+    public String applyStoreFront(XN808209Req req);
 
     public String addStoreFront(XN808201Req req);
 

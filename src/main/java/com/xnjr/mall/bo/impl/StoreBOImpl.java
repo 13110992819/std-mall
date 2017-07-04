@@ -118,12 +118,13 @@ public class StoreBOImpl extends PaginableBOImpl<Store> implements IStoreBO {
     }
 
     @Override
-    public void checkStoreByUser(String bUser) {
+    public void checkStoreByUser(String bUser, String level) {
         Store condition = new Store();
         condition.setOwner(bUser);
+        condition.setLevel(level);
         List<Store> list = this.queryStoreList(condition);
         if (CollectionUtils.isNotEmpty(list) && list.size() > 0) {
-            throw new BizException("xn000000", "已有店铺,无需再次申请");
+            throw new BizException("xn000000", "您已经申请过该类型商户，不能多次申请");
         }
     }
 

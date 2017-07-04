@@ -35,6 +35,7 @@ import com.xnjr.mall.dto.req.XN808201Req;
 import com.xnjr.mall.dto.req.XN808203Req;
 import com.xnjr.mall.dto.req.XN808204Req;
 import com.xnjr.mall.dto.req.XN808208Req;
+import com.xnjr.mall.dto.req.XN808209Req;
 import com.xnjr.mall.dto.res.XN808219Res;
 import com.xnjr.mall.dto.res.XN808276Res;
 import com.xnjr.mall.enums.EOrderStatus;
@@ -96,29 +97,14 @@ public class StoreAOImpl implements IStoreAO {
         String userRefereeUserId = storeBO.isUserRefereeExist(userReferee);
         // 验证B端用户
         String bUser = null;
-        if (ESystemCode.JKEG.getCode().equals(req.getSystemCode())
-                && EStoreLevel.MINGSU.getCode().equals(req.getLevel())) {
-            bUser = userBO.isUserExist(req.getMobile(), EUserKind.Partner,
-                req.getSystemCode());
-            if (StringUtils.isBlank(bUser)) { // 注册名宿主用户
-                bUser = userBO.doSavePartnerUser(req.getMobile(),
-                    req.getUserReferee(), req.getUpdater(),
-                    req.getSystemCode(), req.getCompanyCode());
-            } else {
-                // 判断该用户是否有店铺了
-                storeBO.checkStoreByUser(bUser);
-            }
+        bUser = userBO.isUserExist(req.getMobile(), EUserKind.F2,
+            req.getSystemCode());
+        if (StringUtils.isBlank(bUser)) { // 注册B端用户
+            bUser = userBO.doSaveBUser(req.getMobile(), req.getUserReferee(),
+                req.getUpdater(), req.getSystemCode(), req.getCompanyCode());
         } else {
-            bUser = userBO.isUserExist(req.getMobile(), EUserKind.F2,
-                req.getSystemCode());
-            if (StringUtils.isBlank(bUser)) { // 注册B端用户
-                bUser = userBO.doSaveBUser(req.getMobile(),
-                    req.getUserReferee(), req.getUpdater(),
-                    req.getSystemCode(), req.getCompanyCode());
-            } else {
-                // 判断该用户是否有店铺了
-                storeBO.checkStoreByUser(bUser);
-            }
+            // 判断该用户是否有店铺了
+            storeBO.checkStoreByUser(bUser, null);
         }
 
         // 根据小类获取大类
@@ -156,6 +142,89 @@ public class StoreAOImpl implements IStoreAO {
         store.setRate3(StringValidater.toDouble(req.getRate3()));
 
         store.setStatus(EStoreStatus.PASS.getCode());
+        store.setUpdater(req.getUpdater());
+        store.setUpdateDatetime(new Date());
+        store.setRemark(req.getRemark());
+        store.setOwner(bUser);
+
+        store.setContractNo(OrderNoGenerater.generateM("ZHS-"));
+        store.setTotalRmbNum(0);
+        store.setTotalJfNum(0);
+        store.setTotalDzNum(0);
+        store.setTotalScNum(0);
+
+        store.setSystemCode(req.getSystemCode());
+        store.setCompanyCode(req.getCompanyCode());
+        storeBO.saveStoreOss(store);
+        return code;
+    }
+
+    @Override
+    @Transactional
+    public String applyStoreFront(XN808209Req req) {
+        // 验证B端用户
+        String bUser = null;
+        EUserKind userKind = null;
+        String level = null;
+        if (ESystemCode.JKEG.getCode().equals(req.getSystemCode())) {
+            if (EStoreLevel.MINGSU.getCode().equals(req.getLevel())) {
+                userKind = EUserKind.JKEG_MINGSU;
+                level = EStoreLevel.MINGSU.getCode();
+            } else if (EStoreLevel.SUPPLIER.getCode().equals(req.getLevel())) {
+                userKind = EUserKind.JKEG_SUPPLIER;
+                level = EStoreLevel.SUPPLIER.getCode();
+            } else if (EStoreLevel.NOMAL.getCode().equals(req.getLevel())) {
+                userKind = EUserKind.JKEG_O2O;
+                level = EStoreLevel.NOMAL.getCode();
+            }
+            bUser = userBO.isUserExist(req.getMobile(), userKind,
+                req.getSystemCode());
+            if (StringUtils.isBlank(bUser)) { // 注册名宿主用户
+                bUser = userBO.doSaveUser(userKind, req.getMobile(),
+                    req.getUserReferee(), req.getUpdater(),
+                    req.getSystemCode(), req.getCompanyCode(),
+                    userKind.getValue());
+            } else {
+                // 判断该用户是否有店铺了
+                storeBO.checkStoreByUser(bUser, level);
+            }
+        }
+
+        // 根据小类获取大类
+        Category category = categoryBO.getCategory(req.getType());
+
+        // 更新字段
+        String code = OrderNoGenerater.generateM("SJ");
+        Store store = new Store();
+        store.setCode(code);
+        store.setName(req.getName());
+        store.setLevel(req.getLevel());
+        store.setCategory(category.getParentCode());
+        store.setType(req.getType());
+        store.setSlogan(req.getSlogan());
+
+        store.setAdvPic(req.getAdvPic());
+        store.setPic(req.getPic());
+        store.setDescription(req.getDescription());
+        store.setProvince(req.getProvince());
+        store.setCity(req.getCity());
+
+        store.setArea(req.getArea());
+        store.setAddress(req.getAddress());
+        store.setLongitude(req.getLongitude());
+        store.setLatitude(req.getLatitude());
+        store.setBookMobile(req.getBookMobile());
+
+        store.setSmsMobile(req.getSmsMobile());
+        store.setPdf(req.getPdf());
+        store.setLegalPersonName(req.getLegalPersonName());
+
+        store.setUserReferee(req.getUpdater());
+        store.setRate1(StringValidater.toDouble(req.getRate1()));
+        store.setRate2(StringValidater.toDouble(req.getRate2()));
+        store.setRate3(StringValidater.toDouble(req.getRate3()));
+
+        store.setStatus(EStoreStatus.TOCHECK.getCode());
         store.setUpdater(req.getUpdater());
         store.setUpdateDatetime(new Date());
         store.setRemark(req.getRemark());
@@ -230,7 +299,7 @@ public class StoreAOImpl implements IStoreAO {
     public String addStoreFront(XN808201Req req) {
         // 验证当前用户是否已拥有店铺
         User owner = userBO.getRemoteUser(req.getOwner());
-        storeBO.checkStoreByUser(owner.getUserId());
+        storeBO.checkStoreByUser(owner.getUserId(), null);
         // 验证推荐手机号和店铺主人手机号(正汇等传入推荐人是手机号)
         if (owner.getMobile().equals(req.getUserReferee())) {
             throw new BizException("xn000000", "推荐人手机号不能和申请人手机号一样");

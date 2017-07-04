@@ -1,5 +1,7 @@
 package com.xnjr.mall.bo;
 
+import com.xnjr.mall.domain.Store;
+import com.xnjr.mall.domain.User;
 
 /**
  * 分销BO，专门用于分销
@@ -9,4 +11,9 @@ package com.xnjr.mall.bo;
  */
 public interface IDistributeBO {
 
+    // 商城消费分销
+    public void distributeMall(User consumer, Store store, Long frAmount);
+
+    // O2O消费分销
+    public void distributeO2O(User consumer, Store store, Long frAmount);
 }

@@ -60,6 +60,6 @@ public interface IStoreBO {
      * @create: 2017年3月27日 下午3:15:36 xieyj
      * @history:
      */
-    public void checkStoreByUser(String bUser);
+    public void checkStoreByUser(String bUser, String level);
 
 }

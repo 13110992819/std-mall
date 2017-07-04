@@ -15,7 +15,11 @@ package com.xnjr.mall.enums;
  */
 public enum EUserKind {
     F1("f1", "C端会员"), F2("f2", "B端商家"), Operator("01", "平台"), Partner("11",
-            "合伙人");
+            "合伙人"),
+
+    // 健康e购
+    JKEG_OPERATOR("operator", "市/区运营商"), JKEG_O2O("o2o", "o2o商家"), JKEG_SUPPLIER(
+            "supplier", "供应商"), JKEG_MINGSU("mingsu", "名宿主");
 
     EUserKind(String code, String value) {
         this.code = code;

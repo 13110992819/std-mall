@@ -31,8 +31,8 @@ public interface IUserBO {
     public String doSaveBUser(String mobile, String userReferee,
             String updater, String systemCode, String companyCode);
 
-    public String doSavePartnerUser(String mobile, String userReferee,
-            String updater, String systemCode, String companyCode);
+    public String doSaveUser(EUserKind kind, String mobile, String userReferee,
+            String updater, String systemCode, String companyCode, String remark);
 
     /**
      * 根据systemCode获取系统userId
@@ -42,4 +42,7 @@ public interface IUserBO {
      * @history:
      */
     public String getSystemUser(String systemCode);
+
+    public User getPartner(String province, String city, String area,
+            EUserKind kind);
 }

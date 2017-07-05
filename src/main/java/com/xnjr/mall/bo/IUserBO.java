@@ -45,4 +45,6 @@ public interface IUserBO {
 
     public User getPartner(String province, String city, String area,
             EUserKind kind);
+
+    public void doUpgrade(String userId);
 }

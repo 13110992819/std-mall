@@ -359,8 +359,8 @@ public class StorePurchaseBOImpl extends PaginableBOImpl<StorePurchase>
     }
 
     @Override
-    public String storePurchaseJKEGRMBYE(User user, Store store, Long amount,
-            Long payRMB) {
+    public String storePurchaseJKEGRMBYE(User user, Store store,
+            Long totalAmount, Long payRMB, Long frAmount) {
         String code = OrderNoGenerater.generateM(EGeneratePrefix.STORE_PURCHASW
             .getCode());
         Date now = new Date();
@@ -368,15 +368,17 @@ public class StorePurchaseBOImpl extends PaginableBOImpl<StorePurchase>
         data.setCode(code);
         data.setUserId(user.getUserId());
         data.setStoreCode(store.getCode());
-        data.setPrice(amount);
+        data.setPrice(totalAmount);
 
         data.setCreateDatetime(now);
         data.setStatus(EStorePurchaseStatus.PAYED.getCode());
         data.setPayType(EPayType.YE.getCode());
 
         data.setPayAmount1(payRMB);
+        data.setPayAmount2(0L);
         data.setPayAmount3(0L);
-        data.setBackAmount(0L);
+        data.setBackAmount(frAmount);
+        data.setBackCurrency(ECurrency.CNY.getCode());
 
         data.setPayDatetime(now);
         data.setRemark("健康币余额支付-O2O消费");
@@ -427,8 +429,8 @@ public class StorePurchaseBOImpl extends PaginableBOImpl<StorePurchase>
     }
 
     @Override
-    public String storePurchaseJKEGZFBAPP(User user, Store store, Long amount,
-            Long payRMB, String payGroup) {
+    public String storePurchaseJKEGZFBAPP(User user, Store store,
+            Long totalAmount, Long frAmount, String payGroup) {
         Date now = new Date();
         StorePurchase data = new StorePurchase();
         String code = OrderNoGenerater.generateM(EGeneratePrefix.STORE_PURCHASW
@@ -436,14 +438,15 @@ public class StorePurchaseBOImpl extends PaginableBOImpl<StorePurchase>
         data.setCode(code);
         data.setUserId(user.getUserId());
         data.setStoreCode(store.getCode());
-        data.setPrice(amount);
+        data.setPrice(totalAmount);
 
         data.setCreateDatetime(now);
         data.setStatus(EStorePurchaseStatus.TO_PAY.getCode());
         data.setPayType(EPayType.ALIPAY.getCode());
         data.setPayGroup(payGroup);
 
-        data.setBackAmount(0L);
+        data.setBackAmount(frAmount);
+        data.setBackCurrency(ECurrency.CNY.getCode());
         data.setRemark(EBizType.JKEG_O2O_RMB.getValue());
 
         data.setSystemCode(store.getSystemCode());

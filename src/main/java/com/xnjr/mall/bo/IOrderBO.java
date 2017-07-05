@@ -43,4 +43,6 @@ public interface IOrderBO extends IPaginableBO<Order> {
 
     public Long getTotalAmount(String userId);
 
+    public Long selectXFAmount(String userId);
+
 }

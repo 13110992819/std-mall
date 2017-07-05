@@ -26,4 +26,7 @@ public interface IOrderDAO extends IBaseDAO<Order> {
     public int updatePayGroup(Order data);
 
     public Long selectTotalAmount(Order condition);
+
+    // 统计用户消费总额
+    public Long selectXFAmount(String userId);
 }

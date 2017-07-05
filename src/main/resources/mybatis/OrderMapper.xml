@@ -314,4 +314,13 @@
 		SELECT ifnull(sum(amount1),0) FROM tmall_order t 
 		<include refid="where_condition" />
 	</select>
+	
+	<select id="select_XF_Amount" parameterType="java.lang.String"
+		resultType="java.lang.Long">
+		select amount1+amount2+amount3 from
+(select  ifnull(sum(pay_amount1),0) amount1 from tmall_order where apply_user = #{userId} and status  in ('2','3','4')) as a,
+(select ifnull(sum(pay_amount),0) amount2 from tmall_vorder where apply_user = #{userId} and status in ('1','2')) as b,
+(select ifnull(sum(pay_amount1),0) amount3 from to2o_purchase where user_id = #{userId} and status = '1') as c
+		<include refid="where_condition" />
+	</select>
 </mapper>

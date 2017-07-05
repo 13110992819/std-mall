@@ -33,7 +33,10 @@ import com.xnjr.mall.bo.ISmsOutBO;
 import com.xnjr.mall.bo.IStoreBO;
 import com.xnjr.mall.bo.IUserBO;
 import com.xnjr.mall.bo.base.Paginable;
+import com.xnjr.mall.common.AmountUtil;
 import com.xnjr.mall.common.DateUtil;
+import com.xnjr.mall.common.SysConstants;
+import com.xnjr.mall.core.CalculationUtil;
 import com.xnjr.mall.core.StringValidater;
 import com.xnjr.mall.domain.Account;
 import com.xnjr.mall.domain.Cart;
@@ -41,6 +44,7 @@ import com.xnjr.mall.domain.Order;
 import com.xnjr.mall.domain.Product;
 import com.xnjr.mall.domain.ProductOrder;
 import com.xnjr.mall.domain.ProductSpecs;
+import com.xnjr.mall.domain.SYSConfig;
 import com.xnjr.mall.domain.Store;
 import com.xnjr.mall.domain.User;
 import com.xnjr.mall.dto.req.XN808050Req;
@@ -56,6 +60,7 @@ import com.xnjr.mall.enums.EProductKind;
 import com.xnjr.mall.enums.EProductStatus;
 import com.xnjr.mall.enums.ESysUser;
 import com.xnjr.mall.enums.ESystemCode;
+import com.xnjr.mall.enums.EUserLevel;
 import com.xnjr.mall.exception.BizException;
 
 /** 
@@ -295,6 +300,8 @@ public class OrderAOImpl implements IOrderAO {
             productSpecsBO.refreshQuantity(productOrder.getProductSpecsCode(),
                 productOrder.getQuantity());
         }
+
+        this.checkUpgrade(fromUserId);
 
         return new BooleanRes(true);
     }
@@ -705,32 +712,29 @@ public class OrderAOImpl implements IOrderAO {
         }
         doConfirm(order, updater, remark);
 
-        if (ESystemCode.JKEG.getCode().equals(order.getSystemCode())) {
-            // 平台付钱给商户
-            Long rmbAmount = order.getAmount1();
-            ECurrency currency = ECurrency.CNY;
-            EBizType bizType = EBizType.JKEG_MALL;
-            if (EOrderType.INTEGRAL_EXCHANGE.getCode().equals(order.getType())) {
-                currency = ECurrency.JF;
-                bizType = EBizType.JKEG_JF_MALL;
-            }
-            if (StringUtils.isNotBlank(order.getToUser())
-                    && !order.getToUser().startsWith("SYS_USER")) {
+        if (ESystemCode.JKEG.getCode().equals(order.getSystemCode())
+                && EOrderType.SH_SALE.getCode().equals(order.getType())) {
+            if (StringUtils.isNotBlank(order.getToUser())) {
+                Store store = storeBO.getStoreByUser(order.getToUser());
+                // 订单总额
+                Long totalAmount = order.getAmount1();
+                // 分润金额
+                Long frAmount = AmountUtil.mul(order.getAmount1(),
+                    1 - store.getRate1());
+                // 供应商应该拿到的金额
+                Long amount = totalAmount - frAmount;
+                // 平台划钱给供应商
                 accountBO.doTransferAmountRemote(
                     ESysUser.SYS_USER_JKEG.getCode(), order.getToUser(),
-                    currency, rmbAmount, bizType, bizType.getValue(),
-                    bizType.getValue(), order.getCode());
-                if (EBizType.JKEG_MALL.equals(bizType)) {
-                    // 平台返积分给用户
-                    accountBO.doTransferAmountRemote(
-                        ESysUser.SYS_USER_JKEG.getCode(), order.getApplyUser(),
-                        ECurrency.JF, rmbAmount, bizType, bizType.getValue(),
-                        bizType.getValue(), order.getCode());
-                }
+                    ECurrency.CNY, amount, EBizType.JKEG_MALL,
+                    EBizType.JKEG_MALL.getValue(),
+                    EBizType.JKEG_MALL.getValue(), order.getCode());
+                // 开始分赃
+                User consumer = userBO.getRemoteUser(order.getApplyUser());
+                distributeBO.distributeMall(consumer, store, frAmount,
+                    order.getCode());
             }
-
         }
-
     }
 
     private void doConfirm(Order order, String updater, String remark) {
@@ -764,6 +768,7 @@ public class OrderAOImpl implements IOrderAO {
                     productOrder.getProductSpecsCode(),
                     productOrder.getQuantity());
             }
+            checkUpgrade(order.getApplyUser());
         } else {
             logger.info("订单号：" + order.getCode() + "已支付，重复回调");
         }
@@ -820,5 +825,25 @@ public class OrderAOImpl implements IOrderAO {
             }
         }
         logger.info("***************结束扫描未支付订单***************");
+    }
+
+    @Override
+    public void checkUpgrade(String userId) {
+        try {
+            User user = userBO.getRemoteUser(userId);
+            if (EUserLevel.ZERO.getCode().equals(user.getLevel())) {
+                Long xfAmount = orderBO.selectXFAmount(userId);
+                SYSConfig config = sysConfigBO.getSYSConfig(
+                    SysConstants.UPGRADE_AMOUNT, ESystemCode.JKEG.getCode());
+                Long upgradeAmount = Long.valueOf(CalculationUtil.mult(config
+                    .getCvalue()));
+                if (xfAmount >= upgradeAmount) {
+                    userBO.doUpgrade(userId);
+                }
+            }
+        } catch (Exception e) {
+            logger.error("检查会员是否可以升级异常！");
+        }
+
     }
 }

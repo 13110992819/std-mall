@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.xnjr.mall.ao.IOrderAO;
 import com.xnjr.mall.ao.IStorePurchaseAO;
 import com.xnjr.mall.bo.IAccountBO;
 import com.xnjr.mall.bo.IDistributeBO;
@@ -71,6 +72,9 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
     @Autowired
     private IAccountBO accountBO;
 
+    @Autowired
+    private IOrderAO orderAO;
+
     @Override
     @Transactional
     public Object storePurchaseYC(String userId, String storeCode, Long amount,
@@ -114,18 +118,19 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
     }
 
     private Object storePurchaseJKEGZFBAPP(User user, Store store, Long amount) {
-        // 付给商家多少钱
-        Long payStoreRmbAmount = AmountUtil.mul(amount, store.getRate1());
-        if (payStoreRmbAmount < 10) {
+        // 付给平台多少钱
+        Long payAmount = AmountUtil.mul(amount, store.getRate1());
+        Long frAmount = AmountUtil.mul(payAmount, store.getRate2());
+        if (payAmount < 10) {
             throw new BizException("xn000000", "折扣后支付金额，必须大于0.01元");
         }
         String payGroup = OrderNoGenerater.generateM(EGeneratePrefix.PAY_GROUP
             .getCode());
         String code = storePurchaseBO.storePurchaseJKEGZFBAPP(user, store,
-            amount, payStoreRmbAmount, payGroup);
+            amount, frAmount, payGroup);
         String systemUser = ESysUser.SYS_USER_JKEG.getCode();
         return accountBO.doAlipayRemote(user.getUserId(), systemUser, payGroup,
-            code, EBizType.JKEG_O2O_RMB, "周边消费支付宝支付", payStoreRmbAmount);
+            code, EBizType.JKEG_O2O_RMB, "周边消费支付宝支付", payAmount);
     }
 
     private Object storePurchaseJKEGWXAPP(User user, Store store, Long amount) {
@@ -135,21 +140,32 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
 
     private Object storePurchaseJKEGRMBYE(User user, Store store,
             Long rmbTotalAmount) {
-        Long payStoreRmbAmount = AmountUtil.mul(rmbTotalAmount,
-            store.getRate1());
+        // 折扣之后的金额（用户需支付的金额）
+        Long amount = AmountUtil.mul(rmbTotalAmount, store.getRate1());
+        // 分润金额
+        Long frAmount = AmountUtil.mul(amount, store.getRate2());
+        // 商家实际应该受到的钱
+        Long payStoreRmbAmount = amount - frAmount;
+        // 检查用户余额是否充足
         Account rmbAccount = accountBO.getRemoteAccount(user.getUserId(),
             ECurrency.CNY);
-        if (payStoreRmbAmount > rmbAccount.getAmount()) {
+        if (amount > rmbAccount.getAmount()) {
             throw new BizException("xn0000", "健康币不足");
         }
         // 落地本地系统消费记录
         String code = storePurchaseBO.storePurchaseJKEGRMBYE(user, store,
-            rmbTotalAmount, payStoreRmbAmount);
-        // 资金划转开始--------------
-        accountBO.doTransferAmountRemote(user.getUserId(), store.getOwner(),
-            ECurrency.CNY, payStoreRmbAmount, EBizType.JKEG_O2O_RMB,
-            "店铺消费健康币支付", "店铺消费健康币支付", code);
-        // 资金划转结束--------------
+            rmbTotalAmount, payStoreRmbAmount, frAmount);
+        // 用户付钱给平台
+        accountBO.doTransferAmountRemote(user.getUserId(),
+            ESysUser.SYS_USER_JKEG.getCode(), ECurrency.CNY, amount,
+            EBizType.JKEG_O2O_RMB, "店铺消费健康币支付", "店铺消费健康币支付", code);
+        // 平台划转给商家
+        orderAO.checkUpgrade(user.getUserId());
+        accountBO.doTransferAmountRemote(ESysUser.SYS_USER_JKEG.getCode(),
+            store.getOwner(), ECurrency.CNY, payStoreRmbAmount,
+            EBizType.JKEG_O2O_RMB, "店铺消费健康币支付", "店铺消费健康币支付", code);
+        // 开始分赃
+        distributeBO.distributeO2O(user, store, frAmount, code);
         return code;
     }
 
@@ -573,11 +589,17 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
             storePurchaseBO.paySuccess(storePurchase, payCode, payAmount);
             // 资金划转逻辑--------------
             Store store = storeBO.getStore(storePurchase.getStoreCode());
-            Long payStoreRmbAmount = payAmount;
-            String systemUser = ESysUser.SYS_USER_YAOCHENG.getCode();
+            // 商家该收到的钱
+            Long payStoreRmbAmount = payAmount - storePurchase.getBackAmount();
+            String systemUser = ESysUser.SYS_USER_JKEG.getCode();
             accountBO.doTransferAmountRemote(systemUser, store.getOwner(),
                 ECurrency.CNY, payStoreRmbAmount, EBizType.JKEG_O2O_RMB,
                 "周边消费人民币支付", "周边消费人民币支付", storePurchase.getCode());
+            orderAO.checkUpgrade(storePurchase.getUserId());
+            // 开始分赃
+            User consumer = userBO.getRemoteUser(storePurchase.getUserId());
+            distributeBO.distributeO2O(consumer, store,
+                storePurchase.getBackAmount(), storePurchase.getCode());
         } else {
             logger.info("订单号：" + storePurchase.getCode() + "已支付，重复回调");
         }

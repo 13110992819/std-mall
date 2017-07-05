@@ -111,4 +111,10 @@ public class OrderDAOImpl extends AMybatisTemplate implements IOrderDAO {
         return super.selectTotalCount(NAMESPACE.concat("select_totalAmount"),
             condition);
     }
+
+    @Override
+    public Long selectXFAmount(String userId) {
+        return super.select(NAMESPACE.concat("select_XF_Amount"), userId,
+            Long.class);
+    }
 }

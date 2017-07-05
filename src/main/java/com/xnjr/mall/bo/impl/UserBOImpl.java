@@ -14,6 +14,7 @@ import com.xnjr.mall.domain.User;
 import com.xnjr.mall.dto.req.XN001100Req;
 import com.xnjr.mall.dto.req.XN001102Req;
 import com.xnjr.mall.dto.req.XN001301Req;
+import com.xnjr.mall.dto.req.XN001302Req;
 import com.xnjr.mall.dto.req.XN001350Req;
 import com.xnjr.mall.dto.req.XN001351Req;
 import com.xnjr.mall.dto.req.XN001400Req;
@@ -25,6 +26,7 @@ import com.xnjr.mall.dto.res.XNUserRes;
 import com.xnjr.mall.enums.ESysUser;
 import com.xnjr.mall.enums.ESystemCode;
 import com.xnjr.mall.enums.EUserKind;
+import com.xnjr.mall.enums.EUserLevel;
 import com.xnjr.mall.exception.BizException;
 import com.xnjr.mall.http.BizConnecter;
 import com.xnjr.mall.http.JsonUtils;
@@ -190,5 +192,14 @@ public class UserBOImpl implements IUserBO {
             user.setMobile(result.getMobile());
         }
         return user;
+    }
+
+    @Override
+    public void doUpgrade(String userId) {
+        XN001302Req req = new XN001302Req();
+        req.setUserId(userId);
+        req.setLevel(EUserLevel.ONE.getCode());
+        BizConnecter.getBizData("001302", JsonUtils.object2Json(req),
+            XNUserRes.class);
     }
 }

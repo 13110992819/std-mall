@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.xnjr.mall.ao.IOrderAO;
 import com.xnjr.mall.ao.ISorderAO;
 import com.xnjr.mall.ao.ISproductAO;
 import com.xnjr.mall.bo.IAccountBO;
@@ -59,6 +60,9 @@ public class SorderAOImpl implements ISorderAO {
 
     @Autowired
     private ISproductAO sproductAO;
+
+    @Autowired
+    private IOrderAO orderAO;
 
     @Override
     public String commitOrder(XN808450Req req) {
@@ -175,6 +179,7 @@ public class SorderAOImpl implements ISorderAO {
             ECurrency.CNY, rmbAmount, EBizType.JKEG_FW,
             EBizType.JKEG_FW.getValue(), EBizType.JKEG_FW.getValue(),
             order.getCode());
+        orderAO.checkUpgrade(order.getApplyUser());
         return new BooleanRes(true);
     }
 
@@ -252,6 +257,7 @@ public class SorderAOImpl implements ISorderAO {
             // 更新订单支付金额
             sorderBO.refreshPaySuccess(order, amount, 0L, 0L, null);
             sproductAO.resetAvaliableNumbers(order.getProductCode());
+            orderAO.checkUpgrade(order.getApplyUser());
         } else {
             logger.info("订单号：" + order.getCode() + "已支付，重复回调");
         }

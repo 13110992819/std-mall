@@ -308,4 +308,9 @@ public class OrderBOImpl extends PaginableBOImpl<Order> implements IOrderBO {
         return orderDAO.selectTotalAmount(condition);
     }
 
+    @Override
+    public Long selectXFAmount(String userId) {
+        return orderDAO.selectXFAmount(userId);
+    }
+
 }

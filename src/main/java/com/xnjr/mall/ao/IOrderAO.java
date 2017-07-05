@@ -53,4 +53,6 @@ public interface IOrderAO {
 
     public void paySuccessGD(String payGroup, String payCode, Long amount);
 
+    public void checkUpgrade(String userId);
+
 }

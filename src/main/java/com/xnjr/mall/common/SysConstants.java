@@ -81,4 +81,6 @@ public class SysConstants {
 
     public static final String MALL_FC16 = "mall_fc16";
 
+    public static final String UPGRADE_AMOUNT = "upgradeAmount";
+
 }

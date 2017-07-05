@@ -37,13 +37,12 @@ public class XN808209 extends AProcessor {
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN808209Req.class);
         StringValidater.validateBlank(req.getName(), req.getLevel(),
-            req.getType(), req.getUserReferee(), req.getRate1(),
-            req.getRate2(), req.getSlogan(), req.getAdvPic(), req.getPic(),
-            req.getDescription(), req.getProvince(), req.getCity(),
-            req.getArea(), req.getAddress(), req.getLongitude(),
-            req.getLatitude(), req.getBookMobile(), req.getSmsMobile(),
-            req.getMobile(), req.getUpdater(), req.getSystemCode(),
-            req.getCompanyCode());
+            req.getType(), req.getRate1(), req.getRate2(), req.getSlogan(),
+            req.getAdvPic(), req.getPic(), req.getDescription(),
+            req.getProvince(), req.getCity(), req.getArea(), req.getAddress(),
+            req.getLongitude(), req.getLatitude(), req.getBookMobile(),
+            req.getSmsMobile(), req.getMobile(), req.getUpdater(),
+            req.getSystemCode(), req.getCompanyCode());
     }
 
 }

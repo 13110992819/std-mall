@@ -219,7 +219,7 @@ public class StoreAOImpl implements IStoreAO {
         store.setPdf(req.getPdf());
         store.setLegalPersonName(req.getLegalPersonName());
 
-        store.setUserReferee(req.getUpdater());
+        store.setUserReferee(req.getUserReferee());
         store.setRate1(StringValidater.toDouble(req.getRate1()));
         store.setRate2(StringValidater.toDouble(req.getRate2()));
         store.setRate3(StringValidater.toDouble(req.getRate3()));

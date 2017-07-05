@@ -270,23 +270,22 @@ public class OrderAOImpl implements IOrderAO {
     }
 
     private Object toPayOrderJKEGYE(Order order) {
-        Long rmbAmount = order.getAmount1();
-        String fromUserId = order.getApplyUser();
-        Account rmbAccount = accountBO.getRemoteAccount(fromUserId,
-            ECurrency.CNY);
-        if (rmbAmount > rmbAccount.getAmount()) {
-            throw new BizException("xn0000", "健康币不足");
-        }
-        // 更新订单支付金额
-        orderBO.refreshPaySuccess(order, rmbAmount, 0L, 0L, null,
-            EPayType.YE.getCode());
-
         ECurrency currency = ECurrency.CNY;
         EBizType bizType = EBizType.JKEG_MALL;
         if (EOrderType.INTEGRAL_EXCHANGE.getCode().equals(order.getType())) {
             currency = ECurrency.JF;
             bizType = EBizType.JKEG_JF_MALL;
         }
+
+        Long rmbAmount = order.getAmount1();
+        String fromUserId = order.getApplyUser();
+        Account rmbAccount = accountBO.getRemoteAccount(fromUserId, currency);
+        if (rmbAmount > rmbAccount.getAmount()) {
+            throw new BizException("xn0000", "账户余额不足");
+        }
+        // 更新订单支付金额
+        orderBO.refreshPaySuccess(order, rmbAmount, 0L, 0L, null,
+            EPayType.YE.getCode());
 
         // 付钱给平台，确认收货之后，平台给钱至商家
         accountBO.doTransferAmountRemote(fromUserId,
@@ -718,11 +717,11 @@ public class OrderAOImpl implements IOrderAO {
                 Store store = storeBO.getStoreByUser(order.getToUser());
                 // 订单总额
                 Long totalAmount = order.getAmount1();
-                // 分润金额
-                Long frAmount = AmountUtil.mul(order.getAmount1(),
-                    1 - store.getRate1());
                 // 供应商应该拿到的金额
-                Long amount = totalAmount - frAmount;
+                Long amount = AmountUtil.mul(order.getAmount1(),
+                    store.getRate1());
+                // 分润金额
+                Long frAmount = totalAmount - amount;
                 // 平台划钱给供应商
                 accountBO.doTransferAmountRemote(
                     ESysUser.SYS_USER_JKEG.getCode(), order.getToUser(),
@@ -734,6 +733,11 @@ public class OrderAOImpl implements IOrderAO {
                 distributeBO.distributeMall(consumer, store, frAmount,
                     order.getCode());
             }
+            // 1:1返积分
+            accountBO.doTransferAmountRemote(ESysUser.SYS_USER_JKEG.getCode(),
+                order.getApplyUser(), ECurrency.JF, order.getAmount1(),
+                EBizType.JKEG_MALL, EBizType.JKEG_MALL.getValue(),
+                EBizType.JKEG_MALL.getValue(), order.getCode());
         }
     }
 

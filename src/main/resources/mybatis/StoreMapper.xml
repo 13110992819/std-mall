@@ -58,7 +58,14 @@
 				AND t.name like "%"#{name}"%"
 			</if>
 			<if test="level != null and level != '' ">
-				AND t.level = #{level}
+				<choose>
+					<when test='level == "o2o"'>
+						AND t.level in(1,2)
+					</when>
+				    <otherwise>
+						AND t.level = #{level}
+					</otherwise>
+				</choose>
 			</if>
 			<if test="category != null and category != '' ">
 				AND t.category = #{category}

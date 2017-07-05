@@ -30,6 +30,7 @@ public class XN808915 extends AProcessor {
         condition.setType(req.getType());
         condition.setCkeyForQuery(req.getCkey());
         condition.setUpdater(req.getUpdater());
+        condition.setNote(req.getNote());
         condition.setCompanyCode(req.getCompanyCode());
         condition.setSystemCode(req.getSystemCode());
 

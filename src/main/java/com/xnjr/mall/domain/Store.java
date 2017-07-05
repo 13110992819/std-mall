@@ -130,6 +130,9 @@ public class Store extends ABaseDO {
     // 店铺主人信息
     User user;
 
+    // 店铺推荐人信息
+    User referrer;
+
     // 登录名
     private String loginName;
 
@@ -196,6 +199,14 @@ public class Store extends ABaseDO {
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    public User getReferrer() {
+        return referrer;
+    }
+
+    public void setReferrer(User referrer) {
+        this.referrer = referrer;
     }
 
     public String getType() {

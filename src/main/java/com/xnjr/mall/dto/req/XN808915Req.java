@@ -13,6 +13,8 @@ public class XN808915Req extends APageReq {
     // key值(选填)
     private String ckey;
 
+    private String note;
+
     // 修改人(选填)
     private String updater;
 
@@ -40,6 +42,14 @@ public class XN808915Req extends APageReq {
 
     public String getUpdater() {
         return updater;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
 
     public void setUpdater(String updater) {

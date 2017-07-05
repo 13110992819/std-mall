@@ -28,12 +28,14 @@ import com.xnjr.mall.core.StringValidater;
 import com.xnjr.mall.domain.Category;
 import com.xnjr.mall.domain.Product;
 import com.xnjr.mall.domain.ProductSpecs;
+import com.xnjr.mall.domain.Store;
 import com.xnjr.mall.dto.req.XN808010Req;
 import com.xnjr.mall.dto.req.XN808012Req;
 import com.xnjr.mall.dto.req.XN808013Req;
 import com.xnjr.mall.dto.req.XN808030Req;
 import com.xnjr.mall.enums.EGeneratePrefix;
 import com.xnjr.mall.enums.EProductStatus;
+import com.xnjr.mall.enums.EStoreStatus;
 import com.xnjr.mall.enums.ESysUser;
 import com.xnjr.mall.exception.BizException;
 
@@ -61,7 +63,10 @@ public class ProductAOImpl implements IProductAO {
     public String addProduct(XN808010Req req) {
         String storeCode = ESysUser.SYS_USER_JKEG.getCode();
         if (StringUtils.isNotBlank(req.getStoreCode())) {
-            storeBO.getStore(req.getStoreCode());
+            Store store = storeBO.getStore(req.getStoreCode());
+            if (!EStoreStatus.ON_OPEN.getCode().equals(store.getStatus())) {
+                throw new BizException("xn000000", "您还未审核通过上架，暂时不能发布产品，请联系运营商！");
+            }
             storeCode = req.getStoreCode();
         }
 

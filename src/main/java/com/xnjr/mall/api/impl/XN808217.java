@@ -29,7 +29,7 @@ public class XN808217 extends AProcessor {
         Store condition = new Store();
         condition.setFromUser(req.getUserId());
         condition.setName(req.getName());
-        condition.setLevel(req.getLevel());
+        condition.setLevel("o2o");
         condition.setType(req.getType());
 
         condition.setStatus(EStoreStatus.ON_OPEN.getCode());

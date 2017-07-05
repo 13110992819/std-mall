@@ -504,6 +504,7 @@ public class StoreAOImpl implements IStoreAO {
                 if (StringUtils.isNotBlank(refereeUserId)) {
                     User remoteRes = userBO.getRemoteUser(refereeUserId);
                     ele.setRefereeMobile(remoteRes.getMobile());
+                    ele.setReferrer(remoteRes);
                 }
                 // 设置店铺主人手机号
                 String ownerId = ele.getOwner();
@@ -525,6 +526,7 @@ public class StoreAOImpl implements IStoreAO {
         if (StringUtils.isNotBlank(refereeUserId)) {
             User remoteRes = userBO.getRemoteUser(refereeUserId);
             ele.setRefereeMobile(remoteRes.getMobile());
+            ele.setReferrer(remoteRes);
         }
         // 设置店铺主人手机号
         String ownerId = ele.getOwner();
@@ -566,6 +568,7 @@ public class StoreAOImpl implements IStoreAO {
             if (StringUtils.isNotBlank(refereeUserId)) {
                 User remoteRes = userBO.getRemoteUser(refereeUserId);
                 store.setRefereeMobile(remoteRes.getMobile());
+                store.setReferrer(remoteRes);
             }
             XN808219Res result = new XN808219Res();
             result.setStore(store);

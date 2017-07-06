@@ -58,6 +58,9 @@ public class XN001403Res {
     // 手机号
     private String mobile;
 
+    // 推荐人
+    private String userReferee;
+
     public String getLoginName() {
         return loginName;
     }
@@ -208,6 +211,14 @@ public class XN001403Res {
 
     public void setLatitude(String latitude) {
         this.latitude = latitude;
+    }
+
+    public String getUserReferee() {
+        return userReferee;
+    }
+
+    public void setUserReferee(String userReferee) {
+        this.userReferee = userReferee;
     }
 
 }

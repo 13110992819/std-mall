@@ -192,6 +192,7 @@ public class UserBOImpl implements IUserBO {
             user.setUserId(result.getUserId());
             user.setLoginName(result.getLoginName());
             user.setMobile(result.getMobile());
+            user.setUserReferee(result.getUserReferee());
         }
         return user;
     }

@@ -61,8 +61,8 @@ public class DistributeBOImpl implements IDistributeBO {
                 accountBO.doTransferAmountRemote(
                     ESysUser.SYS_USER_JKEG.getCode(), storeReferee.getUserId(),
                     ECurrency.CNY, FC1, EBizType.JKEG_O2O_FR,
-                    EBizType.JKEG_O2O_FR.getValue() + "-签约人",
-                    EBizType.JKEG_O2O_FR.getValue() + "-签约人", refNo);
+                    EBizType.JKEG_O2O_FR.getValue() + "-店铺签约人",
+                    EBizType.JKEG_O2O_FR.getValue() + "-店铺签约人", refNo);
             }
             // 签约人一级推荐人
             if (StringUtils.isNotBlank(storeReferee.getUserReferee())) {
@@ -75,8 +75,8 @@ public class DistributeBOImpl implements IDistributeBO {
                         ESysUser.SYS_USER_JKEG.getCode(),
                         storeRefereeI.getUserId(), ECurrency.CNY, FC2,
                         EBizType.JKEG_O2O_FR, EBizType.JKEG_O2O_FR.getValue()
-                                + "-签约人推荐人", EBizType.JKEG_O2O_FR.getValue()
-                                + "-签约人推荐人", refNo);
+                                + "-店铺签约人推荐人", EBizType.JKEG_O2O_FR.getValue()
+                                + "-店铺签约人推荐人", refNo);
                 }
                 // 签约人二级推荐人
                 if (StringUtils.isNotBlank(storeRefereeI.getUserReferee())) {
@@ -89,8 +89,8 @@ public class DistributeBOImpl implements IDistributeBO {
                             ESysUser.SYS_USER_JKEG.getCode(),
                             storeRefereeII.getUserId(), ECurrency.CNY, FC3,
                             EBizType.JKEG_O2O_FR,
-                            EBizType.JKEG_O2O_FR.getValue() + "-签约人二级推荐人",
-                            EBizType.JKEG_O2O_FR.getValue() + "-签约人二级推荐人",
+                            EBizType.JKEG_O2O_FR.getValue() + "-店铺签约人二级推荐人",
+                            EBizType.JKEG_O2O_FR.getValue() + "-店铺签约人二级推荐人",
                             refNo);
                     }
                 }
@@ -320,8 +320,8 @@ public class DistributeBOImpl implements IDistributeBO {
                 accountBO.doTransferAmountRemote(
                     ESysUser.SYS_USER_JKEG.getCode(), consumer.getUserId(),
                     ECurrency.CNY, FC18, EBizType.JKEG_O2O_FR,
-                    EBizType.JKEG_O2O_FR.getValue() + "-o2o消费会员本人返点",
-                    EBizType.JKEG_O2O_FR.getValue() + "-o2o消费会员本人返点", refNo);
+                    EBizType.JKEG_O2O_FR.getValue() + "-会员本人返点",
+                    EBizType.JKEG_O2O_FR.getValue() + "-会员本人返点", refNo);
             }
         }
     }
@@ -351,8 +351,8 @@ public class DistributeBOImpl implements IDistributeBO {
                 accountBO.doTransferAmountRemote(
                     ESysUser.SYS_USER_JKEG.getCode(), storeReferee.getUserId(),
                     ECurrency.CNY, FC1, EBizType.JKEG_MALL_FR,
-                    EBizType.JKEG_MALL_FR.getValue(),
-                    EBizType.JKEG_MALL_FR.getValue(), refNo);
+                    EBizType.JKEG_MALL_FR.getValue() + "-供应商签约人",
+                    EBizType.JKEG_MALL_FR.getValue() + "-供应商签约人", refNo);
             }
             // 签约人一级推荐人
             if (StringUtils.isNotBlank(storeReferee.getUserReferee())) {
@@ -364,9 +364,9 @@ public class DistributeBOImpl implements IDistributeBO {
                     accountBO.doTransferAmountRemote(
                         ESysUser.SYS_USER_JKEG.getCode(),
                         storeRefereeI.getUserId(), ECurrency.CNY, FC2,
-                        EBizType.JKEG_MALL_FR,
-                        EBizType.JKEG_MALL_FR.getValue(),
-                        EBizType.JKEG_MALL_FR.getValue(), refNo);
+                        EBizType.JKEG_MALL_FR, EBizType.JKEG_MALL_FR.getValue()
+                                + "-供应商签约人推荐人",
+                        EBizType.JKEG_MALL_FR.getValue() + "-供应商签约人推荐人", refNo);
                 }
                 // 签约人二级推荐人
                 if (StringUtils.isNotBlank(storeRefereeI.getUserReferee())) {
@@ -379,8 +379,9 @@ public class DistributeBOImpl implements IDistributeBO {
                             ESysUser.SYS_USER_JKEG.getCode(),
                             storeRefereeII.getUserId(), ECurrency.CNY, FC3,
                             EBizType.JKEG_MALL_FR,
-                            EBizType.JKEG_MALL_FR.getValue(),
-                            EBizType.JKEG_MALL_FR.getValue(), refNo);
+                            EBizType.JKEG_MALL_FR.getValue() + "-供应商签约人二级推荐人",
+                            EBizType.JKEG_MALL_FR.getValue() + "-供应商签约人二级推荐人",
+                            refNo);
                     }
                 }
             }
@@ -400,9 +401,9 @@ public class DistributeBOImpl implements IDistributeBO {
                     accountBO.doTransferAmountRemote(
                         ESysUser.SYS_USER_JKEG.getCode(),
                         consumerReferee.getUserId(), ECurrency.CNY, FC4,
-                        EBizType.JKEG_MALL_FR,
-                        EBizType.JKEG_MALL_FR.getValue(),
-                        EBizType.JKEG_MALL_FR.getValue(), refNo);
+                        EBizType.JKEG_MALL_FR, EBizType.JKEG_MALL_FR.getValue()
+                                + "-消费会员推荐人", EBizType.JKEG_MALL_FR.getValue()
+                                + "-消费会员推荐人", refNo);
                 }
             } else if (EUserKind.JKEG_SUPPLIER.getCode().equals(// 推荐人是供应商
                 consumerReferee.getKind())) {
@@ -412,9 +413,9 @@ public class DistributeBOImpl implements IDistributeBO {
                     accountBO.doTransferAmountRemote(
                         ESysUser.SYS_USER_JKEG.getCode(),
                         consumerReferee.getUserId(), ECurrency.CNY, FC5,
-                        EBizType.JKEG_MALL_FR,
-                        EBizType.JKEG_MALL_FR.getValue(),
-                        EBizType.JKEG_MALL_FR.getValue(), refNo);
+                        EBizType.JKEG_MALL_FR, EBizType.JKEG_MALL_FR.getValue()
+                                + "-消费会员推荐人", EBizType.JKEG_MALL_FR.getValue()
+                                + "-消费会员推荐人", refNo);
                 }
             } else if (EUserKind.F1.getCode().equals(consumerReferee.getKind())
                     && EUserLevel.ZERO.getCode().equals(// 推荐人是普通会员
@@ -425,9 +426,9 @@ public class DistributeBOImpl implements IDistributeBO {
                     accountBO.doTransferAmountRemote(
                         ESysUser.SYS_USER_JKEG.getCode(),
                         consumerReferee.getUserId(), ECurrency.CNY, FC6,
-                        EBizType.JKEG_MALL_FR,
-                        EBizType.JKEG_MALL_FR.getValue(),
-                        EBizType.JKEG_MALL_FR.getValue(), refNo);
+                        EBizType.JKEG_MALL_FR, EBizType.JKEG_MALL_FR.getValue()
+                                + "-消费会员推荐人", EBizType.JKEG_MALL_FR.getValue()
+                                + "-消费会员推荐人", refNo);
                 }
                 if (StringUtils.isNotBlank(consumerReferee.getUserReferee())) {
                     User consumerRefereeI = userBO
@@ -439,8 +440,9 @@ public class DistributeBOImpl implements IDistributeBO {
                             ESysUser.SYS_USER_JKEG.getCode(),
                             consumerRefereeI.getUserId(), ECurrency.CNY, FC7,
                             EBizType.JKEG_MALL_FR,
-                            EBizType.JKEG_MALL_FR.getValue(),
-                            EBizType.JKEG_MALL_FR.getValue(), refNo);
+                            EBizType.JKEG_MALL_FR.getValue() + "-消费会员二级推荐人",
+                            EBizType.JKEG_MALL_FR.getValue() + "-消费会员二级推荐人",
+                            refNo);
                     }
                     if (StringUtils.isNotBlank(consumerRefereeI
                         .getUserReferee())) {
@@ -449,12 +451,15 @@ public class DistributeBOImpl implements IDistributeBO {
                         Long FC8 = AmountUtil.mul(frAmount, Double
                             .valueOf(configsMap.get(SysConstants.MALL_FC8)));
                         if (FC8 > 0) {
-                            accountBO.doTransferAmountRemote(
-                                ESysUser.SYS_USER_JKEG.getCode(),
-                                consumerRefereeII.getUserId(), ECurrency.CNY,
-                                FC8, EBizType.JKEG_MALL_FR,
-                                EBizType.JKEG_MALL_FR.getValue(),
-                                EBizType.JKEG_MALL_FR.getValue(), refNo);
+                            accountBO
+                                .doTransferAmountRemote(
+                                    ESysUser.SYS_USER_JKEG.getCode(),
+                                    consumerRefereeII.getUserId(),
+                                    ECurrency.CNY, FC8, EBizType.JKEG_MALL_FR,
+                                    EBizType.JKEG_MALL_FR.getValue()
+                                            + "-消费会员三级推荐人",
+                                    EBizType.JKEG_MALL_FR.getValue()
+                                            + "-消费会员三级推荐人", refNo);
                         }
                     }
                 }
@@ -467,9 +472,9 @@ public class DistributeBOImpl implements IDistributeBO {
                     accountBO.doTransferAmountRemote(
                         ESysUser.SYS_USER_JKEG.getCode(),
                         consumerReferee.getUserId(), ECurrency.CNY, FC9,
-                        EBizType.JKEG_MALL_FR,
-                        EBizType.JKEG_MALL_FR.getValue(),
-                        EBizType.JKEG_MALL_FR.getValue(), refNo);
+                        EBizType.JKEG_MALL_FR, EBizType.JKEG_MALL_FR.getValue()
+                                + "-消费会员推荐人", EBizType.JKEG_MALL_FR.getValue()
+                                + "-消费会员推荐人", refNo);
                 }
                 if (StringUtils.isNotBlank(consumerReferee.getUserReferee())) {
                     User consumerRefereeI = userBO
@@ -481,8 +486,9 @@ public class DistributeBOImpl implements IDistributeBO {
                             ESysUser.SYS_USER_JKEG.getCode(),
                             consumerRefereeI.getUserId(), ECurrency.CNY, FC10,
                             EBizType.JKEG_MALL_FR,
-                            EBizType.JKEG_MALL_FR.getValue(),
-                            EBizType.JKEG_MALL_FR.getValue(), refNo);
+                            EBizType.JKEG_MALL_FR.getValue() + "-消费会员二级推荐人",
+                            EBizType.JKEG_MALL_FR.getValue() + "-消费会员二级推荐人",
+                            refNo);
                     }
                     if (StringUtils.isNotBlank(consumerRefereeI
                         .getUserReferee())) {
@@ -491,12 +497,15 @@ public class DistributeBOImpl implements IDistributeBO {
                         Long FC11 = AmountUtil.mul(frAmount, Double
                             .valueOf(configsMap.get(SysConstants.MALL_FC11)));
                         if (FC11 > 0) {
-                            accountBO.doTransferAmountRemote(
-                                ESysUser.SYS_USER_JKEG.getCode(),
-                                consumerRefereeII.getUserId(), ECurrency.CNY,
-                                FC11, EBizType.JKEG_MALL_FR,
-                                EBizType.JKEG_MALL_FR.getValue(),
-                                EBizType.JKEG_MALL_FR.getValue(), refNo);
+                            accountBO
+                                .doTransferAmountRemote(
+                                    ESysUser.SYS_USER_JKEG.getCode(),
+                                    consumerRefereeII.getUserId(),
+                                    ECurrency.CNY, FC11, EBizType.JKEG_MALL_FR,
+                                    EBizType.JKEG_MALL_FR.getValue()
+                                            + "-消费会员三级推荐人",
+                                    EBizType.JKEG_MALL_FR.getValue()
+                                            + "-消费会员三级推荐人", refNo);
                         }
                     }
                 }
@@ -512,8 +521,8 @@ public class DistributeBOImpl implements IDistributeBO {
                 accountBO.doTransferAmountRemote(
                     ESysUser.SYS_USER_JKEG.getCode(), cityOperator.getUserId(),
                     ECurrency.CNY, FC12, EBizType.JKEG_MALL_FR,
-                    EBizType.JKEG_MALL_FR.getValue(),
-                    EBizType.JKEG_MALL_FR.getValue(), refNo);
+                    EBizType.JKEG_MALL_FR.getValue() + "-消费会员所属市运营商",
+                    EBizType.JKEG_MALL_FR.getValue() + "-消费会员所属市运营商", refNo);
             }
             if (StringUtils.isNotBlank(cityOperator.getUserReferee())) {
                 User cityOperatorReferee = userBO.getRemoteUser(cityOperator
@@ -524,9 +533,10 @@ public class DistributeBOImpl implements IDistributeBO {
                     accountBO.doTransferAmountRemote(
                         ESysUser.SYS_USER_JKEG.getCode(),
                         cityOperatorReferee.getUserId(), ECurrency.CNY, FC13,
-                        EBizType.JKEG_MALL_FR,
-                        EBizType.JKEG_MALL_FR.getValue(),
-                        EBizType.JKEG_MALL_FR.getValue(), refNo);
+                        EBizType.JKEG_MALL_FR, EBizType.JKEG_MALL_FR.getValue()
+                                + "-消费会员所属市运营商推荐人",
+                        EBizType.JKEG_MALL_FR.getValue() + "-消费会员所属市运营商推荐人",
+                        refNo);
                 }
             }
         }
@@ -540,11 +550,11 @@ public class DistributeBOImpl implements IDistributeBO {
                 accountBO.doTransferAmountRemote(
                     ESysUser.SYS_USER_JKEG.getCode(), areaOperator.getUserId(),
                     ECurrency.CNY, FC14, EBizType.JKEG_MALL_FR,
-                    EBizType.JKEG_MALL_FR.getValue(),
-                    EBizType.JKEG_MALL_FR.getValue(), refNo);
+                    EBizType.JKEG_MALL_FR.getValue() + "-消费会员所属区运营商",
+                    EBizType.JKEG_MALL_FR.getValue() + "-消费会员所属区运营商", refNo);
             }
             if (StringUtils.isNotBlank(areaOperator.getUserReferee())) {
-                User areaOperatorReferee = userBO.getRemoteUser(cityOperator
+                User areaOperatorReferee = userBO.getRemoteUser(areaOperator
                     .getUserReferee());
                 Long FC15 = AmountUtil.mul(frAmount,
                     Double.valueOf(configsMap.get(SysConstants.MALL_FC15)));
@@ -552,9 +562,10 @@ public class DistributeBOImpl implements IDistributeBO {
                     accountBO.doTransferAmountRemote(
                         ESysUser.SYS_USER_JKEG.getCode(),
                         areaOperatorReferee.getUserId(), ECurrency.CNY, FC15,
-                        EBizType.JKEG_MALL_FR,
-                        EBizType.JKEG_MALL_FR.getValue(),
-                        EBizType.JKEG_MALL_FR.getValue(), refNo);
+                        EBizType.JKEG_MALL_FR, EBizType.JKEG_MALL_FR.getValue()
+                                + "-消费会员所属区运营商推荐人",
+                        EBizType.JKEG_MALL_FR.getValue() + "-消费会员所属区运营商推荐人",
+                        refNo);
                 }
             }
         }
@@ -566,8 +577,8 @@ public class DistributeBOImpl implements IDistributeBO {
                 accountBO.doTransferAmountRemote(
                     ESysUser.SYS_USER_JKEG.getCode(), consumer.getUserId(),
                     ECurrency.CNY, FC16, EBizType.JKEG_MALL_FR,
-                    EBizType.JKEG_MALL_FR.getValue(),
-                    EBizType.JKEG_MALL_FR.getValue(), refNo);
+                    EBizType.JKEG_MALL_FR.getValue() + "-会员本人返点",
+                    EBizType.JKEG_MALL_FR.getValue() + "-会员本人返点", refNo);
             }
         }
     }

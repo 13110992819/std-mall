@@ -263,33 +263,39 @@ public class DistributeBOImpl implements IDistributeBO {
             }
         }
         // 查询消费会员所属市/区运营商
-        User cityOperator = userBO.getPartner(consumer.getProvince(),
-            consumer.getCity(), consumer.getCity(), EUserKind.JKEG_OPERATOR);
-        if (cityOperator != null) {
-            Long FC16 = AmountUtil.mul(frAmount,
-                Double.valueOf(configsMap.get(SysConstants.O2O_FC16)));
-            if (FC16 > 0) {
-                accountBO.doTransferAmountRemote(
-                    ESysUser.SYS_USER_JKEG.getCode(), cityOperator.getUserId(),
-                    ECurrency.CNY, FC16, EBizType.JKEG_O2O_FR,
-                    EBizType.JKEG_O2O_FR.getValue(),
-                    EBizType.JKEG_O2O_FR.getValue(), refNo);
+        if (StringUtils.isNotBlank(consumer.getProvince())
+                && StringUtils.isNotBlank(consumer.getCity())) {
+            User cityOperator = userBO
+                .getPartner(consumer.getProvince(), consumer.getCity(),
+                    consumer.getCity(), EUserKind.JKEG_OPERATOR);
+            if (cityOperator != null) {
+                Long FC16 = AmountUtil.mul(frAmount,
+                    Double.valueOf(configsMap.get(SysConstants.O2O_FC16)));
+                if (FC16 > 0) {
+                    accountBO.doTransferAmountRemote(
+                        ESysUser.SYS_USER_JKEG.getCode(),
+                        cityOperator.getUserId(), ECurrency.CNY, FC16,
+                        EBizType.JKEG_O2O_FR, EBizType.JKEG_O2O_FR.getValue(),
+                        EBizType.JKEG_O2O_FR.getValue(), refNo);
+                }
+            }
+
+            User areaOperator = userBO
+                .getPartner(consumer.getProvince(), consumer.getCity(),
+                    consumer.getArea(), EUserKind.JKEG_OPERATOR);
+            if (areaOperator != null) {
+                Long FC17 = AmountUtil.mul(frAmount,
+                    Double.valueOf(configsMap.get(SysConstants.O2O_FC17)));
+                if (FC17 > 0) {
+                    accountBO.doTransferAmountRemote(
+                        ESysUser.SYS_USER_JKEG.getCode(),
+                        areaOperator.getUserId(), ECurrency.CNY, FC17,
+                        EBizType.JKEG_O2O_FR, EBizType.JKEG_O2O_FR.getValue(),
+                        EBizType.JKEG_O2O_FR.getValue(), refNo);
+                }
             }
         }
 
-        User areaOperator = userBO.getPartner(consumer.getProvince(),
-            consumer.getCity(), consumer.getArea(), EUserKind.JKEG_OPERATOR);
-        if (areaOperator != null) {
-            Long FC17 = AmountUtil.mul(frAmount,
-                Double.valueOf(configsMap.get(SysConstants.O2O_FC17)));
-            if (FC17 > 0) {
-                accountBO.doTransferAmountRemote(
-                    ESysUser.SYS_USER_JKEG.getCode(), areaOperator.getUserId(),
-                    ECurrency.CNY, FC17, EBizType.JKEG_O2O_FR,
-                    EBizType.JKEG_O2O_FR.getValue(),
-                    EBizType.JKEG_O2O_FR.getValue(), refNo);
-            }
-        }
         // 会员本人
         if (consumer != null) {
             Long FC18 = AmountUtil.mul(frAmount,

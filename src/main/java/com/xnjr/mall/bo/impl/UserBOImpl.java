@@ -75,7 +75,9 @@ public class UserBOImpl implements IUserBO {
             user.setIdentityFlag(res.getIdentityFlag());
             user.setUserReferee(res.getUserReferee());
             user.setLevel(res.getLevel());
-
+            user.setProvince(res.getProvince());
+            user.setCity(res.getCity());
+            user.setArea(res.getArea());
             user.setDivRate(StringValidater.toDouble(res.getDivRate()));
         }
         return user;

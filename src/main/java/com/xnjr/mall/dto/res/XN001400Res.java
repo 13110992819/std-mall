@@ -40,17 +40,14 @@ public class XN001400Res {
     // 证件号码
     private String idNo;
 
+    // 实名认证
+    private String identityFlag;
+
     // 是否设置支付密码
     private String tradepwdFlag;
 
-    // 是否绑定银行卡
-    private String bankcardFlag;
-
     // 分成比例
     private String divRate;
-
-    // 公司编号
-    private String companyCode;
 
     // 关注数
     private String totalFollowNum;
@@ -58,11 +55,50 @@ public class XN001400Res {
     // 粉丝数
     private String totalFansNum;
 
+    // 省
+    private String province;
+
+    // 市区
+    private String city;
+
+    // 区(县)
+    private String area;
+
+    // 具体地址
+    private String address;
+
+    // 经度
+    private String longitude;
+
+    // 维度
+    private String latitude;
+
+    // 性别(1 男 0 女)
+    private String gender;
+
+    // 生日
+    private String birthday;
+
+    // 邮箱
+    private String email;
+
+    // 学位
+    private String diploma;
+
+    // 职业
+    private String occupation;
+
+    // 工作年限
+    private String workTime;
+
+    // 介绍
+    private String introduce;
+
+    // 公司编号
+    private String companyCode;
+
     // 系统编号
     private String systemCode;
-
-    // 实名认证
-    private String identityFlag;
 
     public String getIdentityFlag() {
         return identityFlag;
@@ -160,14 +196,6 @@ public class XN001400Res {
         this.tradepwdFlag = tradepwdFlag;
     }
 
-    public String getBankcardFlag() {
-        return bankcardFlag;
-    }
-
-    public void setBankcardFlag(String bankcardFlag) {
-        this.bankcardFlag = bankcardFlag;
-    }
-
     public String getKind() {
         return kind;
     }
@@ -216,12 +244,100 @@ public class XN001400Res {
         this.totalFansNum = totalFansNum;
     }
 
-    public String getDivRate() {
-        return divRate;
+    public String getProvince() {
+        return province;
     }
 
-    public void setDivRate(String divRate) {
-        this.divRate = divRate;
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public String getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(String birthday) {
+        this.birthday = birthday;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getDiploma() {
+        return diploma;
+    }
+
+    public void setDiploma(String diploma) {
+        this.diploma = diploma;
+    }
+
+    public String getOccupation() {
+        return occupation;
+    }
+
+    public void setOccupation(String occupation) {
+        this.occupation = occupation;
+    }
+
+    public String getWorkTime() {
+        return workTime;
+    }
+
+    public void setWorkTime(String workTime) {
+        this.workTime = workTime;
+    }
+
+    public String getIntroduce() {
+        return introduce;
+    }
+
+    public void setIntroduce(String introduce) {
+        this.introduce = introduce;
     }
 
     public String getSystemCode() {
@@ -230,5 +346,21 @@ public class XN001400Res {
 
     public void setSystemCode(String systemCode) {
         this.systemCode = systemCode;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getDivRate() {
+        return divRate;
+    }
+
+    public void setDivRate(String divRate) {
+        this.divRate = divRate;
     }
 }

@@ -154,7 +154,7 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
         }
         // 落地本地系统消费记录
         String code = storePurchaseBO.storePurchaseJKEGRMBYE(user, store,
-            rmbTotalAmount, payStoreRmbAmount, frAmount);
+            rmbTotalAmount, amount, frAmount);
         // 用户付钱给平台
         accountBO.doTransferAmountRemote(user.getUserId(),
             ESysUser.SYS_USER_JKEG.getCode(), ECurrency.CNY, amount,

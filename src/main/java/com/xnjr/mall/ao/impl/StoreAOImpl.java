@@ -408,8 +408,8 @@ public class StoreAOImpl implements IStoreAO {
             String remark) {
         Store dbStore = storeBO.getStore(code);
         if (!EStoreStatus.TOCHECK.getCode().equals(dbStore.getStatus())) {
-            throw new BizException("xn000000", "店铺<" + code
-                    + ">不处于待审核状态，不能进行审核操作");
+            throw new BizException("xn000000", dbStore.getName()
+                    + "不处于待审核状态，不能进行审核操作");
         }
         storeBO.checkStore(dbStore, checkResult, checkUser, remark);
     }

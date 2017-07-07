@@ -19,6 +19,7 @@ import com.xnjr.mall.dto.req.XN001350Req;
 import com.xnjr.mall.dto.req.XN001351Req;
 import com.xnjr.mall.dto.req.XN001400Req;
 import com.xnjr.mall.dto.req.XN001403Req;
+import com.xnjr.mall.dto.req.XN805183Req;
 import com.xnjr.mall.dto.res.XN001102Res;
 import com.xnjr.mall.dto.res.XN001400Res;
 import com.xnjr.mall.dto.res.XN001403Res;
@@ -204,5 +205,16 @@ public class UserBOImpl implements IUserBO {
         req.setLevel(EUserLevel.ONE.getCode());
         BizConnecter.getBizData("001302", JsonUtils.object2Json(req),
             XNUserRes.class);
+    }
+
+    @Override
+    public void doApprove(String userId, String approver, String approveResult,
+            String remark) {
+        XN805183Req req = new XN805183Req();
+        req.setUserId(userId);
+        req.setApprover(approver);
+        req.setApproveResult(approveResult);
+        req.setRemark(remark);
+        BizConnecter.getBizData("805183", JsonUtils.object2Json(req));
     }
 }

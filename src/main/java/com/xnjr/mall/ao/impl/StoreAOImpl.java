@@ -179,7 +179,7 @@ public class StoreAOImpl implements IStoreAO {
             }
             bUser = userBO.isUserExist(req.getMobile(), userKind,
                 req.getSystemCode());
-            if (StringUtils.isBlank(bUser)) { // 注册名宿主用户
+            if (StringUtils.isBlank(bUser)) {
                 bUser = userBO.doSaveUser(userKind, req.getMobile(),
                     req.getUserReferee(), req.getUpdater(),
                     req.getSystemCode(), req.getCompanyCode(),
@@ -404,6 +404,7 @@ public class StoreAOImpl implements IStoreAO {
     }
 
     @Override
+    @Transactional
     public void checkStore(String code, String checkResult, String checkUser,
             String remark) {
         Store dbStore = storeBO.getStore(code);
@@ -412,6 +413,7 @@ public class StoreAOImpl implements IStoreAO {
                     + "不处于待审核状态，不能进行审核操作");
         }
         storeBO.checkStore(dbStore, checkResult, checkUser, remark);
+        userBO.doApprove(dbStore.getOwner(), checkUser, checkResult, remark);
     }
 
     @Override

@@ -47,4 +47,7 @@ public interface IUserBO {
             EUserKind kind);
 
     public void doUpgrade(String userId);
+
+    public void doApprove(String userId, String approver, String approveResult,
+            String remark);
 }

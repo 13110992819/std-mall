@@ -60,6 +60,7 @@ public class ProductSpecsBOImpl extends PaginableBOImpl<ProductSpecs> implements
 
     @Override
     public List<ProductSpecs> queryProductSpecsList(ProductSpecs condition) {
+        condition.setOrder("order_no", "asc");
         return productSpecsDAO.selectList(condition);
     }
 
@@ -81,6 +82,7 @@ public class ProductSpecsBOImpl extends PaginableBOImpl<ProductSpecs> implements
     public List<ProductSpecs> queryProductSpecsList(String productCode) {
         ProductSpecs condition = new ProductSpecs();
         condition.setProductCode(productCode);
+        condition.setOrder("order_no", "asc");
         return productSpecsDAO.selectList(condition);
     }
 

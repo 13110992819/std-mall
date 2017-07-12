@@ -309,8 +309,8 @@ public class OrderAOImpl implements IOrderAO {
         Long rmbAmount = order.getAmount1();
         User user = userBO.getRemoteUser(order.getApplyUser());
         String payGroup = orderBO.addPayGroup(order.getCode());
-        return accountBO.doWeiXinH5PayRemote(user.getUserId(),
-            user.getOpenId(), order.getToUser(), payGroup, order.getCode(),
+        return accountBO.doWeiXinPayRemote(user.getUserId(),
+            ESysUser.SYS_USER_JKEG.getCode(), payGroup, order.getCode(),
             EBizType.JKEG_MALL, EBizType.JKEG_MALL.getValue() + "-微信",
             rmbAmount);
     }

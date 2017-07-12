@@ -130,12 +130,25 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
             amount, frAmount, payGroup);
         String systemUser = ESysUser.SYS_USER_JKEG.getCode();
         return accountBO.doAlipayRemote(user.getUserId(), systemUser, payGroup,
-            code, EBizType.JKEG_O2O_RMB, "周边消费支付宝支付", payAmount);
+            code, EBizType.JKEG_O2O_RMB, EBizType.JKEG_O2O_RMB + "-支付宝支付",
+            payAmount);
     }
 
     private Object storePurchaseJKEGWXAPP(User user, Store store, Long amount) {
-        // TODO Auto-generated method stub
-        return null;
+        // 付给平台多少钱
+        Long payAmount = AmountUtil.mul(amount, store.getRate1());
+        Long frAmount = AmountUtil.mul(payAmount, store.getRate2());
+        if (payAmount < 10) {
+            throw new BizException("xn000000", "折扣后支付金额，必须大于0.01元");
+        }
+        String payGroup = OrderNoGenerater.generateM(EGeneratePrefix.PAY_GROUP
+            .getCode());
+        String code = storePurchaseBO.storePurchaseJKEGWXAPP(user, store,
+            amount, frAmount, payGroup);
+        String systemUser = ESysUser.SYS_USER_JKEG.getCode();
+        return accountBO.doWeiXinPayRemote(user.getUserId(), systemUser,
+            payGroup, code, EBizType.JKEG_O2O_RMB, EBizType.JKEG_O2O_RMB
+                    + "-微信支付", payAmount);
     }
 
     private Object storePurchaseJKEGRMBYE(User user, Store store,

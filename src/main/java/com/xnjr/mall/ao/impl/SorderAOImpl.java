@@ -32,6 +32,7 @@ import com.xnjr.mall.enums.ECurrency;
 import com.xnjr.mall.enums.EGeneratePrefix;
 import com.xnjr.mall.enums.EPayType;
 import com.xnjr.mall.enums.ESproductStatus;
+import com.xnjr.mall.enums.ESysUser;
 import com.xnjr.mall.enums.ESystemCode;
 import com.xnjr.mall.enums.EVorderStatus;
 import com.xnjr.mall.exception.BizException;
@@ -149,9 +150,10 @@ public class SorderAOImpl implements ISorderAO {
         Long rmbAmount = order.getAmount1();
         User user = userBO.getRemoteUser(order.getApplyUser());
         String payGroup = sorderBO.addPayGroup(order, EPayType.ALIPAY);
-        return accountBO.doAlipayRemote(user.getUserId(),
-            sproduct.getStoreUser(), payGroup, order.getCode(),
-            EBizType.JKEG_FW, "支付宝支付", rmbAmount);
+        return accountBO
+            .doAlipayRemote(user.getUserId(), ESysUser.SYS_USER_JKEG.getCode(),
+                payGroup, order.getCode(), EBizType.JKEG_FW,
+                EBizType.JKEG_FW.getValue() + "-支付宝支付", rmbAmount);
     }
 
     private Object toPayOrderWXAPP(Sorder order, Sproduct sproduct) {
@@ -159,8 +161,8 @@ public class SorderAOImpl implements ISorderAO {
         User user = userBO.getRemoteUser(order.getApplyUser());
         String payGroup = sorderBO.addPayGroup(order, EPayType.WEIXIN_APP);
         return accountBO.doWeiXinPayRemote(user.getUserId(),
-            sproduct.getStoreUser(), payGroup, order.getCode(),
-            EBizType.JKEG_FW, "微信APP支付", rmbAmount);
+            ESysUser.SYS_USER_JKEG.getCode(), payGroup, order.getCode(),
+            EBizType.JKEG_FW, EBizType.JKEG_FW.getValue() + "-微信支付", rmbAmount);
     }
 
     private Object toPayOrderYE(Sorder order, Sproduct sproduct) {
@@ -175,19 +177,25 @@ public class SorderAOImpl implements ISorderAO {
         // 更新订单支付金额
         sorderBO.refreshPaySuccess(order, rmbAmount, 0L, 0L, null);
         sproductBO.refreshSproduct(sproduct, sproduct.getRemainNum() + 1);
-        accountBO.doTransferAmountRemote(fromUserId, sproduct.getStoreUser(),
-            ECurrency.CNY, rmbAmount, EBizType.JKEG_FW,
-            EBizType.JKEG_FW.getValue(), EBizType.JKEG_FW.getValue(),
-            order.getCode());
+        accountBO.doTransferAmountRemote(fromUserId,
+            ESysUser.SYS_USER_JKEG.getCode(), ECurrency.CNY, rmbAmount,
+            EBizType.JKEG_FW, EBizType.JKEG_FW.getValue(),
+            EBizType.JKEG_FW.getValue(), order.getCode());
         orderAO.checkUpgrade(order.getApplyUser());
         return new BooleanRes(true);
     }
 
     @Override
+    @Transactional
     public void deliverOrder(String code, String handleUser, String remark) {
         Sorder order = sorderBO.getSorder(code);
         if (EVorderStatus.PAYED.getCode().equals(order.getStatus())) {
             sorderBO.deliver(order, handleUser, remark);
+            // 平台付款给商家
+            accountBO.doTransferAmountRemote(ESysUser.SYS_USER_JKEG.getCode(),
+                order.getStoreCode(), ECurrency.CNY, order.getPayAmount1(),
+                EBizType.JKEG_FW, EBizType.JKEG_FW.getValue(),
+                EBizType.JKEG_FW.getValue(), order.getCode());
             // 发送短信
             smsOutBO.sentContent(order.getApplyUser(),
                 "尊敬的用户，您的订单《" + order.getCode() + "》已办理入住，详情请登录网站查询。");
@@ -206,9 +214,10 @@ public class SorderAOImpl implements ISorderAO {
                 "尊敬的用户，您的订单[" + order.getCode() + "]已取消");
         } else if (EVorderStatus.PAYED.getCode().equals(order.getStatus())) {
             if (ESystemCode.JKEG.getCode().equals(order.getSystemCode())) {
-                accountBO.doTransferAmountRemote(order.getStoreUser(),
-                    order.getApplyUser(), ECurrency.CNY, order.getPayAmount1(),
-                    EBizType.JKEG_FWTK, EBizType.JKEG_FWTK.getValue(),
+                accountBO.doTransferAmountRemote(
+                    ESysUser.SYS_USER_JKEG.getCode(), order.getApplyUser(),
+                    ECurrency.CNY, order.getPayAmount1(), EBizType.JKEG_FWTK,
+                    EBizType.JKEG_FWTK.getValue(),
                     EBizType.JKEG_FWTK.getValue(), order.getCode());
             }
             // 发短信

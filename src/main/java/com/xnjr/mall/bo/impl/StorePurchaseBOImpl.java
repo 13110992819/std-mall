@@ -455,4 +455,32 @@ public class StorePurchaseBOImpl extends PaginableBOImpl<StorePurchase>
 
         return code;
     }
+
+    @Override
+    public String storePurchaseJKEGWXAPP(User user, Store store,
+            Long totalAmount, Long frAmount, String payGroup) {
+        Date now = new Date();
+        StorePurchase data = new StorePurchase();
+        String code = OrderNoGenerater.generateM(EGeneratePrefix.STORE_PURCHASW
+            .getCode());
+        data.setCode(code);
+        data.setUserId(user.getUserId());
+        data.setStoreCode(store.getCode());
+        data.setPrice(totalAmount);
+
+        data.setCreateDatetime(now);
+        data.setStatus(EStorePurchaseStatus.TO_PAY.getCode());
+        data.setPayType(EPayType.WEIXIN_APP.getCode());
+        data.setPayGroup(payGroup);
+
+        data.setBackAmount(frAmount);
+        data.setBackCurrency(ECurrency.CNY.getCode());
+        data.setRemark(EBizType.JKEG_O2O_RMB.getValue());
+
+        data.setSystemCode(store.getSystemCode());
+        data.setCompanyCode(store.getCompanyCode());
+        storePurchaseDAO.insert(data);
+
+        return code;
+    }
 }

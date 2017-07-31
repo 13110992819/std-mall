@@ -191,7 +191,14 @@ public class StoreAOImpl implements IStoreAO {
         }
 
         // 根据小类获取大类
-        Category category = categoryBO.getCategory(req.getType());
+        Category category = null;
+        if (EStoreLevel.MINGSU.getCode().equals(req.getLevel())) {
+            category = new Category();
+            category.setType(EUserKind.JKEG_MINGSU.getCode());
+            category.setParentCode(EUserKind.JKEG_MINGSU.getCode());
+        } else {
+            category = categoryBO.getCategory(req.getType());
+        }
 
         // 更新字段
         String code = OrderNoGenerater.generateM("SJ");
@@ -256,7 +263,14 @@ public class StoreAOImpl implements IStoreAO {
             .getUserReferee());
 
         // 根据小类获取大类
-        Category category = categoryBO.getCategory(req.getType());
+        Category category = null;
+        if (EStoreLevel.MINGSU.getCode().equals(req.getLevel())) {
+            category = new Category();
+            category.setType(EUserKind.JKEG_MINGSU.getCode());
+            category.setParentCode(EUserKind.JKEG_MINGSU.getCode());
+        } else {
+            category = categoryBO.getCategory(req.getType());
+        }
 
         dbStore.setName(req.getName());
         dbStore.setLevel(req.getLevel());

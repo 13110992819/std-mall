@@ -839,8 +839,8 @@ public class OrderAOImpl implements IOrderAO {
                 Long xfAmount = orderBO.selectXFAmount(userId);
                 SYSConfig config = sysConfigBO.getSYSConfig(
                     SysConstants.UPGRADE_AMOUNT, ESystemCode.JKEG.getCode());
-                Long upgradeAmount = Long.valueOf(CalculationUtil.mult(config
-                    .getCvalue()));
+                Long upgradeAmount = Long.valueOf(CalculationUtil
+                    .multDown(config.getCvalue()));
                 if (xfAmount >= upgradeAmount) {
                     userBO.doUpgrade(userId);
                 }

@@ -35,18 +35,22 @@
 		
 		<result column="is_default" property="isDefault" />
 		<result column="status" property="status" />
+		<result column="approver" property="approver" />
+		<result column="approve_datetime" property="approveDatetime" />
+		<result column="approve_note" property="approveNote" />
+		
 		<result column="updater" property="updater" />
 		<result column="update_datetime" property="updateDatetime" />
 		<result column="remark" property="remark" />
-		
 		<result column="owner" property="owner" />
 		<result column="contract_no" property="contractNo" />
+		
 		<result column="total_jf_num" property="totalJfNum" />
 		<result column="total_dz_num" property="totalDzNum" />
 		<result column="total_sc_num" property="totalScNum" />
-		
 		<result column="distance" property="distance" />
 		<result column="company_code" property="companyCode" />
+		
 		<result column="system_code" property="systemCode" />
 	</resultMap>
 	<sql id="where_condition">
@@ -167,13 +171,17 @@
 		,t.is_default
 		
 		,t.status
+		,t.approver
+		,t.approve_datetime
+		,t.approve_note
 		,t.updater
+		
 		,t.update_datetime
 		,t.remark
 		,t.owner
-		
 		,t.contract_no
 		,t.total_rmb_num
+		
 		,t.total_jf_num
 		,t.total_dz_num
 		,t.total_sc_num
@@ -234,13 +242,17 @@
 		,t.is_default
 		
 		,t.status
+		,t.approver
+		,t.approve_datetime
+		,t.approve_note
 		,t.updater
+		
 		,t.update_datetime
 		,t.remark
 		,t.owner
-		
 		,t.contract_no
 		,t.total_rmb_num
+		
 		,t.total_jf_num
 		,t.total_dz_num
 		,t.total_sc_num
@@ -517,10 +529,10 @@
 		UPDATE to2o_store
 		SET
 		status = #{status}
-		,updater = #{updater}
-		,update_datetime = #{updateDatetime}
+		,approver = #{approver}
+		,approve_datetime = #{approveDatetime}
 		,contract_no = #{contractNo}
-		,remark = #{remark}
+		,approve_note = #{approveNote}
 		WHERE code = #{code}
 	</update>
 	

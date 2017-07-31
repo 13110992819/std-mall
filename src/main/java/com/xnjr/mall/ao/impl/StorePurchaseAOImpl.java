@@ -119,8 +119,10 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
 
     private Object storePurchaseJKEGZFBAPP(User user, Store store, Long amount) {
         // 付给平台多少钱
-        Long payAmount = AmountUtil.mul(amount, store.getRate1());
-        Long frAmount = AmountUtil.mul(payAmount, store.getRate2());
+        Long payAmount = AmountUtil.eraseLiUp(AmountUtil.mul(amount,
+            store.getRate1()));
+        Long frAmount = AmountUtil.eraseLiDown(AmountUtil.mul(payAmount,
+            store.getRate2()));
         if (payAmount < 10) {
             throw new BizException("xn000000", "折扣后支付金额，必须大于0.01元");
         }
@@ -136,8 +138,10 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
 
     private Object storePurchaseJKEGWXAPP(User user, Store store, Long amount) {
         // 付给平台多少钱
-        Long payAmount = AmountUtil.mul(amount, store.getRate1());
-        Long frAmount = AmountUtil.mul(payAmount, store.getRate2());
+        Long payAmount = AmountUtil.eraseLiUp(AmountUtil.mul(amount,
+            store.getRate1()));
+        Long frAmount = AmountUtil.eraseLiDown(AmountUtil.mul(payAmount,
+            store.getRate2()));
         if (payAmount < 10) {
             throw new BizException("xn000000", "折扣后支付金额，必须大于0.01元");
         }
@@ -154,9 +158,11 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
     private Object storePurchaseJKEGRMBYE(User user, Store store,
             Long rmbTotalAmount) {
         // 折扣之后的金额（用户需支付的金额）
-        Long amount = AmountUtil.mul(rmbTotalAmount, store.getRate1());
+        Long amount = AmountUtil.eraseLiUp(AmountUtil.mul(rmbTotalAmount,
+            store.getRate1()));
         // 分润金额
-        Long frAmount = AmountUtil.mul(amount, store.getRate2());
+        Long frAmount = AmountUtil.eraseLiDown(AmountUtil.mul(amount,
+            store.getRate2()));
         // 商家实际应该受到的钱
         Long payStoreRmbAmount = amount - frAmount;
         // 检查用户余额是否充足

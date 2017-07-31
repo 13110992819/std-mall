@@ -92,6 +92,15 @@ public class Store extends ABaseDO {
     // 状态
     private String status;
 
+    // 审核人
+    private String approver;
+
+    // 审核时间
+    private Date approveDatetime;
+
+    // 审核备注
+    private String approveNote;
+
     // 更新人
     private String updater;
 
@@ -391,6 +400,30 @@ public class Store extends ABaseDO {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getApprover() {
+        return approver;
+    }
+
+    public void setApprover(String approver) {
+        this.approver = approver;
+    }
+
+    public Date getApproveDatetime() {
+        return approveDatetime;
+    }
+
+    public void setApproveDatetime(Date approveDatetime) {
+        this.approveDatetime = approveDatetime;
+    }
+
+    public String getApproveNote() {
+        return approveNote;
+    }
+
+    public void setApproveNote(String approveNote) {
+        this.approveNote = approveNote;
     }
 
     public String getUpdater() {

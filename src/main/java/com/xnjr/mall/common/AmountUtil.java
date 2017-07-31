@@ -2,6 +2,8 @@ package com.xnjr.mall.common;
 
 import java.math.BigDecimal;
 
+import com.xnjr.mall.core.CalculationUtil;
+
 public class AmountUtil {
     public static Long mul(Long amount, double rate) {
         BigDecimal a = new BigDecimal(Double.toString(amount));
@@ -62,8 +64,19 @@ public class AmountUtil {
         return a.divide(b).doubleValue();
     }
 
+    // 保留两位小数，末尾数不管是几，前一位都加1
+    public static Long eraseLiUp(Long amount) {
+        String amountString = CalculationUtil.diviUp(amount);
+        return Long.valueOf(CalculationUtil.multUp(amountString));
+    }
+
+    // 保留两位小数，末尾数不管是几，前一位都加1
+    public static Long eraseLiDown(Long amount) {
+        String amountString = CalculationUtil.diviDown(amount);
+        return Long.valueOf(CalculationUtil.multDown(amountString));
+    }
+
     public static void main(String[] args) {
-        System.out.println(mulRmbJinFen(1234L, 1.0));
-        System.out.println(mulXnbJin1(1234L, 1.0));
+        System.out.println(eraseLiDown(mul(10L, 0.8)));
     }
 }

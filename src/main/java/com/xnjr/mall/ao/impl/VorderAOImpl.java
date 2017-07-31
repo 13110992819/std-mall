@@ -179,9 +179,11 @@ public class VorderAOImpl implements IVorderAO {
             EVproductType eVproductType = EVproductType
                 .getEVproductType(product.getType());
             String applyUser = order.getApplyUser();
-            smsOutBO.sentContent(applyUser,
+            smsOutBO.sentContent(
+                applyUser,
                 "尊敬的用户，您的" + eVproductType.getValue() + "订单《" + order.getCode()
-                        + "》已处理，充值金额" + CalculationUtil.divi(order.getAmount())
+                        + "》已处理，充值金额"
+                        + CalculationUtil.diviUp(order.getAmount())
                         + "元，请注意查收。");
         } else {
             throw new BizException("xn0000", "该订单不是已支付状态，无法兑换");

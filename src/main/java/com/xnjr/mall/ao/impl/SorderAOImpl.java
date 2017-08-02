@@ -193,7 +193,7 @@ public class SorderAOImpl implements ISorderAO {
             sorderBO.deliver(order, handleUser, remark);
             // 平台付款给商家
             accountBO.doTransferAmountRemote(ESysUser.SYS_USER_JKEG.getCode(),
-                order.getStoreCode(), ECurrency.CNY, order.getPayAmount1(),
+                order.getStoreUser(), ECurrency.CNY, order.getPayAmount1(),
                 EBizType.JKEG_FW, EBizType.JKEG_FW.getValue(),
                 EBizType.JKEG_FW.getValue(), order.getCode());
             // 发送短信

@@ -207,7 +207,7 @@ public class StoreAOImpl implements IStoreAO {
         store.setName(req.getName());
         store.setLevel(req.getLevel());
         store.setCategory(category.getParentCode());
-        store.setType(req.getType());
+        store.setType(category.getType());
         store.setSlogan(req.getSlogan());
 
         store.setAdvPic(req.getAdvPic());
@@ -299,7 +299,7 @@ public class StoreAOImpl implements IStoreAO {
         dbStore.setRate2(StringValidater.toDouble(req.getRate2()));
         dbStore.setRate3(StringValidater.toDouble(req.getRate3()));
 
-        dbStore.setStatus(EStoreStatus.PASS.getCode());
+        dbStore.setStatus(dbStore.getStatus());
         dbStore.setUpdater(req.getUpdater());
         dbStore.setUpdateDatetime(new Date());
         dbStore.setRemark(req.getRemark());

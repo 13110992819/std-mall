@@ -718,8 +718,8 @@ public class OrderAOImpl implements IOrderAO {
                 // 订单总额
                 Long totalAmount = order.getAmount1();
                 // 供应商应该拿到的金额
-                Long amount = AmountUtil.mul(order.getAmount1(),
-                    store.getRate1());
+                Long amount = AmountUtil.eraseLiDown(AmountUtil.mul(
+                    order.getAmount1(), store.getRate1()));
                 // 分润金额
                 Long frAmount = totalAmount - amount;
                 // 平台划钱给供应商

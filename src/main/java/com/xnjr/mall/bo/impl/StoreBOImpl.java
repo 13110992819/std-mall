@@ -110,8 +110,8 @@ public class StoreBOImpl extends PaginableBOImpl<Store> implements IStoreBO {
                 dbStore.setContractNo(OrderNoGenerater.generateM("ZHS-"));
             }
         }
-        dbStore.setApprover(checkResult);
-        dbStore.setUpdateDatetime(new Date());
+        dbStore.setApprover(checkUser);
+        dbStore.setApproveDatetime(new Date());
         dbStore.setApproveNote(remark);
         storeDAO.updateCheck(dbStore);
 

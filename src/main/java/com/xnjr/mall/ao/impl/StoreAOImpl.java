@@ -275,7 +275,7 @@ public class StoreAOImpl implements IStoreAO {
         dbStore.setName(req.getName());
         dbStore.setLevel(req.getLevel());
         dbStore.setCategory(category.getParentCode());
-        dbStore.setType(req.getType());
+        dbStore.setType(category.getType());
         dbStore.setSlogan(req.getSlogan());
 
         dbStore.setAdvPic(req.getAdvPic());

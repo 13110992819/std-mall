@@ -768,7 +768,9 @@ public class OrderAOImpl implements IOrderAO {
                 SYSConfig sysConfig = sysConfigBO.getSYSConfig(
                     SysConstants.HANDLER_ORDER, order.getSystemCode());
                 if (null != sysConfig) {
-                    String content = "订单号" + order.getCode() + "催货，请及时发货";
+                    User user = userBO.getRemoteUser(order.getApplyUser());
+                    String content = "订单号[" + order.getCode() + "]用户"
+                            + user.getMobile() + "催货，请及时发货。";
                     smsOutBO.sentContent(sysConfig.getCvalue(), content,
                         order.getCompanyCode(), order.getSystemCode());
                 }

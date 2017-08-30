@@ -13,6 +13,7 @@ import com.xnjr.mall.bo.IStoreTicketBO;
 import com.xnjr.mall.bo.IUserBO;
 import com.xnjr.mall.bo.IUserTicketBO;
 import com.xnjr.mall.bo.base.Paginable;
+import com.xnjr.mall.common.SystemUtil;
 import com.xnjr.mall.domain.Store;
 import com.xnjr.mall.domain.StoreTicket;
 import com.xnjr.mall.domain.User;
@@ -61,7 +62,7 @@ public class UserTicketAOImpl implements IUserTicketAO {
         // 折扣券落地
         String ticketCode = userTicketBO.saveUserTicket(user, storeTicket);
         // 资金划转：用户的钱包币给平台
-        String systemUser = userBO.getSystemUser(storeTicket.getSystemCode());
+        String systemUser = SystemUtil.getSysUser(storeTicket.getSystemCode());
         ECurrency currency = ECurrency.getResultMap().get(
             storeTicket.getCurrency());
         accountBO.doTransferAmountRemote(userId, systemUser, currency,

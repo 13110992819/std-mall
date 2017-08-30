@@ -33,6 +33,9 @@ public class Order extends ABaseDO {
     // 向谁提货
     private String toUser;
 
+    // 自提点地址
+    private String takeAddress;
+
     // 收件人姓名
     private String receiver;
 
@@ -69,8 +72,10 @@ public class Order extends ABaseDO {
     // 支付方式
     private String payType;
 
+    // 支付组号
     private String payGroup;
 
+    // 渠道号
     private String payCode;
 
     // 实际支付时间
@@ -102,6 +107,12 @@ public class Order extends ABaseDO {
 
     // 物流单
     private String pdf;
+
+    // 签收人
+    private String signer;
+
+    // 签收时间
+    private Date signDatetime;
 
     // 更新人
     private String updater;
@@ -147,14 +158,6 @@ public class Order extends ABaseDO {
     // 规格信息
     private ProductSpecs productSpecs;
 
-    public User getCompanyUser() {
-        return companyUser;
-    }
-
-    public void setCompanyUser(User companyUser) {
-        this.companyUser = companyUser;
-    }
-
     public String getCode() {
         return code;
     }
@@ -177,6 +180,14 @@ public class Order extends ABaseDO {
 
     public void setToUser(String toUser) {
         this.toUser = toUser;
+    }
+
+    public String getTakeAddress() {
+        return takeAddress;
+    }
+
+    public void setTakeAddress(String takeAddress) {
+        this.takeAddress = takeAddress;
     }
 
     public String getReceiver() {
@@ -265,6 +276,14 @@ public class Order extends ABaseDO {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getPayType() {
+        return payType;
+    }
+
+    public void setPayType(String payType) {
+        this.payType = payType;
     }
 
     public String getPayGroup() {
@@ -363,6 +382,46 @@ public class Order extends ABaseDO {
         this.pdf = pdf;
     }
 
+    public String getSigner() {
+        return signer;
+    }
+
+    public void setSigner(String signer) {
+        this.signer = signer;
+    }
+
+    public Date getSignDatetime() {
+        return signDatetime;
+    }
+
+    public void setSignDatetime(Date signDatetime) {
+        this.signDatetime = signDatetime;
+    }
+
+    public String getUpdater() {
+        return updater;
+    }
+
+    public void setUpdater(String updater) {
+        this.updater = updater;
+    }
+
+    public Date getUpdateDatetime() {
+        return updateDatetime;
+    }
+
+    public void setUpdateDatetime(Date updateDatetime) {
+        this.updateDatetime = updateDatetime;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
     public String getCompanyCode() {
         return companyCode;
     }
@@ -411,36 +470,12 @@ public class Order extends ABaseDO {
         this.user = user;
     }
 
-    public String getUpdater() {
-        return updater;
+    public User getCompanyUser() {
+        return companyUser;
     }
 
-    public void setUpdater(String updater) {
-        this.updater = updater;
-    }
-
-    public Date getUpdateDatetime() {
-        return updateDatetime;
-    }
-
-    public void setUpdateDatetime(Date updateDatetime) {
-        this.updateDatetime = updateDatetime;
-    }
-
-    public String getRemark() {
-        return remark;
-    }
-
-    public void setRemark(String remark) {
-        this.remark = remark;
-    }
-
-    public List<String> getStatusList() {
-        return statusList;
-    }
-
-    public void setStatusList(List<String> statusList) {
-        this.statusList = statusList;
+    public void setCompanyUser(User companyUser) {
+        this.companyUser = companyUser;
     }
 
     public Store getStore() {
@@ -451,12 +486,12 @@ public class Order extends ABaseDO {
         this.store = store;
     }
 
-    public String getPayType() {
-        return payType;
+    public List<String> getStatusList() {
+        return statusList;
     }
 
-    public void setPayType(String payType) {
-        this.payType = payType;
+    public void setStatusList(List<String> statusList) {
+        this.statusList = statusList;
     }
 
     public Product getProduct() {
@@ -474,5 +509,4 @@ public class Order extends ABaseDO {
     public void setProductSpecs(ProductSpecs productSpecs) {
         this.productSpecs = productSpecs;
     }
-
 }

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xnjr.mall.dao.IExpressRuleDAO">
+	<resultMap id="expressRule_DB_Result" type="expressRule">
+		<result column="id" property="id" />
+		<result column="start_point" property="startPoint" />
+		<result column="end_point" property="endPoint" />
+		<result column="price" property="price" />
+		<result column="updater" property="updater" />
+		<result column="update_datetime" property="updateDatetime" />
+		<result column="remark" property="remark" />
+		<result column="company_code" property="companyCode" />
+		<result column="system_code" property="systemCode" />
+	</resultMap>
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="id != null and id != '' ">
+				AND t.id = #{id}
+			</if>
+			<if test="startPoint != null and startPoint != '' ">
+				AND t.start_point = #{startPoint}
+			</if>
+			<if test="endPoint != null and endPoint != '' ">
+				AND t.end_point = #{endPoint}
+			</if>
+			<if test="updater != null and updater != '' ">
+				AND t.updater = #{updater}
+			</if>
+			<if test="companyCode != null and companyCode != '' ">
+				AND t.company_code = #{companyCode}
+			</if>
+			<if test="systemCode != null and systemCode != '' ">
+				AND t.system_code = #{systemCode}
+			</if>
+		</trim>
+	</sql>
+	<select id="select_expressRule" parameterType="expressRule" resultMap="expressRule_DB_Result">
+		SELECT
+		t.id
+		,t.start_point
+		,t.end_point
+		,t.price
+		,t.updater
+		,t.update_datetime
+		,t.remark
+		,t.company_code
+		,t.system_code
+		FROM
+		tmall_express_rule t
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+
+	<select id="select_expressRule_count" parameterType="expressRule"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM tmall_express_rule t
+		<include refid="where_condition" />
+	</select>
+
+	<insert id="insert_expressRule" parameterType="expressRule" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO
+		tmall_express_rule(
+		id
+		,start_point
+		,end_point
+		,price
+		,updater
+		,update_datetime
+		,remark
+		,company_code
+		,system_code
+		)
+		VALUES(
+		#{id}
+		,#{startPoint}
+		,#{endPoint}
+		,#{price}
+		,#{updater}
+		,#{updateDatetime}
+		,#{remark}
+		,#{companyCode}
+		,#{systemCode}
+		)
+	</insert>
+	
+	<delete id="delete_expressRule" parameterType="expressRule">
+		DELETE FROM tmall_express_rule
+		WHERE id = #{id}
+	</delete>
+
+	<update id="update_expressRule" parameterType="expressRule">
+		UPDATE tmall_express_rule
+		SET
+		start_point = #{startPoint}
+		,end_point = #{endPoint}
+		,price = #{price}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="update_price" parameterType="expressRule">
+		UPDATE tmall_express_rule
+		SET
+		price = #{price}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
+		WHERE id = #{id}
+	</update>
+</mapper>

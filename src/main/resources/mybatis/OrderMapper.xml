@@ -7,14 +7,14 @@
 		<result column="type" property="type" />
 		<result column="to_user" property="toUser" />
 		<result column="receiver" property="receiver" />
-		<result column="re_mobile" property="reMobile" />
 		
+		<result column="re_mobile" property="reMobile" />
 		<result column="re_address" property="reAddress" />
 		<result column="apply_user" property="applyUser" />
 		<result column="apply_note" property="applyNote" />
 		<result column="apply_datetime" property="applyDatetime" />
-		<result column="amount1" property="amount1" />
 		
+		<result column="amount1" property="amount1" />
 		<result column="amount2" property="amount2" />
 		<result column="amount3" property="amount3" />
 		<result column="yunfei" property="yunfei" />
@@ -53,9 +53,13 @@
 			<if test="toUser != null and toUser != '' ">
 				AND t.to_user = #{toUser}
 			</if>
+			<if test="takeAddress != null and takeAddress != '' ">
+				AND t.take_address = #{takeAddress}
+			</if>
 			<if test="applyUser != null and applyUser != '' ">
 				AND t.apply_user = #{applyUser}
 			</if>
+			
 			<if test="applyDatetimeStart != null and applyDatetimeStart != '' ">
 				<![CDATA[AND t.apply_datetime >= #{applyDatetimeStart}]]>
 			</if>
@@ -91,10 +95,10 @@
 				AND t.pay_code = #{payCode}
 			</if>
 			<if test="deliverer != null and deliverer != '' ">
-				AND t.deliverer = like "%"#{deliverer}"%"
+				AND t.deliverer like "%"#{deliverer}"%"
 			</if>
-			<if test="logisticsCode != null and logisticsCode != '' ">
-				AND t.logistics_code = like "%"#{logisticsCode}"%"
+			<if test="logisticsCode != null and logisticsCode != ''">
+				AND t.logistics_code like "%"#{logisticsCode}"%"
 			</if>
 			<if test="logisticsCompany != null and logisticsCompany != '' ">
 				AND t.logistics_company = #{logisticsCompany}
@@ -113,14 +117,14 @@
 		,t.type
 		,t.to_user
 		,t.receiver
-		,t.re_mobile
 		
+		,t.re_mobile
 		,t.re_address
 		,t.apply_user
 		,t.apply_note
 		,t.apply_datetime
-		,t.amount1
 		
+		,t.amount1
 		,t.amount2
 		,t.amount3
 		,t.yunfei
@@ -267,6 +271,24 @@
 		UPDATE tmall_order
 		SET
 		status = #{status}
+		,signer = #{signer}
+		,sign_datetime = #{signDatetime}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
+		WHERE
+		code = #{code}
+	</update>
+	
+	<update id="update_payYESuccess" parameterType="order">
+		UPDATE tmall_order
+		SET
+		status = #{status}
+		,pay_amount1 = #{payAmount1}
+		,pay_amount2 = #{payAmount2}
+		,pay_amount3 = #{payAmount3}
+		,pay_datetime = #{payDatetime}
+		,pay_type = #{payType}
 		,updater = #{updater}
 		,update_datetime = #{updateDatetime}
 		,remark = #{remark}
@@ -278,7 +300,6 @@
 		UPDATE tmall_order
 		SET
 		status = #{status}
-		,pay_type = #{payType}
 		,pay_amount1 = #{payAmount1}
 		,pay_amount2 = #{payAmount2}
 		,pay_amount3 = #{payAmount3}
@@ -291,12 +312,20 @@
 		code = #{code}
 	</update>
 	
+	<update id="update_promptTimes" parameterType="order">
+		UPDATE tmall_order
+		SET
+		prompt_times = #{promptTimes} + 1
+		WHERE
+		code = #{code}
+	</update>
+	
 	<update id="update_confirm" parameterType="order">
 		UPDATE tmall_order
 		SET
 		status = #{status}
-		,updater = #{updater}
-		,update_datetime = #{updateDatetime}
+		,signer = #{signer}
+		,sign_datetime = #{signDatetime}
 		,remark = #{remark}
 		WHERE
 		code = #{code}
@@ -306,6 +335,7 @@
 		UPDATE tmall_order
 		SET
 		pay_group = #{payGroup}
+		,pay_type = #{payType}
 		WHERE code = #{code}
 	</update>
 	

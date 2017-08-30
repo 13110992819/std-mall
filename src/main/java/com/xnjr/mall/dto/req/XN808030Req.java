@@ -23,6 +23,12 @@ public class XN808030Req {
     // 库存(必填)
     private String quantity;
 
+    // 发货地（ 精确到省份）(必填)
+    private String province;
+
+    // 重量（kg）(必填)
+    private String weight;
+
     // 相对位置编号(必填)
     private String orderNo;
 
@@ -82,6 +88,22 @@ public class XN808030Req {
         this.quantity = quantity;
     }
 
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
+    public String getWeight() {
+        return weight;
+    }
+
+    public void setWeight(String weight) {
+        this.weight = weight;
+    }
+
     public String getOrderNo() {
         return orderNo;
     }
@@ -89,5 +111,4 @@ public class XN808030Req {
     public void setOrderNo(String orderNo) {
         this.orderNo = orderNo;
     }
-
 }

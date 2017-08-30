@@ -12,9 +12,11 @@
 		<result column="price2" property="price2" />
 		<result column="price3" property="price3" />
 		<result column="quantity" property="quantity" />
+		<result column="province" property="province" />
+		<result column="weight" property="weight" />
+		
 		<result column="order_no" property="orderNo" />
 		<result column="company_code" property="companyCode" />
-		
 		<result column="system_code" property="systemCode" />
 	</resultMap>
 	<sql id="where_condition">
@@ -27,6 +29,9 @@
 			</if>
 			<if test="productCode != null and productCode != '' ">
 				AND t.product_code = #{productCode}
+			</if>
+			<if test="province != null and province != '' ">
+				AND t.province = #{province}
 			</if>
 			<if test="companyCode != null and companyCode != '' ">
 				AND t.company_code = #{companyCode}
@@ -47,9 +52,11 @@
 		,t.price2
 		,t.price3
 		,t.quantity
+		,t.province
+		,t.weight
+		
 		,t.order_no
 		,t.company_code
-		
 		,t.system_code
 		FROM
 		tmall_product_specs t
@@ -79,9 +86,11 @@
 		,price2
 		,price3
 		,quantity
+		,province
+		,weight
+		
 		,order_no
 		,company_code
-		
 		,system_code
 		)
 		VALUES(
@@ -94,27 +103,15 @@
 		,#{price2}
 		,#{price3}
 		,#{quantity}
+		,#{province}
+		,#{weight}
+		
 		,#{orderNo}
 		,#{companyCode}
-		
 		,#{systemCode}
 		)
 	</insert>
 
-	<update id="update_productSpecs" parameterType="productSpecs">
-		UPDATE tmall_product_specs
-		SET
-		name = #{name}
-		,original_price = #{originalPrice}
-		,price1 = #{price1}
-		,price2 = #{price2}
-		,price3 = #{price3}
-		
-		,quantity = #{quantity}
-		,order_no = #{orderNo}
-		WHERE code = #{code}
-	</update>
-	
 	<update id="update_quantity" parameterType="product">
 		UPDATE tmall_product_specs
 		SET
@@ -122,18 +119,9 @@
 		WHERE code = #{code}
 	</update>
 
-    <delete id="delete_productSpecs" parameterType="productSpecs">
-		DELETE FROM
-		tmall_product_specs
-		WHERE
-		code = #{code}
-	</delete>
-	
-	<delete id="delete_productSpecs_by_product_code" parameterType="productSpecs">
-		DELETE FROM
-		tmall_product_specs
-		WHERE
-		product_code = #{productCode}
+	 <delete id="delete_byProductCode" parameterType="productSpecs">
+		DELETE FROM tmall_product_specs
+		WHERE product_code = #{productCode}
 	</delete>
 
 </mapper>

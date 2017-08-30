@@ -8,11 +8,11 @@
 		<result column="parent_code" property="parentCode" />
 		<result column="name" property="name" />
 		<result column="pic" property="pic" />
+		
 		<result column="order_no" property="orderNo" />
 		<result column="status" property="status" />
 		<result column="company_code" property="companyCode" />
 		<result column="system_code" property="systemCode" />
-		
 		<result column="parent_name" property="parentName" />
 	</resultMap>
 	<sql id="where_condition">

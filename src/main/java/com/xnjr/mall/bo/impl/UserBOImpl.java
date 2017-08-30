@@ -150,20 +150,6 @@ public class UserBOImpl implements IUserBO {
     }
 
     @Override
-    public String getSystemUser(String systemCode) {
-        if (ESystemCode.Caigo.getCode().equals(systemCode)) {
-            return ESysUser.SYS_USER_CAIGO.getCode();
-        }
-        if (ESystemCode.PIPE.getCode().equals(systemCode)) {
-            return ESysUser.SYS_USER_PIPE.getCode();
-        }
-        if (ESystemCode.YAOCHENG.getCode().equals(systemCode)) {
-            return ESysUser.SYS_USER_YAOCHENG.getCode();
-        }
-        return null;
-    }
-
-    @Override
     public User getPartner(String province, String city, String area,
             EUserKind kind) {
         if (StringUtils.isBlank(city) && StringUtils.isBlank(area)) {

@@ -102,7 +102,7 @@ public class VorderAOImpl implements IVorderAO {
 
         Long payAmount = order.getPayAmount();
         if (EPayType.INTEGRAL.getCode().equals(payType)) {
-            if (ESystemCode.Caigo.getCode().equals(order.getSystemCode())) {
+            if (ESystemCode.CAIGO.getCode().equals(order.getSystemCode())) {
                 // 菜狗币支付
                 accountBO.doTransferAmountRemote(order.getApplyUser(),
                     ESysUser.SYS_USER_CAIGO.getCode(), ECurrency.CG_CGB,
@@ -143,7 +143,7 @@ public class VorderAOImpl implements IVorderAO {
                     ECurrency.YC_CB, order.getPayAmount(), EBizType.YC_XNCZ_M,
                     EBizType.YC_XNCZ_M.getValue(),
                     EBizType.YC_XNCZ_M.getValue(), order.getCode());
-            } else if (ESystemCode.Caigo.getCode()
+            } else if (ESystemCode.CAIGO.getCode()
                 .equals(order.getSystemCode())) {
                 // 菜狗币退款
                 accountBO.doTransferAmountRemote(

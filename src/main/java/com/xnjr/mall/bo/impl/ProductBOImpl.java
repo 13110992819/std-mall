@@ -19,7 +19,6 @@ import com.xnjr.mall.bo.IProductBO;
 import com.xnjr.mall.bo.base.PaginableBOImpl;
 import com.xnjr.mall.dao.IProductDAO;
 import com.xnjr.mall.domain.Product;
-import com.xnjr.mall.enums.EBoolean;
 import com.xnjr.mall.enums.EProductStatus;
 import com.xnjr.mall.exception.BizException;
 
@@ -88,29 +87,6 @@ public class ProductBOImpl extends PaginableBOImpl<Product> implements
             }
         }
         return product;
-    }
-
-    /** 
-     * @see com.xnjr.mall.bo.IProductBO#approveProduct(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
-     */
-    @Override
-    public int approveProduct(String code, String approveResult,
-            String approver, String approveNote) {
-        int count = 0;
-        if (StringUtils.isNotBlank(code)) {
-            Product product = new Product();
-            product.setCode(code);
-            if (EBoolean.YES.getCode().equals(approveResult)) {
-                product.setStatus(EProductStatus.APPROVE_YES.getCode());
-            } else {
-                product.setStatus(EProductStatus.APPROVE_NO.getCode());
-            }
-            product.setUpdater(approver);
-            product.setUpdateDatetime(new Date());
-            product.setRemark(approveNote);
-            count = productDAO.updateStatus(product);
-        }
-        return count;
     }
 
     @Override

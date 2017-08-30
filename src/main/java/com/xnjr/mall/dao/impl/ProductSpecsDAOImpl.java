@@ -54,8 +54,7 @@ public class ProductSpecsDAOImpl extends AMybatisTemplate implements
 
     @Override
     public int deleteByProductCode(ProductSpecs data) {
-        return super.update(
-            NAMESPACE.concat("delete_productSpecs_by_product_code"), data);
+        return super.update(NAMESPACE.concat("delete_byProductCode"), data);
     }
 
     @Override

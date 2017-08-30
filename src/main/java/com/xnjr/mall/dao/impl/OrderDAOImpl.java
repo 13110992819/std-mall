@@ -78,12 +78,19 @@ public class OrderDAOImpl extends AMybatisTemplate implements IOrderDAO {
         return super.update(NAMESPACE.concat("update_platCancel"), data);
     }
 
-    /** 
-     * @see com.xnjr.mall.dao.IOrderDAO#updatePaySuccess(com.xnjr.mall.domain.Order)
-     */
+    @Override
+    public int updatePayYESuccess(Order data) {
+        return super.update(NAMESPACE.concat("update_payYESuccess"), data);
+    }
+
     @Override
     public int updatePaySuccess(Order data) {
         return super.update(NAMESPACE.concat("update_paySuccess"), data);
+    }
+
+    @Override
+    public int updatePromptTimes(Order data) {
+        return super.update(NAMESPACE.concat("update_promptTimes"), data);
     }
 
     @Override

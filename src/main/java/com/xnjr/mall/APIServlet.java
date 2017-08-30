@@ -41,8 +41,8 @@ public class APIServlet extends HttpServlet {
             HttpServletResponse response) throws ServletException, IOException {
         logger.info("Successful Deployment");
         PrintWriter writer = response.getWriter();
-        writer.append("Lastest Version:3.2.0 \n");
-        writer.append("Description:1st remove zhpay & csw, add jkyg \n\n");
+        writer.append("Lastest Version:1.0.0 \n");
+        writer.append("Description:1st");
 
         writer.append("history ******************** \n\n");
 

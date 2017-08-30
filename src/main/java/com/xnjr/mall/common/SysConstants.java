@@ -2,9 +2,11 @@ package com.xnjr.mall.common;
 
 public class SysConstants {
 
-    public static final String SP_BYJE = "SP_BYJE"; // 包邮金额
+    public static final String SP_BYJE = "sp_byje"; // 包邮金额
 
-    public static final String SP_YUNFEI = "SP_YUNFEI"; // 订单运费，全系统统一
+    public static final String SP_YUNFEI = "sp_yunfei"; // 订单运费，全系统统一
+
+    public static final String HANDLER_ORDER = "handler_order"; // 催货订单处理人
 
     // *************************************管道*************************************
     public static final String STORE_RMB2JF = "STORE_RMB2JF"; // 积分消费比例

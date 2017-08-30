@@ -89,4 +89,8 @@
 		<property name="paginableDAO" ref="sysConfigDAOImpl"/>
 	</bean>	
 	
+	<bean id="expressRuleBO" class="com.xnjr.mall.bo.impl.ExpressRuleBOImpl">
+		<property name="paginableDAO" ref="expressRuleDAOImpl"/>
+	</bean>	
+	
 </beans>

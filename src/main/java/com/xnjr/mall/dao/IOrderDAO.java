@@ -13,7 +13,11 @@ public interface IOrderDAO extends IBaseDAO<Order> {
 
     public int updateUserCancel(Order data);
 
+    public int updatePayYESuccess(Order data);
+
     public int updatePaySuccess(Order data);
+
+    public int updatePromptTimes(Order data);
 
     public int updateDeliverLogistics(Order data);
 

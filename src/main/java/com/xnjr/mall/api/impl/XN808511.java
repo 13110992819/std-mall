@@ -53,8 +53,8 @@ public class XN808511 extends AProcessor {
             req.getDateStart(), false));
         condition.setCreateDatetimeEnd(DateUtil.getFrontDate(req.getDateEnd(),
             true));
-        condition.setSystemCode(ESystemCode.Caigo.getCode());
-        condition.setCompanyCode(ESystemCode.Caigo.getCode());
+        condition.setSystemCode(ESystemCode.CAIGO.getCode());
+        condition.setCompanyCode(ESystemCode.CAIGO.getCode());
 
         String orderColumn = req.getOrderColumn();
         if (StringUtils.isBlank(orderColumn)) {

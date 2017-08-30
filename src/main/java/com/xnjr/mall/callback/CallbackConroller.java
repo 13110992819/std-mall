@@ -14,8 +14,7 @@ import com.xnjr.mall.ao.IOrderAO;
 import com.xnjr.mall.ao.ISorderAO;
 import com.xnjr.mall.ao.IStorePurchaseAO;
 import com.xnjr.mall.enums.EBizType;
-import com.xnjr.mall.enums.EChannelType;
-import com.xnjr.mall.enums.EPayType;
+import com.xnjr.mall.enums.ESystemCode;
 
 /** 
  * @author: haiqingzheng 
@@ -40,19 +39,30 @@ public class CallbackConroller {
     public synchronized void doCallbackZhpay(HttpServletRequest request,
             HttpServletResponse response) throws IOException {
         boolean isSuccess = Boolean.valueOf(request.getParameter("isSuccess"));
-        String channelType = request.getParameter("channelType");
         String payGroup = request.getParameter("payGroup");
         String payCode = request.getParameter("payCode");
         Long amount = Long.valueOf(request.getParameter("transAmount"));
         String bizType = request.getParameter("bizType");
-        String payType = getPayType(channelType);
+        String systemCode = request.getParameter("systemCode");
         // 支付成功，商户处理后同步返回给微信参数
         if (!isSuccess) {
             logger.info("****业务类型<" + bizType + "> payGroup <" + payGroup
                     + "> payCode <" + payCode + ">回调失败****");
         } else {
             try {
-                if (EBizType.CG_O2O_RMB.getCode().equals(bizType)) {
+                if (EBizType.AJ_GW.getCode().equals(bizType)) {
+                    if (ESystemCode.HW.getCode().equals(systemCode)) {
+                        logger.info("**** 户外商城人民币支付回调 payGroup <" + payGroup
+                                + "> payCode <" + payCode + ">start****");
+                        orderAO.paySuccessHW(payGroup, payCode, amount);
+                        logger.info("**** 户外商城人民币支付回调 payGroup <" + payGroup
+                                + "> payCode <" + payCode + ">end****");
+                    } else {
+                        logger.error("**** 系统编号" + systemCode
+                                + " 购物支付回调 payGroup <" + payGroup
+                                + "> payCode <" + payCode + ">业务类型不存在");
+                    }
+                } else if (EBizType.CG_O2O_RMB.getCode().equals(bizType)) {
                     logger.info("**** 菜狗O2O人民币支付回调 payGroup <" + payGroup
                             + "> payCode <" + payCode + ">start****");
                     storePurchaseAO.paySuccessCG(payGroup, payCode, amount);
@@ -77,7 +87,6 @@ public class CallbackConroller {
                     orderAO.paySuccessGD(payGroup, payCode, amount);
                     logger.info("**** 管道积分商城人民币支付回调 payGroup <" + payGroup
                             + "> payCode <" + payCode + ">end****");
-
                     // 健康e购
                 } else if (EBizType.JKEG_FW.getCode().equals(bizType)) {
                     logger.info("**** 服务人民币支付回调 payGroup <" + payGroup
@@ -89,7 +98,7 @@ public class CallbackConroller {
                 } else if (EBizType.JKEG_MALL.getCode().equals(bizType)) {
                     logger.info("**** 健康e购健康商城人民币支付回调 payGroup <" + payGroup
                             + "> payCode <" + payCode + ">start****");
-                    orderAO.paySuccessJKEG(payGroup, payType, payCode, amount);
+                    orderAO.paySuccessJKEG(payGroup, payCode, amount);
                     logger.info("**** 健康e购健康商城人民币支付回调 payGroup <" + payGroup
                             + "> payCode <" + payCode + ">end****");
                 } else if (EBizType.JKEG_O2O_RMB.getCode().equals(bizType)) {
@@ -105,15 +114,4 @@ public class CallbackConroller {
             }
         }
     }
-
-    private String getPayType(String channelType) {
-        String payType = null;
-        if (EChannelType.Alipay.getCode().equals(channelType)) {
-            payType = EPayType.ALIPAY.getCode();
-        } else if (EChannelType.WeChat_APP.getCode().equals(channelType)) {
-            payType = EPayType.WEIXIN_APP.getCode();
-        }
-        return payType;
-    }
-
 }

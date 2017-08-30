@@ -3,13 +3,13 @@
 
 2. 本地war包上传至服务器
    scp -P 22 std-mall.war root@121.43.101.148:/home
-   T6dh%$%$ss1
+   cdkj123456Q
 
 3. 备份原先配置(如果第一次部署，跳过此步骤)
   ssh root@121.43.101.148 -p 22
-  T6dh%$%$ss1
+  cdkj123456Q
 
-  cd /home/wwwroot/zhpay/tomcat_std_mall/webapps
+  cd /mnt/www/hw/tomcat_std_mall/webapps
   cp ./std-mall/WEB-INF/classes/application.properties .
   cp ./std-mall/WEB-INF/classes/config.properties .
   rm -rf std-mall*
@@ -23,5 +23,5 @@
   ../bin/startup.sh
   
 6. 验证程序
-  http://121.43.101.148:5604/std-mall/api
+  http://121.43.101.148:3804/std-mall/api
 

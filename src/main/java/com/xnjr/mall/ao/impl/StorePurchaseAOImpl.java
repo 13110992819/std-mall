@@ -89,7 +89,7 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
             return storePurchaseYCCB(user, store, amount);
         } else if (EPayType.YE.getCode().equals(payType)) {
             return storePurchaseYCRMBYE(user, store, amount);
-        } else if (EPayType.WEIXIN_H5.getCode().equals(payType)) {
+        } else if (EPayType.WECHAT_H5.getCode().equals(payType)) {
             return storePurchaseYCWXH5(user, store, amount);
         } else {
             throw new BizException("xn0000", "暂不支持此支付方式");
@@ -108,7 +108,7 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
         // 1-人民币余额支付 5-微信H5支付 50-橙券余额支付
         if (EPayType.YE.getCode().equals(payType)) {
             return storePurchaseJKEGRMBYE(user, store, amount);
-        } else if (EPayType.WEIXIN_APP.getCode().equals(payType)) {
+        } else if (EPayType.WECHAT_APP.getCode().equals(payType)) {
             return storePurchaseJKEGWXAPP(user, store, amount);
         } else if (EPayType.ALIPAY.getCode().equals(payType)) {
             return storePurchaseJKEGZFBAPP(user, store, amount);
@@ -333,7 +333,7 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
         if (EPayType.CG_YE.getCode().equals(payType)) {
             return storePurchaseCGRMBYE(user, store, rmbTotalAmount);
         }
-        if (EPayType.WEIXIN_H5.getCode().equals(payType)) {
+        if (EPayType.WECHAT_H5.getCode().equals(payType)) {
             return storePurchaseCGRMBWX(user, store, rmbTotalAmount);
         } else {
             throw new BizException("xn0000", "支付方式不存在");
@@ -355,7 +355,7 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
         if (EPayType.CG_YE.getCode().equals(payType)) {
             return storePurchaseCGRMBJFYE(user, store, rmbTotalAmount);
         }
-        if (EPayType.WEIXIN_H5.getCode().equals(payType)) {
+        if (EPayType.WECHAT_H5.getCode().equals(payType)) {
             return storePurchaseCGRMBJFWX(user, store, rmbTotalAmount);
         } else {
             throw new BizException("xn0000", "支付方式不存在");
@@ -547,7 +547,7 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
                     systemUser, ECurrency.CGJF, storePurchase.getPayAmount3(),
                     EBizType.CG_O2O_CGJF, "O2O消费使用积分", "O2O消费回收积分",
                     storePurchase.getCode());
-            } else if (EPayType.WEIXIN_H5.getCode().equals( // 全人民币支付
+            } else if (EPayType.WECHAT_H5.getCode().equals( // 全人民币支付
                 storePurchase.getPayType())) {
                 // 资金划转逻辑--------------
                 // 1、平台给商家一定比例人民币

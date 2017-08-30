@@ -20,7 +20,7 @@ public interface IOrderAO {
 
     public String commitCartOrderJKEG(XN808051Req req);
 
-    public String commitCartOrderCG(XN808051Req req);
+    public String commitCartOrder(XN808051Req req);
 
     public Object toPayOrder(List<String> codeList, String payType,
             String tradePwd);
@@ -30,6 +30,8 @@ public interface IOrderAO {
     public void platCancel(List<String> codeList, String updater, String remark);
 
     public void deliverLogistics(XN808054Req req);
+
+    public void callSendLogistics(String code);
 
     public void deliverXianchang(String code, String updater, String remark);
 
@@ -46,8 +48,9 @@ public interface IOrderAO {
 
     public void doChangeOrderStatusDaily();
 
-    public void paySuccessJKEG(String payGroup, String payType, String payCode,
-            Long amount);
+    public void paySuccessHW(String payGroup, String payCode, Long amount);
+
+    public void paySuccessJKEG(String payGroup, String payCode, Long amount);
 
     public void paySuccessYC(String payGroup, String payCode, Long amount);
 

@@ -63,6 +63,17 @@ public class User extends ABaseDO {
     // 区(县)
     private String area;
 
+    // 具体地址
+    private String address;
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
     public String getOpenId() {
         return openId;
     }
@@ -71,28 +82,20 @@ public class User extends ABaseDO {
         this.openId = openId;
     }
 
-    public Double getDivRate() {
-        return divRate;
+    public String getKind() {
+        return kind;
     }
 
-    public void setDivRate(Double divRate) {
-        this.divRate = divRate;
+    public void setKind(String kind) {
+        this.kind = kind;
     }
 
-    public String getUserReferee() {
-        return userReferee;
+    public String getLevel() {
+        return level;
     }
 
-    public void setUserReferee(String userReferee) {
-        this.userReferee = userReferee;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setLevel(String level) {
+        this.level = level;
     }
 
     public String getLoginName() {
@@ -105,14 +108,6 @@ public class User extends ABaseDO {
 
     public String getNickname() {
         return nickname;
-    }
-
-    public String getKind() {
-        return kind;
-    }
-
-    public void setKind(String kind) {
-        this.kind = kind;
     }
 
     public void setNickname(String nickname) {
@@ -143,6 +138,22 @@ public class User extends ABaseDO {
         this.identityFlag = identityFlag;
     }
 
+    public String getUserReferee() {
+        return userReferee;
+    }
+
+    public void setUserReferee(String userReferee) {
+        this.userReferee = userReferee;
+    }
+
+    public Double getDivRate() {
+        return divRate;
+    }
+
+    public void setDivRate(Double divRate) {
+        this.divRate = divRate;
+    }
+
     public String getProvince() {
         return province;
     }
@@ -167,12 +178,11 @@ public class User extends ABaseDO {
         this.area = area;
     }
 
-    public String getLevel() {
-        return level;
+    public String getAddress() {
+        return address;
     }
 
-    public void setLevel(String level) {
-        this.level = level;
+    public void setAddress(String address) {
+        this.address = address;
     }
-
 }

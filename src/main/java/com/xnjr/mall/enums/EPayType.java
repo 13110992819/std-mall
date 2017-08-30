@@ -6,8 +6,8 @@ package com.xnjr.mall.enums;
  * @history:
  */
 public enum EPayType {
-    YE("1", "余额"), WEIXIN_APP("2", "微信APP"), ALIPAY("3", "支付宝"), WEIXIN_H5("5",
-            "微信H5"), INTEGRAL("90", "单一虚拟币支付")
+    YE("1", "余额"), WECHAT_APP("2", "微信APP"), ALIPAY("3", "支付宝"), WECHAT_H5("5",
+            "微信H5"), INTEGRAL("90", "单一虚拟币支付"), MIX_INTEGRAL("91", "多币种余额支付")
 
     , CG_YE("21", "菜狗余额支付")
 

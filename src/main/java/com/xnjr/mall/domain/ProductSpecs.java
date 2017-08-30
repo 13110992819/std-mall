@@ -33,6 +33,12 @@ public class ProductSpecs extends ABaseDO {
     // 数量
     private Integer quantity;
 
+    // 发货地（ 精确到省份）
+    private String province;
+
+    // 重量（kg）
+    private Double weight;
+
     // 相对位置编号
     private Integer orderNo;
 
@@ -43,20 +49,13 @@ public class ProductSpecs extends ABaseDO {
     private String systemCode;
 
     // ******************db properties ********************
+
     public String getCode() {
         return code;
     }
 
     public void setCode(String code) {
         this.code = code;
-    }
-
-    public Long getOriginalPrice() {
-        return originalPrice;
-    }
-
-    public void setOriginalPrice(Long originalPrice) {
-        this.originalPrice = originalPrice;
     }
 
     public String getName() {
@@ -75,28 +74,12 @@ public class ProductSpecs extends ABaseDO {
         this.productCode = productCode;
     }
 
-    public Integer getOrderNo() {
-        return orderNo;
+    public Long getOriginalPrice() {
+        return originalPrice;
     }
 
-    public void setOrderNo(Integer orderNo) {
-        this.orderNo = orderNo;
-    }
-
-    public String getCompanyCode() {
-        return companyCode;
-    }
-
-    public void setCompanyCode(String companyCode) {
-        this.companyCode = companyCode;
-    }
-
-    public String getSystemCode() {
-        return systemCode;
-    }
-
-    public void setSystemCode(String systemCode) {
-        this.systemCode = systemCode;
+    public void setOriginalPrice(Long originalPrice) {
+        this.originalPrice = originalPrice;
     }
 
     public Long getPrice1() {
@@ -131,4 +114,43 @@ public class ProductSpecs extends ABaseDO {
         this.quantity = quantity;
     }
 
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
+    public Double getWeight() {
+        return weight;
+    }
+
+    public void setWeight(Double weight) {
+        this.weight = weight;
+    }
+
+    public Integer getOrderNo() {
+        return orderNo;
+    }
+
+    public void setOrderNo(Integer orderNo) {
+        this.orderNo = orderNo;
+    }
+
+    public String getCompanyCode() {
+        return companyCode;
+    }
+
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
+    }
+
+    public String getSystemCode() {
+        return systemCode;
+    }
+
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
+    }
 }

@@ -25,8 +25,6 @@ public interface IProductAO {
 
     static final String DEFAULT_ORDER_COLUMN = "code";
 
-    public void dropProduct(String code);
-
     public Paginable<Product> queryProductPage(int start, int limit,
             Product condition);
 
@@ -34,20 +32,9 @@ public interface IProductAO {
 
     public Product getProduct(String code);
 
-    /**
-     * 审核多个产品
-     * @param codeList
-     * @param approveResult
-     * @param approver
-     * @param approveNote
-     * @return 
-     * @create: 2016年12月17日 下午1:28:31 xieyj
-     * @history:
-     */
-    public void approveProduct(List<String> codeList, String approveResult,
-            String approver, String approveNote);
-
     public String addProduct(XN808010Req req);
+
+    public void dropProduct(String code);
 
     public void editProduct(XN808012Req req);
 

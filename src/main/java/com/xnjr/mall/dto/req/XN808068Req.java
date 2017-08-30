@@ -25,8 +25,13 @@ public class XN808068Req extends APageReq {
     // 状态（选填）
     private String status;
 
+    // 支付类型（选填）
+    private String payType;
+
+    // 支付组号（选填）
     private String payGroup;
 
+    // 橙账本流水号（选填）
     private String payCode;
 
     // 发货人
@@ -66,6 +71,22 @@ public class XN808068Req extends APageReq {
 
     public void setApplyUser(String applyUser) {
         this.applyUser = applyUser;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getPayType() {
+        return payType;
+    }
+
+    public void setPayType(String payType) {
+        this.payType = payType;
     }
 
     public String getPayGroup() {
@@ -108,14 +129,6 @@ public class XN808068Req extends APageReq {
         this.logisticsCompany = logisticsCompany;
     }
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
     public String getCompanyCode() {
         return companyCode;
     }
@@ -131,5 +144,4 @@ public class XN808068Req extends APageReq {
     public void setSystemCode(String systemCode) {
         this.systemCode = systemCode;
     }
-
 }

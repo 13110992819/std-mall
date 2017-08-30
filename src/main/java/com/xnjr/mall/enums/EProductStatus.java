@@ -14,8 +14,7 @@ package com.xnjr.mall.enums;
  * @history:
  */
 public enum EProductStatus {
-    TO_APPROVE("0", "待审核"), APPROVE_YES("1", "审批通过待上架"), APPROVE_NO("91",
-            "审批不通过"), PUBLISH_YES("3", "已上架"), PUBLISH_NO("4", "已下架");
+    TO_PUBLISH("1", "待上架"), PUBLISH_YES("3", "已上架"), PUBLISH_NO("4", "已下架");
 
     EProductStatus(String code, String value) {
         this.code = code;

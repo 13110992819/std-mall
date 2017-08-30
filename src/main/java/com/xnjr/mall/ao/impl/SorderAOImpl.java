@@ -137,7 +137,7 @@ public class SorderAOImpl implements ISorderAO {
 
         if (EPayType.YE.getCode().equals(payType)) {
             return toPayOrderYE(order, sproduct);
-        } else if (EPayType.WEIXIN_APP.getCode().equals(payType)) {
+        } else if (EPayType.WECHAT_APP.getCode().equals(payType)) {
             return toPayOrderWXAPP(order, sproduct);
         } else if (EPayType.ALIPAY.getCode().equals(payType)) {
             return toPayOrderALIPAY(order, sproduct);
@@ -159,7 +159,7 @@ public class SorderAOImpl implements ISorderAO {
     private Object toPayOrderWXAPP(Sorder order, Sproduct sproduct) {
         Long rmbAmount = order.getAmount1();
         User user = userBO.getRemoteUser(order.getApplyUser());
-        String payGroup = sorderBO.addPayGroup(order, EPayType.WEIXIN_APP);
+        String payGroup = sorderBO.addPayGroup(order, EPayType.WECHAT_APP);
         return accountBO.doWeiXinPayRemote(user.getUserId(),
             ESysUser.SYS_USER_JKEG.getCode(), payGroup, order.getCode(),
             EBizType.JKEG_FW, EBizType.JKEG_FW.getValue() + "-微信支付", rmbAmount);

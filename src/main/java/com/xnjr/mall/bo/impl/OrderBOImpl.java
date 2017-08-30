@@ -16,7 +16,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.xnjr.mall.bo.IOrderBO;
 import com.xnjr.mall.bo.ISYSConfigBO;
@@ -32,6 +31,7 @@ import com.xnjr.mall.domain.ProductOrder;
 import com.xnjr.mall.domain.ProductSpecs;
 import com.xnjr.mall.enums.EGeneratePrefix;
 import com.xnjr.mall.enums.EOrderStatus;
+import com.xnjr.mall.enums.EPayType;
 import com.xnjr.mall.exception.BizException;
 
 /** 
@@ -54,9 +54,6 @@ public class OrderBOImpl extends PaginableBOImpl<Order> implements IOrderBO {
     @Autowired
     private ISYSConfigBO sysConfigBO;
 
-    /** 
-     * @see com.xnjr.mall.bo.IOrderBO#userCancel(java.lang.String, java.lang.String)
-     */
     @Override
     public int userCancel(String code, String userId, String remark) {
         int count = 0;
@@ -88,17 +85,11 @@ public class OrderBOImpl extends PaginableBOImpl<Order> implements IOrderBO {
         return count;
     }
 
-    /** 
-     * @see com.xnjr.mall.bo.IOrderBO#queryOrderList(com.xnjr.mall.domain.Order)
-     */
     @Override
     public List<Order> queryOrderList(Order condition) {
         return orderDAO.selectList(condition);
     }
 
-    /** 
-     * @see com.xnjr.mall.bo.IOrderBO#getOrder(java.lang.String)
-     */
     @Override
     public Order getOrder(String code) {
         Order data = null;
@@ -119,8 +110,8 @@ public class OrderBOImpl extends PaginableBOImpl<Order> implements IOrderBO {
     }
 
     @Override
-    public int refreshPaySuccess(Order order, Long payAmount1, Long payAmount2,
-            Long payAmount3, String payCode, String payType) {
+    public int refreshPayYESuccess(Order order, Long payAmount1,
+            Long payAmount2, Long payAmount3, String payType) {
         int count = 0;
         if (order != null && StringUtils.isNotBlank(order.getCode())) {
             Date now = new Date();
@@ -130,11 +121,39 @@ public class OrderBOImpl extends PaginableBOImpl<Order> implements IOrderBO {
             order.setPayAmount2(payAmount2);
             order.setPayAmount3(payAmount3);
             order.setPayType(payType);
+            order.setUpdater(order.getApplyUser());
+            order.setUpdateDatetime(now);
+            order.setRemark("订单已成功支付");
+            count = orderDAO.updatePayYESuccess(order);
+        }
+        return count;
+    }
+
+    @Override
+    public int refreshPaySuccess(Order order, Long payAmount1, Long payAmount2,
+            Long payAmount3, String payCode) {
+        int count = 0;
+        if (order != null && StringUtils.isNotBlank(order.getCode())) {
+            Date now = new Date();
+            order.setStatus(EOrderStatus.PAY_YES.getCode());
+            order.setPayDatetime(now);
+            order.setPayAmount1(payAmount1);
+            order.setPayAmount2(payAmount2);
+            order.setPayAmount3(payAmount3);
             order.setPayCode(payCode);
             order.setUpdater(order.getApplyUser());
             order.setUpdateDatetime(now);
             order.setRemark("订单已成功支付");
             count = orderDAO.updatePaySuccess(order);
+        }
+        return count;
+    }
+
+    @Override
+    public int promptToSend(Order data) {
+        int count = 0;
+        if (null != data) {
+            count = orderDAO.updatePromptTimes(data);
         }
         return count;
     }
@@ -159,10 +178,11 @@ public class OrderBOImpl extends PaginableBOImpl<Order> implements IOrderBO {
     }
 
     @Override
-    public int deliverXianchang(String code, String updater, String remark) {
-        Order order = new Order();
-        order.setCode(code);
+    public int deliverXianchang(Order order, String updater, String remark) {
+        Date date = new Date();
         order.setStatus(EOrderStatus.RECEIVE.getCode());
+        order.setSigner(order.getApplyUser());
+        order.setSignDatetime(date);
         order.setUpdater(updater);
         order.setUpdateDatetime(new Date());
         order.setRemark(remark);
@@ -170,12 +190,12 @@ public class OrderBOImpl extends PaginableBOImpl<Order> implements IOrderBO {
     }
 
     @Override
-    public int confirm(Order order, String updater, String remark) {
+    public int confirm(Order order, String signer, String remark) {
         int count = 0;
         if (order != null && StringUtils.isNotBlank(order.getCode())) {
             order.setStatus(EOrderStatus.RECEIVE.getCode());
-            order.setUpdater(updater);
-            order.setUpdateDatetime(new Date());
+            order.setSigner(signer);
+            order.setSignDatetime(new Date());
             order.setRemark(remark);
             count = orderDAO.updateConfirm(order);
         }
@@ -183,11 +203,30 @@ public class OrderBOImpl extends PaginableBOImpl<Order> implements IOrderBO {
     }
 
     @Override
-    @Transactional
     public String saveOrder(List<Cart> cartList, CommitOrderPOJO pojo,
             String toUser, String orderType) {
         // 生成订单基本信息
-        Order order = getOrderBasicInfo(orderType, toUser, pojo);
+        Order order = new Order();
+        String code = OrderNoGenerater.generateM(EGeneratePrefix.ORDER
+            .getCode());
+        order.setCode(code);
+        order.setType(orderType);
+        order.setToUser(toUser);
+        order.setReceiver(pojo.getReceiver());
+        order.setReMobile(pojo.getReMobile());
+
+        order.setReAddress(pojo.getReAddress());
+        order.setApplyUser(pojo.getApplyUser());
+        order.setApplyNote(pojo.getApplyNote());
+        order.setApplyDatetime(new Date());
+        order.setStatus(EOrderStatus.TO_PAY.getCode());
+
+        order.setPromptTimes(0);
+        order.setUpdater(pojo.getApplyUser());
+        order.setUpdateDatetime(new Date());
+        order.setRemark("订单新提交，待支付");
+        order.setCompanyCode(pojo.getCompanyCode());
+        order.setSystemCode(pojo.getSystemCode());
         // 计算订单金额
         Long amount1 = 0L;
         Long amount2 = 0L;
@@ -211,16 +250,7 @@ public class OrderBOImpl extends PaginableBOImpl<Order> implements IOrderBO {
         }
         // 计算订单运费（暂时不考虑运费）
         Long yunfei = 0L;
-
         // 计算订单金额
-        order = getOrder(order, amount1, amount2, amount3, yunfei);
-        // 落地订单
-        orderDAO.insert(order);
-        return order.getCode();
-    }
-
-    private Order getOrder(Order order, Long amount1, Long amount2,
-            Long amount3, Long yunfei) {
         order.setAmount1(amount1);
         order.setAmount2(amount2);
         order.setAmount3(amount3);
@@ -228,34 +258,9 @@ public class OrderBOImpl extends PaginableBOImpl<Order> implements IOrderBO {
         order.setPayAmount1(0L);
         order.setPayAmount2(0L);
         order.setPayAmount3(0L);
-        return order;
-    }
-
-    private Order getOrderBasicInfo(String orderType, String toUser,
-            CommitOrderPOJO pojo) {
-        // 生成订单基本信息
-        Order order = new Order();
-        String code = OrderNoGenerater.generateM(EGeneratePrefix.ORDER
-            .getCode());
-        order.setCode(code);
-        order.setType(orderType);
-        order.setToUser(toUser);
-        order.setReceiver(pojo.getReceiver());
-        order.setReMobile(pojo.getReMobile());
-
-        order.setReAddress(pojo.getReAddress());
-        order.setApplyUser(pojo.getApplyUser());
-        order.setApplyNote(pojo.getApplyNote());
-        order.setApplyDatetime(new Date());
-        order.setStatus(EOrderStatus.TO_PAY.getCode());
-
-        order.setPromptTimes(0);
-        order.setUpdater(pojo.getApplyUser());
-        order.setUpdateDatetime(new Date());
-        order.setRemark("订单新提交，待支付");
-        order.setCompanyCode(pojo.getCompanyCode());
-        order.setSystemCode(pojo.getSystemCode());
-        return order;
+        // 落地订单
+        orderDAO.insert(order);
+        return code;
     }
 
     private void saveProductOrder(String orderCode, ProductSpecs productSpecs,
@@ -277,7 +282,7 @@ public class OrderBOImpl extends PaginableBOImpl<Order> implements IOrderBO {
     }
 
     @Override
-    public String addPayGroup(String code) {
+    public String addPayGroup(String code, EPayType payType) {
         String payGroup = null;
         if (StringUtils.isNotBlank(code)) {
             Order data = new Order();
@@ -285,6 +290,7 @@ public class OrderBOImpl extends PaginableBOImpl<Order> implements IOrderBO {
             payGroup = OrderNoGenerater.generateM(EGeneratePrefix.PAY_GROUP
                 .getCode());
             data.setPayGroup(payGroup);
+            data.setPayType(payType.getCode());
             orderDAO.updatePayGroup(data);
         }
         return payGroup;

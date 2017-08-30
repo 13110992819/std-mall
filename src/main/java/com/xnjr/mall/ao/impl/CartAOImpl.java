@@ -80,9 +80,6 @@ public class CartAOImpl implements ICartAO {
         cartBO.refreshCart(data);
     }
 
-    /** 
-     * @see com.xnjr.mall.ao.ICartAO#dropCartList(java.util.List)
-     */
     @Override
     public void dropCartList(List<String> cartCodeList) {
         for (String cartCode : cartCodeList) {
@@ -90,17 +87,11 @@ public class CartAOImpl implements ICartAO {
         }
     }
 
-    /** 
-     * @see com.xnjr.mall.ao.ICartAO#queryCartPage(int, int, com.xnjr.mall.domain.Cart)
-     */
     @Override
     public Paginable<Cart> queryCartPage(int start, int limit, Cart condition) {
         return cartBO.getPaginable(start, limit, condition);
     }
 
-    /** 
-     * @see com.xnjr.mall.ao.ICartAO#queryCartList(com.xnjr.mall.domain.Cart)
-     */
     @Override
     public List<Cart> queryCartList(String userId) {
         Cart condition = new Cart();
@@ -108,9 +99,6 @@ public class CartAOImpl implements ICartAO {
         return cartBO.queryCartList(condition);
     }
 
-    /** 
-     * @see com.xnjr.mall.ao.ICartAO#getCart(java.lang.String)
-     */
     @Override
     public Cart getCart(String code) {
         return cartBO.getCart(code);

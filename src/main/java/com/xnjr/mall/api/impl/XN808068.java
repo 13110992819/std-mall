@@ -35,6 +35,7 @@ public class XN808068 extends AProcessor {
         condition.setToUser(req.getToUser());
         condition.setApplyUser(req.getApplyUser());
         condition.setStatus(req.getStatus());
+        condition.setPayType(req.getPayType());
         condition.setPayGroup(req.getPayGroup());
         condition.setPayCode(req.getPayCode());
         condition.setDeliverer(req.getDeliverer());

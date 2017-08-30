@@ -24,8 +24,8 @@
 		<result column="productSpecs_price2" property="productSpecs.price2" />
 		<result column="productSpecs_price3" property="productSpecs.price3" />
 		<result column="productSpecs_quantity" property="productSpecs.quantity" />
-		<result column="productSpecs_company_code" property="productSpecs.companyCode" />
-		<result column="productSpecs_system_code" property="productSpecs.systemCode" />
+		<result column="productSpecs_province" property="productSpecs.province" />
+		<result column="productSpecs_weight" property="productSpecs.weight" />
 	</resultMap>
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
@@ -72,8 +72,8 @@
         ,tps.price2 productSpecs_price2
         ,tps.price3 productSpecs_price3
         ,tps.quantity productSpecs_quantity
-        ,tps.company_code productSpecs_company_code
-        ,tps.system_code productSpecs_system_code
+        ,tps.province productSpecs_province
+        ,tps.weight productSpecs_weight
 		FROM
 		tmall_cart t INNER JOIN tmall_product tp ON t.product_code = tp.code 
 		             INNER JOIN tmall_product_specs tps ON t.product_specs_code = tps.code 

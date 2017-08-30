@@ -23,6 +23,7 @@ import com.xnjr.mall.bo.IProductBO;
 import com.xnjr.mall.bo.IProductSpecsBO;
 import com.xnjr.mall.bo.IStoreBO;
 import com.xnjr.mall.bo.base.Paginable;
+import com.xnjr.mall.common.SystemUtil;
 import com.xnjr.mall.core.OrderNoGenerater;
 import com.xnjr.mall.core.StringValidater;
 import com.xnjr.mall.domain.Category;
@@ -36,7 +37,6 @@ import com.xnjr.mall.dto.req.XN808030Req;
 import com.xnjr.mall.enums.EGeneratePrefix;
 import com.xnjr.mall.enums.EProductStatus;
 import com.xnjr.mall.enums.EStoreStatus;
-import com.xnjr.mall.enums.ESysUser;
 import com.xnjr.mall.exception.BizException;
 
 /** 
@@ -61,13 +61,15 @@ public class ProductAOImpl implements IProductAO {
     @Override
     @Transactional
     public String addProduct(XN808010Req req) {
-        String storeCode = ESysUser.SYS_USER_JKEG.getCode();
+        String storeCode = null;
         if (StringUtils.isNotBlank(req.getStoreCode())) {
             Store store = storeBO.getStore(req.getStoreCode());
             if (!EStoreStatus.ON_OPEN.getCode().equals(store.getStatus())) {
-                throw new BizException("xn000000", "您还未审核通过上架，暂时不能发布产品，请联系运营商！");
+                throw new BizException("xn000000", "店铺还未审核通过，暂不能发布产品");
             }
             storeCode = req.getStoreCode();
+        } else {
+            storeCode = SystemUtil.getSysUser(req.getSystemCode());
         }
 
         Product data = new Product();
@@ -88,7 +90,7 @@ public class ProductAOImpl implements IProductAO {
         data.setPic(req.getPic());
         data.setDescription(req.getDescription());
 
-        data.setStatus(EProductStatus.APPROVE_YES.getCode());
+        data.setStatus(EProductStatus.TO_PUBLISH.getCode());
         data.setUpdater(req.getUpdater());
         data.setUpdateDatetime(new Date());
         data.setRemark(req.getRemark());
@@ -119,6 +121,9 @@ public class ProductAOImpl implements IProductAO {
 
                 productSpecs.setQuantity(StringValidater.toInteger(xn808030Req
                     .getQuantity()));
+                productSpecs.setProvince(xn808030Req.getProvince());
+                productSpecs.setWeight(StringValidater.toDouble(xn808030Req
+                    .getWeight()));
                 productSpecs.setOrderNo(StringValidater.toInteger(xn808030Req
                     .getOrderNo()));
                 productSpecs.setCompanyCode(req.getCompanyCode());
@@ -135,11 +140,7 @@ public class ProductAOImpl implements IProductAO {
     public void dropProduct(String code) {
         if (StringUtils.isNotBlank(code)) {
             Product product = productBO.getProduct(code);
-            if (EProductStatus.TO_APPROVE.getCode().equals(product.getStatus())
-                    || EProductStatus.APPROVE_YES.getCode().equals(
-                        product.getStatus())
-                    || EProductStatus.APPROVE_NO.getCode().equals(
-                        product.getStatus())) {
+            if (EProductStatus.TO_PUBLISH.getCode().equals(product.getStatus())) {
                 productBO.removeProduct(code);
                 productSpecsBO.removeProductSpecsByProductCode(code);
             } else {
@@ -153,7 +154,7 @@ public class ProductAOImpl implements IProductAO {
     public void editProduct(XN808012Req req) {
         Product dbProduct = productBO.getProduct(req.getCode());
         if (EProductStatus.PUBLISH_YES.getCode().equals(dbProduct.getStatus())) {
-            throw new BizException("xn000000", "该产品已上架，不能修改，请先下架");
+            throw new BizException("xn000000", "该产品已上架，请先下架");
         }
         Product data = new Product();
         // 根据小类获取大类
@@ -195,72 +196,15 @@ public class ProductAOImpl implements IProductAO {
 
                 productSpecs.setQuantity(StringValidater.toInteger(xn808030Req
                     .getQuantity()));
+                productSpecs.setProvince(xn808030Req.getProvince());
+                productSpecs.setWeight(StringValidater.toDouble(xn808030Req
+                    .getWeight()));
                 productSpecs.setOrderNo(StringValidater.toInteger(xn808030Req
                     .getOrderNo()));
                 productSpecs.setCompanyCode(dbProduct.getCompanyCode());
                 productSpecs.setSystemCode(dbProduct.getSystemCode());
                 productSpecsBO.saveProductSpecs(productSpecs);
             }
-        }
-
-    }
-
-    /** 
-     * @see com.xnjr.mall.ao.IProductAO#queryProductPage(int, int, com.xnjr.mall.domain.Product)
-     */
-    @Override
-    public Paginable<Product> queryProductPage(int start, int limit,
-            Product condition) {
-        Paginable<Product> results = productBO.getPaginable(start, limit,
-            condition);
-        if (CollectionUtils.isNotEmpty(results.getList())) {
-            for (Product product : results.getList()) {
-                List<ProductSpecs> productSpecsList = productSpecsBO
-                    .queryProductSpecsList(product.getCode());
-                product.setProductSpecsList(productSpecsList);
-            }
-        }
-        return results;
-    }
-
-    /** 
-     * @see com.xnjr.mall.ao.IProductAO#queryProductList(com.xnjr.mall.domain.Product)
-     */
-    @Override
-    public List<Product> queryProductList(Product condition) {
-        return productBO.queryProductList(condition);
-    }
-
-    /** 
-     * @see com.xnjr.mall.ao.IProductAO#getProduct(java.lang.String)
-     */
-    @Override
-    public Product getProduct(String code) {
-        Product product = productBO.getProduct(code);
-        if (null != product) {
-            List<ProductSpecs> productSpecsList = productSpecsBO
-                .queryProductSpecsList(code);
-            product.setProductSpecsList(productSpecsList);
-        }
-        return product;
-    }
-
-    @Transactional
-    public void approveProduct(String code, String approveResult,
-            String approver, String approveNote) {
-        Product product = productBO.getProduct(code);
-        if (!EProductStatus.TO_APPROVE.getCode().equals(product.getStatus())) {
-            throw new BizException("xn000000", "该产品不是已提交状态");
-        }
-        productBO.approveProduct(code, approveResult, approver, approveNote);
-
-    }
-
-    @Override
-    public void approveProduct(List<String> codeList, String approveResult,
-            String approver, String approveNote) {
-        for (String code : codeList) {
-            this.approveProduct(code, approveResult, approver, approveNote);
         }
     }
 
@@ -269,7 +213,7 @@ public class ProductAOImpl implements IProductAO {
         String code = req.getCode();
         Product dbProduct = productBO.getProduct(code);
         // 已提交，审核通过，已下架状态可上架；
-        if (EProductStatus.APPROVE_YES.getCode().equals(dbProduct.getStatus())
+        if (EProductStatus.TO_PUBLISH.getCode().equals(dbProduct.getStatus())
                 || EProductStatus.PUBLISH_NO.getCode().equals(
                     dbProduct.getStatus())) {
             List<ProductSpecs> productSpecsList = productSpecsBO
@@ -298,8 +242,38 @@ public class ProductAOImpl implements IProductAO {
         if (EProductStatus.PUBLISH_YES.getCode().equals(dbProduct.getStatus())) {
             productBO.putOff(code, updater, remark);
         } else {
-            throw new BizException("xn000000", "该产品状态不是上架状态，无法下架");
+            throw new BizException("xn000000", "该产品不是上架状态，无法下架");
         }
+    }
 
+    @Override
+    public Paginable<Product> queryProductPage(int start, int limit,
+            Product condition) {
+        Paginable<Product> results = productBO.getPaginable(start, limit,
+            condition);
+        if (CollectionUtils.isNotEmpty(results.getList())) {
+            for (Product product : results.getList()) {
+                List<ProductSpecs> productSpecsList = productSpecsBO
+                    .queryProductSpecsList(product.getCode());
+                product.setProductSpecsList(productSpecsList);
+            }
+        }
+        return results;
+    }
+
+    @Override
+    public List<Product> queryProductList(Product condition) {
+        return productBO.queryProductList(condition);
+    }
+
+    @Override
+    public Product getProduct(String code) {
+        Product product = productBO.getProduct(code);
+        if (null != product) {
+            List<ProductSpecs> productSpecsList = productSpecsBO
+                .queryProductSpecsList(code);
+            product.setProductSpecsList(productSpecsList);
+        }
+        return product;
     }
 }

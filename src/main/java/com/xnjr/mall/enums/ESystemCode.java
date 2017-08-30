@@ -9,13 +9,14 @@ import java.util.Map;
  * @history:
  */
 public enum ESystemCode {
-    Caigo("CD-CCG000007", "菜狗"), PIPE("CD-CGD000006", "全能水电工助手"), YAOCHENG(
-            "CD-CYC000009", "姚橙"), JKEG("CD-JKEG000011", "健康E购");
+    CAIGO("CD-CCG000007", "菜狗"), PIPE("CD-CGD000006", "全能水电工助手"), YAOCHENG(
+            "CD-CYC000009", "姚橙"), JKEG("CD-JKEG000011", "健康E购"), HW(
+            "CD-CHY000015", "户外电商");
 
     public static Map<String, ESystemCode> getMap() {
         Map<String, ESystemCode> map = new HashMap<String, ESystemCode>();
-        for (ESystemCode direction : ESystemCode.values()) {
-            map.put(direction.getCode(), direction);
+        for (ESystemCode systemCode : ESystemCode.values()) {
+            map.put(systemCode.getCode(), systemCode);
         }
         return map;
     }
@@ -35,5 +36,9 @@ public enum ESystemCode {
 
     public String getValue() {
         return value;
+    }
+
+    public static void main(String[] args) {
+
     }
 }

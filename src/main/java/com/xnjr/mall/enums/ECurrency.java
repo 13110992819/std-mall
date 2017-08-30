@@ -23,7 +23,7 @@ public enum ECurrency {
 
     CG_CGB("CGB", "菜狗币"), CGJF("CGJF", "菜狗积分"), CG_EXT_HB("EXT_HB", "菜狗外界嗨币"),
 
-    YC_CB("CB", "橙券");
+    YC_CB("CB", "橙券"), HW_XJK("XJK", "小金库");
 
     public static Map<String, ECurrency> getResultMap() {
         Map<String, ECurrency> map = new HashMap<String, ECurrency>();

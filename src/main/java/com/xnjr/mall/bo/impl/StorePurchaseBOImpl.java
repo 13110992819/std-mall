@@ -128,7 +128,7 @@ public class StorePurchaseBOImpl extends PaginableBOImpl<StorePurchase>
 
         data.setCreateDatetime(now);
         data.setStatus(EStorePurchaseStatus.TO_PAY.getCode());
-        data.setPayType(EPayType.WEIXIN_H5.getCode());
+        data.setPayType(EPayType.WECHAT_H5.getCode());
         data.setPayGroup(payGroup);
 
         data.setPayAmount3(0L);
@@ -184,7 +184,7 @@ public class StorePurchaseBOImpl extends PaginableBOImpl<StorePurchase>
 
         data.setCreateDatetime(now);
         data.setStatus(EStorePurchaseStatus.TO_PAY.getCode());
-        data.setPayType(EPayType.WEIXIN_APP.getCode());
+        data.setPayType(EPayType.WECHAT_APP.getCode());
 
         data.setPayGroup(payGroup);
 
@@ -259,9 +259,9 @@ public class StorePurchaseBOImpl extends PaginableBOImpl<StorePurchase>
         condition.setStatus(EStorePurchaseStatus.PAYED.getCode());
         List<StorePurchase> list = storePurchaseDAO.selectList(condition);
         for (StorePurchase storePurchase : list) {
-            if (EPayType.WEIXIN_APP.getCode()
+            if (EPayType.WECHAT_APP.getCode()
                 .equals(storePurchase.getPayType())
-                    || EPayType.WEIXIN_H5.getCode().equals(
+                    || EPayType.WECHAT_H5.getCode().equals(
                         storePurchase.getPayType())
                     || EPayType.ALIPAY.getCode().equals(
                         storePurchase.getPayType())
@@ -402,7 +402,7 @@ public class StorePurchaseBOImpl extends PaginableBOImpl<StorePurchase>
 
         data.setCreateDatetime(now);
         data.setStatus(EStorePurchaseStatus.TO_PAY.getCode());
-        data.setPayType(EPayType.WEIXIN_H5.getCode());
+        data.setPayType(EPayType.WECHAT_H5.getCode());
         data.setPayGroup(payGroup);
 
         data.setPayAmount3(0L);
@@ -470,7 +470,7 @@ public class StorePurchaseBOImpl extends PaginableBOImpl<StorePurchase>
 
         data.setCreateDatetime(now);
         data.setStatus(EStorePurchaseStatus.TO_PAY.getCode());
-        data.setPayType(EPayType.WEIXIN_APP.getCode());
+        data.setPayType(EPayType.WECHAT_APP.getCode());
         data.setPayGroup(payGroup);
 
         data.setBackAmount(frAmount);

@@ -35,6 +35,8 @@
 		
 		<result column="logistics_code" property="logisticsCode" />
 		<result column="pdf" property="pdf" />
+		<result column="signer" property="signer" />
+		<result column="sign_datetime" property="signDatetime" />
 		<result column="updater" property="updater" />
 		<result column="update_datetime" property="updateDatetime" />
 		<result column="remark" property="remark" />
@@ -145,6 +147,8 @@
 		
 		,t.logistics_code
 		,t.pdf
+		,t.signer
+		,t.sign_datetime
 		,t.updater
 		,t.update_datetime
 		,t.remark

@@ -15,6 +15,7 @@
 		<result column="store_code" property="product.storeCode" />
 		<result column="product_name" property="product.name" />
 		<result column="product_adv_pic" property="product.advPic" />
+		<result column="product_status" property="product.status" />
 		
 		<result column="productSpecs_code" property="productSpecs.code" />
 		<result column="productSpecs_name" property="productSpecs.name" />
@@ -57,22 +58,25 @@
 		,t.product_specs_code
 		,t.quantity
 		,t.company_code
-		,t.system_code
 		
+		,t.system_code
 		,tp.code product_code
 		,tp.store_code store_code
 		,tp.name product_name
 		,tp.adv_pic product_adv_pic
-
+		
+		,tp.status product_status
         ,tps.code productSpecs_code
         ,tps.name productSpecs_name
         ,tps.product_code productSpecs_product_code
         ,tps.original_price productSpecs_original_price
+        
         ,tps.price1 productSpecs_price1
         ,tps.price2 productSpecs_price2
         ,tps.price3 productSpecs_price3
         ,tps.quantity productSpecs_quantity
         ,tps.province productSpecs_province
+        
         ,tps.weight productSpecs_weight
 		FROM
 		tmall_cart t INNER JOIN tmall_product tp ON t.product_code = tp.code 

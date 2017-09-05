@@ -79,6 +79,7 @@ public class UserBOImpl implements IUserBO {
             user.setProvince(res.getProvince());
             user.setCity(res.getCity());
             user.setArea(res.getArea());
+            user.setAddress(res.getAddress());
             user.setDivRate(StringValidater.toDouble(res.getDivRate()));
         }
         return user;

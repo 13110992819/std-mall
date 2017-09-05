@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.xnjr.mall.ao.IOrderAO;
 import com.xnjr.mall.bo.IAccountBO;
 import com.xnjr.mall.bo.ICartBO;
+import com.xnjr.mall.bo.ICommentBO;
 import com.xnjr.mall.bo.IDistributeBO;
 import com.xnjr.mall.bo.IOrderBO;
 import com.xnjr.mall.bo.IProductBO;
@@ -48,11 +49,14 @@ import com.xnjr.mall.domain.ProductSpecs;
 import com.xnjr.mall.domain.SYSConfig;
 import com.xnjr.mall.domain.Store;
 import com.xnjr.mall.domain.User;
+import com.xnjr.mall.dto.req.XN003010CReq;
 import com.xnjr.mall.dto.req.XN808050Req;
 import com.xnjr.mall.dto.req.XN808051Req;
 import com.xnjr.mall.dto.req.XN808054Req;
+import com.xnjr.mall.dto.req.XN808059CReq;
 import com.xnjr.mall.dto.res.BooleanRes;
 import com.xnjr.mall.enums.EBizType;
+import com.xnjr.mall.enums.EBoolean;
 import com.xnjr.mall.enums.ECurrency;
 import com.xnjr.mall.enums.EOrderStatus;
 import com.xnjr.mall.enums.EOrderType;
@@ -108,6 +112,9 @@ public class OrderAOImpl implements IOrderAO {
     @Autowired
     private IDistributeBO distributeBO;
 
+    @Autowired
+    private ICommentBO commentBO;
+
     @Override
     @Transactional
     public String commitCartOrderJKEG(XN808051Req req) {
@@ -149,7 +156,7 @@ public class OrderAOImpl implements IOrderAO {
         for (String cartCode : cartCodeList) {
             cartBO.removeCart(cartCode);
         }
-        return orderBO.saveOrder(cartList, req.getPojo(), toUser,
+        return orderBO.saveOrder(cartList, req.getPojo(), toUser, null,
             EOrderType.SH_SALE.getCode());
     }
 
@@ -158,6 +165,7 @@ public class OrderAOImpl implements IOrderAO {
     public String commitCartOrder(XN808051Req req) {
         List<String> cartCodeList = req.getCartCodeList();
         List<Cart> cartList = cartBO.queryCartList(cartCodeList);
+        String systemCode = null;
         // 验证产品是否有记录
         for (Cart cart : cartList) {
             Product product = productBO.getProduct(cart.getProductCode());
@@ -174,9 +182,22 @@ public class OrderAOImpl implements IOrderAO {
                 throw new BizException("xn0000", "产品[" + product.getName()
                         + "]库存不足，不能下单");
             }
+            if (StringUtils.isBlank(systemCode)) {
+                systemCode = cart.getSystemCode();
+            }
+        }
+        String takeAddress = null;
+        // 户外电商toUser为加盟商的userId, 其他系统toUser为产品所属的商家userId
+        if (ESystemCode.HW.getCode().equals(systemCode)) {
+            String toUser = req.getToUser();
+            if (!toUser.startsWith("SYS_USER")) {
+                User ztdUser = userBO.getRemoteUser(toUser);
+                takeAddress = ztdUser.getProvince() + " " + ztdUser.getCity()
+                        + " " + ztdUser.getArea() + " " + ztdUser.getAddress();
+            }
         }
         String orderCode = orderBO.saveOrder(cartList, req.getPojo(),
-            req.getToUser(), EOrderType.SH_SALE.getCode());
+            req.getToUser(), takeAddress, EOrderType.SH_SALE.getCode());
         // 删除购物车选中记录
         for (String cartCode : cartCodeList) {
             cartBO.removeCart(cartCode);
@@ -211,14 +232,17 @@ public class OrderAOImpl implements IOrderAO {
         cartList.add(cart);
 
         String toUser = null;
+        String takeAddress = null; // 自提地点
         String orderType = null;
-        // 菜狗和姚橙 toUser为加盟商的userId, 其他系统toUser为产品所属的商家userId
-        if (ESystemCode.CAIGO.getCode().equals(product.getCompanyCode())
-                || ESystemCode.YAOCHENG.getCode().equals(
-                    product.getCompanyCode())
-                || ESystemCode.HW.getCode().equals(product.getCompanyCode())) {
+        // 户外电商toUser为加盟商的userId, 其他系统toUser为产品所属的商家userId
+        if (ESystemCode.HW.getCode().equals(product.getCompanyCode())) {
             toUser = req.getToUser();
             orderType = EOrderType.SH_SALE.getCode();
+            if (!toUser.startsWith("SYS_USER")) {
+                User ztdUser = userBO.getRemoteUser(toUser);
+                takeAddress = ztdUser.getProvince() + ztdUser.getCity()
+                        + ztdUser.getArea() + ztdUser.getAddress();
+            }
         } else { // 适用健康e购/户外
             if (product.getStoreCode().startsWith("SYS_USER")) { // 平台的产品所属商家为系统用户编号
                 toUser = product.getStoreCode();
@@ -233,7 +257,8 @@ public class OrderAOImpl implements IOrderAO {
                 orderType = EOrderType.INTEGRAL_EXCHANGE.getCode();
             }
         }
-        return orderBO.saveOrder(cartList, req.getPojo(), toUser, orderType);
+        return orderBO.saveOrder(cartList, req.getPojo(), toUser, takeAddress,
+            orderType);
     }
 
     @Override
@@ -754,7 +779,6 @@ public class OrderAOImpl implements IOrderAO {
         List<ProductOrder> productOrderList = productOrderBO
             .queryProductOrderList(imCondition);
         order.setProductOrderList(productOrderList);
-
         return order;
     }
 
@@ -998,5 +1022,33 @@ public class OrderAOImpl implements IOrderAO {
             logger.error("检查会员是否可以升级异常！");
         }
 
+    }
+
+    @Override
+    @Transactional
+    public Object comment(String orderCode, List<XN808059CReq> commentList,
+            String commenter) {
+        Order order = orderBO.getOrder(orderCode);
+        if (!EOrderStatus.RECEIVE.getCode().equals(order.getStatus())) {
+            throw new BizException("XN000000", "订单不是待评价状态");
+        }
+        if (!order.getApplyUser().equals(commenter)) {
+            throw new BizException("XN000000", "评论人与当前订单下单人不一致");
+        }
+        User commentUser = userBO.getRemoteUser(commenter);
+        orderBO.comment(order);
+        List<XN003010CReq> commentRList = new ArrayList<XN003010CReq>();
+        for (XN808059CReq xn808059cReq : commentList) {
+            XN003010CReq cReq = new XN003010CReq();
+            Product product = productBO.getProduct(xn808059cReq
+                .getProductCode());
+            cReq.setScore(xn808059cReq.getScore());
+            cReq.setContent(xn808059cReq.getContent());
+            cReq.setParentCode(EBoolean.NO.getCode());
+            cReq.setEntityCode(product.getCode());
+            cReq.setEntityName(product.getName());
+            commentRList.add(cReq);
+        }
+        return commentBO.comment(order, commentRList, commentUser);
     }
 }

@@ -93,6 +93,17 @@ public class Product extends ABaseDO {
     // 产品参数
     private List<ProductSpecs> productSpecsList;
 
+    // 是否收藏 1是0否
+    private String isCollect;
+
+    public String getIsCollect() {
+        return isCollect;
+    }
+
+    public void setIsCollect(String isCollect) {
+        this.isCollect = isCollect;
+    }
+
     public Store getStore() {
         return store;
     }

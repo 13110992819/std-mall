@@ -34,7 +34,6 @@ public class XN808068 extends AProcessor {
         condition.setType(req.getType());
         condition.setToUser(req.getToUser());
         condition.setApplyUser(req.getApplyUser());
-        condition.setStatus(req.getStatus());
         condition.setPayType(req.getPayType());
         condition.setPayGroup(req.getPayGroup());
         condition.setPayCode(req.getPayCode());
@@ -47,6 +46,7 @@ public class XN808068 extends AProcessor {
             DateUtil.DATA_TIME_PATTERN_1));
         condition.setApplyDatetimeEnd(DateUtil.strToDate(req.getDateEnd(),
             DateUtil.DATA_TIME_PATTERN_1));
+        condition.setStatusList(req.getStatusList());
         String orderColumn = req.getOrderColumn();
         if (StringUtils.isBlank(orderColumn)) {
             orderColumn = IOrderAO.DEFAULT_ORDER_COLUMN;

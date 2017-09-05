@@ -1,43 +1,39 @@
 package com.xnjr.mall.dto.req;
 
-/**
- * 支付订单
- * @author: xieyj 
- * @since: 2016年5月23日 上午8:46:53 
- * @history:
- */
+import java.util.List;
+
 public class XN808059Req {
 
     // 编号（必填）
-    private String code;
+    private List<XN808059CReq> commentList;
 
-    // 支付渠道（必填）
-    private String payType;
+    // 订单编号（必填）
+    private String orderCode;
 
-    // ip地址(选填)
-    private String ip;
+    // 评论人（必填）
+    private String commenter;
 
-    public String getIp() {
-        return ip;
+    public List<XN808059CReq> getCommentList() {
+        return commentList;
     }
 
-    public void setIp(String ip) {
-        this.ip = ip;
+    public void setCommentList(List<XN808059CReq> commentList) {
+        this.commentList = commentList;
     }
 
-    public String getPayType() {
-        return payType;
+    public String getOrderCode() {
+        return orderCode;
     }
 
-    public void setPayType(String payType) {
-        this.payType = payType;
+    public void setOrderCode(String orderCode) {
+        this.orderCode = orderCode;
     }
 
-    public String getCode() {
-        return code;
+    public String getCommenter() {
+        return commenter;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setCommenter(String commenter) {
+        this.commenter = commenter;
     }
 }

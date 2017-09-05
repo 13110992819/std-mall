@@ -243,7 +243,9 @@ public class DateUtil {
         return (int) (times / 60 / 60 / 1000 / 24);
     }
 
-    public static void main(String[] args) {
-
+    // 将时间戳转换为时间
+    public static Date stampToDate(Long dateS) {
+        long dates = new Long(dateS);
+        return new Date(dates);
     }
 }

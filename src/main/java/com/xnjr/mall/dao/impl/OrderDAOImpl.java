@@ -109,6 +109,11 @@ public class OrderDAOImpl extends AMybatisTemplate implements IOrderDAO {
     }
 
     @Override
+    public int updateComment(Order data) {
+        return super.update(NAMESPACE.concat("update_comment"), data);
+    }
+
+    @Override
     public int updatePayGroup(Order data) {
         return super.update(NAMESPACE.concat("update_payGroup"), data);
     }
@@ -124,4 +129,5 @@ public class OrderDAOImpl extends AMybatisTemplate implements IOrderDAO {
         return super.select(NAMESPACE.concat("select_XF_Amount"), userId,
             Long.class);
     }
+
 }

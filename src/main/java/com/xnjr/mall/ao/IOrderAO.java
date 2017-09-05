@@ -7,6 +7,7 @@ import com.xnjr.mall.domain.Order;
 import com.xnjr.mall.dto.req.XN808050Req;
 import com.xnjr.mall.dto.req.XN808051Req;
 import com.xnjr.mall.dto.req.XN808054Req;
+import com.xnjr.mall.dto.req.XN808059CReq;
 
 /** 
  * @author: xieyj 
@@ -36,6 +37,9 @@ public interface IOrderAO {
     public void deliverXianchang(String code, String updater, String remark);
 
     public void confirm(String code, String updater, String remark);
+
+    public Object comment(String orderCode, List<XN808059CReq> commentList,
+            String commenter);
 
     public Paginable<Order> queryOrderPage(int start, int limit, Order condition);
 

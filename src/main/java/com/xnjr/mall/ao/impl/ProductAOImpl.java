@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.xnjr.mall.ao.IProductAO;
 import com.xnjr.mall.bo.ICategoryBO;
+import com.xnjr.mall.bo.IInteractBO;
 import com.xnjr.mall.bo.IProductBO;
 import com.xnjr.mall.bo.IProductSpecsBO;
 import com.xnjr.mall.bo.IStoreBO;
@@ -34,7 +35,9 @@ import com.xnjr.mall.dto.req.XN808010Req;
 import com.xnjr.mall.dto.req.XN808012Req;
 import com.xnjr.mall.dto.req.XN808013Req;
 import com.xnjr.mall.dto.req.XN808030Req;
+import com.xnjr.mall.enums.EBoolean;
 import com.xnjr.mall.enums.EGeneratePrefix;
+import com.xnjr.mall.enums.EInteractType;
 import com.xnjr.mall.enums.EProductStatus;
 import com.xnjr.mall.enums.EStoreStatus;
 import com.xnjr.mall.exception.BizException;
@@ -57,6 +60,9 @@ public class ProductAOImpl implements IProductAO {
 
     @Autowired
     private IStoreBO storeBO;
+
+    @Autowired
+    private IInteractBO interactBO;
 
     @Override
     @Transactional
@@ -267,12 +273,22 @@ public class ProductAOImpl implements IProductAO {
     }
 
     @Override
-    public Product getProduct(String code) {
+    public Product getProduct(String code, String userId) {
         Product product = productBO.getProduct(code);
         if (null != product) {
             List<ProductSpecs> productSpecsList = productSpecsBO
                 .queryProductSpecsList(code);
             product.setProductSpecsList(productSpecsList);
+        }
+        if (StringUtils.isNotBlank(userId)) {
+            boolean result = interactBO.isInteract(userId, product.getCode(),
+                EInteractType.PRODUCT, product.getCompanyCode(),
+                product.getSystemCode());
+            if (result) {
+                product.setIsCollect(EBoolean.YES.getCode());
+            } else {
+                product.setIsCollect(EBoolean.NO.getCode());
+            }
         }
         return product;
     }

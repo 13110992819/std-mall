@@ -83,7 +83,7 @@ public class ProductBOImpl extends PaginableBOImpl<Product> implements
             condition.setCode(code);
             product = productDAO.select(condition);
             if (product == null) {
-                throw new BizException("xn000000", "产品编号不存在");
+                throw new BizException("xn000000", code + "产品编号不存在");
             }
         }
         return product;

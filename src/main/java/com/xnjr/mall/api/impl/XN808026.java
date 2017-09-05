@@ -35,7 +35,7 @@ public class XN808026 extends AProcessor {
      */
     @Override
     public Object doBusiness() throws BizException {
-        return productAO.getProduct(req.getCode());
+        return productAO.getProduct(req.getCode(), req.getUserId());
     }
 
     /** 

@@ -16,7 +16,7 @@ import com.xnjr.mall.enums.EPayType;
 public interface IOrderBO extends IPaginableBO<Order> {
 
     public String saveOrder(List<Cart> cartList, CommitOrderPOJO pojo,
-            String toUser, String orderType);
+            String toUser, String takeAddress, String orderType);
 
     public int userCancel(String code, String userId, String remark);
 
@@ -38,6 +38,8 @@ public interface IOrderBO extends IPaginableBO<Order> {
             Long payAmount3, String payCode);
 
     public int confirm(Order order, String updater, String remark);
+
+    public int comment(Order order);
 
     public List<Order> queryOrderList(Order data);
 

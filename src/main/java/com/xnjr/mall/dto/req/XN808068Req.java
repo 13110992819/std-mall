@@ -1,5 +1,7 @@
 package com.xnjr.mall.dto.req;
 
+import java.util.List;
+
 /**
  * 订单分页查询
  * @author: xieyj 
@@ -19,11 +21,11 @@ public class XN808068Req extends APageReq {
     // 向谁提货
     private String toUser;
 
+    // 状态
+    private List<String> statusList;
+
     // 下单人
     private String applyUser;
-
-    // 状态（选填）
-    private String status;
 
     // 支付类型（选填）
     private String payType;
@@ -65,20 +67,20 @@ public class XN808068Req extends APageReq {
         this.toUser = toUser;
     }
 
+    public List<String> getStatusList() {
+        return statusList;
+    }
+
+    public void setStatusList(List<String> statusList) {
+        this.statusList = statusList;
+    }
+
     public String getApplyUser() {
         return applyUser;
     }
 
     public void setApplyUser(String applyUser) {
         this.applyUser = applyUser;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 
     public String getPayType() {

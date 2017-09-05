@@ -27,6 +27,8 @@ public interface IOrderDAO extends IBaseDAO<Order> {
 
     public int updateConfirm(Order data);
 
+    public int updateComment(Order data);
+
     public int updatePayGroup(Order data);
 
     public Long selectTotalAmount(Order condition);

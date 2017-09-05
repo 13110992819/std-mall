@@ -203,8 +203,19 @@ public class OrderBOImpl extends PaginableBOImpl<Order> implements IOrderBO {
     }
 
     @Override
+    public int comment(Order order) {
+        int count = 0;
+        if (order != null && StringUtils.isNotBlank(order.getCode())) {
+            order.setStatus(EOrderStatus.COMMENT.getCode());
+            order.setRemark(EOrderStatus.COMMENT.getValue());
+            count = orderDAO.updateComment(order);
+        }
+        return count;
+    }
+
+    @Override
     public String saveOrder(List<Cart> cartList, CommitOrderPOJO pojo,
-            String toUser, String orderType) {
+            String toUser, String takeAddress, String orderType) {
         // 生成订单基本信息
         Order order = new Order();
         String code = OrderNoGenerater.generateM(EGeneratePrefix.ORDER
@@ -212,6 +223,7 @@ public class OrderBOImpl extends PaginableBOImpl<Order> implements IOrderBO {
         order.setCode(code);
         order.setType(orderType);
         order.setToUser(toUser);
+        order.setTakeAddress(takeAddress);
         order.setReceiver(pojo.getReceiver());
         order.setReMobile(pojo.getReMobile());
 
@@ -318,5 +330,4 @@ public class OrderBOImpl extends PaginableBOImpl<Order> implements IOrderBO {
     public Long selectXFAmount(String userId) {
         return orderDAO.selectXFAmount(userId);
     }
-
 }

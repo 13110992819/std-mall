@@ -26,6 +26,8 @@ public class BizConnecter {
 
     public static final String ACCOUNT_URL = PropertiesUtil.Config.ACCOUNT_URL;
 
+    public static final String CORE_URL = PropertiesUtil.Config.CORE_URL;
+
     public static final String POST_URL = "...";
 
     public static <T> T getBizData(String code, String json, Class<T> clazz) {
@@ -63,6 +65,10 @@ public class BizConnecter {
             postUrl = USER_URL;
         } else if (code.startsWith("802") || code.startsWith("002")) {
             postUrl = ACCOUNT_URL;
+        } else if (code.startsWith("801") || code.startsWith("003")) {
+            postUrl = CORE_URL;
+        } else {
+            throw new BizException("Biz000", "请求接口号无对应请求URL");
         }
         return postUrl;
     }

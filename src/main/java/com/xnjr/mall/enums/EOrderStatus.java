@@ -7,7 +7,8 @@ package com.xnjr.mall.enums;
  */
 public enum EOrderStatus {
     TO_PAY("1", "待支付"), PAY_YES("2", "已支付"), SEND("3", "已发货"), RECEIVE("4",
-            "已收货"), YHYC("91", "用户异常"), SHYC("92", "商户异常"), KDYC("93", "快递异常");
+            "已收货"), COMMENT("5", "已评论"), YHYC("91", "用户异常"), SHYC("92", "商户异常"), KDYC(
+            "93", "快递异常");
 
     EOrderStatus(String code, String value) {
         this.code = code;

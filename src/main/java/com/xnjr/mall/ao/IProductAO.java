@@ -30,7 +30,7 @@ public interface IProductAO {
 
     public List<Product> queryProductList(Product condition);
 
-    public Product getProduct(String code);
+    public Product getProduct(String code, String userId);
 
     public String addProduct(XN808010Req req);
 

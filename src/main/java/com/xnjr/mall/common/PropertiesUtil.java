@@ -33,5 +33,6 @@ public class PropertiesUtil {
 
         public static String PAY_BACK_URL = props.getProperty("PAY_BACK_URL");
 
+        public static String CORE_URL = props.getProperty("CORE_URL");
     }
 }

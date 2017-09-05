@@ -6,6 +6,7 @@
 		<result column="code" property="code" />
 		<result column="type" property="type" />
 		<result column="to_user" property="toUser" />
+	    <result column="take_address" property="takeAddress" />
 		<result column="receiver" property="receiver" />
 		
 		<result column="re_mobile" property="reMobile" />
@@ -81,7 +82,7 @@
 					</otherwise>
 				</choose>
 			</if>
-			<if test="statusList != null and statusList != '' ">
+			<if test="statusList != null and statusList.size() != 0 ">
 				AND t.status in 
                 <foreach item="item" index="index" collection="statusList" open="(" separator="," close=")">
 	            	#{item}
@@ -118,6 +119,7 @@
 		t.code
 		,t.type
 		,t.to_user
+		,t.take_address
 		,t.receiver
 		
 		,t.re_mobile
@@ -176,6 +178,7 @@
 		code
 		,type
 		,to_user
+		,take_address
 		,receiver
 		,re_mobile
 		
@@ -205,6 +208,7 @@
 		#{code}
 		,#{type}
 		,#{toUser}
+		,#{takeAddress}
 		,#{receiver}
 		,#{reMobile}
 		
@@ -330,6 +334,15 @@
 		status = #{status}
 		,signer = #{signer}
 		,sign_datetime = #{signDatetime}
+		,remark = #{remark}
+		WHERE
+		code = #{code}
+	</update>
+	
+	<update id="update_comment" parameterType="order">
+		UPDATE tmall_order
+		SET
+		status = #{status}
 		,remark = #{remark}
 		WHERE
 		code = #{code}

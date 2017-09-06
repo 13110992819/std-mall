@@ -9,7 +9,6 @@ import com.xnjr.mall.dto.req.XN003001Req;
 import com.xnjr.mall.dto.res.FlagRes;
 import com.xnjr.mall.dto.res.XN003001Res;
 import com.xnjr.mall.enums.EInteractType;
-import com.xnjr.mall.enums.ESystemCode;
 import com.xnjr.mall.http.BizConnecter;
 import com.xnjr.mall.http.JsonUtils;
 
@@ -45,8 +44,8 @@ public class InteractBOImpl implements IInteractBO {
         req.setLimit(limit);
         req.setType(type);
         req.setInteracter(interacter);
-        req.setSystemCode(ESystemCode.HW.getCode());
-        req.setCompanyCode(ESystemCode.HW.getCode());
+        req.setSystemCode(companyCode);
+        req.setCompanyCode(systemCode);
         return BizConnecter.getBizData("003001", JsonUtils.object2Json(req),
             Page.class);
     }

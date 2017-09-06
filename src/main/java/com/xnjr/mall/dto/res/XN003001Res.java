@@ -15,7 +15,7 @@ public class XN003001Res extends ABaseDO {
     // 编号
     private String code;
 
-    // 类型(1 点赞 2 收藏 3 浏览)
+    // 类型
     private String type;
 
     // 实体编号

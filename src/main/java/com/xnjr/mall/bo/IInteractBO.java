@@ -17,5 +17,4 @@ public interface IInteractBO {
     public Page<XN003001Res> queryInteractPage(String start, String limit,
             String type, String interacter, String companyCode,
             String systemCode);
-
 }

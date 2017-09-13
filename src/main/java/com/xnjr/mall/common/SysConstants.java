@@ -8,6 +8,10 @@ public class SysConstants {
 
     public static final String HANDLER_ORDER = "handler_order"; // 催货订单处理人
 
+    public static final String BACK_ONEREF_XJK_RATE = "back_oneref_xjk_rate";
+
+    public static final String BACK_JF_RATE = "back_jf_rate";
+
     // *************************************管道*************************************
     public static final String STORE_RMB2JF = "STORE_RMB2JF"; // 积分消费比例
 

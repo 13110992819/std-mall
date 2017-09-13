@@ -9,7 +9,7 @@ import java.util.Map;
  * @history:
  */
 public enum EBizType {
-    AJ_GW("-30", "购物"), AJ_GWTK("30", "购物退款"), AJ_QRSH("32", "确认收货，商户收钱"), AJ_GMZKQ(
+    AJ_GW("-30", "购物"), AJ_GWTK("30", "购物退款"), AJ_QRSH("32", "商品确认收货"), AJ_GMZKQ(
             "-40", "购买折扣券")
 
     , CG_HB2CGB("211", "嗨币兑换菜狗币"), CG_O2O_CGB("90", "菜狗O2O菜狗币支付"), CG_O2O_CGBFD(

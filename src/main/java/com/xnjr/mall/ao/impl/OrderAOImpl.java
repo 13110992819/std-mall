@@ -11,6 +11,7 @@ package com.xnjr.mall.ao.impl;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -373,11 +374,11 @@ public class OrderAOImpl implements IOrderAO {
     private Object toPayOrderHWYE(Order order, User user) {
         String buyUser = user.getUserId();
         EBizType bizType = EBizType.AJ_GW;
-        Long rmbAmount = order.getAmount1();// 人民币金额
+        Long orderAmount = order.getAmount1() + order.getYunfei();// 人民币金额
         Account rmbAccount = accountBO.getRemoteAccount(buyUser, ECurrency.CNY);
         Account hyXjkAccount = accountBO.getRemoteAccount(buyUser,
             ECurrency.HW_XJK);
-        if (rmbAmount > (rmbAccount.getAmount() + hyXjkAccount.getAmount())) {
+        if (orderAmount > (rmbAccount.getAmount() + hyXjkAccount.getAmount())) {
             throw new BizException("xn0000", "账户余额不足");
         }
         Long jfAmount = order.getAmount2();// 积分金额
@@ -386,23 +387,24 @@ public class OrderAOImpl implements IOrderAO {
             throw new BizException("xn0000", "积分不足");
         }
         // 更新订单支付金额
-        orderBO.refreshPayYESuccess(order, rmbAmount, jfAmount, 0L,
+        orderBO.refreshPayYESuccess(order, orderAmount, jfAmount, 0L,
             EPayType.YE.getCode());
 
-        // 先扣除账户余额，再扣除小金库余额
-        if (rmbAmount > rmbAccount.getAmount()) {
-            accountBO.doTransferAmountRemote(buyUser,
-                ESysUser.SYS_USER_HW.getCode(), ECurrency.CNY,
-                rmbAccount.getAmount(), bizType, bizType.getValue(),
-                bizType.getValue(), order.getCode());
-            Long xjkAmount = rmbAmount - rmbAccount.getAmount();
+        // 先扣除小金库余额,再扣除账户余额
+        if (orderAmount > hyXjkAccount.getAmount()) {
+            Long xjkAmount = hyXjkAccount.getAmount();
             accountBO.doTransferAmountRemote(buyUser,
                 ESysUser.SYS_USER_HW.getCode(), ECurrency.HW_XJK, xjkAmount,
                 bizType, bizType.getValue(), bizType.getValue(),
                 order.getCode());
+            Long cnyAmount = orderAmount - xjkAmount;
+            accountBO.doTransferAmountRemote(buyUser,
+                ESysUser.SYS_USER_HW.getCode(), ECurrency.CNY, cnyAmount,
+                bizType, bizType.getValue(), bizType.getValue(),
+                order.getCode());
         } else {
             accountBO.doTransferAmountRemote(buyUser,
-                ESysUser.SYS_USER_HW.getCode(), ECurrency.CNY, rmbAmount,
+                ESysUser.SYS_USER_HW.getCode(), ECurrency.HW_XJK, orderAmount,
                 bizType, bizType.getValue(), bizType.getValue(),
                 order.getCode());
         }
@@ -727,7 +729,6 @@ public class OrderAOImpl implements IOrderAO {
                 List<ProductOrder> productOrderList = productOrderBO
                     .queryProductOrderList(imCondition);
                 order.setProductOrderList(productOrderList);
-
             }
         }
         return page;
@@ -883,6 +884,30 @@ public class OrderAOImpl implements IOrderAO {
                 order.getApplyUser(), ECurrency.JF, order.getAmount1(),
                 EBizType.JKEG_MALL, EBizType.JKEG_MALL.getValue(),
                 EBizType.JKEG_MALL.getValue(), order.getCode());
+        } else if (ESystemCode.HW.getCode().equals(order.getSystemCode())
+                && order.getPayAmount1() > 0) {// 人民币消费返现
+            Map<String, String> resultMap = sysConfigBO
+                .getConfigsMap(ESystemCode.HW.getCode());
+            Double backJfRate = Double.valueOf(resultMap
+                .get(SysConstants.BACK_JF_RATE));
+            Long backJfAmount = AmountUtil.mul(order.getPayAmount1(),
+                backJfRate);
+            accountBO.doTransferAmountRemote(ESysUser.SYS_USER_HW.getCode(),
+                order.getApplyUser(), ECurrency.JF, backJfAmount,
+                EBizType.AJ_QRSH, "购物返利", "购物返利", order.getCode());
+            User applyUser = userBO.getRemoteUser(order.getApplyUser());
+            if (null != applyUser
+                    && StringUtils.isNotBlank(applyUser.getUserReferee())) {
+                Double backOneRefXjkRate = Double.valueOf(resultMap
+                    .get(SysConstants.BACK_ONEREF_XJK_RATE));
+                Long backOneRefXjkAmount = AmountUtil.mul(
+                    order.getPayAmount1(), backOneRefXjkRate);
+                accountBO.doTransferAmountRemote(
+                    ESysUser.SYS_USER_HW.getCode(), ECurrency.CNY,
+                    applyUser.getUserReferee(), ECurrency.HW_XJK,
+                    backOneRefXjkAmount, EBizType.AJ_QRSH, "购物一级推荐人返利",
+                    "购物一级推荐人返利", order.getCode());
+            }
         }
     }
 

@@ -7,7 +7,6 @@
 		<result column="type" property="type" />
 		<result column="ckey" property="ckey" />
 		<result column="cvalue" property="cvalue" />
-		<result column="note" property="note" />
 		
 		<result column="updater" property="updater" />
 		<result column="update_datetime" property="updateDatetime" />
@@ -49,7 +48,6 @@
 		,type
 		,ckey
 		,cvalue
-		,note
 		
 		,updater
 		,update_datetime
@@ -76,7 +74,6 @@
 		type
 		,ckey
 		,cvalue
-		,note
 		
 		,updater
 		,update_datetime
@@ -88,7 +85,6 @@
 		#{type}
 		,#{ckey}
 		,#{cvalue}
-		,#{note}
 		
 		,#{updater}
 		,#{updateDatetime}

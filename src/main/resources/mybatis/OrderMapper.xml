@@ -279,6 +279,8 @@
 		UPDATE tmall_order
 		SET
 		status = #{status}
+		,deliverer = #{deliverer}
+		,delivery_datetime = #{deliveryDatetime}
 		,signer = #{signer}
 		,sign_datetime = #{signDatetime}
 		,updater = #{updater}

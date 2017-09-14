@@ -181,6 +181,8 @@ public class OrderBOImpl extends PaginableBOImpl<Order> implements IOrderBO {
     public int deliverXianchang(Order order, String updater, String remark) {
         Date date = new Date();
         order.setStatus(EOrderStatus.RECEIVE.getCode());
+        order.setDeliverer(updater);
+        order.setDeliveryDatetime(date);
         order.setSigner(order.getApplyUser());
         order.setSignDatetime(date);
         order.setUpdater(updater);

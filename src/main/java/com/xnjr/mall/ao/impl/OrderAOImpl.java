@@ -647,9 +647,9 @@ public class OrderAOImpl implements IOrderAO {
                 .queryProductOrderList(order.getCode());
             for (ProductOrder productOrder : productOrders) {
                 // 更新库存
+                Integer quantity = -productOrder.getQuantity();
                 productSpecsBO.refreshQuantity(
-                    productOrder.getProductSpecsCode(),
-                    productOrder.getQuantity());
+                    productOrder.getProductSpecsCode(), quantity);
             }
         } else {
             throw new BizException("xn000000", "系统编号不能识别");

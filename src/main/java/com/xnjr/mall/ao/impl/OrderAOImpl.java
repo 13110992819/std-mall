@@ -664,8 +664,13 @@ public class OrderAOImpl implements IOrderAO {
             smsOutBO.sentContent(userId, "尊敬的用户，您的订单[" + order.getCode()
                     + "]已取消，请联系平台处理退款事宜。");
         } else {
+            if (StringUtils.isNotBlank(remark)) {
+                remark = ",取消原因是：" + remark;
+            } else {
+                remark = "";
+            }
             smsOutBO.sentContent(userId, "尊敬的用户，您的订单[" + order.getCode()
-                    + "]已取消,请及时查看退款。");
+                    + "]已取消" + remark + ",请及时查看退款。");
         }
     }
 
@@ -1011,6 +1016,7 @@ public class OrderAOImpl implements IOrderAO {
     @Override
     public void doChangeOrderStatusDaily() {
         doChangeNoPayOrder();
+        doChangeToTakeOrder();// 系统确认收货
     }
 
     private void doChangeNoPayOrder() {
@@ -1027,6 +1033,33 @@ public class OrderAOImpl implements IOrderAO {
             }
         }
         logger.info("***************结束扫描未支付订单***************");
+    }
+
+    private void doChangeToTakeOrder() {
+        SYSConfig sysConfig = sysConfigBO.getSYSConfig(
+            SysConstants.CONFIRM_ORDER_DAYS, ESystemCode.HW.getCode());
+        Integer confirmOrderDays = Integer.valueOf(sysConfig.getCvalue());
+        logger.info("***************开始扫描" + confirmOrderDays
+                + "天未收货确认收货订单***************");
+        Order condition = new Order();
+        condition.setStatus(EOrderStatus.SEND.getCode());
+        condition.setDeliveryDatetimeEnd(DateUtil.getRelativeDate(
+            DateUtil.getTodayStart(),
+            -(60 * 60 * 24 * (confirmOrderDays - 1) + 1)));
+        List<Order> orderList = orderBO.queryOrderList(condition);
+        if (CollectionUtils.isNotEmpty(orderList)) {
+            for (Order order : orderList) {
+                try {
+                    confirm(order.getCode(), "system", confirmOrderDays
+                            + "天未收货，系统自动确认收货");
+                } catch (Exception e) {
+                    logger.error(confirmOrderDays + "天未收货订单号："
+                            + order.getCode() + ",异常如下：" + e.getMessage());
+                }
+            }
+        }
+        logger.info("***************结束扫描" + confirmOrderDays
+                + "天未收货确认收货订单***************");
     }
 
     @Override

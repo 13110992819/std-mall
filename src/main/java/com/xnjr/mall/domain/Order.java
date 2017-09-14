@@ -158,6 +158,28 @@ public class Order extends ABaseDO {
     // 规格信息
     private ProductSpecs productSpecs;
 
+    // 发货时间起
+    private Date deliveryDatetimeStart;
+
+    // 发货时间止
+    private Date deliveryDatetimeEnd;
+
+    public Date getDeliveryDatetimeStart() {
+        return deliveryDatetimeStart;
+    }
+
+    public void setDeliveryDatetimeStart(Date deliveryDatetimeStart) {
+        this.deliveryDatetimeStart = deliveryDatetimeStart;
+    }
+
+    public Date getDeliveryDatetimeEnd() {
+        return deliveryDatetimeEnd;
+    }
+
+    public void setDeliveryDatetimeEnd(Date deliveryDatetimeEnd) {
+        this.deliveryDatetimeEnd = deliveryDatetimeEnd;
+    }
+
     public String getCode() {
         return code;
     }

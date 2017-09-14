@@ -20,8 +20,8 @@
            <list>
            	  <ref bean="orderTrigger"/> 
               <!-- <ref bean="storeTicketTrigger"/> -->
-              <ref bean="sproductTrigger"/>
-          </list>  
+<!--               <ref bean="sproductTrigger"/>
+ -->          </list>  
        </property>  
        <property name="autoStartup" value="true"/>  
     </bean> 
@@ -35,26 +35,26 @@
 	        <property name="targetMethod" value="doChangeOrderStatusDaily"/>  
 	        <property name="concurrent" value="true"/>  <!--  是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程-->  
 	</bean>
-	
+<!-- 	
 	<bean id="storeTicketTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
        <property name="jobDetail" ref="storeTicketJobDetail"/>  
-      <property name="cronExpression" value="59 59 23 * * ?"/><!-- 每天23:59:59开始执行 -->
+      <property name="cronExpression" value="59 59 23 * * ?"/>每天23:59:59开始执行
 	</bean>
 	<bean id="storeTicketJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">   
 	        <property name="targetObject" ref="storeTicketAOImpl"/>  
 	        <property name="targetMethod" value="doChangeStatusByInvalid"/>  
-	        <property name="concurrent" value="true"/>  <!-- 是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程   -->
-	</bean> 
+	        <property name="concurrent" value="true"/>  是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程  
+	</bean>  -->
 	
 	<!-- 重置服务可用数量 -->
-	<bean id="sproductTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
+	<!-- <bean id="sproductTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
        <property name="jobDetail" ref="sproductJobDetail"/>  
-      <property name="cronExpression" value="59 59 23 * * ?"/><!-- 每天23:59:59开始执行 -->
+      <property name="cronExpression" value="59 59 23 * * ?"/>每天23:59:59开始执行
 	</bean>
 	<bean id="sproductJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">   
 	        <property name="targetObject" ref="sproductAOImpl"/>  
 	        <property name="targetMethod" value="doResetAvaliableNumbersDaily"/>  
-	        <property name="concurrent" value="true"/>  <!-- 是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程   -->
-	</bean> 
+	        <property name="concurrent" value="true"/>  是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程  
+	</bean>  -->
 	
 </beans>

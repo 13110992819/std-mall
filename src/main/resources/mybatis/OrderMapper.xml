@@ -100,6 +100,12 @@
 			<if test="deliverer != null and deliverer != '' ">
 				AND t.deliverer like "%"#{deliverer}"%"
 			</if>
+			<if test="deliveryDatetimeStart != null and deliveryDatetimeStart != '' ">
+				<![CDATA[AND t.delivery_datetime >= #{deliveryDatetimeStart}]]>
+			</if>
+			<if test="deliveryDatetimeEnd != null and deliveryDatetimeEnd != '' ">
+				<![CDATA[AND t.delivery_datetime <= #{deliveryDatetimeEnd}]]>
+			</if>
 			<if test="logisticsCode != null and logisticsCode != ''">
 				AND t.logistics_code like "%"#{logisticsCode}"%"
 			</if>

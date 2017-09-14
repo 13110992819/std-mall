@@ -12,6 +12,8 @@ public class SysConstants {
 
     public static final String BACK_JF_RATE = "back_jf_rate";
 
+    public static final String CONFIRM_ORDER_DAYS = "CONFIRM_ORDER_DAYS"; // 超过天数，系统确认收货
+
     // *************************************管道*************************************
     public static final String STORE_RMB2JF = "STORE_RMB2JF"; // 积分消费比例
 

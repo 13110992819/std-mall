@@ -47,6 +47,17 @@ public class XN808025Req extends APageReq {
     // 所属系统编号(必填)
     private String systemCode;
 
+    // 用户编号(选填)
+    private String userId;
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
     public String getStoreCode() {
         return storeCode;
     }

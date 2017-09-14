@@ -254,7 +254,7 @@ public class ProductAOImpl implements IProductAO {
 
     @Override
     public Paginable<Product> queryProductPage(int start, int limit,
-            Product condition) {
+            Product condition, String userId) {
         Paginable<Product> results = productBO.getPaginable(start, limit,
             condition);
         if (CollectionUtils.isNotEmpty(results.getList())) {
@@ -262,6 +262,16 @@ public class ProductAOImpl implements IProductAO {
                 List<ProductSpecs> productSpecsList = productSpecsBO
                     .queryProductSpecsList(product.getCode());
                 product.setProductSpecsList(productSpecsList);
+                if (StringUtils.isNotBlank(userId)) {
+                    boolean result = interactBO.isInteract(userId,
+                        product.getCode(), EInteractType.PRODUCT,
+                        product.getCompanyCode(), product.getSystemCode());
+                    if (result) {
+                        product.setIsCollect(EBoolean.YES.getCode());
+                    } else {
+                        product.setIsCollect(EBoolean.NO.getCode());
+                    }
+                }
             }
         }
         return results;

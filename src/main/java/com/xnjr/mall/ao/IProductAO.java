@@ -26,7 +26,7 @@ public interface IProductAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
 
     public Paginable<Product> queryProductPage(int start, int limit,
-            Product condition);
+            Product condition, String userId);
 
     public List<Product> queryProductList(Product condition);
 

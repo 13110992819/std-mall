@@ -53,7 +53,8 @@ public class XN808028 extends AProcessor {
         condition.setOrder(orderColumn, req.getOrderDir());
         int start = StringValidater.toInteger(req.getStart());
         int limit = StringValidater.toInteger(req.getLimit());
-        return productAO.queryProductPage(start, limit, condition);
+        return productAO.queryProductPage(start, limit, condition,
+            req.getUserId());
     }
 
     /** 
